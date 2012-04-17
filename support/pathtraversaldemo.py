@@ -3,7 +3,7 @@
 import os
 
 startdir = "."
-filter = ['./Uforia/.git']
+filter = ['./Uforia-1/.git']
 
 for root,subFolders,files in os.walk(startdir):
 	for path in filter:
