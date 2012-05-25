@@ -1,9 +1,9 @@
 import os
 from md5 import md5calc
-import magic
-from hash import filetomd5
+
+
 top=os.getcwd()
-#c=filetomd5()
+c=md5calc()
 
 
 #top is the top directory of the search, in this case the current
@@ -14,17 +14,21 @@ def find(top):
 #doesnt allow modifying the directory listings on the spot
 		for name in files:
 			filepath=os.path.join(root,name)
-			ftype=magic.from_file(filepath)
-			mtype=magic.from_file(filepath, mime=True)
-			btype=magic.from_buffer(open(filepath).read(1024))
-			print "file found: ", os.path.join(root,name), "\n hashes:", filetomd5(filepath), "\n file magic:", ftype, mtype, btype
-			print "current directory is is: ", top
+			print "file found: ", os.path.join(root,name), c.md5hash( md5hash(), () )
+			print "current top is: ", top
 			#adds the location to the filenames, printing full path
 		for name in dirs:
 			top=os.path.join(root,name)
 			#full directory path is set as new source dir
 			print "directory found: ", os.path.join(root,name)
-			print "current directory is: ", 
+			print "current top is: ", 
 			#find(top)
 			#function is launched again from the found directories
+
 find(top)
+
+
+
+
+
+
