@@ -3,7 +3,7 @@ import datetime
 import pwd
 from stat import *
 
-#filepath = '/home/carlo/test/aap'
+#contains various file information
 
 def mtime(filepath):
 	mt = os.path.getmtime(filepath)
