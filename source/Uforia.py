@@ -7,8 +7,8 @@ import magic
 from hash import *
 from macs import *
 from modscanner import *
-from Uforia.default.models import * 
-from Uforia.modules.models import *
+#from Uforia.default.models import * 
+#from Uforia.modules.models import *
 from config import *
 
 fileList = []
@@ -97,24 +97,24 @@ class fileWorker(threading.Thread):
 					os.system(filelauncher)
 			except:
 				pass
-
-if __name__ == "__main__":
-				
+		
 fileQueue = Queue.Queue()
 
-print "\n","Starting in directory:", startScan
-print "\n","Starting Filepath Scanner"
-for scanner in xrange(numberOfScanners):
-	scanner = filepathScanner(fileQueue, rootDir)
-	scanner.start()
+if __name__ == "__main__": 
+
+	print "\n","Starting in directory:", startScan
+	print "\n","Starting Filepath Scanner"
+	for scanner in xrange(numberOfScanners):
+			scanner = filepathScanner(fileQueue, rootDir)
+			scanner.start()
 	print "\n","Filepath Scanner started successfully"
 	scanner.join()
 	print "\n","Stopping Filepath Scanner"
 	
-print "\n","Starting File Worker"
-for hasher in xrange(numberOfWorkers):
-	hasher = fileWorker(fileQueue)
-	hasher.start()
+	print "\n","Starting File Worker"
+	for hasher in xrange(numberOfWorkers):
+		hasher = fileWorker(fileQueue)
+		hasher.start()
 	print "\n","File Worker started successfully"
 	hasher.join()
 	print "\n","Stopping File Worker"
