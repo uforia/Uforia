@@ -73,7 +73,7 @@ class fileWorker(threading.Thread):
 			print "\n","Access time:", atime(filepath),
 			print "\n","User id and group id:", owner(filepath), group(filepath),
 
-			b = Hash(MD5 = filetomd5(filepath), SHA1 = filetosha1(filepath), SHA256 = filetosha256(filepath), FileType = mtype, FileSize = os.path.getsize(filepath))
+			b = Hash(MD5 = filetomd5(filepath), SHA1 = filetosha1(filepath), SHA256 = filetosha256(filepath), FileType = xmtype, FileSize = os.path.getsize(filepath))
 			b.save()
 			print "\n","\n","Hashes exported to database"
 			c = Metadata(Location = filepath, Name = os.path.basename(filepath), MTimes = mtime(filepath), ATimes = atime(filepath), CTimes = ctime(filepath), Owner = owner(filepath), Groups = group(filepath), Permissions = '?')
