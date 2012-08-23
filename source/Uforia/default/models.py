@@ -1,5 +1,6 @@
 from django.db import models
 
+#This file creates the tables and columns for the database. Each class is a table.
 class Hash(models.Model):
     	HashID = models.AutoField(primary_key=True) #Er is geen one-to-one relations
 	MD5 = models.TextField(max_length=255)

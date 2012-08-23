@@ -1,10 +1,12 @@
 import os
 
+#The program is looking for its own root folder and then it goes to the /modules directory
 modtop = top=os.getcwd()
 modtop +="/modules"
 moddir = []
 modname = []
 
+#This part of code will scan all the directories for the right Module name and will enter this directory
 def findmods(modtop):
 	for root, dirs, files in os.walk(modtop, topdown=False):
 			
@@ -22,6 +24,7 @@ def findmods(modtop):
 					print "fail"
 			findexec(modtop)
 
+#This part of code will find the executable file in the previous found directory, to handle the file found by the Uforia main program
 def findexec(modtop):
 	for root, dirs, files in os.walk(modtop, topdown=False):
 		for name in files:
@@ -29,6 +32,8 @@ def findexec(modtop):
 			mods = []
 			mods.append(filepath)
 			modname.extend(mods)
+
+#For debug reasons, the output will be shown
 """                                                                        
 findmods(modtop)
 
