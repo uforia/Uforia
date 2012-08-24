@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Django settings for Uforia  project.
 
 #Over here you can edit the settings for the database. Remove the < > when editing the settings 

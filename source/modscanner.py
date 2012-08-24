@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 
 #The program is looking for its own root folder and then it goes to the /modules directory

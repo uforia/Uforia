@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from django.db import models
 
 #This file creates the tables and columns for the database. Each class is a table.

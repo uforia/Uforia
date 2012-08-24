@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # From which directory should UFORIA start to scan?
 # Example: startScan = '/home/user/' 
 startScan = '/home/carlo/public/openbaar/TESTBESTANDEN' 
