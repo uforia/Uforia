@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # Base Python modules
 import os, sys, hashlib, datetime
@@ -7,7 +8,7 @@ import os, sys, hashlib, datetime
 import config, magic
 
 class File(object):
-    def __init__(self,filepath=None):
+    def __init__(self,filepath=None,DEBUG=False):
         """
         Attempt to parse the file passed via the filepath variable and store its
         name, size, owner, group, MACtimes, MD5/SHA1/SHA256 hashes and file magic
@@ -17,8 +18,9 @@ class File(object):
             pass
         else:
             try:
-                self.name = os.path.basename(filepath)
-                self.size = os.path.getsize(filepath)
+                self.fullpath = str(filepath)
+                self.name = str(os.path.basename(filepath))
+                self.size = str(os.path.getsize(filepath))
                 self.owner = str(os.stat(filepath).st_uid)
                 self.group = str(os.stat(filepath).st_gid)
                 self.mtime = repr(os.path.getmtime(filepath))
@@ -27,18 +29,18 @@ class File(object):
                 self.md5 = hashlib.md5()
                 self.sha1 = hashlib.sha1()
                 self.sha256 = hashlib.sha256()
-                self.ftype = magic.from_file(filepath)
-                self.mtype = magic.from_file(filepath, mime=True)
-                self.btype = magic.from_buffer(open(filepath).read(65536))
+                self.ftype = str(magic.from_file(filepath))
+                self.mtype = str(magic.from_file(filepath, mime=True))
+                self.btype = str(magic.from_buffer(open(filepath).read(65536)))
                 with open(filepath,'rb') as f:
                     for chunk in iter(lambda: f.read(65536), b''):
                         self.md5.update(chunk)
                         self.sha1.update(chunk)
                         self.sha256.update(chunk)
-                self.md5 = self.md5.hexdigest()
-                self.sha1 = self.sha1.hexdigest()
-                self.sha256 = self.sha256.hexdigest()
-                if config.DEBUG:
+                self.md5 = str(self.md5.hexdigest())
+                self.sha1 = str(self.sha1.hexdigest())
+                self.sha256 = str(self.sha256.hexdigest())
+                if DEBUG:
                     print "Filename:\t", self.name
                     print "MD5:\t\t", self.md5
                     print "SHA1:\t\t", self.sha1
@@ -53,4 +55,5 @@ class File(object):
 
 if __name__ == "__main__":
     print "This is an example where file.py creates a File object and examines itself :-)\n"
-    example = File(sys.argv[0])
+    DEBUG = True
+    example = File(sys.argv[0],DEBUG)
