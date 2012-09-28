@@ -23,14 +23,14 @@ start = startScan
 findmods(modtop)
 
 class Uforia:
-    def run(self):
+    def __init__(self):
         self.number = 0
         self.tasks =  multiprocessing.JoinableQueue()
         self.consumers = [Consumer(self.tasks) for i in xrange(numberOfWorkers)]
         if debug: print "\n","Starting File Worker"
+        self.fileScanner(start)
         for w in self.consumers:
             w.start()
-        self.fileScanner(start)    
         self.tasks.join()
 
     def fileScanner(self,dir):
@@ -41,7 +41,7 @@ class Uforia:
             for name in files:
                 file=os.path.join(root,name)
                 filelist.append(file)
-                if debug: print "Successfully added filepath\t",os.path.join(root,name), "to queue"
+                if debug: print "Added:\t",os.path.join(root,name)
         for file in filelist:
                     self.tasks.put(self.fileProcessor(file))
         return
@@ -74,12 +74,15 @@ class Uforia:
         #This part of code exports the calculated hashes to the database
     
         hash = Hash(MD5 = md5, SHA1 = sha1, SHA256 = sha256, FileType = mtype, FileSize = filesize)
-        hash.save()
-        if debug: print "\n","\n","Hashes exported to database"
+        try:
+	        hash.save()
+	        if debug: print "\n","\n","Hashes exported to database"
+	        if debug: print "Metadata exported to database"
+	        metadata = Metadata(Location = filepath, Name = name, MTimes = mtimes, ATimes = atimes, CTimes = ctimes, Owner = fileowner, Groups = filegroup, Permissions = '?')
+	        metadata.save()
+        except:
+	        if debug: print "\nError storing hashes or metadata in the database."
         #This part of code exports the metadata of the file to the database
-        metadata = Metadata(Location = filepath, Name = name, MTimes = mtimes, ATimes = atimes, CTimes = ctimes, Owner = fileowner, Groups = filegroup, Permissions = '?')
-        metadata.save()
-        if debug: print "Metadata exported to database"
     
         #This part of code cleans up the full magic output to an easy to understand string for the 'modscanner', so the right module will be selected to read the file contents
         xmtype = ''.join(e for e in mtype if e.isalnum())
@@ -100,7 +103,6 @@ class Uforia:
         except:
             pass
         return
-
 					
 class Consumer(multiprocessing.Process):
     
@@ -108,26 +110,12 @@ class Consumer(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
         self.task_queue = task_queue
 
-
     def run(self):
-        while True:
+        while not self.task_queue.empty() or fileScanner():
             next_task = self.task_queue.get()
-            if next_task is None:
-                self.task_queue.task_done()
-                break
+            if not next_task: break
             next_task()
             self.task_queue.task_done()
-        return
-
-
-
 
 if __name__ == "__main__":
     main = Uforia()
-    main.run()
-    
-
-
-	
-
-
