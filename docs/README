@@ -1,3 +1,21 @@
 Initial commit
 
 Project is licensed GPLv2
+
+Configuration for the files to scan, the number of workers and debug option are set with config.py.
+
+Uforia uses the Django framework for storing data in a database. You need to configure the Django framework in Uforia/settings/settings.py . 
+
+After you have configured Uforia you can run Uforia.py. Uforia will scan the selected files and enter basic data about the files in the database.
+
+The main function of Uforia will first look for additional mods in /modules. It will then start the Uforia class. 
+
+The init of the Uforia class create a number of consumers and start the filescanner. It will then start the consumers.
+
+The filescanner will walk through the filesystem and add these files to the consumer queu.  
+The filescanner can be called by a module to add more files to the queue during runtime.
+
+The consumers will take a file from the queue and calculate a hash with hash.py. Basic information about the file will be saved along with the hash in the database. Finally the consumer will try to run any modules associated with the filetype.
+
+
+
