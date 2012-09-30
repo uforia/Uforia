@@ -2,7 +2,7 @@
 
 # From which directory should Uforia start to scan?
 # Example: startScan = '/home/user/' 
-STARTDIR = '/home/penguin/Uforia/source/modules/' 
+STARTDIR = '/home/FILES/'
 
 # How many Filepath Scanners should be active at the same time?
 # Example: numberOfScanners = 2

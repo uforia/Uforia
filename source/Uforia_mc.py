@@ -40,8 +40,7 @@ class Uforia(object):
         return
     
     def fileProcessor(self,fullpath):
-        self.file = File.File(fullpath)
-    
+        self.file = File.File(fullpath,config.DEBUG)
         hash = Hash(MD5 = self.file.md5, SHA1 = self.file.sha1, SHA256 = self.file.sha256, FileType = self.file.mtype, FileSize = self.file.size)
         try:
 	        hash.save()
