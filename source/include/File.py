@@ -21,11 +21,31 @@ class File(object):
                 self.fullpath = str(filepath)
                 self.name = str(os.path.basename(filepath))
                 self.size = str(os.path.getsize(filepath))
+            except:
+                raise IOError('Cannot read basic file information. Permissions problem?')
+            try:
                 self.owner = str(os.stat(filepath).st_uid)
                 self.group = str(os.stat(filepath).st_gid)
+            except:
+                self.owner = None
+                self.group = None
+                raise IOError('Cannot read owner/group id. File system might not have uid/gid support.')
+            try:
                 self.mtime = repr(os.path.getmtime(filepath))
+            except:
+                self.mtime = None
+                raise IOError('File system might not have mtime support.')
+            try:
                 self.atime = repr(os.path.getatime(filepath))
+            except:
+                self.atime = None
+                raise IOError('File system might not have atime support.')
+            try:
                 self.ctime = repr(os.path.getctime(filepath))
+            except:
+                self.ctime = None
+                raise IOError('File system might not have ctime support.')
+            try:
                 self.md5 = hashlib.md5()
                 self.sha1 = hashlib.sha1()
                 self.sha256 = hashlib.sha256()
@@ -40,18 +60,18 @@ class File(object):
                 self.md5 = str(self.md5.hexdigest())
                 self.sha1 = str(self.sha1.hexdigest())
                 self.sha256 = str(self.sha256.hexdigest())
-                if DEBUG:
-                    print "Filename:\t", self.name
-                    print "MD5:\t\t", self.md5
-                    print "SHA1:\t\t", self.sha1
-                    print "SHA256:\t\t", self.sha256
-                    print "Magic:\t\t", self.ftype, self.mtype, self.btype
-                    print "Modified:\t", self.mtime
-                    print "Accessed:\t", self.atime
-                    print "Changed:\t", self.ctime
-                    print "UID/GID:\t", self.owner+":"+self.group
-            except IOError as detail:
-                print "Error opening "+filepath+":", detail
+            except:
+                raise IOError('Error calculating digests, possible filesystem error.')
+            if DEBUG:
+                print "Filename:\t", self.name
+                print "MD5:\t\t", self.md5
+                print "SHA1:\t\t", self.sha1
+                print "SHA256:\t\t", self.sha256
+                print "Magic:\t\t", self.ftype, self.mtype, self.btype
+                print "Modified:\t", self.mtime
+                print "Accessed:\t", self.atime
+                print "Changed:\t", self.ctime
+                print "UID/GID:\t", self.owner+":"+self.group
 
 if __name__ == "__main__":
     print "This is an example where file.py creates a File object and examines itself :-)\n"
