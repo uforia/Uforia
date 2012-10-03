@@ -67,7 +67,8 @@ class Uforia(object):
                             mod=getattr(mod,target)
                         except AttributeError:
                             pass
-                    print("Called: "+target+".process()")
+                    if config.DEBUG:
+                        print("Called: "+target+".process()")
                     f=self.modulepool.apply_async(getattr(mod,'process')(fullpath))
             except:
                 raise
