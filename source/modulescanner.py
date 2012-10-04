@@ -27,10 +27,3 @@ class ModuleProxy(object):
 
     def __getattr__(self, name):
         return ModuleProxy(self._path + [name, ], self._cache)
-
-#mod = ModuleProxy("modules")
-#l = ['text.plain.plaintextreader']
-#for s in l:
-#    for e in s.split('.'):
-#        mod = getattr(mod,e)
-#    f = getattr(mod,'process')('testasd')
