@@ -1,7 +1,4 @@
 Before running the Uforia program, you need to change some settings.
 
-Edit the settings for the database in:
-    ./Uforia/settings/settings.py
-
-Edit the settings for the main program (like multithreading and starting directory) in:
+Edit the settings for the main program (like multithreading, starting directory and database) in:
     ./include/config.py
