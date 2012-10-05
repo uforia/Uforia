@@ -2,6 +2,8 @@
 
 # Load basic Python modules
 import os, sys, re, time, multiprocessing, imp, glob
+
+# Add loader paths to config files, support classes and database handlers
 sys.path.append('./include')
 
 # Load Uforia custom modules
@@ -12,6 +14,10 @@ class Uforia(object):
         if config.DEBUG:
             print("Listing available modules for MIME types...")
         self.moduleScanner()
+        if config.DEBUG:
+            print("Initializing "+config.DBTYPE+" database connection...")
+        self.databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
+        self.db = self.databaseModule.Database(config.DBHOST,config.DBUSER,config.DBPASS,config.DBNAME)
         if config.DEBUG:
             print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
         self.consumers=multiprocessing.Pool(processes=config.CONSUMERS)
@@ -69,7 +75,7 @@ class Uforia(object):
                             pass
                     if config.DEBUG:
                         print("Called:",target,".process()")
-                    f=self.modulepool.apply_async(getattr(mod,'process')(fullpath))
+                    f=self.modulepool.apply_async(getattr(mod,'process')(fullpath,1,'test',s))
             except:
                 raise
 					

@@ -13,6 +13,16 @@ STARTDIR = '/home/FILES/'
 # Example: MODULES = './modules/'
 MODULEDIR = './modules/'
 
+# Database configuration. The name should match the handler providing
+# the appropriate Database class with setup() and store() methods.
+# Example: DBTYPE = 'mysql'
+DATABASEDIR = './databases/'
+DBTYPE = 'mysql'
+DBHOST = 'localhost'
+DBUSER = 'uforia'
+DBPASS = 'uforia'
+DBNAME = 'uforia'
+
 # How many processes should be parsing files at the same time?
 # Note: This is a tradeoff between CPU power and disk I/O. More workers
 # means higher CPU utilization, but disk I/O might become a limiting factor.

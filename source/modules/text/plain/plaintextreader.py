@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-# DB: SEARCHABLETEXT
+# TEXT
 
-def process(fullpath):
+def process(fullpath,hashid,db,modulename):
     with open(fullpath,'rb') as f:
         fulltext=f.read()
-        print fulltext
+        print hashid,db,modulename
