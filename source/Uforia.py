@@ -7,17 +7,17 @@ import os, sys, re, time, multiprocessing, imp, glob
 sys.path.append('./include')
 
 # Load Uforia custom modules
-import config, File, magic, modulescanner
+import config, File, magic
 
 class Uforia(object):
     def __init__(self):
         if config.DEBUG:
-            print("Listing available modules for MIME types...")
-        self.moduleScanner()
-        if config.DEBUG:
             print("Initializing "+config.DBTYPE+" database connection...")
         self.databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
         self.db = self.databaseModule.Database(config.DBHOST,config.DBUSER,config.DBPASS,config.DBNAME)
+        if config.DEBUG:
+            print("Listing available modules for MIME types...")
+        self.moduleScanner()
         if config.DEBUG:
             print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
         self.consumers=multiprocessing.Pool(processes=config.CONSUMERS)
@@ -28,13 +28,25 @@ class Uforia(object):
     def moduleScanner(self):
         if config.DEBUG:
             print("Starting in directory "+config.MODULEDIR+"...")
-            print("Starting modulescanner...")
-        self.modules=modulescanner.ModuleProxy(config.MODULEDIR)
+        self.modules={}
         self.modulelist={}
+        self.tabletocolumns={}
+        self.moduletotable={}
         for major in os.listdir(config.MODULEDIR):
             for minor in os.listdir(config.MODULEDIR+major):
                 mimetype=major+'/'+minor
                 self.modulelist[mimetype]=glob.glob(config.MODULEDIR+mimetype+"/*.py")
+                for modulepath in self.modulelist[mimetype]:
+                    with open(modulepath) as file:
+                        for line in file:
+                            if line.startswith("""#TABLE: """):
+                                columns=line.strip('\n').replace("""#TABLE: """,'')
+                                modulename=modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','.')
+                                tablename=modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
+                                self.modules[modulename]=imp.load_source(modulename,modulepath)
+                                self.moduletotable[modulename]=tablename
+                                self.tabletocolumns[tablename]=columns.split(':')[0]
+                                self.db.setup(self.moduletotable[modulename],columns)
 
     def fileScanner(self,dir):
         if config.DEBUG:
@@ -51,7 +63,7 @@ class Uforia(object):
         self.file=File.File(fullpath,config.DEBUG)
         try:
 	        if config.DEBUG:
-	            print("Hashes and metadata exported to database.")
+	            print("Exporting basic hashes and metadata to database.")
 	        # TODO: Store the stuff in the database
         except:
             raise IOError('Error storing hashes, possible database problem.')
@@ -67,15 +79,12 @@ class Uforia(object):
                 for handler in self.modulelist[self.file.mtype]:
                     handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
                 for s in handlers:
-                    mod=self.modules
-                    for target in s.split('.'):
-                        try:
-                            mod=getattr(mod,target)
-                        except AttributeError:
-                            pass
-                    if config.DEBUG:
-                        print("Called:",target,".process()")
-                    f=self.modulepool.apply_async(getattr(mod,'process')(fullpath,1,'test',s))
+                    func=getattr(self.modules[s],'process')
+                    args=(fullpath,1,'test',s)
+                    table=self.moduletotable[s]
+                    columns=self.tabletocolumns[self.moduletotable[s]]
+                    values=func(*args)
+                    self.db.store(table,1,(columns,),(values,))
             except:
                 raise
 					

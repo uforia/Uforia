@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-# TEXT
+#TABLE: Contents:LONGTEXT
 
-def process(fullpath,hashid,db,modulename):
+def process(fullpath,hashid,db,tablename):
     with open(fullpath,'rb') as f:
-        fulltext=f.read()
-        print hashid,db,modulename
+        return f.read()
