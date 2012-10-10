@@ -88,11 +88,10 @@ class Uforia(object):
                     handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
                 for s in handlers:
                     func=getattr(self.modules[s],'process')
-                    args=(self.file.fullpath)
                     table=self.moduletotable[s]
                     columns=self.tabletocolumns[self.moduletotable[s]]
-                    values=func(args)
-                    self.db.store(table,lasthashid,(columns,),(values,))
+                    args=(self.db,table,hashid,columns,self.file.fullpath)
+                    x=self.modulepool.apply_async(func(*args))
             except:
                 raise
 					
