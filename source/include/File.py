@@ -27,36 +27,38 @@ class File(object):
                 self.owner = str(os.stat(filepath).st_uid)
                 self.group = str(os.stat(filepath).st_gid)
             except:
-                self.owner = None
-                self.group = None
-                print('Cannot read owner/group id. File system might not support ownerships.')
+                self.owner = -1
+                self.group = -1
+                if DEBUG:
+                    print('Cannot read owner/group id. File system might not support ownerships.')
             try:
                 self.perm = oct(os.stat(filepath).st_mode)
             except:
-                self.perm = None
-                print('Cannot read permissions. File system might not support permissions.')
+                self.perm = 'UFORIA_NO_PERM'
+                if DEBUG:
+                    print('Cannot read permissions. File system might not support permissions.')
             try:
                 self.mtime = repr(os.path.getmtime(filepath))
             except:
-                self.mtime = None
-                print('File system might not support MACtimes.')
+                self.mtime = -1
+                if DEBUG:
+                    print('File system might not support MACtimes.')
             try:
                 self.atime = repr(os.path.getatime(filepath))
             except:
-                self.atime = None
-                print('File system might not support MACtimes.')
+                self.atime = -1
+                if DEBUG:
+                    print('File system might not support MACtimes.')
             try:
                 self.ctime = repr(os.path.getctime(filepath))
             except:
-                self.ctime = None
-                print('File system might not support MACtimes.')
+                self.ctime = -1
+                if DEBUG:
+                    print('File system might not support MACtimes.')
             try:
                 self.md5 = hashlib.md5()
                 self.sha1 = hashlib.sha1()
                 self.sha256 = hashlib.sha256()
-                self.ftype = str(magic.from_file(filepath))
-                self.mtype = str(magic.from_file(filepath, mime=True))
-                self.btype = str(magic.from_buffer(open(filepath).read(65536)))
                 with open(filepath,'rb') as f:
                     for chunk in iter(lambda: f.read(65536), b''):
                         self.md5.update(chunk)
@@ -67,8 +69,14 @@ class File(object):
                 self.sha256 = str(self.sha256.hexdigest())
             except:
                 raise IOError('Error calculating digests, possible filesystem error.')
+            try:
+                self.ftype = str(magic.from_file(filepath))
+                self.mtype = str(magic.from_file(filepath, mime=True))
+                self.btype = str(magic.from_buffer(open(filepath).read(65536)))
+            except:
+                raise IOError('Error reading file magic, possible library or filesystem error.')
             if DEBUG:
-                print "\nFilename:\t",self.name
+                print "Filename:\t",self.name
                 print "UID/GID:\t",self.owner+":"+self.group
                 print "Permissions:\t",self.perm
                 print "Magic:\t\tF:",self.ftype,"\n\t\tM:",self.mtype,"\n\t\tB:",self.btype
@@ -76,6 +84,6 @@ class File(object):
                 print "MD5:\t\t",self.md5,"\nSHA1:\t\t",self.sha1,"\nSHA256\t\t",self.sha256
 
 if __name__ == "__main__":
-    print "This is an example where",sys.argv[0],"creates a File object and examines itself :-)\n"
+    print "This is an example where",sys.argv[0],"creates a File object and examines itself :-)"
     DEBUG = True
     example = File(sys.argv[0],DEBUG)
