@@ -3,14 +3,15 @@
 import warnings
 
 class Database(object):
-    def __init__(self,host='localhost',user=None,passwd=None,db='Uforia'):
-        if not host or not user or not passwd or not db:
+    def __init__(self,config):
+        if not config.DBHOST or not config.DBUSER or not config.DBPASS or not config.DBNAME:
             raise ValueError('Cannot initialize a database connection without valid credentials.')
         else:
-            self.hostname = host
-            self.username = user
-            self.password = passwd
-            self.database = db
+            self.hostname = config.DBHOST
+            self.username = config.DBUSER
+            self.password = config.DBPASS
+            self.database = config.DBNAME
+            self.truncate = config.TRUNCATE
             import MySQLdb
             try:
                 self.db=MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
@@ -38,6 +39,11 @@ class Database(object):
             warnings.filterwarnings('ignore',category=self.db.Warning)
             self.cursor.execute(query)
             self.db.commit()
+            if self.truncate:
+                query="""TRUNCATE `files`"""
+                warnings.filterwarnings('ignore',category=self.db.Warning)
+                self.cursor.execute(query)
+                self.db.commit()
             warnings.resetwarnings()
 
     def setup(self,moduletable,columns):
@@ -55,6 +61,11 @@ class Database(object):
         warnings.filterwarnings('ignore',category=self.db.Warning)
         self.cursor.execute(query)
         self.db.commit()
+        if self.truncate:
+            query="""TRUNCATE `"""+moduletable+"""`"""
+            warnings.filterwarnings('ignore',category=self.db.Warning)
+            self.cursor.execute(query)
+            self.db.commit()
         warnings.resetwarnings()
 
     def store(self,moduletable,hashid,columns,values):

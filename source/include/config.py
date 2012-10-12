@@ -23,6 +23,11 @@ DBUSER = 'uforia'
 DBPASS = 'uforia'
 DBNAME = 'uforia'
 
+# Should Uforia TRUNCATE/DROP any existing tables? Setting this to False
+# can be useful when you want to add additional evidence items on an
+# already-examined filesystem
+TRUNCATE = True
+
 # How many processes should be parsing files at the same time?
 # Note: This is a tradeoff between CPU power and disk I/O. More workers
 # means higher CPU utilization, but disk I/O might become a limiting factor.

@@ -14,7 +14,7 @@ class Uforia(object):
         if config.DEBUG:
             print("Initializing "+config.DBTYPE+" database connection...")
         self.databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
-        self.db = self.databaseModule.Database(config.DBHOST,config.DBUSER,config.DBPASS,config.DBNAME)
+        self.db = self.databaseModule.Database(config)
         if config.DEBUG:
             print("Listing available modules for MIME types...")
         self.moduleScanner()
