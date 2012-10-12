@@ -62,6 +62,7 @@ class Uforia(object):
                 self.hashid+=1;
     
     def fileProcessor(self,fullpath,hashid):
+        print "Examining:",fullpath
         self.file=File.File(fullpath,config.DEBUG)
         try:
 	        if config.DEBUG:
@@ -74,7 +75,6 @@ class Uforia(object):
 	            raise
         except:
             raise
-            #raise IOError('Error storing hashes, possible database problem.')
         if self.file.mtype not in self.modulelist:
             if config.DEBUG:
                 print("No modules found to handle MIME-type "+self.file.mtype+", skipping additional file parsing...")
@@ -90,7 +90,7 @@ class Uforia(object):
                     func=getattr(self.modules[s],'process')
                     table=self.moduletotable[s]
                     columns=self.tabletocolumns[self.moduletotable[s]]
-                    args=(self.db,table,hashid,columns,self.file.fullpath)
+                    args=(self.db,table,lasthashid,columns,self.file.fullpath)
                     x=self.modulepool.apply_async(func(*args))
             except:
                 raise

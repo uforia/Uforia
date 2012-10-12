@@ -6,7 +6,7 @@ DEBUG = False
 
 # From which directory should Uforia start to scan?
 # Example: STARTDIR = '/home/user/' 
-STARTDIR = '/home/FILES/'
+STARTDIR = '/home/TESTDATA/'
 
 # Where should Uforia find the modules to handle found MIME types?
 # Note: You should not normally have to modify this!
@@ -29,7 +29,7 @@ DBNAME = 'uforia'
 # Conversely: less workers might mean optimal disk I/O, but your CPU might
 # be sitting idle...
 # Example: CONSUMERS = 2
-CONSUMERS = 1
+CONSUMERS = 2
 
 # How many modules should be processing a file at the same time?
 # Note: This is a tradeoff between CPU power and disk I/O. More workers
