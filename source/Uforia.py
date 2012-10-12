@@ -58,7 +58,8 @@ class Uforia(object):
             for name in files:
                 fullpath=os.path.join(root,name)
                 stdscr.addstr(0,0,"=== Uforia ===")
-                stdscr.addstr(2,0,"Added: "+str(fullpath))
+                stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
+                stdscr.addstr(3,0,"Progress:\t"+str(round(float(files.index(name))/float(len(files))*100,1))+"%")
                 stdscr.clrtoeol()
                 stdscr.refresh()
                 self.consumers.apply_async(self.fileProcessor(fullpath,self.hashid))
