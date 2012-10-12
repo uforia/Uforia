@@ -8,9 +8,13 @@ DEBUG = False
 # Example: STARTDIR = '/home/user/' 
 STARTDIR = '/home/TESTDATA/'
 
-# Where should Uforia find the modules to handle found MIME types?
+# Should Uforia attempt to detect and run additional modules for each
+# of the fond files/filetypes? If so, where should Uforia find the
+# modules to handle those files?
 # Note: You should not normally have to modify this!
-# Example: MODULES = './modules/'
+# Example: ENABLEMODULES = True
+# Example: MODULEDIR = './modules/'
+ENABLEMODULES = False
 MODULEDIR = './modules/'
 
 # Database configuration. The name should match the handler providing
@@ -43,3 +47,9 @@ CONSUMERS = 2
 # be sitting idle...
 # Example: MODULES = 1
 MODULES = 1
+
+# ADVANCED CONFIGURATION, FOR EXPERTS ONLY
+
+# Tune the filesystem block reads
+# Example: CHUNKSIZE = 65536
+CHUNKSIZE = 65536

@@ -15,9 +15,10 @@ class Uforia(object):
             print("Initializing "+config.DBTYPE+" database connection...")
         self.databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
         self.db = self.databaseModule.Database(config)
-        if config.DEBUG:
-            print("Listing available modules for MIME types...")
-        self.moduleScanner()
+        if config.ENABLEMODULES:
+            if config.DEBUG:
+                print("Listing available modules for MIME types...")
+            self.moduleScanner()
         if config.DEBUG:
             print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
         self.consumers=multiprocessing.Pool(processes=config.CONSUMERS)
@@ -62,8 +63,7 @@ class Uforia(object):
                 self.hashid+=1;
     
     def fileProcessor(self,fullpath,hashid):
-        print "Examining:",fullpath
-        self.file=File.File(fullpath,config.DEBUG)
+        self.file=File.File(fullpath,config)
         try:
 	        if config.DEBUG:
 	            print("Exporting basic hashes and metadata to database.")
@@ -75,25 +75,29 @@ class Uforia(object):
 	            raise
         except:
             raise
-        if self.file.mtype not in self.modulelist:
+        if not config.ENABLEMODULES:
             if config.DEBUG:
-                print("No modules found to handle MIME-type "+self.file.mtype+", skipping additional file parsing...")
+                print("Additional module parsing disabled by config, skipping...")
         else:
-            try:
+            if self.file.mtype not in self.modulelist:
                 if config.DEBUG:
-                    print("Setting up "+str(config.MODULES)+" module workers...")
-                self.modulepool=multiprocessing.Pool(processes=config.MODULES)
-                handlers=[]
-                for handler in self.modulelist[self.file.mtype]:
-                    handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
-                for s in handlers:
-                    func=getattr(self.modules[s],'process')
-                    table=self.moduletotable[s]
-                    columns=self.tabletocolumns[self.moduletotable[s]]
-                    args=(self.db,table,lasthashid,columns,self.file.fullpath)
-                    x=self.modulepool.apply_async(func(*args))
-            except:
-                raise
+                    print("No modules found to handle MIME-type "+self.file.mtype+", skipping additional file parsing...")
+            else:
+                try:
+                    if config.DEBUG:
+                        print("Setting up "+str(config.MODULES)+" module workers...")
+                    self.modulepool=multiprocessing.Pool(processes=config.MODULES)
+                    handlers=[]
+                    for handler in self.modulelist[self.file.mtype]:
+                        handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
+                    for s in handlers:
+                        func=getattr(self.modules[s],'process')
+                        table=self.moduletotable[s]
+                        columns=self.tabletocolumns[self.moduletotable[s]]
+                        args=(self.db,table,lasthashid,columns,self.file.fullpath)
+                        x=self.modulepool.apply_async(func(*args))
+                except:
+                    raise
 					
 if __name__ == "__main__":
     main=Uforia()
