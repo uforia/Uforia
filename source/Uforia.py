@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, sys, re, time, multiprocessing, imp, glob
+import os, sys, re, time, multiprocessing, imp, glob, curses
 
 # Add loader paths to config files, support classes and database handlers
 sys.path.append('./include')
@@ -57,8 +57,10 @@ class Uforia(object):
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
                 fullpath=os.path.join(root,name)
-                if config.DEBUG:
-                    print("Added:",fullpath)
+                stdscr.addstr(0,0,"=== Uforia ===")
+                stdscr.addstr(2,0,"Added: "+str(fullpath))
+                stdscr.clrtoeol()
+                stdscr.refresh()
                 self.consumers.apply_async(self.fileProcessor(fullpath,self.hashid))
                 self.hashid+=1;
     
@@ -100,4 +102,14 @@ class Uforia(object):
                     raise
 					
 if __name__ == "__main__":
-    main=Uforia()
+    try:
+        stdscr = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
+        stdscr.keypad(1)
+        main=Uforia()
+    finally:
+        curses.nocbreak()
+        stdscr.keypad(0)
+        curses.echo()
+        curses.endwin()
