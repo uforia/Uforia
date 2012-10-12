@@ -55,12 +55,15 @@ class Uforia(object):
             print("Starting filescanner...")
         self.hashid=1
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
+            totalfiles=float(len(files))
             for name in files:
                 fullpath=os.path.join(root,name)
                 stdscr.addstr(0,0,"=== Uforia ===")
                 stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
                 stdscr.clrtoeol()
-                stdscr.addstr(3,0,"Progress:\t"+str(round(float(files.index(name))/float(len(files))*100,1))+"%")
+                currentfile=float(files.index(name))
+                percentage=round(100*(currentfile/totalfiles),1)
+                stdscr.addstr(3,0,"Progress:\t"+str(percentage)+"%")
                 stdscr.clrtoeol()
                 stdscr.refresh()
                 self.consumers.apply_async(self.fileProcessor(fullpath,self.hashid))
