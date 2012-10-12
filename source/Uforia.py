@@ -59,6 +59,7 @@ class Uforia(object):
                 fullpath=os.path.join(root,name)
                 stdscr.addstr(0,0,"=== Uforia ===")
                 stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
+                stdscr.clrtoeol()
                 stdscr.addstr(3,0,"Progress:\t"+str(round(float(files.index(name))/float(len(files))*100,1))+"%")
                 stdscr.clrtoeol()
                 stdscr.refresh()

@@ -38,7 +38,7 @@ TRUNCATE = True
 # Conversely: less workers might mean optimal disk I/O, but your CPU might
 # be sitting idle...
 # Example: CONSUMERS = 2
-CONSUMERS = 2
+CONSUMERS = 1
 
 # How many modules should be processing a file at the same time?
 # Note: This is a tradeoff between CPU power and disk I/O. More workers
