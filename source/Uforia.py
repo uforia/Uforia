@@ -5,6 +5,7 @@ import os, sys, re, time, multiprocessing, imp, glob, curses
 
 # Add loader paths to config files, support classes and database handlers
 sys.path.append('./include')
+sys.path.append('./databases')
 
 # Load Uforia custom modules
 import config, File, magic
