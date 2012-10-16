@@ -78,9 +78,6 @@ class Uforia(object):
 	        columns=('hashid','fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
 	        values=(hashid,self.file.fullpath, self.file.name, self.file.size, self.file.owner, self.file.group, self.file.perm, self.file.mtime, self.file.atime, self.file.ctime, self.file.md5, self.file.sha1, self.file.sha256, self.file.ftype, self.file.mtype, self.file.btype)
 	        self.db.store('files','',columns,values)
-	        lasthashid=self.db.findhash((self.file.fullpath,))
-	        if not lasthashid:
-	            raise
         except:
             raise
         if not config.ENABLEMODULES:
@@ -91,6 +88,9 @@ class Uforia(object):
                 if config.DEBUG:
                     print("No modules found to handle MIME-type "+self.file.mtype+", skipping additional file parsing...")
             else:
+       	        lasthashid=self.db.findhash((self.file.fullpath,))
+    	        if not lasthashid:
+	                raise
                 try:
                     if config.DEBUG:
                         print("Setting up "+str(config.MODULES)+" module workers...")
