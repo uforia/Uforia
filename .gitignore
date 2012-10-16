@@ -92,4 +92,4 @@ pip-log.txt
 .DS_Store
 
 # Uforia config
-include/config.py
+source/include/config.py
