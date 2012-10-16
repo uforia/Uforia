@@ -77,6 +77,7 @@ class Database(object):
             raise
         if not moduletable or not columns or not values:
             raise ValueError('Cannot store information to database.')
+        cursor = self.db.cursor()
         query="""INSERT IGNORE INTO `"""+moduletable+"""` ("""
         if hashid:
             query=query+"""`hashid`"""
@@ -95,17 +96,17 @@ class Database(object):
         warnings.filterwarnings('ignore',category=self.db.Warning)
         if not hashid:
             query=query.replace(""" (, """,""" (""")
-        self.cursor.execute(query%escaped)
-        self.db.commit()
+        cursor.execute(query%escaped)
         warnings.resetwarnings()
 
     def findhash(self,fullpath):
         if not self.db:
             raise
+        cursor = self.db.cursor()
         query="""SELECT hashid FROM files WHERE fullpath='%s';"""
         escaped=[]
         for item in fullpath:
             escaped.append(self.db.escape_string(item))
         escaped=tuple(escaped)
-        self.cursor.execute(query%escaped)
+        cursor.execute(query%escaped)
         return self.cursor.fetchone()[0]

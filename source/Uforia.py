@@ -65,6 +65,7 @@ def fileScanner(dir,consumers):
     consumers.map_async(fileProcessor, filelist)
     consumers.close()
     consumers.join()
+    db.commit()
 
 def fileProcessor(item):
     fullpath=item[0]
@@ -125,3 +126,7 @@ if __name__ == "__main__":
             stdscr.keypad(0)
             curses.echo()
             curses.endwin()
+        try:
+            db.commit()
+        except:
+            pass
