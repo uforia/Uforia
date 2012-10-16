@@ -59,14 +59,15 @@ class Uforia(object):
             totalfiles=float(len(files))
             for name in files:
                 fullpath=os.path.join(root,name)
-                stdscr.addstr(0,0,"=== Uforia ===")
-                stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
-                stdscr.clrtoeol()
-                currentfile=float(files.index(name))
-                percentage=round(100*(currentfile/totalfiles),1)
-                stdscr.addstr(3,0,"Progress:\t"+str(percentage)+"%")
-                stdscr.clrtoeol()
-                stdscr.refresh()
+                if config.OUPUT:
+                    stdscr.addstr(0,0,"=== Uforia ===")
+                    stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
+                    stdscr.clrtoeol()
+                    currentfile=float(files.index(name))
+                    percentage=round(100*(currentfile/totalfiles),1)
+                    stdscr.addstr(3,0,"Progress:\t"+str(percentage)+"%")
+                    stdscr.clrtoeol()
+                    stdscr.refresh()
                 self.consumers.apply_async(self.fileProcessor(fullpath,self.hashid))
                 self.hashid+=1;
     
@@ -109,13 +110,15 @@ class Uforia(object):
 					
 if __name__ == "__main__":
     try:
-        stdscr = curses.initscr()
-        curses.noecho()
-        curses.cbreak()
-        stdscr.keypad(1)
+        if config.OUTPUT:
+            stdscr = curses.initscr()
+            curses.noecho()
+            curses.cbreak()
+            stdscr.keypad(1)
         main=Uforia()
     finally:
-        curses.nocbreak()
-        stdscr.keypad(0)
-        curses.echo()
-        curses.endwin()
+        if config.OUTPUT:
+            curses.nocbreak()
+            stdscr.keypad(0)
+            curses.echo()
+            curses.endwin()
