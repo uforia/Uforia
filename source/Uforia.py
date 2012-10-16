@@ -62,7 +62,9 @@ def fileScanner(dir,consumers):
             fullpath=os.path.join(root,name)
             filelist.append((fullpath,hashid,totalfiles))
             hashid+=1;
-    consumers.map(fileProcessor, filelist)
+    consumers.map_async(fileProcessor, filelist)
+    consumers.close()
+    consumers.join()
 
 def fileProcessor(item):
     fullpath=item[0]
@@ -105,7 +107,7 @@ def fileProcessor(item):
                 table=moduletotable[s]
                 columns=tabletocolumns[moduletotable[s]]
                 args=(db,table,lasthashid,columns,file.fullpath)
-                x=modulepool.apply_async(func(*args))
+                modulepool.map_async(func,*args)
         except:
             raise
 					
