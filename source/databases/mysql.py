@@ -21,34 +21,36 @@ class Database(object):
                 self.db=MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
             except:
                 raise
-            self.cursor = self.db.cursor()
-            query="""CREATE TABLE IF NOT EXISTS `files`
-                (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
-                INDEX USING HASH (`hashid`),
-                `fullpath` LONGTEXT,
-                `name` LONGTEXT,
-                `size` BIGINT,
-                `owner` INT,
-                `group` INT,
-                `perm` LONGTEXT,
-                `mtime` DECIMAL(32,16),
-                `atime` DECIMAL(32,16),
-                `ctime` DECIMAL(32,16),
-                `md5` VARCHAR(32),
-                `sha1` VARCHAR(40),
-                `sha256` VARCHAR(64),
-                `ftype` LONGTEXT,
-                `mtype` LONGTEXT,
-                `btype` LONGTEXT)"""
+    
+    def filestable(self):
+        self.cursor = self.db.cursor()
+        query="""CREATE TABLE IF NOT EXISTS `files`
+            (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+            INDEX USING HASH (`hashid`),
+            `fullpath` LONGTEXT,
+            `name` LONGTEXT,
+            `size` BIGINT,
+            `owner` INT,
+            `group` INT,
+            `perm` LONGTEXT,
+            `mtime` DECIMAL(32,16),
+            `atime` DECIMAL(32,16),
+            `ctime` DECIMAL(32,16),
+            `md5` VARCHAR(32),
+            `sha1` VARCHAR(40),
+            `sha256` VARCHAR(64),
+            `ftype` LONGTEXT,
+            `mtype` LONGTEXT,
+            `btype` LONGTEXT)"""
+        warnings.filterwarnings('ignore',category=self.db.Warning)
+        self.cursor.execute(query)
+        self.db.commit()
+        if self.truncate:
+            query="""TRUNCATE `files`"""
             warnings.filterwarnings('ignore',category=self.db.Warning)
             self.cursor.execute(query)
             self.db.commit()
-            if self.truncate:
-                query="""TRUNCATE `files`"""
-                warnings.filterwarnings('ignore',category=self.db.Warning)
-                self.cursor.execute(query)
-                self.db.commit()
-            warnings.resetwarnings()
+        warnings.resetwarnings()
 
     def setup(self,moduletable,columns):
         if not self.db:

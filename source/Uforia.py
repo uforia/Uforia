@@ -16,6 +16,8 @@ def run():
     global databaseModule
     databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
     db = databaseModule.Database(config)
+    db.filestable()
+    db.db.close()
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Listing available modules for MIME types...")
