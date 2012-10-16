@@ -59,7 +59,7 @@ class Uforia(object):
             totalfiles=float(len(files))
             for name in files:
                 fullpath=os.path.join(root,name)
-                if config.OUPUT:
+                if config.OUTPUT:
                     stdscr.addstr(0,0,"=== Uforia ===")
                     stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
                     stdscr.clrtoeol()
