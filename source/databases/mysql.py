@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import warnings
+import warnings, sys
+sys.path.append('.')
 
 class Database(object):
     def __init__(self,config):
