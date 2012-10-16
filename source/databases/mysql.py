@@ -13,7 +13,10 @@ class Database(object):
             self.password = config.DBPASS
             self.database = config.DBNAME
             self.truncate = config.TRUNCATE
-            import MySQLdb
+            try:
+                import MySQLdb
+            except ImportError:
+                raise
             try:
                 self.db=MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
             except:
