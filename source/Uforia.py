@@ -13,8 +13,8 @@ import config, File, magic
 def run():
     if config.DEBUG:
         print("Initializing "+config.DBTYPE+" database connection...")
+    global databaseModule
     databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
-    global db
     db = databaseModule.Database(config)
     if config.ENABLEMODULES:
         if config.DEBUG:
@@ -48,7 +48,9 @@ def moduleScanner():
                             modules[modulename]=imp.load_source(modulename,modulepath)
                             moduletotable[modulename]=tablename
                             tabletocolumns[tablename]=columns.split(':')[0]
+                            db = databaseModule.Database(config)
                             db.setup(moduletotable[modulename],columns)
+                            db.db.close()
 
 def fileScanner(dir,consumers):
     if config.DEBUG:
@@ -65,7 +67,9 @@ def fileScanner(dir,consumers):
     consumers.map_async(fileProcessor, filelist)
     consumers.close()
     consumers.join()
-    db.commit()
+    db = databaseModule.Database(config)
+    db.db.commit()
+    db.db.close()
 
 def fileProcessor(item):
     fullpath=item[0]
@@ -82,7 +86,9 @@ def fileProcessor(item):
             print("Exporting basic hashes and metadata to database.")
         columns=('hashid','fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
         values=(hashid,file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
+        db = databaseModule.Database(config)
         db.store('files','',columns,values)
+        db.db.close()
     except:
         raise
     if not config.ENABLEMODULES:
