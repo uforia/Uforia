@@ -61,10 +61,10 @@ def fileScanner(dir,consumers):
     hashid=1
     filelist=[]
     for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
-        totalfiles=len(files)
+        #totalfiles=len(files)
         for name in files:
             fullpath=os.path.join(root,name)
-            filelist.append((fullpath,hashid,totalfiles))
+            filelist.append((fullpath,hashid))
             hashid+=1;
     consumers.map_async(fileProcessor, filelist)
     consumers.close()
@@ -74,9 +74,7 @@ def fileScanner(dir,consumers):
     db.db.close()
 
 def fileProcessor(item):
-    fullpath=item[0]
-    hashid=item[1]
-    totalfiles=item[2]
+    fullpath,hashid=item
     file=File.File(fullpath,config)
     if config.OUTPUT:
         stdscr.addstr(0,0,"=== Uforia ===")
