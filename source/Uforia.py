@@ -3,12 +3,10 @@
 # Load basic Python modules
 import os, sys, re, time, multiprocessing, imp, glob, curses
 
-# Add loader paths to config files, support classes and database handlers
-sys.path.append('./include')
-sys.path.append('./databases')
-
 # Load Uforia custom modules
-import config, File, magic
+config=imp.load_source('config','include/config.py')
+File=imp.load_source('File','include/File.py')
+magic=imp.load_source('magic','include/magic.py')
 
 def run():
     if config.DEBUG:
@@ -75,7 +73,7 @@ def fileScanner(dir,consumers):
 
 def fileProcessor(item):
     fullpath,hashid=item
-    file=File.File(fullpath,config)
+    file=File.File(fullpath,config,magic)
     if config.OUTPUT:
         stdscr.addstr(0,0,"=== Uforia ===")
         stdscr.addstr(2,0,"Examining:\t"+str(fullpath))

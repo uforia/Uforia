@@ -4,11 +4,8 @@
 # Base Python modules
 import os, sys, hashlib, datetime
 
-# Uforia modules
-import config, magic
-
 class File(object):
-    def __init__(self,fullpath,config):
+    def __init__(self,fullpath,config,magic):
         """
         Attempt to parse the file passed via the fullpath variable and store its
         name, size, owner, group, MACtimes, MD5/SHA1/SHA256 hashes and file magic
