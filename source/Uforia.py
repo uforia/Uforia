@@ -44,7 +44,7 @@ def fileScanner(dir,consumers):
             fullpath=os.path.join(root,name)
             filelist.append((fullpath,hashid))
             hashid+=1;
-    consumers.map(fileProcessor,filelist)
+    consumers.map_async(fileProcessor,filelist)
     consumers.close()
     consumers.join()
 
