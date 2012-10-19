@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 try:
-    import MySQLdb, warnings
+    import MySQLdb, warnings, time
 except:
     raise
 
@@ -17,6 +17,18 @@ class Database(object):
             self.truncate = config.TRUNCATE
     
     def executeQuery(self,query):
+        connection = None
+        while not connection:
+            try:
+                connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
+            except MySQLdb.OperationalError, e:
+                if self.debug or True:
+                    print("Could not connect to the MySQL server: "+str(e))
+                    print("You might be flooding it with connections; consider raising the maximum amount!")
+                    print("Sleeping briefly...")
+                    time.sleep(1)
+            except:
+                raise
         try:
             connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
         except:
