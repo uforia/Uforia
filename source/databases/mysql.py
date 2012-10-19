@@ -10,11 +10,12 @@ class Database(object):
         if not config.DBHOST or not config.DBUSER or not config.DBPASS or not config.DBNAME:
             raise ValueError('Cannot initialize a database connection without valid credentials.')
         else:
-            self.hostname = config.DBHOST
-            self.username = config.DBUSER
-            self.password = config.DBPASS
-            self.database = config.DBNAME
-            self.truncate = config.TRUNCATE
+            self.hostname   = config.DBHOST
+            self.username   = config.DBUSER
+            self.password   = config.DBPASS
+            self.database   = config.DBNAME
+            self.truncate   = config.TRUNCATE
+            self.debug      = config.DEBUG
     
     def executeQuery(self,query):
         connection = None
