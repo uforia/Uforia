@@ -56,3 +56,7 @@ MODULES = 1
 # Tune the filesystem block reads
 # Example: CHUNKSIZE = 65536
 CHUNKSIZE = 65536
+
+# Maximum number of database connection attempts before giving up
+DBCONN = 5
+
