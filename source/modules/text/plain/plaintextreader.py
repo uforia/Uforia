@@ -4,5 +4,5 @@
 
 def process(db,table,hashid,columns,fullpath):
     with open(fullpath,'rb') as f:
-        values=(f.read(),)
+        values=f.read()
         db.store(table,hashid,(columns,),(values,))

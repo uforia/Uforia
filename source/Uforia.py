@@ -1,56 +1,36 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, sys, re, time, multiprocessing, imp, glob, curses
+import os, sys, re, time, multiprocessing, imp, curses, glob
 
 # Load Uforia custom modules
-config=imp.load_source('config','include/config.py')
-File=imp.load_source('File','include/File.py')
-magic=imp.load_source('magic','include/magic.py')
+try:
+    config      = imp.load_source('config','include/config.py')
+    File        = imp.load_source('File','include/File.py')
+    magic       = imp.load_source('magic','include/magic.py')
+    modules     = imp.load_source('modulescanner','include/modulescanner.py')
+    database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
+except:
+    raise
 
 def run():
     if config.DEBUG:
         print("Initializing "+config.DBTYPE+" database connection...")
-    global databaseModule
-    databaseModule = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
-    db = databaseModule.Database(config)
-    db.filestable()
-    db.db.close()
+    db = database.Database(config)
+    db.setupMainTable()
+    global uforiamodules
     if config.ENABLEMODULES:
         if config.DEBUG:
-            print("Listing available modules for MIME types...")
-        moduleScanner()
+            print("Detecting available modules...")
+        uforiamodules = modules.Modules(config,db)
+    else:
+        uforiamodules = '';
     if config.DEBUG:
         print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
-    consumers=multiprocessing.Pool(processes=config.CONSUMERS)
+    consumers = multiprocessing.Pool(processes=config.CONSUMERS)
     if config.DEBUG:
         print("Starting producer...")
     fileScanner(config.STARTDIR,consumers)
-
-def moduleScanner():
-    if config.DEBUG:
-       print("Starting in directory "+config.MODULEDIR+"...")
-    modules={}
-    modulelist={}
-    tabletocolumns={}
-    moduletotable={}
-    for major in os.listdir(config.MODULEDIR):
-        for minor in os.listdir(config.MODULEDIR+major):
-            mimetype=major+'/'+minor
-            modulelist[mimetype]=glob.glob(config.MODULEDIR+mimetype+"/*.py")
-            for modulepath in modulelist[mimetype]:
-                with open(modulepath) as file:
-                    for line in file:
-                        if line.startswith("""#TABLE: """):
-                            columns=line.strip('\n').replace("""#TABLE: """,'')
-                            modulename=modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','.')
-                            tablename=modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
-                            modules[modulename]=imp.load_source(modulename,modulepath)
-                            moduletotable[modulename]=tablename
-                            tabletocolumns[tablename]=columns.split(':')[0]
-                            db = databaseModule.Database(config)
-                            db.setup(moduletotable[modulename],columns)
-                            db.db.close()
 
 def fileScanner(dir,consumers):
     if config.DEBUG:
@@ -64,57 +44,51 @@ def fileScanner(dir,consumers):
             fullpath=os.path.join(root,name)
             filelist.append((fullpath,hashid))
             hashid+=1;
-    consumers.map_async(fileProcessor, filelist)
+    consumers.map(fileProcessor,filelist)
     consumers.close()
     consumers.join()
-    db = databaseModule.Database(config)
-    db.db.commit()
-    db.db.close()
 
 def fileProcessor(item):
+    multiprocessing.current_process().daemon=False
     fullpath,hashid=item
     file=File.File(fullpath,config,magic)
     if config.OUTPUT:
         stdscr.addstr(0,0,"=== Uforia ===")
-        stdscr.addstr(2,0,"Examining:\t"+str(fullpath))
+        stdscr.addstr(2,0,"Examining:")
+        stdscr.addstr(2,20,str(fullpath))
         stdscr.clrtoeol()
         stdscr.refresh()
     try:
         if config.DEBUG:
             print("Exporting basic hashes and metadata to database.")
-        columns=('hashid','fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-        values=(hashid,file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
-        db = databaseModule.Database(config)
-        db.store('files','',columns,values)
-        db.db.close()
+        columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
+        values = (file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
+        db = database.Database(config)
+        db.store('files',hashid,columns,values)
     except:
         raise
     if not config.ENABLEMODULES:
         if config.DEBUG:
             print("Additional module parsing disabled by config, skipping...")
     else:
-        if file.mtype not in modulelist:
+        if file.mtype not in uforiamodules.modulelist:
             if config.DEBUG:
                 print("No modules found to handle MIME-type "+file.mtype+", skipping additional file parsing...")
         else:
-   	        lasthashid=db.findhash((file.fullpath,))
-    	        if not lasthashid:
-	                raise
-        try:
-            if config.DEBUG:
-                print("Setting up "+str(config.MODULES)+" module workers...")
-            modulepool=multiprocessing.Pool(processes=config.MODULES)
-            handlers=[]
-            for handler in modulelist[file.mtype]:
-                handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
-            for s in handlers:
-                func=getattr(modules[s],'process')
-                table=moduletotable[s]
-                columns=tabletocolumns[moduletotable[s]]
-                args=(db,table,lasthashid,columns,file.fullpath)
-                modulepool.map_async(func,*args)
-        except:
-            raise
+            try:
+                if config.DEBUG:
+                    print("Setting up "+str(config.MODULES)+" module workers...")
+                modulepool = multiprocessing.Pool(processes=config.MODULES)
+                handlers = []
+                for handler in uforiamodules.modulelist[file.mtype]:
+                    handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
+                for s in handlers:
+                    table = uforiamodules.moduletotable[s]
+                    columns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
+                    args = (db,table,hashid,columns,file.fullpath)
+                    modulepool.apply_async(uforiamodules.modules[s].process(*args))
+            except:
+                raise
 					
 if __name__ == "__main__":
     try:
@@ -130,7 +104,3 @@ if __name__ == "__main__":
             stdscr.keypad(0)
             curses.echo()
             curses.endwin()
-        try:
-            db.commit()
-        except:
-            pass

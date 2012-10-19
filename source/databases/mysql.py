@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-import warnings, sys
-sys.path.append('.')
+try:
+    import MySQLdb, warnings
+except:
+    raise
 
 class Database(object):
     def __init__(self,config):
@@ -13,17 +15,26 @@ class Database(object):
             self.password = config.DBPASS
             self.database = config.DBNAME
             self.truncate = config.TRUNCATE
-            try:
-                import MySQLdb
-            except ImportError:
-                raise
-            try:
-                self.db=MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
-            except:
-                raise
     
-    def filestable(self):
-        self.cursor = self.db.cursor()
+    def executeQuery(self,query):
+        try:
+            connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
+        except:
+            raise
+        try:
+            cursor = connection.cursor()
+        except:
+            raise
+        try:
+            warnings.filterwarnings('ignore',category=connection.Warning)
+            cursor.execute(query)
+            connection.commit()
+            warnings.resetwarnings()
+            connection.close()
+        except:
+            raise
+    
+    def setupMainTable(self):
         query="""CREATE TABLE IF NOT EXISTS `files`
             (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
             INDEX USING HASH (`hashid`),
@@ -42,73 +53,38 @@ class Database(object):
             `ftype` LONGTEXT,
             `mtype` LONGTEXT,
             `btype` LONGTEXT)"""
-        warnings.filterwarnings('ignore',category=self.db.Warning)
-        self.cursor.execute(query)
-        self.db.commit()
+        self.executeQuery(query)
         if self.truncate:
-            query="""TRUNCATE `files`"""
-            warnings.filterwarnings('ignore',category=self.db.Warning)
-            self.cursor.execute(query)
-            self.db.commit()
-        warnings.resetwarnings()
+            query = """TRUNCATE `files`"""
+            self.executeQuery(query)
 
-    def setup(self,moduletable,columns):
-        if not self.db:
-            raise
-        if not moduletable:
-            raise ValueError('Module table name missing.')
-        if not columns:
-            raise ValueError('Table columns missing.')
-        query="""CREATE TABLE IF NOT EXISTS `"""+moduletable+"""` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
+    def setupModuleTable(self,table,columns):
+        if not table or not columns:
+            raise ValueError('Module table or columns missing.')
+        query = """CREATE TABLE IF NOT EXISTS `"""+table+"""` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
         for items in columns.split(','):
-            name,type=items.split(':')
-            query=query+""", `"""+name+"""` """+type
-        query=query+""", PRIMARY KEY(`hashid`));"""
-        warnings.filterwarnings('ignore',category=self.db.Warning)
-        self.cursor.execute(query)
-        self.db.commit()
+            name,type = items.split(':')
+            query += """, `"""+name+"""` """+type
+        query += """, PRIMARY KEY(`hashid`));"""
+        self.executeQuery(query)
         if self.truncate:
-            query="""TRUNCATE `"""+moduletable+"""`"""
-            warnings.filterwarnings('ignore',category=self.db.Warning)
-            self.cursor.execute(query)
-            self.db.commit()
-        warnings.resetwarnings()
+            query = """TRUNCATE `"""+table+"""`"""
+            self.executeQuery(query)
 
-    def store(self,moduletable,hashid,columns,values):
-        if not self.db:
-            raise
-        if not moduletable or not columns or not values:
-            raise ValueError('Cannot store information to database.')
-        cursor = self.db.cursor()
-        query="""INSERT IGNORE INTO `"""+moduletable+"""` ("""
-        if hashid:
-            query=query+"""`hashid`"""
+    def store(self,table,hashid,columns,values):
+        if not table or not columns or not values:
+            raise ValueError('Module table, columns or values missing.')
+        query = """INSERT IGNORE INTO `"""+table+"""` (`hashid`"""
         for item in columns:
-            query=query+", `"+item+"`"
-        query=query+""") VALUES ("""
-        if hashid:
-            query=query+str(hashid)
+            query += ", `"+item+"`"
+        query += """) VALUES ("""+str(hashid)
         for item in values:
-            query=query+", '%s'"
-        query=query+""");"""
-        escaped=[]
+            query += ", '%s'"
+        query += """);"""
+        escaped = []
         for i in values:
-            escaped.append(self.db.escape_string(str(i)))
-        escaped=tuple(escaped)
-        warnings.filterwarnings('ignore',category=self.db.Warning)
-        if not hashid:
-            query=query.replace(""" (, """,""" (""")
-        cursor.execute(query%escaped)
-        warnings.resetwarnings()
-
-    def findhash(self,fullpath):
-        if not self.db:
-            raise
-        cursor = self.db.cursor()
-        query="""SELECT hashid FROM files WHERE fullpath='%s';"""
-        escaped=[]
-        for item in fullpath:
-            escaped.append(self.db.escape_string(item))
-        escaped=tuple(escaped)
-        cursor.execute(query%escaped)
-        return self.cursor.fetchone()[0]
+            escaped.append(MySQLdb.escape_string(str(i)))
+        escaped = tuple(escaped)
+        escapedQuery = query%escaped
+        escapedQuery = escapedQuery.replace(""" (, """,""" (""")
+        self.executeQuery(escapedQuery)
