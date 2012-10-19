@@ -15,21 +15,25 @@ class Database(object):
             self.password   = config.DBPASS
             self.database   = config.DBNAME
             self.truncate   = config.TRUNCATE
+            self.dbconn     = config.DBCONN
             self.debug      = config.DEBUG
     
     def executeQuery(self,query):
         connection = None
+        attempts = 0
         while not connection:
             try:
                 connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
+                attempts += 1
             except MySQLdb.OperationalError, e:
-                if self.debug or True:
+                if self.debug:
                     print("Could not connect to the MySQL server: "+str(e))
-                    print("You might be flooding it with connections; consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
                     print("Sleeping for 5 seconds...")
-                    time.sleep(5)
-            except:
-                raise
+                time.sleep(5)
+                if attempts > self.dbconn:
+                    print("The MySQL server didn't respond after "+str(self.dbconn)+" requests; you might be flooding it with connections.")
+                    print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
+                    raise
         try:
             connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
         except:
