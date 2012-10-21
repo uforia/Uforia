@@ -29,8 +29,8 @@ class Database(object):
             except MySQLdb.OperationalError, e:
                 if self.debug:
                     print("Could not connect to the MySQL server: "+str(e))
-                    print("Sleeping for 5 seconds...")
-                time.sleep(5)
+                    print("Sleeping for 3 seconds...")
+                time.sleep(3)
                 if attempts > retries:
                     print("The MySQL server didn't respond after "+str(retries)+" requests; you might be flooding it with connections.")
                     print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
