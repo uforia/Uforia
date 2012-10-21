@@ -15,12 +15,13 @@ class Database(object):
             self.password   = config.DBPASS
             self.database   = config.DBNAME
             self.truncate   = config.TRUNCATE
-            self.dbconn     = config.DBCONN
+            self.retries    = config.DBRETRY
             self.debug      = config.DEBUG
     
     def executeQuery(self,query):
         connection = None
         attempts = 0
+        retries = self.retries
         while not connection:
             try:
                 connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
@@ -30,8 +31,8 @@ class Database(object):
                     print("Could not connect to the MySQL server: "+str(e))
                     print("Sleeping for 5 seconds...")
                 time.sleep(5)
-                if attempts > self.dbconn:
-                    print("The MySQL server didn't respond after "+str(self.dbconn)+" requests; you might be flooding it with connections.")
+                if attempts > retries:
+                    print("The MySQL server didn't respond after "+str(retries)+" requests; you might be flooding it with connections.")
                     print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
                     raise
         try:
