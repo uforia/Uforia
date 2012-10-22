@@ -10,22 +10,19 @@ class Database(object):
         if not config.DBHOST or not config.DBUSER or not config.DBPASS or not config.DBNAME:
             raise ValueError('Cannot initialize a database connection without valid credentials.')
         else:
-            self.hostname   = config.DBHOST
-            self.username   = config.DBUSER
-            self.password   = config.DBPASS
-            self.database   = config.DBNAME
+            hostname        = config.DBHOST
+            username        = config.DBUSER
+            password        = config.DBPASS
+            database        = config.DBNAME
             self.truncate   = config.TRUNCATE
-            self.retries    = config.DBRETRY
             self.debug      = config.DEBUG
-    
-    def executeQuery(self,query):
-        connection = None
-        attempts = 0
-        retries = self.retries
-        while not connection:
+            self.connection = None
+            attempts        = 0
+            retries         = config.DBRETRY
+        while not self.connection:
             try:
-                connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
-                attempts += 1
+                self.connection  = MySQLdb.connect(host = hostname, user = username, passwd = password, db = database)
+                attempts    += 1
             except MySQLdb.OperationalError, e:
                 if self.debug:
                     print("Could not connect to the MySQL server: "+str(e))
@@ -36,19 +33,15 @@ class Database(object):
                     print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
                     raise
         try:
-            connection = MySQLdb.connect(host=self.hostname,user=self.username,passwd=self.password,db=self.database)
+            self.cursor     = self.connection.cursor()
         except:
             raise
+    
+    def executeQuery(self,query):
         try:
-            cursor = connection.cursor()
-        except:
-            raise
-        try:
-            warnings.filterwarnings('ignore',category=connection.Warning)
-            cursor.execute(query)
-            connection.commit()
+            warnings.filterwarnings('ignore',category=self.connection.Warning)
+            self.cursor.execute(query)
             warnings.resetwarnings()
-            connection.close()
         except:
             raise
     

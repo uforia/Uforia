@@ -20,16 +20,16 @@ def dbworker():
         table,hashid,columns,values = dbqueue.get()
         if table == "Processing done":
             break
-        print table,hashid,columns,values
         db.store(table,hashid,columns,values)
         dbqueue.task_done()
+    db.connection.commit()
+    db.connection.close()
 
 def run():
     print "Uforia starting..."
-    if config.DEBUG:
-        print("Initializing "+config.DBTYPE+" database connection...")
-    db = database.Database(config)
 
+    if config.DEBUG:
+        print("Initializing "+config.DBTYPE+" database worker thread...")
     global dbqueue
     dbqueue = multiprocessing.JoinableQueue()
     dbthread = multiprocessing.Process(target = dbworker)
@@ -39,7 +39,9 @@ def run():
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
+        db = database.Database(config)
         uforiamodules = modules.Modules(config,db)
+        del db
     else:
         uforiamodules = '';
     if config.DEBUG:
