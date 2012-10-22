@@ -39,7 +39,6 @@ def fileScanner(dir,consumers):
     hashid=1
     filelist=[]
     for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
-        #totalfiles=len(files)
         for name in files:
             fullpath=os.path.join(root,name)
             filelist.append((fullpath,hashid))
