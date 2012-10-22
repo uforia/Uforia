@@ -28,6 +28,7 @@ def dbworker():
 def run():
     print "Uforia starting..."
 
+    db = database.Database(config)
     if config.DEBUG:
         print("Initializing "+config.DBTYPE+" database worker thread...")
     global dbqueue
@@ -39,11 +40,10 @@ def run():
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
-        db = database.Database(config)
         uforiamodules = modules.Modules(config,db)
-        del db
     else:
         uforiamodules = '';
+
     if config.DEBUG:
         print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
     consumers = multiprocessing.Pool(processes=config.CONSUMERS)
