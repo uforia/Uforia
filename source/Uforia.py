@@ -34,6 +34,7 @@ def run():
     global dbqueue
     dbqueue = multiprocessing.JoinableQueue()
     dbthread = multiprocessing.Process(target = dbworker)
+    dbthread.daemon = True
     dbthread.start()
 
     global uforiamodules
