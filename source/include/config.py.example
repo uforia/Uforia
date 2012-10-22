@@ -43,14 +43,6 @@ TRUNCATE = True
 # Example: CONSUMERS = 2
 CONSUMERS = 2
 
-# How many modules should be processing a file at the same time?
-# Note: This is a tradeoff between CPU power and disk I/O. More workers
-# means higher CPU utilization, but disk I/O might become a limiting factor.
-# Conversely: less workers might mean optimal disk I/O, but your CPU might
-# be sitting idle...
-# Example: MODULES = 1
-MODULES = 1
-
 # ADVANCED CONFIGURATION, FOR EXPERTS ONLY
 
 # Tune the filesystem block reads

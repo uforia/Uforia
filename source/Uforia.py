@@ -13,11 +13,28 @@ try:
 except:
     raise
 
+def dbworker():
+    db = database.Database(config)
+    db.setupMainTable()
+    while True:
+        table,hashid,columns,values = dbqueue.get()
+        if table == "Processing done":
+            break
+        print table,hashid,columns,values
+        db.store(table,hashid,columns,values)
+        dbqueue.task_done()
+
 def run():
+    print "Uforia starting..."
     if config.DEBUG:
         print("Initializing "+config.DBTYPE+" database connection...")
     db = database.Database(config)
-    db.setupMainTable()
+
+    global dbqueue
+    dbqueue = multiprocessing.JoinableQueue()
+    dbthread = multiprocessing.Process(target = dbworker)
+    dbthread.start()
+
     global uforiamodules
     if config.ENABLEMODULES:
         if config.DEBUG:
@@ -31,6 +48,10 @@ def run():
     if config.DEBUG:
         print("Starting producer...")
     fileScanner(config.STARTDIR,consumers)
+    
+    dbqueue.put(('Processing done','','',''))
+    dbthread.join()
+    print "Uforia completed..."
 
 def fileScanner(dir,consumers):
     if config.DEBUG:
@@ -43,7 +64,7 @@ def fileScanner(dir,consumers):
             fullpath=os.path.join(root,name)
             filelist.append((fullpath,hashid))
             hashid+=1;
-    consumers.map_async(fileProcessor,filelist)
+    consumers.map(fileProcessor,filelist)
     consumers.close()
     consumers.join()
 
@@ -63,7 +84,7 @@ def fileProcessor(item):
         columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
         values = (file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
         db = database.Database(config)
-        db.store('files',hashid,columns,values)
+        dbqueue.put(('files',hashid,columns,values))
     except:
         raise
     if not config.ENABLEMODULES:
@@ -77,15 +98,13 @@ def fileProcessor(item):
             try:
                 if config.DEBUG:
                     print("Setting up "+str(config.MODULES)+" module workers...")
-                modulepool = multiprocessing.Pool(processes=config.MODULES)
                 handlers = []
                 for handler in uforiamodules.modulelist[file.mtype]:
                     handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
                 for s in handlers:
-                    table = uforiamodules.moduletotable[s]
-                    columns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
-                    args = (db,table,hashid,columns,file.fullpath)
-                    modulepool.apply_async(uforiamodules.modules[s].process(*args))
+                    moduletable = uforiamodules.moduletotable[s]
+                    modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
+                    dbqueue.put(uforiamodules.modules[s].process(moduletable,hashid,modulecolumns,file.fullpath))
             except:
                 raise
 					
