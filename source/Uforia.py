@@ -18,8 +18,6 @@ def dbworker():
     db.setupMainTable()
     while True:
         table,hashid,columns,values = dbqueue.get()
-        if table == "Processing done":
-            break
         db.store(table,hashid,columns,values)
         dbqueue.task_done()
     db.connection.commit()
@@ -28,20 +26,22 @@ def dbworker():
 def run():
     print "Uforia starting..."
 
-    db = database.Database(config)
     if config.DEBUG:
-        print("Initializing "+config.DBTYPE+" database worker thread...")
+        print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
     global dbqueue
     dbqueue = multiprocessing.JoinableQueue()
-    dbthread = multiprocessing.Process(target = dbworker)
-    dbthread.daemon = True
-    dbthread.start()
+    for i in range(config.DBCONN):
+        dbthread = multiprocessing.Process(target = dbworker)
+        dbthread.daemon = True
+        dbthread.start()
 
     global uforiamodules
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
+        db = database.Database(config)
         uforiamodules = modules.Modules(config,db)
+        del db
     else:
         uforiamodules = '';
 
@@ -52,8 +52,8 @@ def run():
         print("Starting producer...")
     fileScanner(config.STARTDIR,consumers)
     
-    dbqueue.put(('Processing done','','',''))
-    dbthread.join()
+    dbqueue.join()
+    #dbqueue.put(('Processing done','','',''))
     print "Uforia completed..."
 
 def fileScanner(dir,consumers):
@@ -86,7 +86,6 @@ def fileProcessor(item):
             print("Exporting basic hashes and metadata to database.")
         columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
         values = (file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
-        db = database.Database(config)
         dbqueue.put(('files',hashid,columns,values))
     except:
         raise

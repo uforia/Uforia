@@ -21,7 +21,9 @@ ENABLEMODULES = False
 MODULEDIR = './modules/'
 
 # Database configuration. The name should match the handler providing
-# the appropriate Database class with setup() and store() methods.
+# the appropriate Database class with setupMainTable() and setupTable()
+# and store() methods. See one of the provided database handlers for more
+# information.
 # Example: DBTYPE = 'mysql'
 DATABASEDIR = './databases/'
 DBTYPE = 'mysql'
@@ -29,6 +31,11 @@ DBHOST = 'localhost'
 DBUSER = 'uforia'
 DBPASS = 'uforia'
 DBNAME = 'uforia'
+
+# How many simultaneous database connections should we use to handle
+# the queue of SQL queries? Warning: setting this too high can overload
+# or hamper database performance
+DBCONN = 2
 
 # Should Uforia TRUNCATE/DROP any existing tables? Setting this to False
 # can be useful when you want to add additional evidence items on an
@@ -50,5 +57,4 @@ CONSUMERS = 2
 CHUNKSIZE = 65536
 
 # Maximum number of database connection attempts before giving up
-DBCONN = 5
-
+DBRETRY = 5
