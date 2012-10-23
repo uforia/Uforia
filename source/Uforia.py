@@ -18,15 +18,13 @@ def dbworker():
     db.setupMainTable()
     while True:
         table,hashid,columns,values = dbqueue.get()
-        print table,hashid,columns,values
         db.store(table,hashid,columns,values)
         dbqueue.task_done()
     db.connection.commit()
     db.connection.close()
 
 def run():
-    print "Uforia starting..."
-
+    print("Uforia starting...")
     if config.DEBUG:
         print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
     global dbqueue
@@ -35,7 +33,6 @@ def run():
         dbthread = multiprocessing.Process(target = dbworker)
         dbthread.daemon = True
         dbthread.start()
-
     global uforiamodules
     if config.ENABLEMODULES:
         if config.DEBUG:
@@ -45,17 +42,17 @@ def run():
         del db
     else:
         uforiamodules = '';
-
     if config.DEBUG:
         print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
     consumers = multiprocessing.Pool(processes=config.CONSUMERS)
     if config.DEBUG:
         print("Starting producer...")
-    fileScanner(config.STARTDIR,consumers)
-    
+    if os.path.exists(config.STARTDIR):
+        fileScanner(config.STARTDIR,consumers)
+    else:
+        print("The pathname "+config.STARTDIR+" does not exist, stopping...")
     dbqueue.join()
-    #dbqueue.put(('Processing done','','',''))
-    print "Uforia completed..."
+    print("Uforia completed...")
 
 def fileScanner(dir,consumers):
     if config.DEBUG:
