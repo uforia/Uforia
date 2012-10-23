@@ -18,6 +18,7 @@ def dbworker():
     db.setupMainTable()
     while True:
         table,hashid,columns,values = dbqueue.get()
+        print table,hashid,columns,values
         db.store(table,hashid,columns,values)
         dbqueue.task_done()
     db.connection.commit()
