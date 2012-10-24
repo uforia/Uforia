@@ -2,7 +2,7 @@
 
 #TABLE: Contents:LONGTEXT
 
-def process(table,hashid,columns,fullpath):
+def process(fullpath):
     with open(fullpath,'rb') as f:
         values=f.read()
-        return (table,hashid,(columns,),(values,))
+        return (values,)
