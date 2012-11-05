@@ -23,6 +23,15 @@ def dbworker():
     db.connection.commit()
     db.connection.close()
 
+def monitorworker(stdscr):
+    while True:
+        stdscr.addstr(0,0,"=== Uforia ===")
+        stdscr.addstr(2,0,"Examining:")
+        stdscr.addstr(2,20,str(monitorqueue.get()))
+        stdscr.clrtoeol()
+        stdscr.refresh()
+        monitorqueue.task_done()
+
 def run():
     print("Uforia starting...")
     if config.DEBUG:
@@ -42,6 +51,12 @@ def run():
         del db
     else:
         uforiamodules = '';
+    if config.OUTPUT:
+        global monitorqueue
+        monitorqueue = multiprocessing.JoinableQueue()
+        monitorthread = multiprocessing.Process(target = monitorworker, args = (stdscr,))
+        monitorthread.daemon = True
+        monitorthread.start()
     if config.DEBUG:
         print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
     consumers = multiprocessing.Pool(processes=config.CONSUMERS)
@@ -52,6 +67,8 @@ def run():
     else:
         print("The pathname "+config.STARTDIR+" does not exist, stopping...")
     dbqueue.join()
+    if config.OUTPUT:
+        monitorqueue.join()
     print("Uforia completed...")
 
 def fileScanner(dir,consumers):
@@ -62,9 +79,9 @@ def fileScanner(dir,consumers):
     filelist=[]
     for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
         for name in files:
-            fullpath=os.path.join(root,name)
+            fullpath = os.path.join(root,name)
             filelist.append((fullpath,hashid))
-            hashid+=1;
+            hashid += 1;
     consumers.map_async(fileProcessor,filelist)
     consumers.close()
     consumers.join()
@@ -74,11 +91,7 @@ def fileProcessor(item):
     fullpath,hashid=item
     file=File.File(fullpath,config,magic)
     if config.OUTPUT:
-        stdscr.addstr(0,0,"=== Uforia ===")
-        stdscr.addstr(2,0,"Examining:")
-        stdscr.addstr(2,20,str(fullpath))
-        stdscr.clrtoeol()
-        stdscr.refresh()
+        monitorqueue.put(fullpath)
     try:
         if config.DEBUG:
             print("Exporting basic hashes and metadata to database.")
