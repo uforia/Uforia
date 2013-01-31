@@ -14,13 +14,18 @@ except:
     raise
 
 def dbworker():
+    QueueRunning = True
     db = database.Database(config)
     db.setupMainTable()
     while True:
         table,hashid,columns,values = dbqueue.get()
-        db.store(table,hashid,columns,values)
-        dbqueue.task_done()
+        if table != "No more tasks":
+            db.store(table,hashid,columns,values)
+            dbqueue.task_done()
+        else:
+            break
     db.connection.commit()
+    dbqueue.task_done()
     db.connection.close()
 
 def monitorworker(stdscr):
@@ -38,10 +43,11 @@ def run():
         print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
     global dbqueue
     dbqueue = multiprocessing.JoinableQueue()
+    dbworkers = []
     for i in range(config.DBCONN):
-        dbthread = multiprocessing.Process(target = dbworker)
-        dbthread.daemon = True
-        dbthread.start()
+        dbworkers.append(multiprocessing.Process(target = dbworker))
+        dbworkers[i].daemon = True
+        dbworkers[i].start()
     global uforiamodules
     if config.ENABLEMODULES:
         if config.DEBUG:
@@ -66,10 +72,12 @@ def run():
         fileScanner(config.STARTDIR,consumers)
     else:
         print("The pathname "+config.STARTDIR+" does not exist, stopping...")
+    for i in range(config.DBCONN):
+        dbqueue.put(('No more tasks','','',''))
     dbqueue.join()
     if config.OUTPUT:
         monitorqueue.join()
-    print("Uforia completed...")
+    print("\nUforia completed...\n")
 
 def fileScanner(dir,consumers):
     if config.DEBUG:
