@@ -78,4 +78,4 @@ class File(object):
                 print "Permissions:\t",self.perm
                 print "Magic:\t\tF:",self.ftype,"\n\t\tM:",self.mtype,"\n\t\tB:",self.btype
                 print "Modified:\t",self.mtime,"\nAccessed:\t",self.atime,"\nChanged:\t",self.ctime
-                print "MD5:\t\t",self.md5,"\nSHA1:\t\t",self.sha1,"\nSHA256\t\t",self.sha256
+                print "MD5:\t\t",self.md5,"\nSHA1:\t\t",self.sha1,"\nSHA256:\t\t",self.sha256
