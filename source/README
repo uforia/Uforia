@@ -1,7 +1,0 @@
-Before running the Uforia program, you need to change some settings.
-
-Edit the settings for the main program (like multithreading, starting directory and database) in:
-    ./include/config.py
-
-We are in the process of developing and pushing the first set of modules at the moment, now that
-the basic codebase is working reliably under Linux.
