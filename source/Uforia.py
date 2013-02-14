@@ -13,7 +13,7 @@ try:
 except:
     raise
 
-def dbworker():
+def dbworker(dbqueue):
     QueueRunning = True
     db = database.Database(config)
     db.setupMainTable()
@@ -41,11 +41,12 @@ def run():
     print("Uforia starting...")
     if config.DEBUG:
         print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
-    global dbqueue
-    dbqueue = multiprocessing.JoinableQueue()
+
+    manager = multiprocessing.Manager()
+    dbqueue = manager.JoinableQueue()
     dbworkers = []
     for i in range(config.DBCONN):
-        dbworkers.append(multiprocessing.Process(target = dbworker))
+        dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))
         dbworkers[i].daemon = True
         dbworkers[i].start()
     global uforiamodules
@@ -69,7 +70,7 @@ def run():
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        fileScanner(config.STARTDIR,consumers)
+        fileScanner(config.STARTDIR,consumers,dbqueue)
     else:
         print("The pathname "+config.STARTDIR+" does not exist, stopping...")
     for i in range(config.DBCONN):
@@ -79,7 +80,7 @@ def run():
         monitorqueue.join()
     print("\nUforia completed...\n")
 
-def fileScanner(dir,consumers):
+def fileScanner(dir,consumers,dbqueue):
     if config.DEBUG:
         print("Starting in directory "+config.STARTDIR+"...")
         print("Starting filescanner...")
@@ -88,7 +89,7 @@ def fileScanner(dir,consumers):
     for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
         for name in files:
             fullpath = os.path.join(root,name)
-            filelist.append((fullpath,hashid))
+            filelist.append((fullpath,hashid,dbqueue))
             hashid += 1;
     consumers.map_async(fileProcessor,filelist)
     consumers.close()
@@ -96,7 +97,7 @@ def fileScanner(dir,consumers):
 
 def fileProcessor(item):
     multiprocessing.current_process().daemon=False
-    fullpath,hashid=item
+    fullpath,hashid,dbqueue=item
     file=File.File(fullpath,config,magic)
     if config.OUTPUT:
         monitorqueue.put(fullpath)
