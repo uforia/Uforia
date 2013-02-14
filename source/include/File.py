@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # Base Python modules
-import os, sys, hashlib, datetime
+import os, sys, hashlib, datetime, traceback
 
 class File(object):
     def __init__(self,fullpath,config,magic):
@@ -67,9 +67,12 @@ class File(object):
             except:
                 raise IOError('Error calculating digests, possible filesystem error.')
             try:
-                self.ftype = str(magic.from_file(fullpath))
-                self.mtype = str(magic.from_file(fullpath, mime=True))
-                self.btype = str(magic.from_buffer(open(fullpath).read(65536)))
+                magic_default = magic.Magic(magic_file=config.MAGICFILE)
+                magic_mime = magic.Magic(mime=True, magic_file=config.MAGICFILE)
+                
+                self.ftype = str(magic_default.from_file(fullpath))
+                self.mtype = str(magic_mime.from_file(fullpath))
+                self.btype = str(magic_default.from_buffer(open(fullpath).read(65536)))
             except:
                 raise IOError('Error reading file magic, possible library or filesystem error.')
             if config.DEBUG:
