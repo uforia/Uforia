@@ -49,7 +49,6 @@ def run():
         dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))
         dbworkers[i].daemon = True
         dbworkers[i].start()
-    global uforiamodules
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
@@ -70,7 +69,7 @@ def run():
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        fileScanner(config.STARTDIR,consumers,dbqueue)
+        fileScanner(config.STARTDIR,consumers,dbqueue,uforiamodules)
     else:
         print("The pathname "+config.STARTDIR+" does not exist, stopping...")
     for i in range(config.DBCONN):
@@ -80,7 +79,7 @@ def run():
         monitorqueue.join()
     print("\nUforia completed...\n")
 
-def fileScanner(dir,consumers,dbqueue):
+def fileScanner(dir,consumers,dbqueue,uforiamodules):
     if config.DEBUG:
         print("Starting in directory "+config.STARTDIR+"...")
         print("Starting filescanner...")
@@ -89,15 +88,16 @@ def fileScanner(dir,consumers,dbqueue):
     for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
         for name in files:
             fullpath = os.path.join(root,name)
-            filelist.append((fullpath,hashid,dbqueue))
+            filelist.append((fullpath,hashid))
             hashid += 1;
-    consumers.map_async(fileProcessor,filelist)
+    for item in filelist:
+        consumers.apply_async(fileProcessor,args=(item,dbqueue,uforiamodules))
     consumers.close()
     consumers.join()
 
-def fileProcessor(item):
+def fileProcessor(item,dbqueue,uforiamodules):
     multiprocessing.current_process().daemon=False
-    fullpath,hashid,dbqueue=item
+    fullpath,hashid=item
     file=File.File(fullpath,config,magic)
     if config.OUTPUT:
         monitorqueue.put(fullpath)
@@ -119,8 +119,9 @@ def fileProcessor(item):
         else:
             try:
                 if config.DEBUG:
-                    print("Setting up "+str(config.MODULES)+" module workers...")
+                    print("Setting up "+str(len(uforiamodules.modulelist))+" module workers...")
                 handlers = []
+                uforiamodules.load_modules()
                 for handler in uforiamodules.modulelist[file.mtype]:
                     handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
                 for s in handlers:

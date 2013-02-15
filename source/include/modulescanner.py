@@ -8,6 +8,7 @@ class Modules(object):
         self.modulelist = {}
         self.moduletotable = {}
         self.moduletabletocolumns = {}
+        self.modulepaths = {}
         for major in os.listdir(config.MODULEDIR):
             for minor in os.listdir(config.MODULEDIR+major):
                 mimetype = major+'/'+minor
@@ -21,10 +22,20 @@ class Modules(object):
                                 columns = line.strip('\n').replace("""#TABLE: """,'')
                                 modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','.')
                                 tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
-                                self.modules[modulename] = imp.load_source(modulename,modulepath)
+                                self.modulepaths[modulename] = modulepath
                                 self.moduletotable[modulename] = tablename
                                 self.moduletabletocolumns[tablename] = columns.split(':')[0]
                                 db.setupModuleTable(self.moduletotable[modulename],columns)
                                 break
                     if not tableDef:
                         del self.modulelist[mimetype]
+
+    def load_modules(self):
+        """
+        Because the result of imp.load_source can't be shared between processes, each process
+        using a module should call this function to actually load its sources and put the modules
+        in the modules attribute.
+        """
+        for modulename, modulepath in self.modulepaths.items():
+            self.modules[modulename] = imp.load_source(modulename,modulepath)
+        
