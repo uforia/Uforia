@@ -93,3 +93,8 @@ pip-log.txt
 
 # Uforia config
 source/include/config.py
+
+# Uforia config files for Windows users only
+source/magic1.dll
+source/regex2.dll
+source/zlib1.dll
