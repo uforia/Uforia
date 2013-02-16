@@ -28,6 +28,7 @@ class Modules(object):
                                 columns.append(column)
                             self.moduletabletocolumns[tablename] = columns
                             db.setupModuleTable(self.moduletotable[modulename],columnline)
+                            break
                             
                 if not tableDef:
                     del self.modulelist[mimetype]
