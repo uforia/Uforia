@@ -113,7 +113,8 @@ def fileProcessor(item,dbqueue,uforiamodules):
         if config.DEBUG:
             print("Additional module parsing disabled by config, skipping...")
     else:
-        if file.mtype not in uforiamodules.modulelist:
+        modulename = file.mtype.replace('/','_')
+        if modulename not in uforiamodules.modulelist:
             if config.DEBUG:
                 print("No modules found to handle MIME-type "+file.mtype+", skipping additional file parsing...")
         else:
@@ -122,7 +123,7 @@ def fileProcessor(item,dbqueue,uforiamodules):
                     print("Setting up "+str(len(uforiamodules.modulelist))+" module workers...")
                 handlers = []
                 uforiamodules.load_modules()
-                for handler in uforiamodules.modulelist[file.mtype]:
+                for handler in uforiamodules.modulelist[modulename]:
                     handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
                 for s in handlers:
                     moduletable = uforiamodules.moduletotable[s]
