@@ -17,14 +17,18 @@ class Modules(object):
                     for line in file:
                         if line.startswith("""#TABLE: """):
                             tableDef = True
-                            columns = line.strip('\n').replace("""#TABLE: """,'')
+                            columnline = line.strip('\n').replace("""#TABLE: """,'')
                             modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','.')
                             tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
                             self.modulepaths[modulename] = modulepath
                             self.moduletotable[modulename] = tablename
-                            self.moduletabletocolumns[tablename] = columns.split(':')[0]
-                            db.setupModuleTable(self.moduletotable[modulename],columns)
-                            break
+                            columns = []
+                            for columnelement in columnline.split(','):
+                                column = columnelement.split(':')[0]
+                                columns.append(column)
+                            self.moduletabletocolumns[tablename] = columns
+                            db.setupModuleTable(self.moduletotable[modulename],columnline)
+                            
                 if not tableDef:
                     del self.modulelist[mimetype]
 

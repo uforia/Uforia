@@ -127,7 +127,7 @@ def fileProcessor(item,dbqueue,uforiamodules):
                     handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
                 for s in handlers:
                     moduletable = uforiamodules.moduletotable[s]
-                    modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]],
+                    modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
                     dbqueue.put((moduletable,hashid,modulecolumns,uforiamodules.modules[s].process(file.fullpath)))
             except:
                 raise
