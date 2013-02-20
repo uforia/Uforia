@@ -86,8 +86,19 @@ def run():
     print("\nUforia completed...\n")
 
 def fileScanner(dir,consumers,dbqueue,uforiamodules):
+    """
+    Walks through the specified directory tree to find all files. Each
+    file is passed through fileProcessor, which is called asynchronously
+    through the multiprocessing pool (consumers).
+
+    dir - The path to search
+    consumers - The multiprocessing.Pool which will carry out the
+        file processing task
+    dbqueue - The database queue, passed to fileProcessor
+    uforiamodules - Loaded uforia modules, passed to fileProcessor
+    """
     if config.DEBUG:
-        print("Starting in directory "+config.STARTDIR+"...")
+        print("Starting in directory "+dir+"...")
         print("Starting filescanner...")
     hashid=1
     filelist=[]
