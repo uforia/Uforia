@@ -13,7 +13,7 @@ try:
 except:
     raise
 
-def dbworker(dbqueue, db=database.Database(config)):
+def dbworker(dbqueue, db=None):
     """
     Receives new argument lists from the database queue and writes them
     to the database. The worker will not stop until it obtains a table
@@ -22,6 +22,8 @@ def dbworker(dbqueue, db=database.Database(config)):
     dbqueue - The database queue, a multiprocessing.JoinableQueue
     db - Optionally use another database object
     """
+    if db == None:
+        db = database.Database(config)
     db.setupMainTable()
     while True:
         table,hashid,columns,values = dbqueue.get()
