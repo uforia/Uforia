@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, sys, re, time, multiprocessing, imp, curses, glob
+import os, multiprocessing, imp, curses
 
 # Load Uforia custom modules
 try:
@@ -13,9 +13,15 @@ try:
 except:
     raise
 
-def dbworker(dbqueue):
-    QueueRunning = True
-    db = database.Database(config)
+def dbworker(dbqueue, db=database.Database(config)):
+    """
+    Receives new argument lists from the database queue and writes them
+    to the database. The worker will not stop until it obtains a table
+    with the name "No more tasks" in the argument list.
+
+    dbqueue - The database queue, a multiprocessing.JoinableQueue
+    db - Optionally use another database object
+    """
     db.setupMainTable()
     while True:
         table,hashid,columns,values = dbqueue.get()
@@ -131,7 +137,7 @@ def fileProcessor(item,dbqueue,uforiamodules):
                     dbqueue.put((moduletable,hashid,modulecolumns,uforiamodules.modules[s].process(file.fullpath)))
             except:
                 raise
-					
+
 if __name__ == "__main__":
     try:
         if config.OUTPUT:
