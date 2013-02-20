@@ -68,18 +68,18 @@ class TestFileScanner(unittest.TestCase):
         self.osWalkPatcher.stop()
 
     def testFileScannerClosesConsumers(self):
-        Uforia.fileScanner(self.testDir[0], self.consumers, None, None)
+        Uforia.fileScanner(self.testDir[0], self.consumers, None, None, None)
 
         self.consumers.close.assert_called_once_with()
 
     def testFileScannerJoinsConsumers(self):
-        Uforia.fileScanner(self.testDir[0], self.consumers, None, None)
+        Uforia.fileScanner(self.testDir[0], self.consumers, None, None, None)
 
         self.consumers.join.assert_called_once_with()
 
     def testFileScannerHandlesAllFiles(self):
         self.assertTrue(os.walk == self.MockOsWalk)
-        Uforia.fileScanner(self.testDir[0], self.consumers, None, None)
+        Uforia.fileScanner(self.testDir[0], self.consumers, None, None, None)
 
         fullPaths = []
         for args, kwargs in self.consumers.apply_async.call_args_list:
@@ -89,7 +89,7 @@ class TestFileScanner(unittest.TestCase):
             self.assertTrue(fullPath.endswith(self.testDir[0][2][i]), "not all files have been processed")
 
     def testFileScannerHashIdsAreUnique(self):
-        Uforia.fileScanner(self.testDir[0], self.consumers, None, None)
+        Uforia.fileScanner(self.testDir[0], self.consumers, None, None, None)
 
         hashIds = []
         for args, kwargs in self.consumers.apply_async.call_args_list:

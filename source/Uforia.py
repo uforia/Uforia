@@ -36,58 +36,40 @@ def dbworker(dbqueue, db=None):
     dbqueue.task_done()
     db.connection.close()
 
-def monitorworker(stdscr):
+def monitorworker(monitorqueue):
+    """
+    Starts the monitor display for the curses console.
+
+    monitorqueue - The multiprocessing.JoinableQueue that emits the
+        currently examined file
+    """
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    stdscr.keypad(1)
+
     while True:
-        stdscr.addstr(0,0,"=== Uforia ===")
-        stdscr.addstr(2,0,"Examining:")
-        stdscr.addstr(2,20,str(monitorqueue.get()))
-        stdscr.clrtoeol()
-        stdscr.refresh()
-        monitorqueue.task_done()
+        val = monitorqueue.get()
+        if val != None:
+            stdscr.clear()
+            stdscr.addstr(0,0,"=== Uforia ===")
+            stdscr.addstr(2,0,"Examining:")
+            stdscr.addstr(2,20,str(val))
+            if config.DEBUG:
+                stdscr.addstr(24,0,"Warning: console output will be severely mangled with debug enabled.")
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            monitorqueue.task_done()
+        else:
+            break
 
-def run():
-    print("Uforia starting...")
-    if config.DEBUG:
-        print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
+    monitorqueue.task_done()
+    curses.nocbreak()
+    stdscr.keypad(0)
+    curses.echo()
+    curses.endwin()
 
-    manager = multiprocessing.Manager()
-    dbqueue = manager.JoinableQueue()
-    dbworkers = []
-    for i in range(config.DBCONN):
-        dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))
-        dbworkers[i].daemon = True
-        dbworkers[i].start()
-    if config.ENABLEMODULES:
-        if config.DEBUG:
-            print("Detecting available modules...")
-        db = database.Database(config)
-        uforiamodules = modules.Modules(config,db)
-        del db
-    else:
-        uforiamodules = '';
-    if config.OUTPUT:
-        global monitorqueue
-        monitorqueue = multiprocessing.JoinableQueue()
-        monitorthread = multiprocessing.Process(target = monitorworker, args = (stdscr,))
-        monitorthread.daemon = True
-        monitorthread.start()
-    if config.DEBUG:
-        print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
-    consumers = multiprocessing.Pool(processes=config.CONSUMERS)
-    if config.DEBUG:
-        print("Starting producer...")
-    if os.path.exists(config.STARTDIR):
-        fileScanner(config.STARTDIR,consumers,dbqueue,uforiamodules)
-    else:
-        print("The pathname "+config.STARTDIR+" does not exist, stopping...")
-    for i in range(config.DBCONN):
-        dbqueue.put(('No more tasks','','',''))
-    dbqueue.join()
-    if config.OUTPUT:
-        monitorqueue.join()
-    print("\nUforia completed...\n")
-
-def fileScanner(dir,consumers,dbqueue,uforiamodules):
+def fileScanner(dir,consumers,dbqueue,monitorqueue,uforiamodules):
     """
     Walks through the specified directory tree to find all files. Each
     file is passed through fileProcessor, which is called asynchronously
@@ -110,11 +92,54 @@ def fileScanner(dir,consumers,dbqueue,uforiamodules):
             filelist.append((fullpath,hashid))
             hashid += 1;
     for item in filelist:
-        consumers.apply_async(fileProcessor,args=(item,dbqueue,uforiamodules))
+        consumers.apply_async(fileProcessor,args=(item,dbqueue,monitorqueue,uforiamodules))
     consumers.close()
     consumers.join()
 
-def fileProcessor(item,dbqueue,uforiamodules):
+def invokeModules(dbqueue, uforiamodules, hashid, file):
+    """
+    Loads all Uforia modules in the current process and invokes them.
+    Only modules that apply to the current MIME-type are loaded.
+    The result of the module's process method will be put to the
+    database queue.
+
+    dbqueue - The database queue, a multiprocessing.JoinableQueue
+    uforiamodules - The uforia module objects from modulescanner
+    hashid - The hash id of the currently processed file
+    file - The currenlty processed file
+    """
+    modulename = file.mtype.replace('/', '_')
+    if modulename not in uforiamodules.modulelist:
+        if config.DEBUG:
+            print "No modules found to handle MIME-type " + file.mtype + ", skipping additional file parsing..."
+    else:
+        try:
+            if config.DEBUG:
+                print "Setting up " + str(len(uforiamodules.modulelist)) + " module workers..."
+            handlers = []
+            uforiamodules.load_modules()
+            for handler in uforiamodules.modulelist[modulename]:
+                handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/', '.'))
+
+            for s in handlers:
+                moduletable = uforiamodules.moduletotable[s]
+                modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
+                dbqueue.put((moduletable, hashid, modulecolumns, uforiamodules.modules[s].process(file.fullpath)))
+        except:
+            raise
+
+def fileProcessor(item,dbqueue,monitorqueue,uforiamodules):
+    """
+    Process a file item and export its information to the database
+    queue. Also calls invokeModules() if modules are enabled in the
+    configuration.
+
+    item - Tuple containing the fullpath and hashid of the file
+    dbqueue - The database queue, a multiprocessing.JoinableQueue
+    monitorqueue - The monitoring queue to show information about the
+        current file
+    uforiamodules - The uforia module objects from modulescanner
+    """
     multiprocessing.current_process().daemon=False
     fullpath,hashid=item
     file=File.File(fullpath,config,magic)
@@ -132,36 +157,56 @@ def fileProcessor(item,dbqueue,uforiamodules):
         if config.DEBUG:
             print("Additional module parsing disabled by config, skipping...")
     else:
-        modulename = file.mtype.replace('/','_')
-        if modulename not in uforiamodules.modulelist:
-            if config.DEBUG:
-                print("No modules found to handle MIME-type "+file.mtype+", skipping additional file parsing...")
-        else:
-            try:
-                if config.DEBUG:
-                    print("Setting up "+str(len(uforiamodules.modulelist))+" module workers...")
-                handlers = []
-                uforiamodules.load_modules()
-                for handler in uforiamodules.modulelist[modulename]:
-                    handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/','.'))
-                for s in handlers:
-                    moduletable = uforiamodules.moduletotable[s]
-                    modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
-                    dbqueue.put((moduletable,hashid,modulecolumns,uforiamodules.modules[s].process(file.fullpath)))
-            except:
-                raise
+        invokeModules(dbqueue, uforiamodules, hashid, file)
+
+def run():
+    """
+    Starts Uforia.
+
+    Sets up the database, modules, all background processes and then
+    invokes the fileScanner.
+    """
+    print("Uforia starting...")
+    if config.DEBUG:
+        print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
+
+    manager = multiprocessing.Manager()
+    dbqueue = manager.JoinableQueue()
+    dbworkers = []
+    for i in range(config.DBCONN):
+        dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))
+        dbworkers[i].daemon = True
+        dbworkers[i].start()
+    if config.ENABLEMODULES:
+        if config.DEBUG:
+            print("Detecting available modules...")
+        db = database.Database(config)
+        uforiamodules = modules.Modules(config,db)
+        del db
+    else:
+        uforiamodules = '';
+    monitorqueue = None
+    if config.OUTPUT:
+        monitorqueue = manager.JoinableQueue()
+        monitorthread = multiprocessing.Process(target = monitorworker, args = (monitorqueue,))
+        monitorthread.daemon = True
+        monitorthread.start()
+    if config.DEBUG:
+        print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
+    consumers = multiprocessing.Pool(processes=config.CONSUMERS)
+    if config.DEBUG:
+        print("Starting producer...")
+    if os.path.exists(config.STARTDIR):
+        fileScanner(config.STARTDIR,consumers,dbqueue,monitorqueue,uforiamodules)
+    else:
+        print("The pathname "+config.STARTDIR+" does not exist, stopping...")
+    for i in range(config.DBCONN):
+        dbqueue.put(('No more tasks','','',''))
+    dbqueue.join()
+    if config.OUTPUT:
+        monitorqueue.put(None)
+        monitorqueue.join()
+    print("\nUforia completed...\n")
 
 if __name__ == "__main__":
-    try:
-        if config.OUTPUT:
-            stdscr = curses.initscr()
-            curses.noecho()
-            curses.cbreak()
-            stdscr.keypad(1)
-        run()
-    finally:
-        if config.OUTPUT:
-            curses.nocbreak()
-            stdscr.keypad(0)
-            curses.echo()
-            curses.endwin()
+    run()
