@@ -16,8 +16,10 @@ except:
 def dbworker(dbqueue, db=None):
     """
     Receives new argument lists from the database queue and writes them
-    to the database. The worker will not stop until it obtains a table
-    with the name "No more tasks" in the argument list.
+    to the database. The worker will continue until it receives a table
+    with the name "No more tasks" (the sentinel) in the argument list. Upon
+    receiving the sentinel, it will send a commit to write out all
+    outstanding I/O to the database. 
 
     dbqueue - The database queue, a multiprocessing.JoinableQueue
     db - Optionally use another database object
@@ -106,7 +108,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
     dbqueue - The database queue, a multiprocessing.JoinableQueue
     uforiamodules - The uforia module objects from modulescanner
     hashid - The hash id of the currently processed file
-    file - The currenlty processed file
+    file - The file currently being processed
     """
     modulename = file.mtype.replace('/', '_')
     if modulename not in uforiamodules.modulelist:
