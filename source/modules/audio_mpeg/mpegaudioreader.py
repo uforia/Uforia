@@ -241,17 +241,17 @@ def process(fullpath):
         # Print some data that is stored in the database if debug is true
         if config.DEBUG:
             print "\nAudio file data:"
-            print "Title:        " + title
-            print "Subtitle:     " + subtitle
-            print "Arist:        " + artist
-            print "Album:        " + album
-            print "Album aritst: " + album_artist
-            print "Track number: " + str(track_number)
-            print "Publisher:    " + publisher
-            print "Conductor:    " + conductor
-            print "Composer:     " + composer
-            print "Duration:     " + str(duration)
-            print "Rating:       " + str(rating)
+            print "Title:        %s" % title
+            print "Subtitle:     %s" % subtitle
+            print "Arist:        %s" % artist
+            print "Album:        %s" % album
+            print "Album aritst: %s" % album_artist
+            print "Track number: %s" % str(track_number)
+            print "Publisher:    %s" % publisher
+            print "Conductor:    %s" % conductor
+            print "Composer:     %s" % composer
+            print "Duration:     %s" % str(duration)
+            print "Rating:       %s" % str(rating)
             print
             
         
