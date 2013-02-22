@@ -6,7 +6,16 @@ except:
     raise
 
 class Database(object):
+    """
+    This is a MySQL implementation of Uforia's data storage facility.
+    """
     def __init__(self,config):
+        """
+        Initializes a MySQL database connection using the specified Uforia
+        configuration.
+
+        config - The uforia configuration object
+        """
         if not config.DBHOST or not config.DBUSER or not config.DBPASS or not config.DBNAME:
             raise ValueError('Cannot initialize a database connection without valid credentials.')
         else:
@@ -36,16 +45,25 @@ class Database(object):
             self.cursor     = self.connection.cursor()
         except:
             raise
-    
+
     def executeQuery(self,query):
+        """
+        Executes a query (which should have no data to return).
+
+        query - The query string
+        """
         try:
             warnings.filterwarnings('ignore',category=self.connection.Warning)
             self.cursor.execute(query)
             warnings.resetwarnings()
         except:
             raise
-    
+
     def setupMainTable(self):
+        """
+        Sets up the main data table, which contains general information
+        about each file.
+        """
         query="""CREATE TABLE IF NOT EXISTS `files`
             (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
             INDEX USING HASH (`hashid`),
@@ -70,6 +88,14 @@ class Database(object):
             self.executeQuery(query)
 
     def setupModuleTable(self,table,columns):
+        """
+        Sets up a specified table.
+
+        table - The name of the table
+        columns - A string with multiple column names and datatypes,
+            separated by commas. Example:
+            Summary:LONGSTRING, Index:SMALLINT
+        """
         if not table or not columns:
             raise ValueError('Module table or columns missing.')
         query = """CREATE TABLE IF NOT EXISTS `"""+table+"""` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
@@ -83,6 +109,15 @@ class Database(object):
             self.executeQuery(query)
 
     def store(self,table,hashid,columns,values):
+        """
+        Inserts data into the specified table (main table or module
+        table).
+
+        table - The name of the table
+        hashid - The file's hash id
+        columns - A tuple with the name of each column
+        values - A tuple with the value for each column
+        """
         if not table or not columns or not values:
             raise ValueError('Module table, columns or values missing.')
         query = """INSERT IGNORE INTO `"""+table+"""` (`hashid`"""

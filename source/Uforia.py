@@ -119,7 +119,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             if config.DEBUG:
                 print "Setting up " + str(len(uforiamodules.modulelist)) + " module workers..."
             handlers = []
-            uforiamodules.load_modules()
+            uforiamodules.loadModules()
             for handler in uforiamodules.modulelist[modulename]:
                 handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/', '.'))
 
