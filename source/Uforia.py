@@ -110,8 +110,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
     hashid - The hash id of the currently processed file
     file - The file currently being processed
     """
-    modulename = file.mtype#.replace('/', '_')
-    if modulename not in uforiamodules.modulelist:
+    if file.mtype not in uforiamodules.modulelist:
         if config.DEBUG:
             print "No modules found to handle MIME-type " + file.mtype + ", skipping additional file parsing..."
     else:
@@ -120,7 +119,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
                 print "Setting up " + str(len(uforiamodules.modulelist)) + " module workers..."
             handlers = []
             uforiamodules.loadModules()
-            for handler in uforiamodules.modulelist[modulename]:
+            for handler in uforiamodules.modulelist[file.mtype]:
                 handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/', '.'))
 
             for s in handlers:
