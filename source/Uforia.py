@@ -110,7 +110,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
     hashid - The hash id of the currently processed file
     file - The file currently being processed
     """
-    modulename = file.mtype.replace('/', '_')
+    modulename = file.mtype#.replace('/', '_')
     if modulename not in uforiamodules.modulelist:
         if config.DEBUG:
             print "No modules found to handle MIME-type " + file.mtype + ", skipping additional file parsing..."

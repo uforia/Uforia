@@ -30,29 +30,32 @@ class Modules(object):
         self.moduletotable = {}
         self.moduletabletocolumns = {}
         self.modulepaths = {}
-        for mimetype in os.listdir(config.MODULEDIR):
-            self.modulelist[mimetype] = glob.glob(config.MODULEDIR+mimetype+"/*.py")
-            for modulepath in self.modulelist[mimetype]:
-                tableDef = False
-                with open(modulepath) as file:
-                    for line in file:
-                        if line.startswith("""#TABLE: """):
-                            tableDef = True
-                            columnline = line.strip('\n').replace("""#TABLE: """,'')
-                            modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','.')
-                            tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
-                            self.modulepaths[modulename] = modulepath
-                            self.moduletotable[modulename] = tablename
-                            columns = []
-                            for columnelement in columnline.split(','):
-                                column = columnelement.split(':')[0]
-                                columns.append(column)
-                            self.moduletabletocolumns[tablename] = columns
-                            db.setupModuleTable(self.moduletotable[modulename],columnline)
-                            break
 
-                if not tableDef:
-                    del self.modulelist[mimetype]
+        for major in os.listdir(config.MODULEDIR):
+            for minor in os.listdir(config.MODULEDIR+major):
+                mimetype = major+'/'+minor
+                self.modulelist[mimetype] = glob.glob(config.MODULEDIR+mimetype+"/*.py")
+                for modulepath in self.modulelist[mimetype]:
+                    tableDef = False
+                    with open(modulepath) as file:
+                        for line in file:
+                            if line.startswith("""#TABLE: """):
+                                tableDef = True
+                                columnline = line.strip('\n').replace("""#TABLE: """,'')
+                                modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','.')
+                                tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
+                                self.modulepaths[modulename] = modulepath
+                                self.moduletotable[modulename] = tablename
+                                columns = []
+                                for columnelement in columnline.split(','):
+                                    column = columnelement.split(':')[0]
+                                    columns.append(column)
+                                self.moduletabletocolumns[tablename] = columns
+                                db.setupModuleTable(self.moduletotable[modulename],columnline)
+                                break
+
+                    if not tableDef:
+                        del self.modulelist[mimetype]
 
     def loadModules(self):
         """
