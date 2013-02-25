@@ -42,8 +42,8 @@ class Modules(object):
                             if line.startswith("""#TABLE: """):
                                 tableDef = True
                                 columnline = line.strip('\n').replace("""#TABLE: """,'')
-                                modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
-                                tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_')
+                                modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_').replace('\\','_')
+                                tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_').replace('\\','_')
                                 self.modulepaths[modulename] = modulepath
                                 self.moduletotable[modulename] = tablename
                                 columns = []
