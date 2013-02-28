@@ -121,7 +121,6 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             uforiamodules.loadModules()
             for handler in uforiamodules.modulelist[file.mtype]:
                 handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/', '_').replace('\\','_'))
-            print handlers
 
             for s in handlers:
                 moduletable = uforiamodules.moduletotable[s]
