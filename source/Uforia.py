@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, multiprocessing, imp, curses
+import os, multiprocessing, imp, curses, sys, traceback
 
 # Load Uforia custom modules
 try:
@@ -121,12 +121,14 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             uforiamodules.loadModules()
             for handler in uforiamodules.modulelist[file.mtype]:
                 handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/', '_').replace('\\','_'))
+            print handlers
 
             for s in handlers:
                 moduletable = uforiamodules.moduletotable[s]
                 modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
                 dbqueue.put((moduletable, hashid, modulecolumns, uforiamodules.modules[s].process(file.fullpath)))
         except:
+            traceback.print_exc(file = sys.stderr)
             raise
 
 def fileProcessor(item,dbqueue,monitorqueue,uforiamodules):
