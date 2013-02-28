@@ -5,7 +5,7 @@ Created on 16 feb. 2013
 '''
 #!/usr/bin/env python
 
-# This is the module for mp3 and mpeg
+# This is the audio module for mp3 and mpeg
 
 #TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT(3), TotalTracks:INT(3), DiscNumber:INT(3), TotalDiscs:INT(3), CDID:INT(3), Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT(6), DurationInSeconds:INT(6), PlayCount:INT(6), TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT  
 
@@ -242,7 +242,7 @@ def process(fullpath):
         
         # Print some data that is stored in the database if debug is true
         if config.DEBUG:
-            print "\nAudio file data:"
+            print "\nMP3 file data:"
             print "Title:        %s" % title
             print "Subtitle:     %s" % subtitle
             print "Arist:        %s" % artist
