@@ -18,7 +18,7 @@ try:
 except:
     raise
 
-def process(fullpath):
+def process(fullpath, columns=None):
         # Try to parse TXT data
         try:
             with open(fullpath,'rb') as f:

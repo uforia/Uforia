@@ -19,7 +19,7 @@ try:
 except:
     raise
 
-def process(fullpath):
+def process(fullpath, columns=None):
     try:
         #open the wave file
         waveFile = wave.open(fullpath, "rb")

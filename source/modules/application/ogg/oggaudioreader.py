@@ -19,7 +19,7 @@ try:
 except:
     raise
 
-def process(fullpath):
+def process(fullpath, columns=None):
         #Try to parse .ogg data
         try:  
             #Read the .ogg file

@@ -24,7 +24,7 @@ except:
     raise
 
 
-def process(fullpath):
+def process(fullpath, columns=None):
     # The whole parse data method is in a try block to catch any exception
     try:        
         # Read the audio file and get the two data classes from it (Tag and AudioInfo)

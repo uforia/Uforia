@@ -101,6 +101,8 @@ class Database(object):
         query = """CREATE TABLE IF NOT EXISTS `"""+table+"""` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
         for items in columns.split(','):
             name,type = items.split(':')
+            name = name.strip()
+            type = type.strip()
             query += """, `"""+name+"""` """+type
         query += """, PRIMARY KEY(`hashid`));"""
         self.executeQuery(query)
