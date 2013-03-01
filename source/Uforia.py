@@ -125,7 +125,9 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             for s in handlers:
                 moduletable = uforiamodules.moduletotable[s]
                 modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
-                dbqueue.put((moduletable, hashid, modulecolumns, uforiamodules.modules[s].process(file.fullpath)))
+                processresult = uforiamodules.modules[s].process(file.fullpath)
+                if processresult != None:
+                    dbqueue.put((moduletable, hashid, modulecolumns, processresult))
         except:
             traceback.print_exc(file = sys.stderr)
             raise
