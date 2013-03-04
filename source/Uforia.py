@@ -83,20 +83,24 @@ def fileScanner(dir,consumers,dbqueue,monitorqueue,uforiamodules):
     dbqueue - The database queue, passed to fileProcessor
     uforiamodules - Loaded uforia modules, passed to fileProcessor
     """
-    if config.DEBUG:
-        print("Starting in directory "+dir+"...")
-        print("Starting filescanner...")
-    hashid=1
-    filelist=[]
-    for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
-        for name in files:
-            fullpath = os.path.join(root,name)
-            filelist.append((fullpath,hashid))
-            hashid += 1;
-    for item in filelist:
-        consumers.apply_async(fileProcessor,args=(item,dbqueue,monitorqueue,uforiamodules))
-    consumers.close()
-    consumers.join()
+    try:
+        if config.DEBUG:
+            print("Starting in directory "+dir+"...")
+            print("Starting filescanner...")
+        hashid=1
+        filelist=[]
+        for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
+            for name in files:
+                fullpath = os.path.join(root,name)
+                filelist.append((fullpath,hashid))
+                hashid += 1;
+        for item in filelist:
+            consumers.apply_async(fileProcessor,args=(item,dbqueue,monitorqueue,uforiamodules))
+        consumers.close()
+        consumers.join()
+    except:
+        traceback.print_exc(file=sys.stderr)
+        raise
 
 def invokeModules(dbqueue, uforiamodules, hashid, file):
     """
@@ -144,24 +148,29 @@ def fileProcessor(item,dbqueue,monitorqueue,uforiamodules):
         current file
     uforiamodules - The uforia module objects from modulescanner
     """
-    multiprocessing.current_process().daemon=False
-    fullpath,hashid=item
-    file=File.File(fullpath,config,magic)
-    if config.OUTPUT:
-        monitorqueue.put(fullpath)
     try:
-        if config.DEBUG:
-            print("Exporting basic hashes and metadata to database.")
-        columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-        values = (file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
-        dbqueue.put(('files',hashid,columns,values))
+        multiprocessing.current_process().daemon=False
+        fullpath,hashid=item
+        file=File.File(fullpath,config,magic)
+        if config.OUTPUT:
+            monitorqueue.put(fullpath)
+        try:
+            if config.DEBUG:
+                print("Exporting basic hashes and metadata to database.")
+            columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
+            values = (file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
+            dbqueue.put(('files',hashid,columns,values))
+        except:
+            traceback.print_exc(file=sys.stderr)
+            raise
+        if not config.ENABLEMODULES:
+            if config.DEBUG:
+                print("Additional module parsing disabled by config, skipping...")
+        else:
+            invokeModules(dbqueue, uforiamodules, hashid, file)
     except:
+        traceback.print_exc(file=sys.stderr)
         raise
-    if not config.ENABLEMODULES:
-        if config.DEBUG:
-            print("Additional module parsing disabled by config, skipping...")
-    else:
-        invokeModules(dbqueue, uforiamodules, hashid, file)
 
 def run():
     """
