@@ -42,5 +42,5 @@ def process(fullpath):
     except:
         print "An error occured while parsing audio data: ", sys.exc_info()
         
-    return (myfile.artist, myfile.title, myfile.channels,  myfile.comment,  myfile.duration,  myfile.genre,  myfile.sample_rate,  myfile.size, myfile.track, myfile.valid, myfile.year)
+    return (myfile.artist, myfile.title, myfile.channels,  myfile.comment,  myfile.duration,  myfile.genre,  myfile.sample_rate,  myfile.size, myfile.track, myfile.valid, myfile.year, myfile.album, myfile.audio_size)
        
