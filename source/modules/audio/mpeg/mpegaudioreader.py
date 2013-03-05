@@ -7,13 +7,14 @@ Created on 16 feb. 2013
 
 # This is the audio module for mp3 and mpeg
 
-#TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT(3), TotalTracks:INT(3), DiscNumber:INT(3), TotalDiscs:INT(3), CDID:INT(3), Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT(6), DurationInSeconds:INT(6), PlayCount:INT(6), TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT  
+#TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT(3), TotalTracks:INT(3), DiscNumber:INT(3), TotalDiscs:INT(3), CDID:INT(3), Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT(6), DurationInSeconds:INT(6), PlayCount:INT(6), TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT, XMP:LONGTEXT
 
 # import for external lib eyed3
 # This lib is used for the audio module, so please install it with the following command: pip install eyeD3
 import eyed3
 import sys
 import imp
+import libxmp
 from mutagen.apev2 import APEv2
 
 
@@ -239,7 +240,18 @@ def process(fullpath, columns=None):
         del track_info
         del track_tag 
         del track
-        
+
+        # Get APEv2 tag from MP3, because we don't know the key:value we store all data in one column
+        try:
+            apev2_tag = APEv2(fullpath)
+        except:
+            apev2_tag = None
+
+        # Store the embedded XMP metadata
+        xmpfile = libxmp.XMPFiles(file_path=fullpath)
+        xmp = str(xmpfile.get_xmp())
+        xmpfile.close_file()
+
         # Print some data that is stored in the database if debug is true
         if config.DEBUG:
             print "\nMP3 file data:"
@@ -255,20 +267,12 @@ def process(fullpath, columns=None):
             print "Duration:     %s" % str(duration)
             print "Rating:       %s" % str(rating)
             print
-            
-        # Get APEv2 tag from MP3, because we don't know the key:value we store all data in one column
-        try:
-            apev2_tag = APEv2(fullpath)
-        except:
-            apev2_tag = None     
-            
+
         # Return all info from the audio file
-        return(title, subtitle, artist, album_artist, album, track_number, track_total, disc_number, disc_total, cd_id, publisher, composer, conductor, group_content, release_date, recording_year, bpm, duration, play_count, terms_of_use, language, rating, genre, comment_text, comment_description, comment_lang, encoded_by, copyright_text, mood, compilation, user_text_text, user_text_description, lyrics_text, lyrics_description, lyrics_lang, image_description, image_picturetype, image_url, chapter_title, chapter_subtitle, chapter_starttime, chapter_endtime, chapter_startoffset, chapter_endoffset, commercial_url, copyright_url, artist_url, audio_file_url, audio_source_url, internet_radio_url, payment_url, publisher_url, user_url, apev2_tag)
+        return(title, subtitle, artist, album_artist, album, track_number, track_total, disc_number, disc_total, cd_id, publisher, composer, conductor, group_content, release_date, recording_year, bpm, duration, play_count, terms_of_use, language, rating, genre, comment_text, comment_description, comment_lang, encoded_by, copyright_text, mood, compilation, user_text_text, user_text_description, lyrics_text, lyrics_description, lyrics_lang, image_description, image_picturetype, image_url, chapter_title, chapter_subtitle, chapter_starttime, chapter_endtime, chapter_startoffset, chapter_endoffset, commercial_url, copyright_url, artist_url, audio_file_url, audio_source_url, internet_radio_url, payment_url, publisher_url, user_url, apev2_tag, xmp)
     
     except:
         print "An error occured while parsing audio data: ", sys.exc_info()
-        
-        # Store values in database so not the whole application crashes
-        return (None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+        return None
 
     
