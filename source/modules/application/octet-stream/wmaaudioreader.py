@@ -17,7 +17,7 @@ except:
     raise
 
 
-def process(fullpath):
+def process(fullpath, columns=None):
     try:
         myfile = wma.WMADecoder(fullpath)
         if config.DEBUG:
