@@ -114,24 +114,26 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
     hashid - The hash id of the currently processed file
     file - The file currently being processed
     """
-    if file.mtype not in uforiamodules.modulelist:
+    modules = uforiamodules.getModulesForMimetype(file.mtype)
+    nrHandlers = 0
+    for module in modules:
+        if module.isMimeHandler:
+            nrHandlers+=1
+
+    if nrHandlers == 0:
         if config.DEBUG:
             print "No modules found to handle MIME-type " + file.mtype + ", skipping additional file parsing..."
     else:
         try:
+            modules = uforiamodules.getModulesForMimetype(file.mtype)
             if config.DEBUG:
-                print "Setting up " + str(len(uforiamodules.modulelist)) + " module workers..."
-            handlers = []
-            uforiamodules.loadModules()
-            for handler in uforiamodules.modulelist[file.mtype]:
-                handlers.append(handler[2:].strip(config.MODULEDIR).strip('.py').replace('/', '_').replace('\\','_'))
-
-            for s in handlers:
-                moduletable = uforiamodules.moduletotable[s]
-                modulecolumns = uforiamodules.moduletabletocolumns[uforiamodules.moduletotable[s]]
-                processresult = uforiamodules.modules[s].process(file.fullpath, columns=modulecolumns)
-                if processresult != None:
-                    dbqueue.put((moduletable, hashid, modulecolumns, processresult))
+                print "Setting up " + str(nrHandlers) + " module workers..."
+            for module in modules:
+                module.loadSources()
+                if module.isMimeHandler:
+                    processresult = module.pymodule.process(file.fullpath, columns=module.columnnames)
+                    if processresult != None:
+                        dbqueue.put((module.tablename, hashid, module.columnnames, processresult))
         except:
             traceback.print_exc(file = sys.stderr)
             raise

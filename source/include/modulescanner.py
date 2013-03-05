@@ -1,68 +1,123 @@
 #!/usr/bin/env python
 
-import os, glob, imp
+import os, imp, warnings
 
-class Modules(object):
+class Module:
+    """
+    Represents a single Uforia module file. This might be a handler
+    for MIME types or a __init__.py file.
+    """
+    def __init__(self, path, name, mimetype=None, isGlobal=False, asMimeHandler=False):
+        self.path = path
+        self.name = name
+        self.isGlobal = isGlobal
+        self.mimetype = mimetype
+        self.isMimeHandler = False
+        self.tablename = ""
+        self.columndefinition = ""
+        self.columnnames = []
+        self.pymodule = None
+        self.__loadHandler()
+
+    def __loadHandler(self):
+        """
+        Parses the table information inside a MIME handler module file.
+        """
+        with open(self.path) as file:
+            for line in file:
+                if line.startswith("""#TABLE: """):
+                    self.columndefinition = line.strip('\n').replace("""#TABLE: """, '')
+                    self.tablename = self.name.replace('.', '_')
+                    for columnelement in self.columndefinition.split(','):
+                        column = columnelement.split(':')[0].strip()
+                        self.columnnames.append(column)
+
+                    self.isMimeHandler = True
+
+    def loadSources(self):
+        """
+        Because the result of imp.load_source can't be shared between processes, each process
+        using a module should call this function to actually load its sources.
+        """
+        self.pymodule = imp.load_source(self.name, self.path)
+
+class Modules:
     """
     A class for the dynamic loading of Uforia modules.
 
     The format for defining module columns is as follows (this should
     be inside a normal python comment):
-    #TABLE: <column name>:<data type>, <column name>:<data type>,...
+    #TABLE: <column name>:<data type>, <column name>:<data type>,
     Example:
     #TABLE: Title:LONGTEXT, Subject:LONGTEXT
 
-    Each defined module should have a process() function which accepts
-    a path to the file to analyze. It should return a tuple with the
-    data for each column.
+    Each defined MIME type handler should have a process() function
+    which accepts a path to the file to analyze. It should return a
+    tuple with the data for each column.
     """
-    def __init__(self,config,db):
-        """
-        Initializes a Modules object, which will check the configuration
-        for valid module path(s) and add the necessary columns defined
-        by the modules to the database.
+    def __init__(self, config, db):
+        self.modules = []
+        self.__setupModules(config, db)
 
+    def getModulesForMimetype(self, mimetype):
+        """
+        Returns all modules that apply to the given mimetype.
+        """
+        modules = []
+        for module in self.modules:
+            if module.isGlobal or module.mimetype == mimetype or (module.mimetype and mimetype.startswith(module.mimetype)):
+                modules.append(module)
+        return modules
+
+    def __setupModules(self, config, db):
+        """
+        Loads all modules in the modules directory, including subdirectories
+        and top-level modules.
         config - The uforia configuration object
         db - The uforia database object
         """
-        self.modules = {}
-        self.modulelist = {}
-        self.moduletotable = {}
-        self.moduletabletocolumns = {}
-        self.modulepaths = {}
+        DEPTH_ROOT=0
+        DEPTH_TYPE=1
+        DEPTH_SUBTYPE=2
 
-        for major in os.listdir(config.MODULEDIR):
-            for minor in os.listdir(config.MODULEDIR+major):
-                mimetype = major+'/'+minor
-                self.modulelist[mimetype] = glob.glob(config.MODULEDIR+mimetype+"/*.py")
-                for modulepath in self.modulelist[mimetype]:
-                    tableDef = False
-                    with open(modulepath) as file:
-                        for line in file:
-                            if line.startswith("""#TABLE: """):
-                                tableDef = True
-                                columnline = line.strip('\n').replace("""#TABLE: """,'')
-                                modulename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_').replace('\\','_')
-                                tablename = modulepath[2:].strip(config.MODULEDIR).strip('.py').replace('/','_').replace('\\','_')
-                                self.modulepaths[modulename] = modulepath
-                                self.moduletotable[modulename] = tablename
-                                columns = []
-                                for columnelement in columnline.split(','):
-                                    column = columnelement.split(':')[0].strip()
-                                    columns.append(column)
-                                self.moduletabletocolumns[tablename] = columns
-                                db.setupModuleTable(self.moduletotable[modulename],columnline)
-                                break
+        for root, subFolders, files in os.walk("modules"):
+            nicepath = os.path.relpath(root, "modules")
+            fullpath = root
 
-                    if not tableDef:
-                        del self.modulelist[mimetype]
+            depth = nicepath.count(os.path.sep)
+            if depth > DEPTH_SUBTYPE:
+                warnings.warn("sub-subdirectory in module (%s) ignored." % nicepath)
 
-    def loadModules(self):
-        """
-        Because the result of imp.load_source can't be shared between processes, each process
-        using a module should call this function to actually load its sources and put the modules
-        in the modules attribute.
-        """
-        for modulename, modulepath in self.modulepaths.items():
-            self.modules[modulename] = imp.load_source(modulename,modulepath)
+            modulenamebase = nicepath.replace(os.path.sep, '.')
+            mimetype = nicepath.replace(os.path.sep, '/')
 
+            if depth != DEPTH_ROOT:
+                # Each folder should except root have an __init__.py, otherwise the
+                # directory name be assigned as a module.
+                if not "__init__.py" in files:
+                    warnings.warn("__init__.py not found in module folder '%s'." % nicepath)
+                    continue
+
+                modulepath =  fullpath + os.path.sep + "__init__.py"
+                module = Module(modulepath, modulenamebase, mimetype)
+                self.modules.append(module)
+
+            # Now load each handler .py file
+            for file in files:
+                modulenameend, extension = os.path.splitext(file)
+                if extension.lower() == ".py":
+                    isInit = file=="__init__.py"
+                    modulepath = fullpath + os.path.sep + file
+                    modulename = None
+                    if isInit:
+                        modulename = modulenamebase
+                    elif depth==DEPTH_ROOT:
+                        modulename = modulenameend
+                    else:
+                        modulename = modulenamebase + '.' + modulenameend
+
+                    module = Module(modulepath, modulename, mimetype, isGlobal=(depth==DEPTH_ROOT), asMimeHandler=not isInit)
+                    if module.isMimeHandler:
+                        db.setupModuleTable(module.tablename, module.columndefinition)
+
+                    self.modules.append(module)
