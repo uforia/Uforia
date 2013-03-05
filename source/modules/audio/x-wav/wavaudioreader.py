@@ -7,11 +7,12 @@ Created on 21 feb. 2013
 
 # This is the audio module for wav files
 
-#TABLE: NumberOfChannels:INT(3), SampleWidth:INT(3), FrameRate:INT(6), NumberOfFrames:INT(6), DurationInSeconds:FLOAT, CompressionType:LONGTEXT, CompressionName:LONGTEXT
+#TABLE: NumberOfChannels:INT(3), SampleWidth:INT(3), FrameRate:INT(6), NumberOfFrames:INT(6), DurationInSeconds:FLOAT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, XMP:LONGTEXT
 
-import sys, imp;
-import struct;
-import wave;
+import sys, imp
+import struct
+import wave
+import libxmp
 
 # Load Uforia custom modules
 try:
@@ -29,6 +30,14 @@ def process(fullpath, columns=None):
 
         # duration of the wave file is amount of frames divided by framerate
         duration = nframes / float(framerate) 
+
+        # close the wavefile first before opening using the XMP toolkit
+        waveFile.close()
+
+        # Store the embedded XMP metadata
+        xmpfile = libxmp.XMPFiles(file_path=fullpath)
+        xmp = str(xmpfile.get_xmp())
+        xmpfile.close_file()
         
         # Print some data that is stored in the database if debug is true
         if config.DEBUG:
@@ -43,10 +52,9 @@ def process(fullpath, columns=None):
             print
             
         # Return all info from the audio file    
-        return(nchannels, sampwidth, framerate, nframes, duration, comptype, compname,)
+        return(nchannels, sampwidth, framerate, nframes, duration, comptype, compname, xmp)
     
     except:
         print "An error occured while parsing wav data: ", sys.exc_info()
         
-        # Store values in database so not the whole application crashes
-        return(None, None, None, None, None, None, None, None, None)
+        return None
