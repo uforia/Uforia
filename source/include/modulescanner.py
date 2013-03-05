@@ -48,7 +48,7 @@ class Modules(object):
                                 self.moduletotable[modulename] = tablename
                                 columns = []
                                 for columnelement in columnline.split(','):
-                                    column = columnelement.split(':')[0]
+                                    column = columnelement.split(':')[0].strip()
                                     columns.append(column)
                                 self.moduletabletocolumns[tablename] = columns
                                 db.setupModuleTable(self.moduletotable[modulename],columnline)

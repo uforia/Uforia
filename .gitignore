@@ -98,3 +98,4 @@ source/include/config.py
 source/magic1.dll
 source/regex2.dll
 source/zlib1.dll
+source/exempi.dll

@@ -7,31 +7,54 @@ Created on 21 feb. 2013
 
 # This is the audio module for wav files
 
-#TABLE: NumberOfChannels:INT(3), SampleWidth:INT(3), FrameRate:INT(6), NumberOfFrames:INT(6), DurationInSeconds:FLOAT, CompressionType:LONGTEXT, CompressionName:LONGTEXT
+#TABLE: NumberOfChannels:INT(3), SampleWidth:INT(3), FrameRate:INT(6), NumberOfFrames:INT(6), DurationInSeconds:FLOAT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, XMP:LONGTEXT
 
-import sys;
-import struct;
-import wave;
+import sys, imp
+import struct
+import wave
+import libxmp
 
-def process(fullpath):
+# Load Uforia custom modules
+try:
+    config      = imp.load_source('config','include/config.py')
+except:
+    raise
+
+def process(fullpath, columns=None):
     try:
-        waveFile = wave.open(fullpath, "rb") #open de wave file
+        #open the wave file
+        waveFile = wave.open(fullpath, "rb")
         
-        (nchannels, sampwidth, framerate, nframes, comptype, compname) = waveFile.getparams() #vul de variabelen met de parameters van de wave file          
-        frames = waveFile.readframes(nframes * nchannels)   # aantal frames keer het aantal channels worden gelezen             
-        out = struct.unpack_from ("%dh" % nframes * nchannels, frames)
+        #fill variables from the wave file        
+        (nchannels, sampwidth, framerate, nframes, comptype, compname) = waveFile.getparams()
 
-        duration = nframes / float(framerate) # duur van de wave file is aantal frames keer framerate
+        # duration of the wave file is amount of frames divided by framerate
+        duration = nframes / float(framerate) 
 
-       # Convert 2 channels to arrays
-        if nchannels == 2: # als er 2 channels zijn bestaan de linker en rechter box
-           left_audio_stream = out[0::2]
-           right_audio_stream = out[1::2]           
-        else: # als er geen 2 zijn komt er alleen uit de linker kant geluid
-            left_audio_stream = array(out)
-            right_audio_stream = None  
+        # close the wavefile first before opening using the XMP toolkit
+        waveFile.close()
+
+        # Store the embedded XMP metadata
+        xmpfile = libxmp.XMPFiles(file_path=fullpath)
+        xmp = str(xmpfile.get_xmp())
+        xmpfile.close_file()
+        
+        # Print some data that is stored in the database if debug is true
+        if config.DEBUG:
+            print "\nWAV file data:"
+            print "NumberOfChannels: %s" % str(nchannels)
+            print "SampleWidth:      %s" % str(sampwidth)
+            print "FrameRate:        %s" % str(framerate)
+            print "NumberOfFrames:   %s" % str(nframes)
+            print "Duration:         %s" % str(duration)
+            print "CompressionType:  %s" % comptype
+            print "CompressionName:  %s" % compname
+            print
             
-        return(nchannels, sampwidth, framerate, nframes, duration, comptype, compname,)
+        # Return all info from the audio file    
+        return(nchannels, sampwidth, framerate, nframes, duration, comptype, compname, xmp)
+    
     except:
         print "An error occured while parsing wav data: ", sys.exc_info()
-        return(None, None, None, None, None, None, None, None, None)
+        
+        return None
