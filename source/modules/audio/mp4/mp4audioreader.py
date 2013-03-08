@@ -22,8 +22,6 @@ except:
 def process(fullpath, columns=None):
         # Try to parse mp4 data
         try:
-            #TODO: cover
-            
             audio = mutagen.mp4.MP4(fullpath)
             
             # Source of these properties: mp4.py from mutagen (MP4Info class) 
