@@ -22,6 +22,7 @@ def process(fullpath, columns=None):
         # If the wma file can be read succesfully
         if myfile.valid:
             
+            # Store audio data in list
             assorted = [
               myfile.artist,
               myfile.title,
@@ -36,6 +37,9 @@ def process(fullpath, columns=None):
               myfile.album,
               myfile.audio_size
             ]
+            
+            # delete the wmaFile variable
+            del myfile
                  
             # Make sure we stored exactly the same amount of columns as
             # specified!!

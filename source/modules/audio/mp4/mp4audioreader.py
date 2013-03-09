@@ -4,8 +4,6 @@ Created on 2 mrt. 2013
 @author: Jimmy van den Berg
 '''
 
-#!/usr/bin/env python
-
 # This is the audio module for MP4
 
 #TABLE: Length:REAL, Bitrate:INT, NumberOfChannels:INT, SampleRate:BIGINT, BitsPerSample:INT, Title:LONGTEXT, Album:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Composer:LONGTEXT, Year:INT, Comment:LONGTEXT, Description:LONGTEXT, PurschaseDate:DATE, Grouping:LONGTEXT, Genre:LONGTEXT, Lyrics:LONGTEXT, PodcastURL:LONGTEXT, PodcastEpisode:LONGTEXT, PodcastCategory:LONGTEXT, PodcastKeywords:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, AlbumSortOrder:LONGTEXT, AlbumArtistSortOrder:LONGTEXT, ArtistSortOrder:LONGTEXT, TitleSortOrder:LONGTEXT, ComposerSortOrder:LONGTEXT, ShowSortOrder:LONGTEXT, ShowName:LONGTEXT, PartOfCompilation:BOOLEAN, PartOfAlbum:BOOLEAN,Podcast:BOOLEAN, Tempo:BIGINT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CoversFormat:LONGTEXT
@@ -76,6 +74,9 @@ def process(fullpath, columns=None):
                 assorted.append(covers)
                 del covers  
             
+            #Close connection with file
+            del audio
+            
             # Make sure we stored exactly the same amount of columns as
             # specified!!
             assert len(assorted) == len(columns)
@@ -85,6 +86,7 @@ def process(fullpath, columns=None):
                 print "\nMP4 file data:"
                 for i in range(0, len(assorted)):
                     print "%-18s %s" % (columns[i]+':', assorted[i])
+                print
             
             return assorted
             

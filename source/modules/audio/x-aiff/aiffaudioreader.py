@@ -4,11 +4,9 @@ Created on 2 mrt. 2013
 @author: Jimmy van den Berg
 '''
 
-#!/usr/bin/env python
-
 # This is the audio module for .aiff(c)
 
-#TABLE: NumberOfChannels:INT(3), SampleWidth:INT(3), FrameRate:INT(6), NumberOfFrames:INT(6), DurationInSeconds:FLOAT, CompressionType:LONGTEXT, CompressionName:LONGTEXT
+#TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE
 
 import sys, imp
 import aifc
@@ -25,26 +23,27 @@ def process(fullpath, columns=None):
             # Open the AIFF file
             audiofile = aifc.open(fullpath, "rb")
             
-            #fill variables from the AIFF file        
-            (nchannels, sampwidth, framerate, nframes, comptype, compname) = audiofile.getparams()
+            #fill variables from the AIFF file (nchannels, sampwidth, framerate, nframes, comptype, compname)        
+            assorted = list(audiofile.getparams())
             
-            # duration of the wave file is amount of frames divided by framerate
-            duration = nframes / float(framerate) 
+            # duration of the aiff file is amount of frames divided by framerate
+            assorted.append(audiofile.getnframes() / float(audiofile.getframerate())) 
+            
+            # close the aiffFile
+            audiofile.close()
+            
+            # Make sure we stored exactly the same amount of columns as
+            # specified!!
+            assert len(assorted) == len(columns)
             
             # Print some data that is stored in the database if debug is true
             if config.DEBUG:
                 print "\nAIFF file data:"
-                print "NumberOfChannels: %s" % str(nchannels)
-                print "SampleWidth:      %s" % str(sampwidth)
-                print "FrameRate:        %s" % str(framerate)
-                print "NumberOfFrames:   %s" % str(nframes)
-                print "Duration:         %s" % str(duration)
-                print "CompressionType:  %s" % comptype
-                print "CompressionName:  %s" % compname
+                for i in range(0, len(assorted)):
+                    print "%-18s %s" % (columns[i]+':', assorted[i])
                 print
             
-            # Return all info from the audio file    
-            return(nchannels, sampwidth, framerate, nframes, duration, comptype, compname,)
+            return assorted
             
         except:
             print "An error occured while parsing audio data: ", sys.exc_info()

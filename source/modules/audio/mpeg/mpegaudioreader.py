@@ -7,13 +7,11 @@ Created on 16 feb. 2013
 
 # This is the audio module for mp3 and mpeg
 
-#TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT(3), TotalTracks:INT(3), DiscNumber:INT(3), TotalDiscs:INT(3), CDID:INT(3), Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT(6), DurationInSeconds:INT(6), PlayCount:INT(6), TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT, XMP:LONGTEXT
+#TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CDID:INT, Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT, DurationInSeconds:DOUBLE, PlayCount:INT, TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT, XMP:LONGTEXT
 
 # import for external lib eyed3
-# This lib is used for the audio module, so please install it with the following command: pip install eyeD3
+import sys, imp
 import eyed3
-import sys
-import imp
 import libxmp
 from mutagen.apev2 import APEv2
 
@@ -36,8 +34,11 @@ def process(fullpath, columns=None):
         # A variable to store mutiple strings in a list
         list_of_strings = []
         
-        # Store the title in a variable, to store it in the database        
-        title = track_tag.title                
+        # Init list
+        assorted = []
+        
+        # Store the title in the list        
+        assorted.append(track_tag.title)                
         
         '''
         To get a tag from the audio file we need to set a frame in the eyed3 lib.
@@ -51,22 +52,22 @@ def process(fullpath, columns=None):
         Because a NoneType can not be irritated we use the "or", so when we get a NoneType the for loop uses an empty list.
         Wich will result in an empty string because nothing is added to the list.
         '''
-        # Store the subtitle in a variable, to store it in the database  
+        # Store the subtitle in the list  
         for subtitle_frame in track_tag.frame_set["TIT3"] or []:
             list_of_strings.append(subtitle_frame.text)
-        subtitle = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
 
-        # Store the artist in a variable, to store it in the database
-        artist = track_tag.artist
+        # Store the artist in the list
+        assorted.append(track_tag.artist)
         
-        # Store the album artist in a variable, to store it in the database
+        # Store the album artist in the list
         list_of_strings = []
         for album_artist_frame in track_tag.frame_set["TPE2"] or []:
             list_of_strings.append(album_artist_frame.text)
-        album_artist = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the album in a variable, to store it in the database  
-        album = track_tag.album
+        # Store the album in the list  
+        assorted.append(track_tag.album)
         
         '''
         Some tags return an array or list of items.
@@ -75,77 +76,86 @@ def process(fullpath, columns=None):
         
         If the list is empty we still need to give something in return to the database, so we first define the variable to None.
         '''
-        # Store the track_number in a variable, to store it in the database
+        # Store the track_number in the list
         track_number = None
         track_total = None
         if(track_tag.track_num):
             track_number = track_tag.track_num[0]
             track_total = track_tag.track_num[1]
+        assorted.append(track_number)
+        assorted.append(track_total)
         
-        # Store the disc_number in a variable, to store it in the database    
+        # Store the disc_number in the list    
         disc_number = None
         disc_total = None
         if(track_tag.disc_num):
             disc_number = track_tag.disc_num[0]
             disc_total = track_tag.disc_num[1]
+        assorted.append(disc_number)
+        assorted.append(disc_total)
         
-        # Store the cd_id in a variable, to store it in the database     
-        cd_id = track_tag.cd_id
+        # delete variables
+        del track_number, track_total, disc_number, disc_total
+        
+        # Store the cd_id in the list     
+        assorted.append(track_tag.cd_id)
          
-        # Store the publisher in a variable, to store it in the database     
-        publisher = track_tag.publisher
+        # Store the publisher in the list     
+        assorted.append(track_tag.publisher)
         
-        # Store the composer in a variable, to store it in the database  
+        # Store the composer in the list  
         list_of_strings = []
         for composer_frame in track_tag.frame_set["TCOM"] or []:
             list_of_strings.append(composer_frame.text)
-        composer = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the conductor in a variable, to store it in the database     
+        # Store the conductor in the list     
         list_of_strings = []
         for conductor_frame in track_tag.frame_set["TPE3"] or []:
             list_of_strings.append(conductor_frame.text)
-        conductor = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the group content in a variable, to store it in the database 
+        # Store the group content in the list 
         list_of_strings = []
         for group_content_frame in track_tag.frame_set["TIT1"] or []:
             list_of_strings.append(group_content_frame.text)
-        group_content = ' / '.join(list_of_strings) 
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the releasedate and the recording year in a variable, to store it in the database 
-        release_date = track_tag.release_date
-        recording_year = track_tag.recording_date
+        # Store the releasedate and the recording year in the list 
+        assorted.append(track_tag.release_date)
+        assorted.append(track_tag.recording_date)
         
-        # Store beats per minute in a variable, to store it in the database
-        bpm = track_tag.bpm
+        # Store beats per minute in the list
+        assorted.append(track_tag.bpm)
         
-        # Store the duration of the song in a variable, to store it in the database
-        duration = track_info.time_secs
+        # Store the duration of the song in the list
+        assorted.append(track_info.time_secs)
         
-        # Store the play count of the song in a variable, to store it in the database
-        play_count = track_tag.play_count
+        # Store the play count of the song in the list
+        assorted.append(track_tag.play_count)
         
-        # Store the terms of use in a variable, to store it in the database
-        terms_of_use = track_tag.terms_of_use
+        # Store the terms of use in the list
+        assorted.append(track_tag.terms_of_use)
         
-        # Store the language in a variable, to store it in the database
+        # Store the language in the list
         list_of_strings = []
         for language_frame in track_tag.frame_set["TLAN"] or []:
             list_of_strings.append(language_frame.text)
-        language = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the rating in a variable, to store it in the database 
+        # Store the rating in the list 
         rating = 0    
         for rating in track_tag.popularities:
             rating = rating.rating
+        assorted.append(rating)
         
-        # Store the genre in a variable, to store it in the database     
+        # Store the genre in the list     
         genre = None
         if(track_tag.genre):
             genre = track_tag.genre.name
+        assorted.append(genre)
         
-        # Store the comment data in variables, to store it in the database    
+        # Store the comment data in the list    
         comment_description = None
         comment_lang = None
         comment_text = None    
@@ -153,48 +163,59 @@ def process(fullpath, columns=None):
             comment_description = comment.description
             comment_lang = comment.lang
             comment_text = comment.text
+        assorted.append(comment_text)
+        assorted.append(comment_description)
+        assorted.append(comment_lang)
         
-        # Store the encoded by in a variable, to store it in the database
+        # delete variables
+        del rating, genre, comment_description, comment_lang, comment_text
+        
+        # Store the encoded by in the list
         list_of_strings = []
         for encoded_by_frame in track_tag.frame_set["TENC"] or []:
             list_of_strings.append(encoded_by_frame.text)
-        encoded_by = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the copyright in a variable, to store it in the database    
+        # Store the copyright in the list    
         list_of_strings = []
         for copyright_frame in track_tag.frame_set["TCOP"] or []:
             list_of_strings.append(copyright_frame.text)
-        copyright_text = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the mood in a variable, to store it in the database    
+        # Store the mood in the list    
         list_of_strings = []
         for mood_frame in track_tag.frame_set["TMOO"] or []:
             list_of_strings.append(mood_frame.text)
-        mood = ' / '.join(list_of_strings)
+        assorted.append( ' / '.join(list_of_strings) )
         
-        # Store the compilation in a variable, to store it in the database 
+        # Store the compilation in the list 
         list_of_strings = []
         for compitation_frame in track_tag.frame_set["TPE4"] or []:
             list_of_strings.append(compitation_frame.text)
-        compilation = ' / '.join(list_of_strings) 
+        assorted.append( ' / '.join(list_of_strings) ) 
         
-        # Store the user text data in variables, to store it in the database     
+        # Store the user text data in the list     
         user_text_description = None
         user_text_text = None
         for user_text in track_tag._user_texts:
             user_text_description = user_text.description
             user_text_text = user_text.text
+        assorted.append(user_text_text)
+        assorted.append(user_text_description)
         
-        # Store the lyrics data in variables, to store it in the database        
+        # Store the lyrics data in the list        
         lyrics_description = None
         lyrics_text = None
         lyrics_lang = None
         for lyric in track_tag.lyrics:
             lyrics_description = lyric.description
             lyrics_text = lyric.text
-            lyrics_lang = lyric.lang       
+            lyrics_lang = lyric.lang
+        assorted.append(lyrics_text)
+        assorted.append(lyrics_description)
+        assorted.append(lyrics_lang)       
 
-        # Store the image data in variables, to store it in the database 
+        # Store the image data in the list 
         image_description = None
         image_url = None
         image_picturetype = None
@@ -202,9 +223,15 @@ def process(fullpath, columns=None):
             image_description = image.description
             image_url = image.image_url
             image_picturetype = image.picTypeToString(image.picture_type)
-            #TODO: do something with image itself (image module):  image.image_data 
+            #TODO: do something with image itself (image module):  image.image_data
+        assorted.append(image_description)
+        assorted.append(image_picturetype)
+        assorted.append(image_url)
+        
+        #delete variables
+        del user_text_description, user_text_text, lyrics_description, lyrics_lang, lyrics_text, image_description, image_url, image_picturetype 
     
-        # Store the chapter data in variables, to store it in the database 
+        # Store the chapter data in the list 
         chapter_title = None
         chapter_subtitle = None    
         chapter_starttime = None
@@ -220,56 +247,62 @@ def process(fullpath, columns=None):
             if(chapter.offsets):
                 chapter_startoffset = chapter.offsets[0]
                 chapter_endoffset = chapter.offsets[1]
+        assorted.append(chapter_title)
+        assorted.append(chapter_subtitle)
+        assorted.append(chapter_starttime)
+        assorted.append(chapter_endtime)
+        assorted.append(chapter_startoffset)
+        assorted.append(chapter_endoffset)
         
-        # Store all URL's in variables, to store it in the database 
-        commercial_url = track_tag.commercial_url
-        copyright_url = track_tag.copyright_url
-        artist_url = track_tag.artist_url
-        audio_file_url = track_tag.audio_file_url
-        audio_source_url = track_tag.audio_source_url
-        internet_radio_url = track_tag.internet_radio_url
-        payment_url = track_tag.payment_url
-        publisher_url = track_tag.publisher_url
+        #delete variables
+        del chapter_title, chapter_subtitle, chapter_starttime, chapter_endtime, chapter_startoffset, chapter_endoffset
+        
+        # Store all URL's in the list 
+        assorted.append(track_tag.commercial_url)
+        assorted.append(track_tag.copyright_url)
+        assorted.append(track_tag.artist_url)
+        assorted.append(track_tag.audio_file_url)
+        assorted.append(track_tag.audio_source_url)
+        assorted.append(track_tag.internet_radio_url)
+        assorted.append(track_tag.payment_url)
+        assorted.append(track_tag.publisher_url)
         
         user_url = None
         for user_url_tag in track_tag._user_urls:
             user_url = user_url_tag.url
+        assorted.append(user_url)
         
         # Delete all variables that are not used anymore
-        del list_of_strings
-        del track_info
-        del track_tag 
-        del track
+        del user_url, list_of_strings, track_info, track_tag, track
 
         # Get APEv2 tag from MP3, because we don't know the key:value we store all data in one column
         try:
             apev2_tag = APEv2(fullpath)
         except:
             apev2_tag = None
+        assorted.append(apev2_tag)
+        
+        # Delete variable
+        del apev2_tag
 
         # Store the embedded XMP metadata
         xmpfile = libxmp.XMPFiles(file_path=fullpath)
-        xmp = str(xmpfile.get_xmp())
+        assorted.append( str(xmpfile.get_xmp()))
         xmpfile.close_file()
 
+        # Make sure we stored exactly the same amount of columns as
+        # specified!!
+        assert len(assorted) == len(columns)
+            
         # Print some data that is stored in the database if debug is true
         if config.DEBUG:
-            print "\nMP3 file data:"
-            print "Title:        %s" % title
-            print "Subtitle:     %s" % subtitle
-            print "Arist:        %s" % artist
-            print "Album:        %s" % album
-            print "Album aritst: %s" % album_artist
-            print "Track number: %s" % str(track_number)
-            print "Publisher:    %s" % publisher
-            print "Conductor:    %s" % conductor
-            print "Composer:     %s" % composer
-            print "Duration:     %s" % str(duration)
-            print "Rating:       %s" % str(rating)
+            print "\nMPEG file data:"
+            for i in range(0, len(assorted)):
+                print "%-18s %s" % (columns[i]+':', assorted[i])
             print
-
-        # Return all info from the audio file
-        return(title, subtitle, artist, album_artist, album, track_number, track_total, disc_number, disc_total, cd_id, publisher, composer, conductor, group_content, release_date, recording_year, bpm, duration, play_count, terms_of_use, language, rating, genre, comment_text, comment_description, comment_lang, encoded_by, copyright_text, mood, compilation, user_text_text, user_text_description, lyrics_text, lyrics_description, lyrics_lang, image_description, image_picturetype, image_url, chapter_title, chapter_subtitle, chapter_starttime, chapter_endtime, chapter_startoffset, chapter_endoffset, commercial_url, copyright_url, artist_url, audio_file_url, audio_source_url, internet_radio_url, payment_url, publisher_url, user_url, apev2_tag, xmp)
+            
+        # Store in database  
+        return assorted
     
     except:
         print "An error occured while parsing audio data: ", sys.exc_info()
