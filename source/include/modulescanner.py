@@ -84,7 +84,11 @@ class Modules:
             nicepath = os.path.relpath(root, "modules")
             fullpath = root
 
-            depth = nicepath.count(os.path.sep)
+            if nicepath == '.':
+                depth = DEPTH_ROOT
+            else:
+                depth = nicepath.count(os.path.sep) + 1
+
             if depth > DEPTH_SUBTYPE:
                 warnings.warn("sub-subdirectory in module (%s) ignored." % nicepath)
 
