@@ -94,8 +94,11 @@ pip-log.txt
 # Uforia config
 source/include/config.py
 
-# Uforia config files for Windows users only
+# Library DLL files (for Windows users)
 source/magic1.dll
 source/regex2.dll
 source/zlib1.dll
 source/exempi.dll
+source/libexpat-1.dll
+source/libgcc_s_dw2-1.dll
+source/libstdc++-6.dll
