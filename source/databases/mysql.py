@@ -103,7 +103,7 @@ class Database(object):
             name,type = items.split(':')
             name = name.strip()
             type = type.strip()
-            query += """, `"""+name+"""` """+type
+            query += """,`"""+name+"""` """+type
         query += """, PRIMARY KEY(`hashid`));"""
         self.executeQuery(query)
         if self.truncate:
