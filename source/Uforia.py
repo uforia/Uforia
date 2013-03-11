@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, multiprocessing, imp, curses, sys, traceback
+import os, multiprocessing, imp, curses, sys, traceback, site
 
 # Load Uforia custom modules
 try:
@@ -182,6 +182,10 @@ def run():
     invokes the fileScanner.
     """
     print("Uforia starting...")
+
+    # adds our library folder to the default include path
+    site.addsitedir("./libraries");
+
     if config.DEBUG:
         print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
 
