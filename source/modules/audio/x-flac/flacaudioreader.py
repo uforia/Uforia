@@ -10,6 +10,7 @@ Created on 26 feb. 2013
 
 import sys, traceback, imp, json
 import mutagen, mutagen.flac
+from PIL import Image
 
 try:
     config = imp.load_source('config','include/config.py')
