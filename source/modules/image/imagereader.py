@@ -23,7 +23,10 @@ def process(fullpath, columns=None):
             #Open image file
             image = Image.open(fullpath, "r")
             
-            assorted = [image.format, image.mode, image.size[0], image.size[1], image.getcolors(), image.getextrema(), image.palette]            
+            assorted = [image.format, image.mode, image.size[0], image.size[1], image.getcolors(), image.getextrema(), image.palette]
+            
+            # Delete variable
+            del image
 
             # Make sure we stored exactly the same amount of columns as
             # specified!!
