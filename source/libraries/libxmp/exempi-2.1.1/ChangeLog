@@ -1,0 +1,339 @@
+2009-05-26  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FileHandlers/UCF_Handler.cpp (UCF_CheckFormat): 
+	Mismatched new [] / delete. (Closes bug #21934)
+
+2009-05-15  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/exempi.cpp:
+	Catch unhandled exceptions in xmp_files_can_put_xmp()
+	(Closes bug #20622)
+
+2009-03-11  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.ac:
+	* exempi/Makefile.am:
+	* m4/ax_ld_check_flag.m4:
+	Detect proper ldflags. (Closes bug #20554)
+
+	* configure.ac: Bump to version 2.1.1
+
+2009-03-11  Lars Holm Nielsen <lnielsen@eso.org>
+
+	* source/XMPFiles/FileHandlers/Makefile.am:
+	* source/XMPFiles/FormatSupport/Makefile.am:
+	* configure.ac:
+	Some files missing when building on Mac
+	(Closes bug #20554)
+
+2009-02-24  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/exempi.cpp (xmp_set_property): 
+	If the value is struct or array, if the property value
+	is the empty string pass NULL.
+	(Closes bug #16030)
+
+2009-02-22  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/common/XMLParserAdapter.hpp: 
+	Remove an annoying warning.
+
+2009-02-20  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.in: 
+	* m4/shave.m4:
+	* shave-libtool.in:
+	* shave.in:
+	Add shave to make the build output saner.
+
+2008-12-28  Michael Biebl <biebl@debian.org>
+
+	* tests/utils.cpp
+	* samples/source/XMPFilesCoverage.cpp
+	* source/common/XML_Node.cpp
+	Fix build on gcc 4.4
+
+2008-12-24  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FileHandlers/P2_Handler.cpp (SetStartTimecodeFromLegacyXML): 
+	Don't compare string pointers. (Closes: #19312)
+
+=== 2.1.0 ===
+
+2008-12-24  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/tests/test-bgo.cpp
+        * exempi/tests/test-xmpfiles.cpp
+	Remove serious warnings.
+
+2008-12-21  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/tests/Makefile.am
+        * exempi/tests/test-bgo.cpp
+	* exempi/tests/test-exempi-core.cpp
+	* exempi/tests/test-serialise.cpp
+	* exempi/tests/test-tiff-leak.cpp
+	* exempi/tests/test-write-new-prop.cpp
+	* exempi/tests/test-xmpfiles-write.cpp
+	* exempi/tests/test-xmpfiles.cpp
+	* exempi/tests/test3.cpp
+	* exempi/tests/testinit.cpp
+	Migrated to use boost/test/minimal
+	
+	* exempi/tests/test1.cpp
+	* exempi/tests/test2.cpp
+	Split out for the above change.
+
+2008-12-19  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/Makefile.am (EXTRA_DIST): Added libexempi.sym
+
+2008-11-26  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/tests/Makefile.am (TESTS_ENVIRONMENT): 
+	BOOST_TEST_CATCH_SYSTEM_ERRORS=no is set before running
+	the test. This avoid a failure because of system() on 
+	boost 1.35 and later.
+	See https://svn.boost.org/trac/boost/ticket/1723
+
+2008-11-24  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FormatSupport/ReconcileTIFF.cpp (ImportSingleTIFF_ASCII): 
+	Re-enable the conversion for UNIX. Disabled in the original SDK.
+
+	* exempi/tests/Makefile.am:
+	* exempi/tests/fdo18635.jpg:
+	* exempi/tests/test-bgo.cpp
+	Don't crash on not so valid Exif. (Closes #18635)
+	And test case.
+
+2008-11-18  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/libexempi.sym, exempi/Makefile.am (libexempi_la_LDFLAGS): 
+	Use symbol file. (Closes #16139)
+
+	* samples/testfiles/BlueSquare.gif,
+	samples/testfiles/Makefile.am: Forgotten files.
+
+	* NEWS,	configure.ac, exempi/Makefile.am, 
+	exempi/tests/test2.cpp, exempi/tests/testcore.sh, 
+	samples/Makefile.am, samples/source/Makefile.am, 
+	source/XMPFiles/FileHandlers/Makefile.am,
+	source/XMPFiles/FormatSupport/Makefile.am,
+	source/XMPCore/Makefile.am, source/common/Makefile.am:
+	Fix the build system.
+	* source/XMPFiles/FileHandlers/AVCHD_Handler.cpp
+	source/XMPFiles/FileHandlers/MP3_Handler.cpp,
+	source/XMPFiles/FileHandlers/MP3_Handler.hpp,
+	source/XMPFiles/FileHandlers/P2_Handler.cpp,
+	source/XMPFiles/FileHandlers/SonyHDV_Handler.cpp,
+	source/XMPFiles/FileHandlers/WAV_Handler.cpp,
+	source/XMPFiles/FileHandlers/WAV_Handler.hpp,
+	source/XMPFiles/FileHandlers/XDCAMEX_Handler.cpp,
+	source/XMPFiles/FileHandlers/XDCAM_Handler.cpp,
+	source/XMPFiles/FormatSupport/ID3_Support.cpp,
+	source/XMPFiles/FormatSupport/ID3_Support.hpp,
+	source/XMPFiles/FormatSupport/RIFF_Support.cpp,
+	source/XMPFiles/FormatSupport/RIFF_Support.hpp,
+	source/XMPFiles/FormatSupport/ReconcileTIFF.cpp,
+	source/XMPFiles/FormatSupport/Reconcile_Impl.cpp,
+	source/XMPFiles/FormatSupport/Reconcile_Impl.hpp,
+	source/XMPFiles/FormatSupport/TIFF_Support.hpp:
+	Enable all the file formats that Adobe disabled on 
+	purpose.
+	* samples/source/ModifyingXMP.cpp,
+	source/common/EndianUtils.hpp,
+	source/common/LargeFileAccess.hpp,
+	source/common/XML_Node.cpp:
+	Other misc merge fixes.
+	
+	* Merge the XPM SDK 4.4.2
+
+2008-05-29  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/exempi.cpp, exempi/Makefile.am: don't define 
+	UNIX_ENV in the source code but use the CPPFLAGS.
+
+	* exempi/exempi.cpp (xmp_files_get_xmp): CHECK_PTR should 
+	return false and not NULL.
+
+2008-04-06  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/xmp.h, exempi/exempi.cpp: add new API
+	xmp_namespace_prefix(), xmp_prefix_namespace_uri().
+	* exempi/tests/test1.cpp: corresponding test.
+	(Closes #14962)
+
+2008-04-04  Hubert Figuiere  <hub@figuiere.net>
+
+	* Start 2.1.0
+
+=== 2.0.2 ===
+
+2008-08-12  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/exempi.cpp (set_error): Use pthread for the TLS 
+	if there is no compiler support.
+	(Closes #16598)
+
+	* configure.ac:
+	* m4/ax_tls.m4:
+	Check for TLS.
+
+=== 2.0.1 ===
+
+2008-04-28  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/tests/test1.cpp: Check that errors are unset.
+
+2008-04-24  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/exempi.cpp: RESET_ERROR is called
+	upon entry of any functions. 
+	error code is local thread storage.
+
+2008-04-05  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FormatSupport/Reconcile_Impl.cpp, 
+	configure.ac: Check for iconv constness. (Closes #14613)
+
+2008-04-04  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/xmp.h: no stdbool.h on Sun compilers
+	(Closes #14612)
+
+=== 2.0.0 ===
+
+2008-04-01  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.ac: This is really 2.0.0
+
+	* exempi/tests/test1.cpp, exempi/tests/test1.xmp:
+	Add a test on "Rating:".
+
+2008-03-30  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FormatSupport/EndianUtils.hpp,
+	configure.ac: Fix the endian detection. (Closes #15263)
+
+2008-02-22  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPCore/XMPMeta.cpp, 
+	source/XMPFiles/FormatSupport/GIF_Support.cpp,
+	source/XMPFiles/FormatSupport/ID3_Support.cpp,
+	source/XMPFiles/FormatSupport/PNG_Support.cpp,
+	source/XMPFiles/FormatSupport/PSIR_FileWriter.cpp,
+	source/XMPFiles/FormatSupport/PSIR_MemoryReader.cpp,
+	source/XMPFiles/FormatSupport/ReconcileIPTC.cpp,
+	source/XMPFiles/FormatSupport/TIFF_Support.hpp:
+	Add some missing includes. (Closes #14615)
+
+	* source/XMPFiles/FormatSupport/EndianUtils.hpp: endian
+	detection on Solaris. (Closes #14614)
+
+=== 1.99.9 ===
+
+2008-01-30  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/xmp.h (XMP_OPEN_OPNLYXMP): Bad API breakage fix (introduced
+	in 1.99.8)
+
+=== 1.99.8 ===
+
+2008-01-23  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FormatSupport/GIF_Support.cpp (ReadHeader): Fix
+	a nasty buffer overflow. Closes Debian #454297. Closes Gnome #484105
+	Patch by Michael Biebl <biebl@debian.org>
+	(ReadBlock): Fix another possible overflow similar to the one in
+	ReadHeader()
+
+2008-01-22  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/xmp.h: Fix a typo. (Closes #14200)
+
+2008-01-18  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/Makefile.am: Disable strict aliasing. This fix
+	some nasty warning.
+
+2008-01-13  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.ac: Allow disabling unittest if you
+	don't have boost (Closes #13712)
+
+	* autogen.sh: Don't run autoheader. (Closes #14049)
+
+	* autogen.sh: re-order commands in autogens.sh
+
+=== 1.99.7 ===
+	
+2008-01-12  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.ac: Fix the soversion. A mix-up occured in the last
+	release.
+
+=== 1.99.6 ===
+
+2008-01-11  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/tests/test2.cpp (test_tiff_leak): Ensure that the file is
+	writable.
+
+2007-12-22  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.ac: make boost optional as it is only for 	
+	the unit tests. (Closes #13712)
+
+	* configure.ac, m4/boost.m4, exempi/test/Makefile.am: 
+	Change the BOOST detection macros.
+	(Closes #13713)
+
+2007-12-20  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPCore/XMPUtils.cpp (ConvertFromInt64): Fix format
+	for long long int that was causing a failure on ppc (big endian).
+
+2007-12-19  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/exempi.cpp, exempi/tests/test1.cpp, 
+	exempi/tests/test1.xmp, exempi/xmp.h: 
+	Add setter/getter for int32, int64, bool, float.
+
+	* exempi/xmpconsts.h, exempi/exempi.cpp: add ACR schema namespace
+	
+	* public/include/TXMPMeta.hpp, public/include/client-glue/TXMPMeta.incl_cpp,
+	samples/source/XMPCoreCoverage.cpp, 
+	source/XMPFiles/FormatSupport/ReconcileTIFF.cpp:
+	Some APIs use long and long long. Change that.
+
+	* source/XMPFiles/FormatSupport/TIFF_FileWriter.cpp, exempi/tests/*: 
+	Fix a memory leak. See http://www.adobeforums.com/webx/.3bc42b73
+	And test case.
+
+	* exempi/tests/*, configure.ac: detect valgrind.
+	Add leak detection support.
+
+2007-12-17  Hubert Figuiere  <hub@figuiere.net>
+
+	* autogen.sh: added for convenience for non-tarball builders.
+	(Closes #13707)
+
+2007-12-16  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/*: added new API for get/set datetime.
+
+	* exempi/tests/*: refactor the test preparation.
+
+2007-11-13  Hubert Figuiere  <hub@figuiere.net>
+
+	* exempi/tests/*.c: Add a bunch of include deemed necessary 
+	by suse factory.
+	* Add a bunch of include deemed necessary by suse factory.
+
+2007-11-08  Hubert Figuiere  <hub@figuiere.net>
+
+	* source/XMPFiles/FormatSupport/Makefile.am: add
+	-Wno-multichar to remove warnings.
+	QuickTime_Support.cpp is in the dist as a noinst_HEADER
+
