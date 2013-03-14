@@ -3,15 +3,18 @@
 # Load basic Python modules
 import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess
 
+ENVIRONMENTAL_VARIABLES_LOADED = '--_envset' in sys.argv
+
 # Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-    File        = imp.load_source('File','include/File.py')
-    magic       = imp.load_source('magic','include/magic.py')
-    modules     = imp.load_source('modulescanner','include/modulescanner.py')
-    database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
-except:
-    raise
+if ENVIRONMENTAL_VARIABLES_LOADED:
+    try:
+        config      = imp.load_source('config','include/config.py')
+        File        = imp.load_source('File','include/File.py')
+        magic       = imp.load_source('magic','include/magic.py')
+        modules     = imp.load_source('modulescanner','include/modulescanner.py')
+        database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
+    except:
+        raise
 
 def dbworker(dbqueue, db=None):
     """
@@ -229,7 +232,7 @@ def run():
 
 if __name__ == "__main__":
     # Reloads current file with additional so/dll import paths
-    if not '--_envset' in sys.argv:
+    if not ENVIRONMENTAL_VARIABLES_LOADED:
         if platform.system() == 'Windows':
             os.environ['PATH'] = '.\\libraries\\windows-deps\\;.\\libraries\\libxmp\\bin\\;' + os.environ['PATH']
         else:
