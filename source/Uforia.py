@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, multiprocessing, imp, curses, sys, platform, traceback, site
+import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess
 
 # Load Uforia custom modules
 try:
@@ -235,6 +235,7 @@ if __name__ == "__main__":
         else:
             os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin/'
 
-        os.system('%s %s --_envset' % (sys.executable, __file__))
+        subprocess.check_call(
+            [sys.executable, __file__, '--_envset'])
     else:
         run()
