@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, multiprocessing, imp, curses, sys, traceback, site
+import os, multiprocessing, imp, curses, sys, platform, traceback, site
 
 # Load Uforia custom modules
 try:
@@ -228,4 +228,12 @@ def run():
     print("\nUforia completed...\n")
 
 if __name__ == "__main__":
+	# Reloads current file with additional so/dll import paths
+    if not '--_envset' in sys.argv:
+		if platform.system() == 'Windows':
+			os.environ['PATH'] = '.\\libraries\\windows-deps\\;.\\libraries\\libxmp\\bin\\;' + os.environ['PATH']
+		else:
+			os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin/'
+
+		os.system('%s %s --_envset' % (sys.executable, __file__))
     run()

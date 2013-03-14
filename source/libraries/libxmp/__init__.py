@@ -132,6 +132,7 @@ try:
 	if not _exempi.xmp_init():
 		_check_for_error()
 except OSError, e:
+	print OSError
 	traceback.print_exc(file=sys.stderr)
 	raise Exception('Could not load shared library exempi.')
 
