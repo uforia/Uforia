@@ -35,6 +35,7 @@ import ctypes.util
 import sys
 import os
 import traceback
+import platform
 
 __all__ = ['XMPMeta','XMPFiles','XMPError','ExempiLoadError','files','core']
 
@@ -110,15 +111,28 @@ def _check_for_error():
 #  Load C library - Exempi must be installed on the system
 #
 try:
-	lib = ctypes.util.find_library('exempi')
-	if lib:
-		_exempi = ctypes.CDLL( lib )
+	if platform.system() == 'Windows':
+		if ctypes.sizeof(ctypes.c_voidp) == 8:
+			raise Exception('No compiled version of libexempi for python64 yet available. Use 32-bit python.')
+		else:
+			_exempi = ctypes.cdll.LoadLibrary("libexempi-x86.dll")
+	elif platform.system() == 'Linux':
+		if ctypes.sizeof(ctypes.c_voidp) == 8:
+			_exempi = ctypes.cdll.LoadLibrary("libexempi-x86_64.so")
+		else:
+			_exempi = ctypes.cdll.LoadLibrary("libexempi-i586.so")
 	else:
-		raise Exception('Could not load shared library exempi.')
+		# Unsupported platform (Mac?), try loading system-wide installed exempi
+		lib = ctypes.util.find_library('exempi')
+		if lib:
+			_exempi = ctypes.CDLL(lib)
+		else:
+			raise Exception('Unsupported platform %s. Cannot load shared library exempi.' % platform.system())
 
 	if not _exempi.xmp_init():
 		_check_for_error()
 except OSError, e:
+	traceback.print_exc(file=sys.stderr)
 	raise Exception('Could not load shared library exempi.')
 
 #
