@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess
+import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess, ctypes
 
 ENVIRONMENTAL_VARIABLES_LOADED = '--_envset' in sys.argv
 
@@ -188,6 +188,11 @@ def run():
 
     # adds our library folder to the default include path
     site.addsitedir("./libraries");
+    
+    architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
+    operatingSystem = platform.system()
+
+    site.addsitedir("./libraries/PIL/bin-%s-%s" % (architecture, operatingSystem))
 
     if config.DEBUG:
         print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
