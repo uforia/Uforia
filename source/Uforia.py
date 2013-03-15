@@ -234,7 +234,7 @@ if __name__ == "__main__":
     # Reloads current file with additional so/dll import paths
     if not ENVIRONMENTAL_VARIABLES_LOADED:
         if platform.system() == 'Windows':
-            os.onviron['PATH'] = './libraries/windows-deps;./libraries/libxmp/bin-%s-%s;%s' % (architecture, operatingSystem, os.environ['PATH'])
+            os.environ['PATH'] = './libraries/windows-deps;./libraries/libxmp/bin-%s-%s;%s' % (architecture, operatingSystem, os.environ['PATH'])
         else:
             os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin-%s-%s' % (architecture, operatingSystem)
 
