@@ -186,14 +186,6 @@ def run():
     """
     print("Uforia starting...")
 
-    # adds our library folder to the default include path
-    site.addsitedir("./libraries");
-    
-    architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
-    operatingSystem = platform.system()
-
-    site.addsitedir("./libraries/PIL/bin-%s-%s" % (architecture, operatingSystem))
-
     if config.DEBUG:
         print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
 
@@ -236,14 +228,23 @@ def run():
     print("\nUforia completed...\n")
 
 if __name__ == "__main__":
+    architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
+    operatingSystem = platform.system()
+
     # Reloads current file with additional so/dll import paths
     if not ENVIRONMENTAL_VARIABLES_LOADED:
         if platform.system() == 'Windows':
-            os.environ['PATH'] = '.\\libraries\\windows-deps\\;.\\libraries\\libxmp\\bin\\;' + os.environ['PATH']
+            os.onviron['PATH'] = './libraries/windows-deps;./libraries/libxmp/bin-%s-%s;%s' % (architecture, operatingSystem, os.environ['PATH'])
         else:
-            os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin/'
+            os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin-%s-%s' % (architecture, operatingSystem)
 
         subprocess.check_call(
             [sys.executable, __file__, '--_envset'])
     else:
+        # Site dir for third-party library imports
+        site.addsitedir("./libraries")
+
+        # Contrary to XMP toolkit, PIL uses importable shared object binaries (.so/.pyd);
+        # so we only need to add them to sitelib, changing environmental vars is unnecessary
+        site.addsitedir("./libraries/PIL/bin-%s-%s" % (architecture, operatingSystem))
         run()

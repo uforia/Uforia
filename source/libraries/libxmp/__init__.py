@@ -111,18 +111,14 @@ def _check_for_error():
 #  Load C library - Exempi must be installed on the system
 #
 try:
-	if platform.system() == 'Windows':
-		if ctypes.sizeof(ctypes.c_voidp) == 8:
-			raise Exception('No compiled version of libexempi for python64 yet available. Use 32-bit python.')
-		else:
-			_exempi = ctypes.cdll.LoadLibrary("libexempi-x86.dll")
-	elif platform.system() == 'Linux':
-		if ctypes.sizeof(ctypes.c_voidp) == 8:
-			_exempi = ctypes.cdll.LoadLibrary("libexempi-x86_64.so")
-		else:
-			_exempi = ctypes.cdll.LoadLibrary("libexempi-i586.so")
+	platform_extensions = {
+		'Windows' : '.dll',
+		'Linux' : '.so'
+	}
+	if platform.system() in platform_extensions:
+		_exempi = ctypes.cdll.LoadLibrary("libexempi" + platform_extensions[platform.system()])
 	else:
-		# Unsupported platform (Mac?), try loading system-wide installed exempi
+		# Unsupported platform (Mac?), try loading system-wide installed exempi	
 		lib = ctypes.util.find_library('exempi')
 		if lib:
 			_exempi = ctypes.CDLL(lib)
@@ -133,7 +129,6 @@ try:
 		_check_for_error()
 except OSError, e:
 	print OSError
-	traceback.print_exc(file=sys.stderr)
 	raise Exception('Could not load shared library exempi.')
 
 #
