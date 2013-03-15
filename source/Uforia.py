@@ -236,7 +236,7 @@ if __name__ == "__main__":
         if platform.system() == 'Windows':
             os.environ['PATH'] = './libraries/windows-deps;./libraries/libxmp/bin-%s-%s;%s' % (architecture, operatingSystem, os.environ['PATH'])
         else:
-            os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin-%s-%s' % (architecture, operatingSystem)
+            os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin-{0}-{1}:./libraries/PIL/bin-{0}-{1}'.format(architecture, operatingSystem)
 
         subprocess.check_call(
             [sys.executable, __file__, '--_envset'])
