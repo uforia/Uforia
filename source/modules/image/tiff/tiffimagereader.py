@@ -6,7 +6,7 @@ Created on 14 mrt. 2013
 
 # This is the image module for TIFF
 
-#TABLE: Tile:LONGTEXT, ICC_Profile:LONGTEXT, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:LONGTEXT, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:LONGTEXT, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:LONGTEXT, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
+#TABLE: Tile:LONGTEXT, ICC_Profile:LONGTEXT, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:LONGTEXT, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:LONGTEXT, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:LONGTEXT, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
 
 import sys, imp
 from PIL import Image, TiffImagePlugin
@@ -57,6 +57,9 @@ def process(fullpath, columns=None):
             else:
                 assorted.append(None)
                 assorted.append(None)
+                
+            # If there are still other values in the dict then put those in column
+            assorted.append(info_dictionary)
                 
             # Get all values from tag atribute, EXIF Tags
             assorted.append(image.tag.get(TiffImagePlugin.BITSPERSAMPLE))
