@@ -12,7 +12,11 @@ class File(object):
         properties in the object's properties.
         """
         if not config.MAGICFILE:
-            self.MAGICFILE = './share/magic'
+            """
+            If there is no magic file defined in the configuration, fall back to the
+            provided one by the stock Uforia installation.
+            """
+            self.MAGICFILE = './share/magic.mgc'
         else:
             self.MAGICFILE = config.MAGICFILE
         if not fullpath:
