@@ -58,8 +58,3 @@ CHUNKSIZE = 65536
 
 # Maximum number of database connection attempts before giving up
 DBRETRY = 5
-
-# Location of the magic file (needs only be supplied on Windows machines)
-# Example (Windows):  MAGICFILE = 'C:/Program Files (x86)/GnuWin32/share/misc/magic'
-# Example (Linux):    MAGICFILE = None
-MAGICFILE = None

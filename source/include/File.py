@@ -5,6 +5,8 @@
 import os, sys, hashlib, datetime, traceback
 
 class File(object):
+    MAGICFILE_PATH = "./share/magic"
+
     def __init__(self,fullpath,config,magic):
         """
         Attempt to parse the file passed via the fullpath variable and store its
@@ -67,8 +69,8 @@ class File(object):
             except:
                 raise IOError('Error calculating digests, possible filesystem error.')
             try:
-                magic_default = magic.Magic(magic_file=config.MAGICFILE)
-                magic_mime = magic.Magic(mime=True, magic_file=config.MAGICFILE)
+                magic_default = magic.Magic(magic_file=self.MAGICFILE_PATH)
+                magic_mime = magic.Magic(mime=True, magic_file=self.MAGICFILE_PATH)
 
                 self.ftype = str(magic_default.from_file(fullpath))
                 self.mtype = str(magic_mime.from_file(fullpath))
