@@ -5,14 +5,16 @@
 import os, sys, hashlib, datetime, traceback
 
 class File(object):
-    MAGICFILE_PATH = "./share/magic"
-
     def __init__(self,fullpath,config,magic):
         """
         Attempt to parse the file passed via the fullpath variable and store its
         name, size, owner, group, MACtimes, MD5/SHA1/SHA256 hashes and file magic
         properties in the object's properties.
         """
+        if not config.MAGICFILE:
+            self.MAGICFILE = './share/magic'
+        else:
+            self.MAGICFILE = config.MAGICFILE
         if not fullpath:
             pass
         else:
@@ -67,16 +69,17 @@ class File(object):
                 self.sha1 = str(self.sha1.hexdigest())
                 self.sha256 = str(self.sha256.hexdigest())
             except:
-                raise IOError('Error calculating digests, possible filesystem error.')
+                raise
+#                raise IOError('Error calculating digests, possible filesystem error.')
             try:
-                magic_default = magic.Magic(magic_file=self.MAGICFILE_PATH)
-                magic_mime = magic.Magic(mime=True, magic_file=self.MAGICFILE_PATH)
-
+                magic_default = magic.Magic(magic_file=self.MAGICFILE)
+                magic_mime = magic.Magic(mime=True, magic_file=self.MAGICFILE)
                 self.ftype = str(magic_default.from_file(fullpath))
                 self.mtype = str(magic_mime.from_file(fullpath))
                 self.btype = str(magic_default.from_buffer(open(fullpath).read(65536)))
             except:
-                raise IOError('Error reading file magic, possible library or filesystem error.')
+                raise
+#                raise IOError('Error reading file magic, possible library or filesystem error.')
             if config.DEBUG:
                 print "Filename:\t",self.name
                 print "UID/GID:\t",self.owner+":"+self.group
