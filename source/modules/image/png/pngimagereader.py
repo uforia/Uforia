@@ -6,7 +6,7 @@ Created on 11 mrt. 2013
 
 # This is the image module for PNG
 
-#TABLE: Text:LONGTEXT, ICC_Profile:LONGTEXT, Interlace:LONGTEXT, Transparency:LONGTEXT, Gamma:LONGTEXT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:LONGTEXT, XMPtag:LONGTEXT 
+#TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:LONGTEXT, Interlace:LONGTEXT, Transparency:LONGTEXT, Gamma:LONGTEXT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:LONGTEXT, XMPtag:LONGTEXT 
 
 import sys, imp
 from PIL import Image
@@ -23,7 +23,7 @@ def process(fullpath, columns=None):
         try:
             image = Image.open(fullpath, "r")
             
-            assorted = [image.text]
+            assorted = [image.tile, image.text]
             info_dictionary = image.info
             
             # Check if ICC profile is in info dictionary, if so put it in our list
