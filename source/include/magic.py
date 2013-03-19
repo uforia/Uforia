@@ -111,11 +111,12 @@ if not libmagic or not libmagic._name:
     magic library support for MacOS X and Windows systems first.
     """
     import sys
-    platform_to_lib = {'darwin': ['/opt/local/lib/libmagic.dylib',
-                                  '/usr/local/lib/libmagic.dylib',
-                                  '/usr/local/Cellar/libmagic/5.10/lib/libmagic.dylib'],
-                       'win32':  ['magic1.dll']}
-    for dll in platform_to_lib.get(sys.platform, []):
+    platform_to_lib = {'darwin': ['./libraries/libmagic/libmagic.dylib'],
+                       'win32':  ['./libraries/libmagic/magic1.dll'],
+                       'win64':  ['./libraries/libmagic/magic1.dll'],
+                       'linux':  ['./libraries/libmagic/libmagic.so.1'],
+                       'linux2':  ['./libraries/libmagic/libmagic.so.1']}
+    for dll in platform_to_lib.get(sys.platform.lower(), []):
         try:
             libmagic = ctypes.CDLL(dll)
         except OSError:
@@ -123,10 +124,10 @@ if not libmagic or not libmagic._name:
 
 if not libmagic or not libmagic._name:
     """
-    If we are not using MacOS X or Windows, assume we're on Linux and load
-    the Uforia-provided libmagic.so.1 library.
+    If we are not using MacOS X or Windows, assume we don't have libmagic and
+    throw an error. Uforia is pretty much useless without libmagic anyways.
     """
-    libmagic = ctypes.CDLL('./libraries/libmagic/libmagic.so.1')
+    raise MagicError('Cannot find magic library for MIME-type detection.')
 
 magic_t = ctypes.c_void_p
 
