@@ -104,18 +104,12 @@ def from_buffer(buffer, mime=False):
     m = _get_magic_type(mime)
     return m.from_buffer(buffer)
 
-
-
-
 libmagic = None
-# Let's try to find magic or magic1
-#dll = ctypes.util.find_library('magic') or ctypes.util.find_library('magic1')
-
-# This is necessary because find_library returns None if it doesn't find the library
-#if dll:
-#    libmagic = ctypes.CDLL(dll)
-
 if not libmagic or not libmagic._name:
+    """
+    We need libmagic support to detect MIME-types. Attempt to autodetect the
+    magic library support for MacOS X and Windows systems first.
+    """
     import sys
     platform_to_lib = {'darwin': ['/opt/local/lib/libmagic.dylib',
                                   '/usr/local/lib/libmagic.dylib',
@@ -128,9 +122,11 @@ if not libmagic or not libmagic._name:
             pass
 
 if not libmagic or not libmagic._name:
+    """
+    If we are not using MacOS X or Windows, assume we're on Linux and load
+    the Uforia-provided libmagic.so.1 library.
+    """
     libmagic = ctypes.CDLL('./libraries/libmagic/libmagic.so.1')
-    # It is better to raise an ImportError since we are importing magic module
-    #raise ImportError('failed to find libmagic.  Check your installation')
 
 magic_t = ctypes.c_void_p
 
