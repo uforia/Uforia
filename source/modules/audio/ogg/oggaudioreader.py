@@ -13,13 +13,13 @@ from hsaudiotag import auto
 
 def process(fullpath, config, columns=None):
         #Try to parse .ogg data
-        try:  
+        try:
             #Read the .ogg file
             oggFile = auto.File(fullpath)
-        
+
             #Check if .ogg file is readed correctly
             if oggFile.valid:
-                
+
                 # Store audio data in list
                 assorted = [
                     oggFile.title,
@@ -35,31 +35,30 @@ def process(fullpath, config, columns=None):
                     oggFile.bitrate,
                     oggFile.audio_offset
                     ]
-                
+
                 # delete the oggFile variable
                 del oggFile
-                
+
                 # Make sure we stored exactly the same amount of columns as
                 # specified!!
                 assert len(assorted) == len(columns)
-            
+
                 # Print some data that is stored in the database if debug is true
                 if config.DEBUG:
                     print "\nOGG file data:"
                     for i in range(0, len(assorted)):
                         print "%-18s %s" % (columns[i]+':', assorted[i])
                     print
-            
-                # Store in database  
-                return assorted            
+
+                # Store in database
+                return assorted
             else:
                 return None
-        
+
         except:
             print "An error occured while parsing audio data: ", sys.exc_info()
-        
+
             # Store values in database so not the whole application crashes
             return None
-        
-        
-        
+
+
