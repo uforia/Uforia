@@ -114,9 +114,9 @@ if not libmagic or not libmagic._name:
     """
     import sys
     platform_to_lib = {'darwin': ['./libraries/libmagic/libmagic.dylib'],
-                       'win32':  ['./libraries/libmagic/magic1.dll'],
-                       'win64':  ['./libraries/libmagic/magic1.dll'],
-                       'windows': ['./libraries/libmagic/magic1.dll'],
+                       'win32':  ['libmagic-1.dll'],
+                       'win64':  ['libmagic-1.dll'],
+                       'windows': ['libmagic-1.dll'],
                        'linux':  ['./libraries/libmagic/libmagic.so.1'],
                        'linux2':  ['./libraries/libmagic/libmagic.so.1']}
     for dll in platform_to_lib.get(sys.platform.lower(), []):
