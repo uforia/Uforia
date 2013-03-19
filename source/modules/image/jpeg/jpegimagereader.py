@@ -5,13 +5,13 @@
 import sys, imp
 from PIL import Image
 from PIL.ExifTags import TAGS
-import libxmp
 
 # Load Uforia custom modules
 try:
     config      = imp.load_source('config','include/config.py')
 except:
     raise
+
 
 def process(fullpath, columns=None):     
         try:
@@ -117,10 +117,14 @@ def process(fullpath, columns=None):
             del info_dictionary, image
             
             # Store the embedded XMP metadata
-            xmpfile = libxmp.XMPFiles(file_path=fullpath)
-            assorted.append(str(xmpfile.get_xmp()))
-            xmpfile.close_file()
-                
+            if config.ENABLEXMP:
+                import libxmp
+                xmpfile = libxmp.XMPFiles(file_path=fullpath)
+                assorted.append(str(xmpfile.get_xmp()))
+                xmpfile.close_file()
+            else:
+                assorted.append(None)
+
             # Make sure we stored exactly the same amount of columns as
             # specified!!
             assert len(assorted) == len(columns)

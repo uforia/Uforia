@@ -10,7 +10,6 @@ Created on 18 mrt. 2013
 
 import sys, imp
 from PIL import Image
-import libxmp
 
 # Load Uforia custom modules
 try:
@@ -19,6 +18,7 @@ except:
     raise
 
 def process(fullpath, columns=None):
+
         # Try to parse TGA data
         try:
             image = Image.open(fullpath, "r")
@@ -47,9 +47,13 @@ def process(fullpath, columns=None):
             del image, info_dictionary
             
             # Store the embedded XMP metadata
-            xmpfile = libxmp.XMPFiles(file_path=fullpath)
-            assorted.append(str(xmpfile.get_xmp()))
-            xmpfile.close_file()
+            if config.ENABLEXMP:
+                import libxmp
+                xmpfile = libxmp.XMPFiles(file_path=fullpath)
+                assorted.append(str(xmpfile.get_xmp()))
+                xmpfile.close_file()
+            else:
+                assorted.append(None)
             
             # Make sure we stored exactly the same amount of columns as
             # specified!!

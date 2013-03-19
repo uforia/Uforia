@@ -10,13 +10,13 @@ Created on 21 feb. 2013
 
 import sys, imp, struct
 import wave
-import libxmp
 
 # Load Uforia custom modules
 try:
     config      = imp.load_source('config','include/config.py')
 except:
     raise
+
 
 def process(fullpath, columns=None):
     try:
@@ -33,9 +33,13 @@ def process(fullpath, columns=None):
         waveFile.close()
 
         # Store the embedded XMP metadata
-        xmpfile = libxmp.XMPFiles(file_path=fullpath)
-        assorted.append(str(xmpfile.get_xmp()))
-        xmpfile.close_file()
+        if config.ENABLEXMP:
+            import libxmp
+            xmpfile = libxmp.XMPFiles(file_path=fullpath)
+            assorted.append(str(xmpfile.get_xmp()))
+            xmpfile.close_file()
+        else:
+            assorted.append(None)
         
         # Make sure we stored exactly the same amount of columns as
         # specified!!

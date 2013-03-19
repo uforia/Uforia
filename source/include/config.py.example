@@ -20,6 +20,9 @@ STARTDIR = '/home/TESTDATA/'
 ENABLEMODULES = False
 MODULEDIR = './modules/'
 
+# Should Uforia modules use the libxmp library for optional XMP support?
+ENABLEXMP = True
+
 # Database configuration. The name should match the handler providing
 # the appropriate Database class with setupMainTable() and setupTable()
 # and store() methods. See one of the provided database handlers for more
