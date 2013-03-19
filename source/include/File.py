@@ -11,14 +11,6 @@ class File(object):
         name, size, owner, group, MACtimes, MD5/SHA1/SHA256 hashes and file magic
         properties in the object's properties.
         """
-        if not config.MAGICFILE:
-            """
-            If there is no magic file defined in the configuration, fall back to the
-            provided one by the stock Uforia installation.
-            """
-            self.MAGICFILE = './share/magic.mgc'
-        else:
-            self.MAGICFILE = config.MAGICFILE
         if not fullpath:
             pass
         else:
@@ -76,8 +68,8 @@ class File(object):
                 raise
 #                raise IOError('Error calculating digests, possible filesystem error.')
             try:
-                magic_default = magic.Magic(magic_file=self.MAGICFILE)
-                magic_mime = magic.Magic(mime=True, magic_file=self.MAGICFILE)
+                magic_default = magic.Magic(magic_file=config.MAGICFILE)
+                magic_mime = magic.Magic(mime=True,magic_file=config.MAGICFILE)
                 self.ftype = str(magic_default.from_file(fullpath))
                 self.mtype = str(magic_mime.from_file(fullpath))
                 self.btype = str(magic_default.from_buffer(open(fullpath).read(65536)))
