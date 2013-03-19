@@ -6,15 +6,9 @@
 
 # import for external lib hsaudiotag
 from hsaudiotag import wma
-import imp, sys
+import sys
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
     try:
         # Gets the WMA file from the path
         myfile = wma.WMADecoder(fullpath)

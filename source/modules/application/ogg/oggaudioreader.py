@@ -8,16 +8,10 @@ Created on 28 feb. 2013
 
 #TABLE: Artist:LONGTEXT, Album:LONGTEXT, Title:LONGTEXT, Genre:LONGTEXT, Year:INT(4), Track:LONGTEXT, Comment:LONGTEXT, DurationInSeconds:DOUBLE, BitRate:INT, SampleRate:INT, AudioFileSize:INT, AudioOffset:INT
 
-import sys, imp
+import sys
 from hsaudiotag import auto
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
         #Try to parse .ogg data
         try:  
             #Read the .ogg file

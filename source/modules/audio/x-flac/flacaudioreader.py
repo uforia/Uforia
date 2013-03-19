@@ -8,14 +8,9 @@ Created on 26 feb. 2013
 #
 #TABLE: Length:REAL, SampleRate:BIGINT, TotalSamples:BIGINT, Channels:INT, BPS:INT, Md5Sig:LONGTEXT, MinBlocksize:BIGINT, MaxBlocksize:BIGINT, MinFramesize:BIGINT, MaxFrameSize:BIGINT, Title:LONGTEXT, Version:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, Artist:LONGTEXT, Performer:LONGTEXT, Copyright:LONGTEXT, License:LONGTEXT, Organization:LONGTEXT, Description:LONGTEXT, Genre:LONGTEXT, Date:LONGTEXT, Location:LONGTEXT, Contact:LONGTEXT, ISRC: LONGTEXT, Unknown:LONGTEXT, Pictures:LONGTEXT, SeekTable:LONGTEXT, CueSheets:LONGTEXT
 
-import sys, traceback, imp, json
+import sys, traceback, json
 import mutagen, mutagen.flac
 from PIL import Image
-
-try:
-    config = imp.load_source('config','include/config.py')
-except:
-    raise
 
 def lookupCaseInsensitive(dict, key):
     """
@@ -117,7 +112,7 @@ def getCuesheet(audio):
 
     return json.dumps(cuedata)
 
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
     """
     Uses the mutagen library to parse all FLAC metadata.
     Parses: STREAMINFO, SEEKTABLE, VORBIS_COMMENT, CUESHEET, PICTURE

@@ -8,17 +8,10 @@ Created on 14 mrt. 2013
 
 #TABLE: Tile:LONGTEXT, ICC_Profile:LONGTEXT, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:LONGTEXT, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:LONGTEXT, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:LONGTEXT, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
 
-import sys, imp
+import sys
 from PIL import Image, TiffImagePlugin
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
 
         # Try to parse TIFF data
         try:

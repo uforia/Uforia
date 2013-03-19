@@ -10,19 +10,11 @@ Created on 16 feb. 2013
 #TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CDID:INT, Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT, DurationInSeconds:DOUBLE, PlayCount:INT, TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT, XMP:LONGTEXT
 
 # import for external lib eyed3
-import sys, imp
+import sys
 import eyed3
 from mutagen.apev2 import APEv2
 
-
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
     # The whole parse data method is in a try block to catch any exception
     try:        
         # Read the audio file and get the two data classes from it (Tag and AudioInfo)

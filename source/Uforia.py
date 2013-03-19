@@ -134,7 +134,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             for module in modules:
                 module.loadSources()
                 if module.isMimeHandler:
-                    processresult = module.pymodule.process(file.fullpath, columns=module.columnnames)
+                    processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)
                     if processresult != None:
                         dbqueue.put((module.tablename, hashid, module.columnnames, processresult))
         except:

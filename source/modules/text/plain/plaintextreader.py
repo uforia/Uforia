@@ -10,15 +10,9 @@ Created on 02 feb. 2013
 
 #TABLE: Contents:LONGTEXT
 
-import sys, imp
+import sys
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
         # Try to parse TXT data
         try:
             with open(fullpath,'rb') as f:

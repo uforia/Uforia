@@ -8,18 +8,12 @@ Created on 11 mrt. 2013
 
 #TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Palette:LONGTEXT
 
-import sys, imp
+import sys
 from PIL import Image
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
         # Try to parse image data
-        try:
+        try:            
             #Open image file
             image = Image.open(fullpath, "r")
             

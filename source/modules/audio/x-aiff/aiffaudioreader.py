@@ -11,13 +11,7 @@ Created on 2 mrt. 2013
 import sys, imp
 import aifc
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
         # Try to parse AIFF data
         try:
             # Open the AIFF file

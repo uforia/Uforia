@@ -8,16 +8,10 @@ Created on 18 mrt. 2013
 
 #TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:LONGTEXT, XMPTag:LONGTEXT
 
-import sys, imp
+import sys
 from PIL import Image
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
 
         # Try to parse TGA data
         try:
@@ -69,7 +63,7 @@ def process(fullpath, columns=None):
             return assorted
             
         except:
-            print "An error occured while parsing audio data: ", sys.exc_info()
+            print "An error occured while parsing TGA data: ", sys.exc_info()
         
             # Store values in database so not the whole application crashes
             return None

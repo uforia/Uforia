@@ -8,17 +8,10 @@ Created on 21 feb. 2013
 
 #TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
 
-import sys, imp, struct
+import sys, struct
 import wave
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
     try:
         #open the wave file
         waveFile = wave.open(fullpath, "rb")

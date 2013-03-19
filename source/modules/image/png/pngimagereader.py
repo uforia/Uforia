@@ -8,17 +8,10 @@ Created on 11 mrt. 2013
 
 #TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:LONGTEXT, Interlace:LONGTEXT, Transparency:LONGTEXT, Gamma:LONGTEXT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:LONGTEXT, XMPtag:LONGTEXT 
 
-import sys, imp
+import sys
 from PIL import Image
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-
-def process(fullpath, columns=None):
+def process(fullpath, config, columns=None):
 
         # Try to parse PNG data
         try:

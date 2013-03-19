@@ -2,18 +2,11 @@
 
 #TABLE: jfif:LONGTEXT, adobe:LONGTEXT, progression:LONGTEXT, quality:LONGTEXT, optimize:LONGTEXT, exif:LONGTEXT, jfif_version:LONGTEXT, jfif_density:LONGTEXT, jfif_unit:LONGTEXT, flashpix:LONGTEXT, adobe_transform:LONGTEXT, DPIx:INT, DPIy:INT, XMPtag:LONGTEXT 
 
-import sys, imp
+import sys
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-# Load Uforia custom modules
-try:
-    config      = imp.load_source('config','include/config.py')
-except:
-    raise
-
-
-def process(fullpath, columns=None):     
+def process(fullpath, config, columns=None):  
         try:
             # Try to parse JPG data   
             image = Image.open(fullpath, "r")
