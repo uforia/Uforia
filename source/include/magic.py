@@ -123,7 +123,7 @@ if not libmagic or not libmagic._name:
         try:
             libmagic = ctypes.CDLL(dll)
         except OSError:
-            pass
+            raise
 
 if not libmagic or not libmagic._name:
     """
