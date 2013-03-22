@@ -1,10 +1,10 @@
 # This is the image module for JPG
 
-#TABLE: Jfif:LONGTEXT, Jfif_version:LONGTEXT, Jfif_density:LONGTEXT, Jfif_unit:LONGTEXT, Adobe:LONGTEXT, Adobe_transform:LONGTEXT, Progression:LONGTEXT, Quality:LONGTEXT, Optimize:LONGTEXT, Progressive:BOOLEAN, Flashpix:LONGTEXT, DPIx:INT, DPIy:INT, Exif:LONGTEXT, OtherInfo:LONGTEXT, XMPtag:LONGTEXT 
+#TABLE: Image_App:LONGTEXT, Image_AppList:LONGTEXT, Image_Bits:INT, Image_Quantization:INT, Image_ICCList:LONGTEXT, Image_Huffman_dc:LONGTEXT, Image_Huffman_ac:LONGTEXT, Image_Layer:LONGTEXT, Image_Tile:LONGTEXT, Image_im:LONGTEXT, Jfif:LONGTEXT, ICC_Profile:LONGTEXT, Jfif_version:LONGTEXT, Jfif_density:LONGTEXT, Jfif_unit:LONGTEXT, Adobe:LONGTEXT, Adobe_transform:LONGTEXT, Progression:LONGTEXT, Quality:LONGTEXT, Optimize:LONGTEXT, Progressive:BOOLEAN, Flashpix:LONGTEXT, DPIx:INT, DPIy:INT, imagewidth:INT, imagelength:INT, bitspersample:INT, compression:LONGTEXT, photometricinterpretation:LONGTEXT, imagedescription:LONGTEXT, make:LONGTEXT, model:LONGTEXT, stripoffsets:INT, orientation:LONGTEXT, samplesperpixel:INT, rowsperstrip:INT, stripbyteconunts:INT, xresolution:INT, yresolution:INT, planarconfiguration:LONGTEXT, resolutionunit:INT, transferfunction:LONGTEXT, software:LONGTEXT, datetime:LONGTEXT, artist:LONGTEXT, whitepoint:LONGTEXT, primarychromaticities:LONGTEXT, jpegifoffset:INT, jpegifbytecount:INT, ycbcrcoefficients:INT, ycbcrsubsampling:INT, ycbcrpositioning:INT, referenceblackwhite:LONGTEXT, relatedimagefileformat:LONGTEXT, relatedimagelength:INT, relatedimagewidth:INT, cfarepeatpatterndim:LONGTEXT, cfapattern:LONGTEXT, batterylevel:INT, copyright:LONGTEXT, exposuretime:INT, fnumber:INT, exifoffset:INT, intercolorprofile:LONGTEXT, exposureprogram:LONGTEXT, isospeedratings:INT, oecf:LONGTEXT, interlace:LONGTEXT, timezoneoffset:LONGTEXT, selftimermode:INT, exifversion:INT, datetimeoriginal:LONGTEXT, datetimedigitized:LONGTEXT, componentsconfiguration:LONGTEXT, compressedbitsperpixel:INT, shutterspeedvalue:INT, aperturevalue:INT, brightnessvalue:INT, exposurebiasvalue:INT, maxaperturevalue:INT, subjectdistance:INT, meteringmode:LONGTEXT, lightsource:LONGTEXT, flash:LONGTEXT, focallength:INT, flashenergy:INT, spatialfrequencyresponse:INT, noise:INT, imagenumber:INT, securityclassification:LONGTEXT, imagehistory:LONGTEXT, exposureindex:LONGTEXT, tiffepstandardid:INT, makernote:LONGTEXT, usercomment:LONGTEXT, subsectime:INT, subsectimeoriginal:INT, subsectimedigitized:INT, flashpixversion:INT, colorspace:INT, exifimagewidth:INT, exifimageheight:INT, relatedsoundfile:LONGTEXT, exifinteroperabilityoffset:INT, spatialfrequenceresponse:INT, focalplanexresolution:INT, focalplaneyresolution:INT, focalplaneresolutionunit:INT, subjectlocation:LONGTEXT, sensingmethod:LONGTEXT, filesource:LONGTEXT, scenetype:LONGTEXT, gpsversionid:INT, gpslatituderef:INT, gpslatitude:INT, gpslongtituderef:INT, gpslongtitude:INT, gpsaltituderef:INT, gpsaltitude:INT, gpstimestamp:INT, gpssatellites:INT, gpsstatus:LONGTEXT, gpsmeasuremode:LONGTEXT, gpsdop:LONGTEXT, gpsspeedref:INT, gpsspeed:INT, gpstrackref:INT, gpstrack:INT, gpsimgdirectionref:INT, gpsimgdirection:INT, gpsmapdatum:INT, gpsdestlatituderef:INT, gpsdestlatitude:INT, gpsdestlongituderef:INT, gpsdestlongitude:INT, gpsdestbearingref:INT, gpsdestbearing:INT, gpsdistanceref:INT, gpsdestdistance:INT,OtherInfo:LONGTEXT, XMPtag:LONGTEXT 
 
-import sys
+import sys, traceback
 from PIL import Image
-from PIL.ExifTags import TAGS
+from PIL.ExifTags import TAGS, GPSTAGS
 
 def process(fullpath, config, columns=None):  
         try:
@@ -12,7 +12,7 @@ def process(fullpath, config, columns=None):
             image = Image.open(fullpath, "r")
             
             # Create an empty list
-            assorted = []
+            assorted = [image.app, image.applist, image.bits, image.quantization, image.icclist, image.huffman_dc, image.huffman_ac, image.layer, image.tile, image.im]
             info_dictionary = image.info
             
             # Check if jfif is in info dictionary, if so put it in our list
@@ -22,6 +22,11 @@ def process(fullpath, config, columns=None):
             else:
                 assorted.append(None)
                 
+            if "icc_profile" in info_dictionary:
+                assorted.append(info_dictionary["icc_profile"])
+                info_dictionary.pop("icc_profile")
+            else:
+                assorted.append(None)    
                   
             # Check if jfif_version is in info dictionary, if so put it in our list       
             if "jfif_version" in image.info:
@@ -104,15 +109,20 @@ def process(fullpath, config, columns=None):
                 
             # Check if exif is in info dictionary, if so decode and put in our list                    
             if "exif" in info_dictionary:
-                exif = {
-                        TAGS[k]: v
-                        for k, v in image._getexif().items()
-                        if k in TAGS
-                        }                
-                assorted.append(exif)
-                info_dictionary.pop("exif")
+                for key in TAGS:
+                    if key == 0x8825:
+                        for gpskey in GPSTAGS:
+                            assorted.append(image._getexif().get(gpskey))
+                    else:
+                        assorted.append(image._getexif().get(key))
+                info_dictionary.pop("exif")        
             else:
-                assorted.append(None)  
+                for key in TAGS:
+                    if key == 0x8825:
+                        for gpskey in GPSTAGS:
+                            assorted.append(None)
+                    else:
+                        assorted.append(None)  
                 
             # If there are still other values in the dict then put those in column
             assorted.append(info_dictionary)            
@@ -137,13 +147,13 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nJPEG file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i]+':', assorted[i])
+                    print "%-18s; %s" % (columns[i], assorted[i])
                 print
 
             return assorted
             
         except:
-            print "An error occured while parsing image data: ", sys.exc_info()
+            traceback.print_exc(file=sys.stderr)
         
             # Store values in database so not the whole application crashes
             return None
