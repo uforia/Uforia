@@ -6,7 +6,7 @@ Created on 11 mrt. 2013
 
 # This is the image module reading all images
 
-#TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Palette:LONGTEXT
+#TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:BLOB, Extrema:LONGTEXT, Histogram:BLOB, Palette:BLOB, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
 
 import sys
 from PIL import Image
@@ -17,7 +17,22 @@ def process(fullpath, config, columns=None):
             #Open image file
             image = Image.open(fullpath, "r")
             
-            assorted = [image.format, image.mode, image.size[0], image.size[1], image.getcolors(), image.getextrema(), image.palette]
+            assorted = [image.format, image.mode, image.size[0], image.size[1], image.getcolors(), image.getextrema(), image.histogram()]
+            
+            # If palette is not None get it's data
+            if image.palette == None:
+                assorted.append(None)
+            else:
+                assorted.append(image.palette.getdata())
+            
+            #
+            if image.getbbox() == None:
+                assorted.append(None)
+            else:
+                assorted.append(image.getbbox()[0])
+                assorted.append(image.getbbox()[1]) 
+                assorted.append(image.getbbox()[2]) 
+                assorted.append(image.getbbox()[3])
             
             # Delete variable
             del image
