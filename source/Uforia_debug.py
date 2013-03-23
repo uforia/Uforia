@@ -8,7 +8,7 @@ config      = []
 File        = []
 magic       = []
 modules     = []
-database = []
+database    = []
 
 def writeToDB(table, hashid, columns, values, db=None):
     """
