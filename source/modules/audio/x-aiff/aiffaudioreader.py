@@ -8,7 +8,7 @@ Created on 2 mrt. 2013
 
 #TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE
 
-import sys, imp
+import sys, traceback
 import aifc
 
 def process(fullpath, config, columns=None):
@@ -34,13 +34,13 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nAIFF file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i]+':', assorted[i])
+                    print "%-18s %s" % (columns[i], assorted[i])
                 print
             
             return assorted
             
         except:
-            print "An error occured while parsing audio data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
         
             # Store values in database so not the whole application crashes
             return None       

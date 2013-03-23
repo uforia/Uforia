@@ -150,7 +150,7 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nJPEG file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s; %s" % (columns[i], assorted[i])
+                    print "%-18s %s" % (columns[i], assorted[i])
                 print
 
             return assorted

@@ -8,7 +8,7 @@ Created on 18 mrt. 2013
 
 #TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:LONGTEXT, XMPTag:LONGTEXT
 
-import sys
+import sys, traceback
 from PIL import Image
 
 def process(fullpath, config, columns=None):
@@ -57,13 +57,13 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nTGA file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i]+':', assorted[i])
+                    print "%-18s %s" % (columns[i], assorted[i])
                 print
             
             return assorted
             
         except:
-            print "An error occured while parsing TGA data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
         
             # Store values in database so not the whole application crashes
             return None

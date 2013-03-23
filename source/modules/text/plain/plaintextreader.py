@@ -10,24 +10,28 @@ Created on 02 feb. 2013
 
 #TABLE: Contents:LONGTEXT
 
-import sys
+import sys, traceback
 
 def process(fullpath, config, columns=None):
         # Try to parse TXT data
         try:
             with open(fullpath,'rb') as f:
-                values=f.read()
+                assorted = [f.read()]
             
-            # Print some data that is stored in the database if debug is true
-            if config.DEBUG:
-                print "\nTXT file data:"
-                print "Contents:    %s" % values
-                print
-            
-            return (values,)
-            
+                # Make sure we stored exactly the same amount of columns as
+                # specified!!
+                assert len(assorted) == len(columns)
+        
+                # Print some data that is stored in the database if debug is true
+                if config.DEBUG:
+                    print "\nTXT file data:"
+                    for i in range(0, len(assorted)):
+                        print "%-18s %s" % (columns[i], assorted[i])
+                        print
+
+                return assorted            
         except:
-            print "An error occured while parsing audio data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
         
             # Store values in database so not the whole application crashes
             return (None, )

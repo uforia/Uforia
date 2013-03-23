@@ -8,7 +8,7 @@ Created on 2 mrt. 2013
 
 #TABLE: Length:REAL, Bitrate:INT, NumberOfChannels:INT, SampleRate:BIGINT, BitsPerSample:INT, Title:LONGTEXT, Album:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Composer:LONGTEXT, Year:INT, Comment:LONGTEXT, Description:LONGTEXT, PurschaseDate:DATE, Grouping:LONGTEXT, Genre:LONGTEXT, Lyrics:LONGTEXT, PodcastURL:LONGTEXT, PodcastEpisode:LONGTEXT, PodcastCategory:LONGTEXT, PodcastKeywords:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, AlbumSortOrder:LONGTEXT, AlbumArtistSortOrder:LONGTEXT, ArtistSortOrder:LONGTEXT, TitleSortOrder:LONGTEXT, ComposerSortOrder:LONGTEXT, ShowSortOrder:LONGTEXT, ShowName:LONGTEXT, PartOfCompilation:BOOLEAN, PartOfAlbum:BOOLEAN,Podcast:BOOLEAN, Tempo:BIGINT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CoversFormat:LONGTEXT
 
-import sys
+import sys,traceback
 import mutagen.mp4
 
 def process(fullpath, config, columns=None):
@@ -79,13 +79,13 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nMP4 file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i]+':', assorted[i])
+                    print "%-18s %s" % (columns[i], assorted[i])
                 print
             
             return assorted
             
         except:
-            print "An error occured while parsing audio data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
         
             # Store values in database so not the whole application crashes
             return None        

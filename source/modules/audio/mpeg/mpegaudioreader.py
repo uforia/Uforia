@@ -10,7 +10,7 @@ Created on 16 feb. 2013
 #TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CDID:INT, Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT, DurationInSeconds:DOUBLE, PlayCount:INT, TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:LONGTEXT, XMP:LONGTEXT
 
 # import for external lib eyed3
-import sys
+import sys, traceback
 import eyed3
 from mutagen.apev2 import APEv2
 
@@ -293,14 +293,14 @@ def process(fullpath, config, columns=None):
         if config.DEBUG:
             print "\nMPEG file data:"
             for i in range(0, len(assorted)):
-                print "%-18s %s" % (columns[i]+':', assorted[i])
+                print "%-18s %s" % (columns[i], assorted[i])
             print
             
         # Store in database  
         return assorted
     
     except:
-        print "An error occured while parsing audio data: ", sys.exc_info()
+        traceback.print_exc(file = sys.stderr)
         return None
 
     

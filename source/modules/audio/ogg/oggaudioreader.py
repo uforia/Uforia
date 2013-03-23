@@ -8,7 +8,7 @@ Created on 28 feb. 2013
 
 #TABLE: Artist:LONGTEXT, Album:LONGTEXT, Title:LONGTEXT, Genre:LONGTEXT, Year:INT(4), Track:LONGTEXT, Comment:LONGTEXT, DurationInSeconds:DOUBLE, BitRate:INT, SampleRate:INT, AudioFileSize:INT, AudioOffset:INT
 
-import sys
+import sys, traceback
 from hsaudiotag import auto
 
 def process(fullpath, config, columns=None):
@@ -47,7 +47,7 @@ def process(fullpath, config, columns=None):
                 if config.DEBUG:
                     print "\nOGG file data:"
                     for i in range(0, len(assorted)):
-                        print "%-18s %s" % (columns[i]+':', assorted[i])
+                        print "%-18s %s" % (columns[i], assorted[i])
                     print
 
                 # Store in database
@@ -56,7 +56,7 @@ def process(fullpath, config, columns=None):
                 return None
 
         except:
-            print "An error occured while parsing audio data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

@@ -8,7 +8,7 @@ Created on 14 mrt. 2013
 
 #TABLE: Tile:LONGTEXT, ICC_Profile:LONGTEXT, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:LONGTEXT, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:LONGTEXT, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:LONGTEXT, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
 
-import sys
+import sys, traceback
 from PIL import Image, TiffImagePlugin
 
 def process(fullpath, config, columns=None):
@@ -103,12 +103,12 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nTiff file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i]+':', assorted[i])
+                    print "%-18s %s" % (columns[i], assorted[i])
             
             return assorted
             
         except:
-            print "An error occured while parsing image data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
         
             # Store values in database so not the whole application crashes
             return None

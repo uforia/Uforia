@@ -8,7 +8,7 @@ Created on 21 feb. 2013
 
 #TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
 
-import sys, struct
+import sys, traceback
 import wave
 
 def process(fullpath, config, columns=None):
@@ -42,12 +42,12 @@ def process(fullpath, config, columns=None):
         if config.DEBUG:
             print "\nWAV file data:"
             for i in range(0, len(assorted)):
-                print "%-18s %s" % (columns[i]+':', assorted[i])
+                print "%-18s %s" % (columns[i], assorted[i])
             print
             
         return assorted
     
     except:
-        print "An error occured while parsing wav data: ", sys.exc_info()
+        traceback.print_exc(file = sys.stderr)
         
         return None

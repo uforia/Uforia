@@ -8,7 +8,7 @@ Created on 11 mrt. 2013
 
 #TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:LONGTEXT, Interlace:LONGTEXT, Transparency:LONGTEXT, Gamma:LONGTEXT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:LONGTEXT, XMPtag:LONGTEXT 
 
-import sys
+import sys, traceback
 from PIL import Image
 
 def process(fullpath, config, columns=None):
@@ -87,13 +87,13 @@ def process(fullpath, config, columns=None):
             if config.DEBUG:
                 print "\nPNG file data:"
                 for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i]+':', assorted[i])
+                    print "%-18s %s" % (columns[i], assorted[i])
                 print
             
             return assorted
             
         except:
-            print "An error occured while parsing image data: ", sys.exc_info()
+            traceback.print_exc(file = sys.stderr)
         
             # Store values in database so not the whole application crashes
             return None
