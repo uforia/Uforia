@@ -13,7 +13,7 @@ database    = []
 def writeToDB(table, hashid, columns, values, db=None):
     """
     Method that writes to database
-    
+
     table - the database table
     hashid - files primary key
     columns - the database columns
@@ -23,7 +23,7 @@ def writeToDB(table, hashid, columns, values, db=None):
     if db == None:
         db = database.Database(config)
     db.store(table,hashid,columns,values)
-        
+
     db.connection.commit()
     db.connection.close()
 
@@ -90,7 +90,7 @@ def invokeModules(uforiamodules, hashid, file):
 
 def fileProcessor(item,uforiamodules):
     """
-    Process a file item and export its information to the database. 
+    Process a file item and export its information to the database.
     Also calls invokeModules() if modules are enabled in the
     configuration.
 
@@ -125,12 +125,12 @@ def run():
     Sets up the database, modules, and then
     invokes the fileScanner.
     """
-    
+
     print("Uforia starting...")
-        
+
     db = database.Database(config)
-    db.setupMainTable() 
-    
+    db.setupMainTable()
+
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
@@ -154,7 +154,7 @@ if __name__ == "__main__":
         os.environ['PATH'] = './libraries/windows-deps;./libraries/libxmp/bin-%s-%s;%s' % (architecture, operatingSystem, os.environ['PATH'])
     else:
         os.environ['LD_LIBRARY_PATH'] = './libraries/libxmp/bin-{0}-{1}:./libraries/PIL/bin-{0}-{1}'.format(architecture, operatingSystem)
-        
+
     try:
         config      = imp.load_source('config','include/config.py')
         File        = imp.load_source('File','include/File.py')

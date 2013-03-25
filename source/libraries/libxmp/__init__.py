@@ -118,7 +118,7 @@ try:
 	if platform.system() in platform_extensions:
 		_exempi = ctypes.cdll.LoadLibrary("libexempi" + platform_extensions[platform.system()])
 	else:
-		# Unsupported platform (Mac?), try loading system-wide installed exempi	
+		# Unsupported platform (Mac?), try loading system-wide installed exempi
 		lib = ctypes.util.find_library('exempi')
 		if lib:
 			_exempi = ctypes.CDLL(lib)

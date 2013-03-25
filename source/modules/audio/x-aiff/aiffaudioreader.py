@@ -16,31 +16,31 @@ def process(fullpath, config, columns=None):
         try:
             # Open the AIFF file
             audiofile = aifc.open(fullpath, "rb")
-            
-            #fill variables from the AIFF file (nchannels, sampwidth, framerate, nframes, comptype, compname)        
+
+            #fill variables from the AIFF file (nchannels, sampwidth, framerate, nframes, comptype, compname)
             assorted = list(audiofile.getparams())
-            
+
             # duration of the aiff file is amount of frames divided by framerate
-            assorted.append(audiofile.getnframes() / float(audiofile.getframerate())) 
-            
+            assorted.append(audiofile.getnframes() / float(audiofile.getframerate()))
+
             # close the aiffFile
             audiofile.close()
-            
+
             # Make sure we stored exactly the same amount of columns as
             # specified!!
             assert len(assorted) == len(columns)
-            
+
             # Print some data that is stored in the database if debug is true
             if config.DEBUG:
                 print "\nAIFF file data:"
                 for i in range(0, len(assorted)):
                     print "%-18s %s" % (columns[i], assorted[i])
                 print
-            
+
             return assorted
-            
+
         except:
             traceback.print_exc(file = sys.stderr)
-        
+
             # Store values in database so not the whole application crashes
-            return None       
+            return None

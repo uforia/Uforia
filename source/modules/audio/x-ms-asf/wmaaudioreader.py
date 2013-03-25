@@ -12,10 +12,10 @@ def process(fullpath, config, columns=None):
     try:
         # Gets the WMA file from the path
         myfile = wma.WMADecoder(fullpath)
-        
+
         # If the wma file can be read succesfully
         if myfile.valid:
-            
+
             # Store audio data in list
             assorted = [
               myfile.artist,
@@ -31,31 +31,30 @@ def process(fullpath, config, columns=None):
               myfile.album,
               myfile.audio_size
             ]
-            
+
             # delete the wmaFile variable
             del myfile
-                 
+
             # Make sure we stored exactly the same amount of columns as
             # specified!!
             assert len(assorted) == len(columns)
-            
+
             # Print some data that is stored in the database if debug is true
             if config.DEBUG:
                 print "\nWMA file data:"
                 for i in range(0, len(assorted)):
                     print "%-18s %s" % (columns[i], assorted[i])
                 print
-            
-            # Store in database  
-            return assorted 
-        
+
+            # Store in database
+            return assorted
+
         else:
              return None
-    
+
     except:
         traceback.print_exc(file = sys.stderr)
-        
+
         # Store nothing so the application won't crash
         return None
-    
-       
+

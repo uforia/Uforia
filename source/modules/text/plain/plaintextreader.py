@@ -17,11 +17,11 @@ def process(fullpath, config, columns=None):
         try:
             with open(fullpath,'rb') as f:
                 assorted = [f.read()]
-            
+
                 # Make sure we stored exactly the same amount of columns as
                 # specified!!
                 assert len(assorted) == len(columns)
-        
+
                 # Print some data that is stored in the database if debug is true
                 if config.DEBUG:
                     print "\nTXT file data:"
@@ -29,9 +29,9 @@ def process(fullpath, config, columns=None):
                         print "%-18s %s" % (columns[i], assorted[i])
                         print
 
-                return assorted            
+                return assorted
         except:
             traceback.print_exc(file = sys.stderr)
-        
+
             # Store values in database so not the whole application crashes
             return (None, )

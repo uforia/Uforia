@@ -22,7 +22,7 @@ def dbworker(dbqueue, db=None):
     to the database. The worker will continue until it receives a table
     with the name "No more tasks" (the sentinel) in the argument list. Upon
     receiving the sentinel, it will send a commit to write out all
-    outstanding I/O to the database. 
+    outstanding I/O to the database.
 
     dbqueue - The database queue, a multiprocessing.JoinableQueue
     db - Optionally use another database object
