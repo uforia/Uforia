@@ -4,9 +4,9 @@ Created on 25 mrt. 2013
 @author: Marcin Koziuk
 '''
 
-# This is the image module for PNG
+# This is the image module for GIF
 
-#TABLE: Header:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:LONGTEXT, XMP:LONGTEXT
+#TABLE: Version:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:LONGTEXT, XMP:LONGTEXT
 import sys, traceback
 from PIL import Image
 
