@@ -97,10 +97,19 @@ def fileScanner(dir,consumers,dbqueue,monitorqueue,uforiamodules):
                 fullpath = os.path.join(root,name)
                 filelist.append((fullpath,hashid))
                 hashid += 1;
-        for item in filelist:
-            consumers.apply_async(fileProcessor,args=(item,dbqueue,monitorqueue,uforiamodules))
-        consumers.close()
-        consumers.join()
+        try:
+            consumermap = [ (item,dbqueue,monitorqueue,uforiamodules) for item in filelist ]
+            result = consumers.map_async(fileProcessor, consumermap)
+
+            # Wait while fileProcessor is busy in order to catch a possible KeyboardInterrupt.
+            #
+            # An infinite float was used;we can't use get() with no arguments as it will
+            # ignore the exception.
+            result.get(float('inf'))
+            consumers.close()
+            consumers.join()
+        except KeyboardInterrupt:
+            consumers.terminate()
     except:
         traceback.print_exc(file=sys.stderr)
         raise
@@ -141,7 +150,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             traceback.print_exc(file = sys.stderr)
             raise
 
-def fileProcessor(item,dbqueue,monitorqueue,uforiamodules):
+def fileProcessor((item,dbqueue,monitorqueue,uforiamodules)):
     """
     Process a file item and export its information to the database
     queue. Also calls invokeModules() if modules are enabled in the
