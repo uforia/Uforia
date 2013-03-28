@@ -250,8 +250,8 @@ if __name__ == "__main__":
         subprocess.check_call(
             [sys.executable, __file__, '--_envset'])
     else:
-        # Site dir for third-party library imports
-        site.addsitedir("./libraries")
+        # Path for third-party library imports (not site-dir because it gets imported last)
+        sys.path.insert(0, "./libraries")
 
         # Contrary to XMP toolkit, PIL uses importable shared object binaries (.so/.pyd);
         # so we only need to add them to sitelib, changing environmental vars is unnecessary
