@@ -27,6 +27,23 @@ def writeToDB(table, hashid, columns, values, db=None):
     db.connection.commit()
     db.connection.close()
 
+def writeToMimeTypesTable(table, columns, values, db=None):
+    """
+    Method that writes to database
+
+    table - the database table
+    columns - the database columns
+    values - the values for in the columns
+    db - Optionally use another database object
+    """
+    if db == None:
+        db = database.Database(config)
+        
+    db.storeMimetypeValues(table,columns,values)
+
+    db.connection.commit()
+    db.connection.close()
+
 def fileScanner(dir,uforiamodules):
     """
     Walks through the specified directory tree to find all files. Each
@@ -117,6 +134,16 @@ def fileProcessor(item,uforiamodules):
     except:
         traceback.print_exc(file=sys.stderr)
         raise
+    
+def fillMimeTypesTable(uforiamodules):
+    """
+    Fills the supported_mimetypes table with all available mime-types
+    """
+    if config.DEBUG:
+        print "Getting available mimetypes..."
+    mime_types = uforiamodules.getAllSupportedMimeTypesWithModules()
+    for mime_type in mime_types:
+        writeToMimeTypesTable('supported_mimetypes', ["mime_type", "modules"],[mime_type, mime_types[mime_type]])
 
 def run():
     """
@@ -130,11 +157,13 @@ def run():
 
     db = database.Database(config)
     db.setupMainTable()
+    db.setupMimeTypesTable()
 
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config,db)
+        fillMimeTypesTable(uforiamodules)
     else:
         uforiamodules = '';
     if config.DEBUG:

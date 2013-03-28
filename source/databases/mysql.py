@@ -86,6 +86,19 @@ class Database(object):
         if self.truncate:
             query = """TRUNCATE `files`"""
             self.executeQuery(query)
+        
+    def setupMimeTypesTable(self):
+        """
+        Sets up the glue data table, this table contains which mime-types uses which modules.
+        """
+        query="""CREATE TABLE IF NOT EXISTS `supported_mimetypes`
+            (`mime_type` VARCHAR(512) NOT NULL PRIMARY KEY,
+            INDEX USING HASH (`mime_type`),
+            `modules` LONGTEXT)"""
+        self.executeQuery(query)
+        if self.truncate:
+            query = """TRUNCATE `supported_mimetypes`"""
+            self.executeQuery(query)
 
     def setupModuleTable(self,table,columns):
         """
@@ -135,4 +148,29 @@ class Database(object):
         escaped = tuple(escaped)
         escapedQuery = query%escaped
         escapedQuery = escapedQuery.replace(""" (, """,""" (""")
+        self.executeQuery(escapedQuery)
+    
+    def storeMimetypeValues(self,table,columns,values):
+        """
+        Inserts data into the specified table (supported_mimetypes).
+
+        table - The name of the table
+        columns - A tuple with the name of each column
+        values - A tuple with the value for each column
+        """
+        if not table or not columns or not values:
+            raise ValueError('supported_mimetypes table, columns or values missing.')
+        query = """INSERT IGNORE INTO `"""+table+"""` ("""
+        for item in columns:
+            query += " `"+item+"`,"
+        query += """) VALUES ("""
+        for item in values:
+            query += " '%s',"
+        query += """);"""
+        escaped = []
+        for i in values:
+            escaped.append(MySQLdb.escape_string(str(i)))
+        escaped = tuple(escaped)
+        escapedQuery = query%escaped
+        escapedQuery = escapedQuery.replace(""",)""",""")""")
         self.executeQuery(escapedQuery)

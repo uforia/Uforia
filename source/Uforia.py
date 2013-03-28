@@ -29,11 +29,14 @@ def dbworker(dbqueue, db=None):
     """
     if db == None:
         db = database.Database(config)
-    db.setupMainTable()
+
     while True:
         table,hashid,columns,values = dbqueue.get()
         if table != "No more tasks":
-            db.store(table,hashid,columns,values)
+            if(table == "supported_mimetypes"):
+                db.storeMimetypeValues(table,columns,values)
+            else:
+                db.store(table,hashid,columns,values)
             dbqueue.task_done()
         else:
             break
@@ -185,6 +188,16 @@ def fileProcessor((item,dbqueue,monitorqueue,uforiamodules)):
     except:
         traceback.print_exc(file=sys.stderr)
         raise
+    
+def fillMimeTypesTable(dbqueue, uforiamodules):
+    """
+    Fills the supported_mimetypes table with all available mime-types
+    """
+    if config.DEBUG:
+        print "Getting available mimetypes..."
+    mime_types = uforiamodules.getAllSupportedMimeTypesWithModules()
+    for mime_type in mime_types:
+        dbqueue.put(('supported_mimetypes', None, ["mime_type", "modules"],[mime_type, mime_types[mime_type]]))
 
 def run():
     """
@@ -201,6 +214,12 @@ def run():
     manager = multiprocessing.Manager()
     dbqueue = manager.JoinableQueue()
     dbworkers = []
+    
+    # Create database tables
+    db = database.Database(config)
+    db.setupMainTable()
+    db.setupMimeTypesTable()
+    
     for i in range(config.DBCONN):
         dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))
         dbworkers[i].daemon = True
@@ -208,11 +227,11 @@ def run():
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
-        db = database.Database(config)
         uforiamodules = modules.Modules(config,db)
-        del db
+        fillMimeTypesTable(dbqueue, uforiamodules)
     else:
         uforiamodules = '';
+    del db
     monitorqueue = None
     if config.OUTPUT:
         monitorqueue = manager.JoinableQueue()

@@ -68,6 +68,34 @@ class Modules:
             if module.isGlobal or module.mimetype == mimetype or (module.mimetype and mimetype.startswith(module.mimetype)):
                 modules.append(module)
         return modules
+    
+    def getAllSupportedMimeTypesWithModules(self):
+        """
+        Returns all mime-types which Uforia supports with modules.
+        """
+    
+        # init dictionary and list
+        mime_types_with_columns = {}
+        mime_types = []
+        
+        #First get all mime-types
+        for module in self.modules:
+            if (not module.isGlobal and not "__init__.py" in module.path): # Global module is for each mime-type so ingnore it.
+                if not module.mimetype in mime_types: # If key not already exists, append to the list with mime-types
+                    mime_types.append(module.mimetype)
+        
+        #Then get all columns for a mime-type
+        for mime_type in mime_types:
+            modules = []
+            for module in self.modules:
+                if (not module.isGlobal and not "__init__.py" in module.path): # Global module is for each mime-type so ingnore it.
+                    if module.mimetype == mime_type or (module.mimetype and mime_type.startswith(module.mimetype)):
+                        modules.append(module.name)
+                        
+            mime_types_with_columns[mime_type] = modules
+        
+        del mime_types
+        return mime_types_with_columns
 
     def __setupModules(self, config, db):
         """
