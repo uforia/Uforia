@@ -6,7 +6,7 @@ Created on 26 feb. 2013
 
 # Module for FLAC audio file parsing
 #
-#TABLE: Length:REAL, SampleRate:BIGINT, TotalSamples:BIGINT, Channels:INT, BPS:INT, Md5Sig:LONGTEXT, MinBlocksize:BIGINT, MaxBlocksize:BIGINT, MinFramesize:BIGINT, MaxFrameSize:BIGINT, Title:LONGTEXT, Version:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, Artist:LONGTEXT, Performer:LONGTEXT, Copyright:LONGTEXT, License:LONGTEXT, Organization:LONGTEXT, Description:LONGTEXT, Genre:LONGTEXT, Date:LONGTEXT, Location:LONGTEXT, Contact:LONGTEXT, ISRC: LONGTEXT, Unknown:LONGTEXT, Pictures:LONGTEXT, SeekTable:LONGTEXT, CueSheets:LONGTEXT
+#TABLE: Length:REAL, SampleRate:BIGINT, TotalSamples:BIGINT, Channels:INT, BPS:INT, Md5Sig:LONGTEXT, MinBlocksize:BIGINT, MaxBlocksize:BIGINT, MinFramesize:BIGINT, MaxFrameSize:BIGINT, Title:LONGTEXT, Version:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, Artist:LONGTEXT, Performer:LONGTEXT, Copyright:LONGTEXT, License:LONGTEXT, Organization:LONGTEXT, Description:LONGTEXT, Genre:LONGTEXT, Date:Date, Location:LONGTEXT, Contact:LONGTEXT, ISRC: LONGTEXT, Unknown:BLOB, Pictures:BLOB, SeekTable:BLOB, CueSheets:BLOB
 
 import sys, traceback, json
 import mutagen, mutagen.flac

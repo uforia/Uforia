@@ -6,7 +6,7 @@ Created on 25 mrt. 2013
 
 # This is the image module for GIF
 
-#TABLE: Version:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:LONGTEXT, XMP:LONGTEXT
+#TABLE: Version:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:BLOB, XMP:BLOB
 import sys, traceback
 from PIL import Image
 

@@ -1,6 +1,6 @@
 # This is the image module for BMP
 
-#TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Remaining:LONGTEXT
+#TABLE: Tile:BLOB, Compression:LONGTEXT, Remaining:LONGTEXT
 
 import sys, imp, traceback
 from PIL import Image
