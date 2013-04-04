@@ -1,16 +1,16 @@
-#!/usr/bin/env python
-
 """
 magic is a wrapper around the libmagic file identification library.
 
 See README for more information.
+
+Changes/improvements to this code for Uforia were made by A. Eijkhoudt
 
 Usage:
 
 >>> import magic
 >>> magic.from_file("testdata/test.pdf")
 'PDF document, version 1.2'
->>> magic.from_file("testdata/test.pdf", mime=True)
+>>> magic.from_file("testdata/test.pdf", mime=False)
 'application/pdf'
 >>> magic.from_buffer(open("testdata/test.pdf").read(1024))
 'PDF document, version 1.2'
@@ -19,6 +19,7 @@ Usage:
 
 """
 
+import sys
 import os.path
 import ctypes
 import ctypes.util
@@ -29,8 +30,8 @@ class MagicException(Exception): pass
 
 class Magic:
     """
-    Magic is a wrapper around the libmagic C library.  
-    
+    Magic is a wrapper around the libmagic C library.
+
     """
 
     def __init__(self, mime=False, magic_file=None, mime_encoding=False):
@@ -40,7 +41,7 @@ class Magic:
         mime - if True, mimetypes are returned instead of textual descriptions
         mime_encoding - if True, codec is returned
         magic_file - use a mime database other than the system default
-        
+
         """
         flags = MAGIC_NONE
         if mime:
@@ -67,11 +68,12 @@ class Magic:
 
         if not os.path.exists(filename):
             raise IOError("File does not exist: " + filename)
-        
+
         return magic_file(self.cookie, filename)
 
     def __del__(self):
-        if self.cookie:
+        # during shutdown magic_close may have been cleared already
+        if self.cookie and magic_close:
             magic_close(self.cookie)
             self.cookie = None
 
@@ -81,7 +83,7 @@ _magic = None
 def _get_magic_mime():
     global _magic_mime
     if not _magic_mime:
-        _magic_mime = Magic(mime=True)
+        _magic_mime = Magic(mime=False)
     return _magic_mime
 
 def _get_magic():
@@ -104,31 +106,31 @@ def from_buffer(buffer, mime=False):
     m = _get_magic_type(mime)
     return m.from_buffer(buffer)
 
-
-
-
 libmagic = None
-# Let's try to find magic or magic1
-dll = ctypes.util.find_library('magic') or ctypes.util.find_library('magic1')
-
-# This is necessary because find_library returns None if it doesn't find the library
-if dll:
-    libmagic = ctypes.CDLL(dll)
-
 if not libmagic or not libmagic._name:
+    """
+    We need libmagic support to detect MIME-types. Attempt to autodetect the
+    magic library support for MacOS X and Windows systems first.
+    """
     import sys
-    platform_to_lib = {'darwin': ['/opt/local/lib/libmagic.dylib', 
-                                  '/usr/local/lib/libmagic.dylib'],
-                       'win32':  ['magic1.dll']}
-    for dll in platform_to_lib.get(sys.platform, []):
+    platform_to_lib = {'darwin': ['./libraries/libmagic/libmagic.dylib'],
+                       'win32':  ['libmagic-1.dll'],
+                       'win64':  ['libmagic-1.dll'],
+                       'windows': ['libmagic-1.dll'],
+                       'linux':  ['./libraries/libmagic/libmagic.so.1'],
+                       'linux2':  ['./libraries/libmagic/libmagic.so.1']}
+    for dll in platform_to_lib.get(sys.platform.lower(), []):
         try:
             libmagic = ctypes.CDLL(dll)
         except OSError:
-            pass
+            raise
 
 if not libmagic or not libmagic._name:
-    # It is better to raise an ImportError since we are importing magic module
-    raise ImportError('failed to find libmagic.  Check your installation')
+    """
+    If we are not using MacOS X or Windows, assume we don't have libmagic and
+    throw an error. Uforia is pretty much useless without libmagic anyways.
+    """
+    raise MagicError('Cannot find magic library for MIME-type detection.')
 
 magic_t = ctypes.c_void_p
 
@@ -138,6 +140,11 @@ def errorcheck(result, func, args):
         raise MagicException(err)
     else:
         return result
+
+def coerce_filename(filename):
+    if filename is None:
+        return None
+    return filename.encode(sys.getfilesystemencoding())
 
 magic_open = libmagic.magic_open
 magic_open.restype = magic_t
@@ -155,11 +162,13 @@ magic_errno = libmagic.magic_errno
 magic_errno.restype = c_int
 magic_errno.argtypes = [magic_t]
 
-magic_file = libmagic.magic_file
-magic_file.restype = c_char_p
-magic_file.argtypes = [magic_t, c_char_p]
-magic_file.errcheck = errorcheck
+_magic_file = libmagic.magic_file
+_magic_file.restype = c_char_p
+_magic_file.argtypes = [magic_t, c_char_p]
+_magic_file.errcheck = errorcheck
 
+def magic_file(cookie, filename):
+    return _magic_file(cookie, coerce_filename(filename))
 
 _magic_buffer = libmagic.magic_buffer
 _magic_buffer.restype = c_char_p
@@ -171,10 +180,13 @@ def magic_buffer(cookie, buf):
     return _magic_buffer(cookie, buf, len(buf))
 
 
-magic_load = libmagic.magic_load
-magic_load.restype = c_int
-magic_load.argtypes = [magic_t, c_char_p]
-magic_load.errcheck = errorcheck
+_magic_load = libmagic.magic_load
+_magic_load.restype = c_int
+_magic_load.argtypes = [magic_t, c_char_p]
+_magic_load.errcheck = errorcheck
+
+def magic_load(cookie, filename):
+    return _magic_load(cookie, coerce_filename(filename))
 
 magic_setflags = libmagic.magic_setflags
 magic_setflags.restype = c_int

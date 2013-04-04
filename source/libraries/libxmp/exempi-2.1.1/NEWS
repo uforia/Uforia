@@ -1,0 +1,131 @@
+2.1.1 - 2009/06/30
+
+New features:
+
+- Added shave to the build system for sane output. (build only)
+
+Bug fixes:
+
+- Bug #16030: if the property is an array or struct allow "" to be passed
+  as a value.
+- Bug #19312: source/XMPFiles/FileHandlers/P2_Handler.cpp was using 
+  an improper string comparison. (made rpmlint unhappy).
+- Bug #20554: Missing file on MacOS X.
+- Bug #20554: Detect ldflags properly.
+- Bug #20622: Catch unhandled exceptions in xmp_files_can_put_xmp().
+- Bug #21934: Mismatched new [] / delete.
+- Bug #22554: Fix a SIGFPE encountered on some invalid files. (Bug GNOME #586720)
+
+2.1.0
+
+- Upgrade XMPCore to Adobe XMP 4.4.2
+  - Handlers for additional file formats, including ASF (WMA, WMV), FLV; 
+    MPEG4; SWF; folder-based video formats AVCHD, P2, SonyHDV, and XDCAM; UCF
+  - Additional schemas to support document histories, composed documents, 
+    and temporal metadata
+- New: NS_PDF namespace for PDF.
+- New: API xmp_prefix_namespace_uri() and xmp_namespace_prefix(). Bug #14962.
+- Bug: make sure boost >1.35 does not fail test with system().
+- Bug: unit test now use boost/test/minimal.hpp to work with more boost
+  install. (known boost.test bug)
+- Bug: fix a typo in a CHECK_PTR call causing warnings on gcc < 4.
+- Bug: no longer define UNIX_ENV in exempi.cpp and let CPPFLAGS do it.
+- Bug #16139: the list of exported symbols was too large.
+- Bug #18635: fix crasher.
+
+2.0.2
+
+- Bug #16598: address the lack of TLS for some platforms.
+
+2.0.1
+
+- Bug #14612: no stdbool.h for Sun compilers.
+- Bug #14613: check for iconv() const-ness.
+- Make the error checking more robust.
+- Make error code thread-safe (ie local to the thread).
+
+2.0.0
+
+- Bug #14614, Bug #15263: endian detection in configure.
+- Bug #14615: missing includes for Solaris.
+
+1.99.9
+
+- Bug: fixed an API breakage introduced in 1.99.8
+
+1.99.8
+
+- Bug #14049: don't run autoheader.
+- Bug #13712: add --enable-unittest to disable tests.
+- Bug: Disable strict aliasing in XMPFiles due to bad casting.
+- Bug #14200: fix a typo.
+- Bug: fix a couple of buffer overflows in GIF support. Closes Debian #454297.
+  Closes Gnome #484105
+
+1.99.7
+
+- Bug: fix soversion.
+
+1.99.6
+
+- New: API xmp_get_property_date() / xmp_set_property_date() with tests.
+- New: API xmp_{get,set]_property_{float,bool,int32,int64}() with tests.
+- New: API add ACR schema namespaces.
+- Test: refactor a the tests preparation.
+- Test: add a test for multiple initializations.
+- Test: use valgrind is available.
+- Bug: fix configure to allow building on MacOS X. Closes bug #13596
+- Bug #13707: add autogen.sh
+- Bug #13713: fix boost macros to link boost.test statically (for 1.34).
+- Bug #13712: skip tests if no boost.
+
+1.99.5
+
+- ABI breakage: soversion is now 3
+- Change: API xmp_files_close(), xmp_files_put_xmp(), xmp_files_free(),
+  xmp_free(), xmp_iterator_free(), xmp_iterator_skip() now return bool.
+- Change: API xmp_get_property_and_bits() renamed xmp_get_property().
+- Change: API xmp_set_property2() renamed xmp_set_property().
+- Bug: all API should check about input and return an error if
+  passed NULL.
+- Bug: more exception handling and refactor set_error() use.
+- Bug: add AC_CONFIG_MACRO_DIR to configure.
+- Bug: Lower requirement for libboost to 1.33.0.
+- New: Doxygen API doc generation.
+
+1.99.4
+
+- New: GIF Files smart handlers
+- New: API xmp_append_array_item(), xmp_delete_property(),
+  xmp_has_property(), xmp_get_localized_text(), 
+  xmp_set_localized_text()
+- New: API xmp_delete_localized_text()
+- New: Exempi will be visible in the "generator" string of the XMP packet.
+- Bug: xmp_files_open_new() will handle exceptions properly
+
+1.99.3
+
+- New: API xmp_serialize{,_and_format}() and the
+  corresponding option bits
+- New API xmp_get_array_item()
+
+1.99.2
+
+- New: API xmp_copy()
+- New: API xmp_set_property2(), xmp_set_array_item()
+  and xmp_get_error()
+- New: API xmp_get_property_and_bits() 
+- Bug: xmp_files_get_xmp() handle exceptions properly.
+
+1.99.1
+
+- Bug: store the TIFF tag as BYTE and not UNDEFINED
+  to comply with the spec.
+- Bug: more exception catched.
+- New: added NS_CC namespace
+- New: API xmp_register_namespace()
+
+1.99.0
+
+Initial release of the 2.0 series. Based on Adobe XMP SDK 4.1.1
+

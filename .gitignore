@@ -1,7 +1,6 @@
 *.pydevproject
 .project
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
@@ -57,7 +56,6 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 publish
-[Bb]in
 [Oo]bj
 sql
 TestResults
@@ -79,17 +77,26 @@ dist
 build
 eggs
 parts
-bin
 var
 sdist
 develop-eggs
 .installed.cfg
 pip-log.txt
 .coverage
-.tox
+.to
 *.mo
 .mr.developer.cfg
 .DS_Store
+*~
 
 # Uforia config
 source/include/config.py
+
+# Library DLL files (for Windows users)
+source/magic1.dll
+source/regex2.dll
+source/zlib1.dll
+source/exempi.dll
+source/libexpat-1.dll
+source/libgcc_s_dw2-1.dll
+source/libstdc++-6.dll
