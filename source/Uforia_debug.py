@@ -3,12 +3,12 @@
 # Load basic Python modules
 import os, imp, sys, platform, traceback, site, ctypes
 
-# init Uforia custom modules
-config      = []
-File        = []
-magic       = []
-modules     = []
-database    = []
+# Loading of Uforia modules is deferred until run() is called
+config      = None
+File        = None
+magic       = None
+modules     = None
+database    = None
 
 def writeToDB(table, hashid, columns, values, db=None):
     """
@@ -174,29 +174,28 @@ def run():
         print("The pathname "+config.STARTDIR+" does not exist, stopping...")
     print("\nUforia completed...\n")
 
-if __name__ == "__main__":
+def setupLibraryPaths():
+    """
+    Setup the PATH environmental variable so that python libraries, .pyd, .so and
+    .dll files can be loaded without intervention. This does not work for Linux
+    shared object files loaded with ctypes.
+    """
     architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
     operatingSystem = platform.system()
 
-    # Reloads current file with additional so/dll import paths
-    if platform.system().lower() in ['windows','win32','win64']:
-        os.environ['PATH'] = './libraries/windows-deps;./libraries/libxmp/bin-%s-%s;%s' % (architecture, operatingSystem, os.environ['PATH'])
-    else:
-        os.environ['PATH'] = './libraries/libxmp/bin-{0}-{1}:./libraries/PIL/bin-{0}-{1}'.format(architecture, operatingSystem)
+    sys.path.append("./libraries")
+    sys.path.append("./libraries/PIL/bin-{0}-{1}".format(architecture, operatingSystem))
+    if platform.system() == 'Windows':
+        sys.path.append("./libraries/windows-deps".format(architecture, operatingSystem))
 
-    try:
-        config      = imp.load_source('config','include/config.py')
-        File        = imp.load_source('File','include/File.py')
-        magic       = imp.load_source('magic','include/magic.py')
-        modules     = imp.load_source('modulescanner','include/modulescanner.py')
-        database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
-    except:
-        raise
+if __name__ == "__main__":
+    setupLibraryPaths()
 
-    # Path for third-party library imports (not site-dir because it gets imported last)
-    sys.path.insert(0, "./libraries")
+    # Load Uforia custom modules
+    config      = imp.load_source('config','include/config.py')
+    File        = imp.load_source('File','include/File.py')
+    magic       = imp.load_source('magic','include/magic.py')
+    modules     = imp.load_source('modulescanner','include/modulescanner.py')
+    database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
 
-    # Contrary to XMP toolkit, PIL uses importable shared object binaries (.so/.pyd);
-    # so we only need to add them to sitelib, changing environmental vars is unnecessary
-    site.addsitedir("./libraries/PIL/bin-%s-%s" % (architecture, operatingSystem))
     run()
