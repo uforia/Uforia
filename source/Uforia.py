@@ -263,14 +263,14 @@ def setupLibraryPaths():
     if platform.system() == 'Windows':
         sys.path.append("./libraries/windows-deps".format(architecture, operatingSystem))
 
+setupLibraryPaths()
+
+# Load Uforia custom modules
+config      = imp.load_source('config','include/config.py')
+File        = imp.load_source('File','include/File.py')
+magic       = imp.load_source('magic','include/magic.py')
+modules     = imp.load_source('modulescanner','include/modulescanner.py')
+database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
+
 if __name__ == "__main__":
-    setupLibraryPaths()
-
-    # Load Uforia custom modules
-    config      = imp.load_source('config','include/config.py')
-    File        = imp.load_source('File','include/File.py')
-    magic       = imp.load_source('magic','include/magic.py')
-    modules     = imp.load_source('modulescanner','include/modulescanner.py')
-    database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
-
     run()
