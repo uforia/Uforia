@@ -111,12 +111,15 @@ def _check_for_error():
 #  Load C library - Exempi must be installed on the system
 #
 try:
-	platform_extensions = {
-		'Windows' : '.dll',
-		'Linux' : '.so'
+	architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
+	operatingSystem = platform.system()
+
+	path_to_lib = {
+		'Windows' : './libraries/libxmp/bin-{0}-Windows/libexempi.dll'.format(architecture),
+		'Linux' : './libraries/libxmp/bin-{0}-Linux/libexempi.so'.format(architecture)
 	}
-	if platform.system() in platform_extensions:
-		_exempi = ctypes.cdll.LoadLibrary("libexempi" + platform_extensions[platform.system()])
+	if platform.system() in path_to_lib:
+		_exempi = ctypes.cdll.LoadLibrary(path_to_lib[platform.system()])
 	else:
 		# Unsupported platform (Mac?), try loading system-wide installed exempi
 		lib = ctypes.util.find_library('exempi')
