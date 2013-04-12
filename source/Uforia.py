@@ -262,7 +262,8 @@ def setupLibraryPaths():
     sys.path.insert(0, "./libraries")
     sys.path.append("./libraries/PIL/bin-{0}-{1}".format(architecture, operatingSystem))
     if platform.system() == 'Windows':
-        sys.path.append("./libraries/windows-deps".format(architecture, operatingSystem))
+        # sys.path.append is not reliable for this thing
+        os.environ['PATH'] += ";./libraries/windows-deps"
 
 setupLibraryPaths()
 
