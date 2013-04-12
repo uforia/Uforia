@@ -40,6 +40,11 @@ DBNAME = 'uforia'
 # or hamper database performance
 DBCONN = 2
 
+# Should Uforia DROP any existing tables? Setting this to False
+# can be useful when you want to add additional evidence items on an
+# already-examined filesystem
+DROPTABLE = True
+
 # Should Uforia TRUNCATE/DROP any existing tables? Setting this to False
 # can be useful when you want to add additional evidence items on an
 # already-examined filesystem
@@ -65,4 +70,4 @@ DBRETRY = 5
 # Location of the magic file (needs only be supplied on Windows machines)
 # Example (Windows):  MAGICFILE = 'C:/Program Files (x86)/GnuWin32/share/misc/magic'
 # Example (Linux):    MAGICFILE = None
-MAGICFILE = None
+MAGICFILE = './share/magic.mgc'

@@ -24,6 +24,7 @@ class Database(object):
             password        = config.DBPASS
             database        = config.DBNAME
             self.truncate   = config.TRUNCATE
+            self.droptable  = config.DROPTABLE
             self.debug      = config.DEBUG
             self.connection = None
             attempts        = 0
@@ -64,6 +65,11 @@ class Database(object):
         Sets up the main data table, which contains general information
         about each file.
         """
+        # First drop table
+        if self.droptable:
+            query = """DROP TABLE IF EXISTS `files`"""
+            self.executeQuery(query)
+        
         query="""CREATE TABLE IF NOT EXISTS `files`
             (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
             INDEX USING HASH (`hashid`),
@@ -83,7 +89,9 @@ class Database(object):
             `mtype` LONGTEXT,
             `btype` LONGTEXT)"""
         self.executeQuery(query)
-        if self.truncate:
+        
+        # Truncate table if not already dropped before
+        if self.truncate and not self.droptable:
             query = """TRUNCATE `files`"""
             self.executeQuery(query)
         
@@ -91,12 +99,19 @@ class Database(object):
         """
         Sets up the glue data table, this table contains which mime-types uses which modules.
         """
+        # First drop table
+        if self.droptable:
+            query = """DROP TABLE IF EXISTS `supported_mimetypes`"""
+            self.executeQuery(query)
+
         query="""CREATE TABLE IF NOT EXISTS `supported_mimetypes`
             (`mime_type` VARCHAR(512) NOT NULL PRIMARY KEY,
             INDEX USING HASH (`mime_type`),
             `modules` LONGTEXT)"""
         self.executeQuery(query)
-        if self.truncate:
+        
+        # Truncate table if not already dropped before
+        if self.truncate and not self.droptable:
             query = """TRUNCATE `supported_mimetypes`"""
             self.executeQuery(query)
 
@@ -111,6 +126,12 @@ class Database(object):
         """
         if not table or not columns:
             raise ValueError('Module table or columns missing.')
+        
+        # First drop table
+        if self.droptable:
+            query = """DROP TABLE IF EXISTS `"""+table+"""`"""
+            self.executeQuery(query)
+        
         query = """CREATE TABLE IF NOT EXISTS `"""+table+"""` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
         for items in columns.split(','):
             name,type = items.split(':')
@@ -119,7 +140,9 @@ class Database(object):
             query += """,`"""+name+"""` """+type
         query += """, PRIMARY KEY(`hashid`));"""
         self.executeQuery(query)
-        if self.truncate:
+
+        # Truncate table if not already dropped before
+        if self.truncate and not self.droptable:
             query = """TRUNCATE `"""+table+"""`"""
             self.executeQuery(query)
 
