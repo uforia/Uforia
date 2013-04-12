@@ -45,7 +45,7 @@ DBCONN = 2
 # already-examined filesystem
 DROPTABLE = True
 
-# Should Uforia TRUNCATE/DROP any existing tables? Setting this to False
+# Should Uforia TRUNCATE any existing tables? Setting this to False
 # can be useful when you want to add additional evidence items on an
 # already-examined filesystem
 TRUNCATE = True
