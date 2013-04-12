@@ -90,7 +90,7 @@ class Modules:
             for module in self.modules:
                 if (not module.isGlobal and not "__init__.py" in module.path): # Global module is for each mime-type so ingnore it.
                     if module.mimetype == mime_type or (module.mimetype and mime_type.startswith(module.mimetype)):
-                        modules.append(module.name)
+                        modules.append(module.tablename)
                         
             mime_types_with_columns[mime_type] = modules
         
