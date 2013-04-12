@@ -139,7 +139,7 @@ class Database(object):
         for item in columns:
             query += ", `"+item+"`"
         query += """) VALUES ("""+str(hashid)
-        values = self._replaceEmptySpace(values)
+        values = self._replaceNoneValue(values)
         for item in values:
             query += ", '%s'"
         query += """);"""
@@ -166,7 +166,7 @@ class Database(object):
         for item in columns:
             query += " `"+item+"`,"
         query += """) VALUES ("""
-        values = self._replaceEmptySpace(values)
+        values = self._replaceNoneValue(values)
         for item in values:
             query += " '%s',"
         query += """);"""
@@ -179,20 +179,13 @@ class Database(object):
         escapedQuery = escapedQuery.replace("""'NULL'""","""NULL""")
         self.executeQuery(escapedQuery)
         
-    def _replaceEmptySpace(self, values):
+    def _replaceNoneValue(self, values):
         """
-        This methods replaces all empty characters (None, [], {}, "", '' etc.) to NULL
+        This methods replaces all None values to NULL
         """
         index = 0
         for value in values:
             if value is None:
                 values[index] = "NULL"
-                
-            try:
-                if len(value) <= 0:
-                    values[index] = "NULL"
-            except:
-                pass
-            
             index += 1
         return values
