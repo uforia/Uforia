@@ -193,6 +193,7 @@ if __name__ == "__main__":
     setupLibraryPaths()
 
     # Load Uforia custom modules
+    import libxmp
     config      = imp.load_source('config','include/config.py')
     File        = imp.load_source('File','include/File.py')
     magic       = imp.load_source('magic','include/magic.py')
