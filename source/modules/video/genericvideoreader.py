@@ -12,6 +12,9 @@ Created on 16 apr. 2013
 import sys, traceback, platform
 import ctypes
 
+# Definitions of the C structures and functions from AVbin using ctypes
+# see: https://github.com/ardekantur/pyglet/blob/master/pyglet/media/avbin.py
+
 class AVbinFileInfo(ctypes.Structure):
     _fields_ = [
         ('structure_size', ctypes.c_size_t),
@@ -44,9 +47,15 @@ def process(fullpath, config, columns=None):
         try:
             file_info = AVbinFileInfo()
             file_info.structure_size = ctypes.sizeof(file_info)
+
+            # open the file and let avbin write its metadata to file_info
             file = av.avbin_open_filename(fullpath)
             av.avbin_file_info(file, ctypes.byref(file_info))
 
+            # The metadata is stored as an attribute (file_info.attr)
+            # and not as key/value pair (file_info['attr']). So we are
+            # looking up all possible attributes here to put them in the
+            # `assorted' array using getattr()
             assorted = []
             for field in file_info._fields_:
                 assorted.append(getattr(file_info, field[0]))
