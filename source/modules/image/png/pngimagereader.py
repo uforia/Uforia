@@ -6,7 +6,7 @@ Created on 11 mrt. 2013
 
 # This is the image module for PNG
 
-#TABLE: Tile:BLOB, Text:LONGTEXT, ICC_Profile:BLOB, Interlace:INT, Transparency:LONGTEXT, Gamma:INT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:BLOB, XMPtag:BLOB
+#TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:BLOB, Interlace:INT, Transparency:LONGTEXT, Gamma:INT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:BLOB, XMPtag:LONGTEXT
 
 import sys, traceback
 from PIL import Image

@@ -6,7 +6,7 @@ Created on 21 feb. 2013
 
 # This is the audio module for wav files
 
-#TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:BLOB
+#TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
 
 import sys, traceback
 import wave

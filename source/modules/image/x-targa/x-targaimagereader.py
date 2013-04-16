@@ -6,7 +6,7 @@ Created on 18 mrt. 2013
 
 # This is the image module for TGA
 
-#TABLE: Tile:BLOB, Compression:LONGTEXT, Orientation:INT, OtherInfo:BLOB, XMPTag:BLOB
+#TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:BLOB, XMPTag:LONGTEXT
 
 import sys, traceback
 from PIL import Image

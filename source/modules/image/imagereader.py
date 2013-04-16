@@ -6,7 +6,7 @@ Created on 11 mrt. 2013
 
 # This is the image module reading all images
 
-#TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:BLOB, Extrema:LONGTEXT, Histogram:BLOB, Palette:BLOB, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
+#TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Histogram:LONGTEXT, Palette:LONGTEXT, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
 
 import sys, traceback
 from PIL import Image
