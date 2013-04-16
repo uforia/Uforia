@@ -9,7 +9,7 @@ Created on 16 apr. 2013
 
 #TABLE: structure_size:INT, n_streams:INT, start_time:BIGINT, duration:BIGINT, title:LONGTEXT, author:LONGTEXT, copyright:LONGTEXT, comment:LONGTEXT, album:LONGTEXT, year:INT, track:INT, genre:LONGTEXT
 
-import sys, traceback
+import sys, traceback, platform
 import ctypes
 
 class AVbinFileInfo(ctypes.Structure):
@@ -28,7 +28,12 @@ class AVbinFileInfo(ctypes.Structure):
         ('genre', ctypes.c_char * 32),
     ]
 
-av = ctypes.cdll.LoadLibrary('avbin')
+architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
+path_to_lib = {
+        'Windows' : './libraries/avbin/bin-{0}-Windows/avbin.dll'.format(architecture),
+        'Linux' : './libraries/avbin/bin-{0}-Linux/libavbin.so.11'.format(architecture)
+}
+av = ctypes.cdll.LoadLibrary(path_to_lib[platform.system()])
 av.avbin_open_filename.restype = ctypes.c_void_p
 av.avbin_open_filename.argtypes = [ctypes.c_char_p]
 av.avbin_file_info.restype = ctypes.c_int
