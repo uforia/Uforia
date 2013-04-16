@@ -105,7 +105,7 @@ class Database(object):
             self.executeQuery(query)
 
         query="""CREATE TABLE IF NOT EXISTS `supported_mimetypes`
-            (`mime_type` VARCHAR(512) NOT NULL PRIMARY KEY,
+            (`mime_type` VARCHAR(255) NOT NULL PRIMARY KEY,
             INDEX USING HASH (`mime_type`),
             `modules` LONGTEXT)"""
         self.executeQuery(query)
