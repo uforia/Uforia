@@ -36,6 +36,7 @@ import sys
 import os
 import traceback
 import platform
+import libutil
 
 __all__ = ['XMPMeta','XMPFiles','XMPError','ExempiLoadError','files','core']
 
@@ -111,23 +112,15 @@ def _check_for_error():
 #  Load C library - Exempi must be installed on the system
 #
 try:
-	architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
-	operatingSystem = platform.system()
-
-	path_to_lib = {
-		'Windows' : './libraries/libxmp/bin-{0}-Windows/libexempi.dll'.format(architecture),
-		'Linux' : './libraries/libxmp/bin-{0}-Linux/libexempi.so'.format(architecture)
-	}
-	if platform.system() in path_to_lib:
-		_exempi = ctypes.cdll.LoadLibrary(path_to_lib[platform.system()])
-	else:
+	try:
+		_exempi = libutil.loadLibrary('libxmp', 'libexempi')
+	except:
 		# Unsupported platform (Mac?), try loading system-wide installed exempi
 		lib = ctypes.util.find_library('exempi')
 		if lib:
 			_exempi = ctypes.CDLL(lib)
 		else:
 			raise Exception('Unsupported platform %s. Cannot load shared library exempi.' % platform.system())
-
 	if not _exempi.xmp_init():
 		_check_for_error()
 except OSError, e:
