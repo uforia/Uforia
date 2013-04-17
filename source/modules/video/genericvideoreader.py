@@ -122,10 +122,16 @@ def getAllStreamInfo(file, fileInfo):
         if info.type == AVBIN_STREAM_TYPE_VIDEO:
             stream['width'] = info.u.video.width
             stream['height'] = info.u.video.height
-            stream['sample_aspect'] = info.u.video.sample_aspect_num \
-                                        / info.u.video.sample_aspect_den
-            stream['frame_rate'] = info.u.video.frame_rate_num \
-                                     / info.u.video.frame_rate_den
+            if info.u.video.sample_aspect_den != 0:
+                stream['sample_aspect'] = info.u.video.sample_aspect_num \
+                                            / info.u.video.sample_aspect_den
+            else:
+                stream['sample_aspect'] = None
+            if info.u.video.frame_rate_den != 0:
+                stream['frame_rate'] = info.u.video.frame_rate_num \
+                                         / info.u.video.frame_rate_den
+            else:
+                stream['frame_rate'] = None
         elif info.type == AVBIN_STREAM_TYPE_AUDIO:
             for field in info.u.audio._fields_:
                 key = field[0]
