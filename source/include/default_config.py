@@ -1,16 +1,6 @@
 #!/usr/bin/env python
 
-import imp
-default_config      = imp.load_source('default_config','include/default_config.py')
-
-"""
-Config is a subclass of Default_config.
-If a Uforia user is missing a variable from the default config in this file,
-it will be grabbed from the super class.
-
-Uforia does this because Config.py has private information so it is not subbmitted.
-"""
-class Config(default_config.Default_config):
+class Default_config:
     
     # Enable debug output. Prints lots of information about internal workings.
     # Note: Debug output is very noisy and should not be used in production.

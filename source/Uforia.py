@@ -271,7 +271,14 @@ setupLibraryPaths()
 
 # Load Uforia custom modules
 import libxmp
-config      = imp.load_source('config','include/config.py')
+
+# Try to get user config file, if it is not found or not configured correctly use the default.
+try:
+    config      = imp.load_source('config','include/config.py').Config
+except (IOError, AttributeError):
+    print("< WARNING! > Config file not found or not configured correctly, loading default config.")
+    config      = imp.load_source('config','include/default_config.py').Default_config
+    
 File        = imp.load_source('File','include/File.py')
 magic       = imp.load_source('magic','include/magic.py')
 modules     = imp.load_source('modulescanner','include/modulescanner.py')
