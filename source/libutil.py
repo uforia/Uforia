@@ -30,7 +30,7 @@ def loadLibrary(foldername, filename, apiversion=None):
     os = platform.system()
     extension = PLATFORM_SHARED_LIBRARY_EXTENSIONS[os]
     if apiversion != None and os != 'Windows':
-        extension += '.' + apiversion
+        extension += '.' + str(apiversion)
 
     path = './libraries/{foldername}/bin-{arch}-{os}/{filename}{ext}'.format(
         foldername = foldername,
