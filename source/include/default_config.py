@@ -14,7 +14,7 @@ class Default_config:
     STARTDIR = '/home/TESTDATA/'
     
     # Should Uforia attempt to detect and run additional modules for each
-    # of the fond files/filetypes? If so, where should Uforia find the
+    # of the found files/filetypes? If so, where should Uforia find the
     # modules to handle those files?
     # Note: You should not normally have to modify this!
     # Example: ENABLEMODULES = True
@@ -60,7 +60,8 @@ class Default_config:
     # Example: CONSUMERS = 2
     CONSUMERS = 2
     
-    # ADVANCED CONFIGURATION, FOR EXPERTS ONLY
+    # ADVANCED CONFIGURATION, FOR EXPERTS ONLY.
+    # Do not modify any of the settings below unless you know what you are doing!
     
     # Tune the filesystem block reads
     # Example: CHUNKSIZE = 65536
