@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-#table title:VARCHAR, subject:VARCHAR, author:VARCHAR, changedBy:VARCHAR, revision:INT, createdOn:DATE, changedOn:DATE, pages:INT, totalWords: INT, chars:INT, apptype:VARCHAR, security:INT, lines:INT, parag: INT, comp: VARCHAR, charspace: INT, shared:VARCHAR, appversion:FLOAT, fulltext:TEXT
+#TABLE title:VARCHAR, subject:VARCHAR, author:VARCHAR, changedBy:VARCHAR, revision:INT, createdOn:DATE, changedOn:DATE, pages:INT, totalWords: INT, chars:INT, apptype:VARCHAR, security:INT, lines:INT, parag: INT, comp: VARCHAR, charspace: INT, shared:VARCHAR, appversion:FLOAT, fulltext:TEXT
 
 import xml.etree.ElementTree as ET
 import re,zipfile,sys,string
 
-def process(fullpath,config, columns=None):
+def process(fullpath, config, columns=None):
 	try:
 		document = zipfile.ZipFile(fullpath)
 	#	xmlfile = open("test.xml", "rw+")
@@ -14,7 +14,6 @@ def process(fullpath,config, columns=None):
 	#	xmlfile.close()
 	#	print "OK"
 	except:
-		print "Unable to find file"
 		exit()
 
 
