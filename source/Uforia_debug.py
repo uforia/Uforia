@@ -188,8 +188,6 @@ def setupLibraryPaths():
     if platform.system() == 'Windows':
         # sys.path.append is not reliable for this thing
         os.environ['PATH'] += ";./libraries/windows-deps"
-        os.environ['PATH'] += ";./libraries/libxmp/bin-{0}-{1}".format(architecture, operatingSystem)
-        os.environ['PATH'] += ";./libraries/avbin/bin-{0}-{1}".format(architecture, operatingSystem)
 
 if __name__ == "__main__":
     setupLibraryPaths()

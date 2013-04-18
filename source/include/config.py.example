@@ -8,7 +8,7 @@ Config is a subclass of Default_config.
 If a Uforia user is missing a variable from the default config in this file,
 it will be grabbed from the super class.
 
-Uforia does this because Config.py has private information so it is not subbmitted.
+Uforia does this because Config.py has private information so it is not submitted.
 """
 class Config(default_config.Default_config):
     
@@ -24,7 +24,7 @@ class Config(default_config.Default_config):
     STARTDIR = '/home/TESTDATA/'
     
     # Should Uforia attempt to detect and run additional modules for each
-    # of the fond files/filetypes? If so, where should Uforia find the
+    # of the found files/filetypes? If so, where should Uforia find the
     # modules to handle those files?
     # Note: You should not normally have to modify this!
     # Example: ENABLEMODULES = True
@@ -70,7 +70,8 @@ class Config(default_config.Default_config):
     # Example: CONSUMERS = 2
     CONSUMERS = 2
     
-    # ADVANCED CONFIGURATION, FOR EXPERTS ONLY
+    # ADVANCED CONFIGURATION, FOR EXPERTS ONLY.
+    # Do not modify any of the settings below unless you know what you are doing!
     
     # Tune the filesystem block reads
     # Example: CHUNKSIZE = 65536
