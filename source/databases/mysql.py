@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-try:
-    import MySQLdb, warnings, time
-except:
-    raise
+import MySQLdb, warnings, time, traceback, sys
 
 class Database(object):
     """
@@ -41,11 +38,11 @@ class Database(object):
                 if attempts > retries:
                     print("The MySQL server didn't respond after "+str(retries)+" requests; you might be flooding it with connections.")
                     print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
-                    raise
+                    traceback.print_exc(file = sys.stderr)
         try:
             self.cursor     = self.connection.cursor()
         except:
-            raise
+            traceback.print_exc(file = sys.stderr)
 
     def executeQuery(self,query):
         """
@@ -58,7 +55,7 @@ class Database(object):
             self.cursor.execute(query)
             warnings.resetwarnings()
         except:
-            raise
+            traceback.print_exc(file = sys.stderr)
 
     def setupMainTable(self):
         """

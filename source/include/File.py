@@ -65,7 +65,7 @@ class File(object):
                 self.sha1 = str(self.sha1.hexdigest())
                 self.sha256 = str(self.sha256.hexdigest())
             except:
-                raise
+                traceback.print_exc(file = sys.stderr)
 #                raise IOError('Error calculating digests, possible filesystem error.')
             try:
                 magic_default = magic.Magic(magic_file=config.MAGICFILE)
@@ -74,7 +74,7 @@ class File(object):
                 self.mtype = str(magic_mime.from_file(fullpath))
                 self.btype = str(magic_default.from_buffer(open(fullpath).read(65536)))
             except:
-                raise
+                traceback.print_exc(file = sys.stderr)
 #                raise IOError('Error reading file magic, possible library or filesystem error.')
             if config.DEBUG:
                 print "Filename:\t",self.name

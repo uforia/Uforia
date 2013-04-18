@@ -19,7 +19,7 @@ Usage:
 
 """
 
-import sys
+import sys, traceback
 import os.path
 import ctypes
 import ctypes.util
@@ -123,7 +123,7 @@ if not libmagic or not libmagic._name:
         try:
             libmagic = ctypes.CDLL(dll)
         except OSError:
-            raise
+            traceback.print_exc(file = sys.stderr)
 
 if not libmagic or not libmagic._name:
     """
