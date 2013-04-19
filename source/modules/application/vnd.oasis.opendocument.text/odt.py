@@ -2,7 +2,7 @@
 
 #TABLE: wordCount:INT, imageCount:INT, objectCount:INT, pageCount:INT, charCount: INT, parCount: INT, tableCount: INT, content:TEXT 
 
-import re, zipfile, sys, strings
+import re, zipfile, sys
 import BeautifulSoup
 
 
