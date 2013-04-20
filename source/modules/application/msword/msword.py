@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#TABLE title:VARCHAR, subject:VARCHAR, author:VARCHAR, changedBy:VARCHAR, revision:INT, createdOn:DATE, changedOn:DATE, pages:INT, totalWords: INT, chars:INT, apptype:VARCHAR, security:INT, lines:INT, parag: INT, comp: VARCHAR, charspace: INT, shared:VARCHAR, appversion:FLOAT, fulltext:TEXT
+#TABLE: title:LONGTEXT, subject:LONGTEXT, author:LONGTEXT, changedBy:LONGTEXT, revision:INT, createdOn:DATE, changedOn:DATE, pages:INT, totalWords: INT, chars:INT, apptype:LONGTEXT, security:INT, lines:INT, parag: INT, comp: LONGTEXT, charspace: INT, shared:LONGTEXT, appversion:FLOAT, fulltext:TEXT
 
 import xml.etree.ElementTree as ET
 import re,zipfile,sys,string

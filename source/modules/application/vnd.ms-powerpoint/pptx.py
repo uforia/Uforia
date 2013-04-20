@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#TABLE title:VARCHAR, createdBy:VARCHAR, modBy:VARCHAR, revision:INT, madeOn:VARCHAR, changedOn:VARCHAR, totalLength: FLOAT, totalWords:INT, application:VARCHAR, ppFormat:VARCHAR, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:VARCHAR, shared:VARCHAR, version:FLOAT 
+#TABLE: title:LONGTEXT, createdBy:LONGTEXT, modBy:LONGTEXT, revision:INT, madeOn:LONGTEXT, changedOn:LONGTEXT, totalLength: FLOAT, totalWords:INT, application:LONGTEXT, ppFormat:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT 
 
 import xml.etree.ElementTree as ET
 import re, zipfile, sys

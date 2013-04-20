@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#TABLE author:VARCHAR, changedBy:VARCHAR, createdOn:VARCHAR, changedOn:VARCHAR, appType:VARCHAR, security:INT, company:VARCHAR, shared:VARCHAR, appVersion:FLOAT, totalSheets:INT
+#TABLE: author:LONGTEXT, changedBy:LONGTEXT, createdOn:LONGTEXT, changedOn:LONGTEXT, appType:LONGTEXT, security:INT, company:LONGTEXT, shared:LONGTEXT, appVersion:FLOAT, totalSheets:INT
 
 import xml.etree.ElementTree as ET
 import re, zipfile, sys, os
