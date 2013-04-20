@@ -138,11 +138,16 @@ def invokeModules(dbqueue, uforiamodules, hashid, file):
             if config.DEBUG:
                 print "Setting up " + str(nrHandlers) + " module workers..."
             for module in modules:
-                module.loadSources()
-                if module.isMimeHandler:
-                    processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)
+                try:
+                    # If module fails catch it's exception and continue running Uforia.
+                    module.loadSources()
+                    processresult = None
+                    if module.isMimeHandler:
+                        processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)                    
                     if processresult != None:
                         dbqueue.put((module.tablename, hashid, module.columnnames, processresult))
+                except:
+                    traceback.print_exc(file = sys.stderr)
         except:
             traceback.print_exc(file = sys.stderr)
             raise
@@ -284,3 +289,4 @@ database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".p
 
 if __name__ == "__main__":
     run()
+
