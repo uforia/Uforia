@@ -188,7 +188,7 @@ def setupLibraryPaths():
     architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
     operatingSystem = platform.system()
 
-    sys.path.append("./libraries")
+    sys.path.insert(0, "./libraries")
     sys.path.append("./libraries/PIL/bin-{0}-{1}".format(architecture, operatingSystem))
     if platform.system() == 'Windows':
         # sys.path.append is not reliable for this thing
