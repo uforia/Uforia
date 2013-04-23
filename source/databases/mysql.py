@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import MySQLdb, warnings, time, traceback, json, base64
+import MySQLdb, warnings, time, sys, traceback, json, base64
 
 class Database(object):
     """
@@ -22,23 +22,22 @@ class Database(object):
             database        = config.DBNAME
             self.truncate   = config.TRUNCATE
             self.droptable  = config.DROPTABLE
-            self.debug      = config.DEBUG
             self.connection = None
             attempts        = 0
             retries         = config.DBRETRY
         while not self.connection:
             try:
-                self.connection  = MySQLdb.connect(host = hostname, user = username, passwd = password, db = database)
                 attempts    += 1
+                self.connection  = MySQLdb.connect(host = hostname, user = username, passwd = password, db = database)
             except MySQLdb.OperationalError, e:
-                if self.debug:
-                    print("Could not connect to the MySQL server: "+str(e))
-                    print("Sleeping for 3 seconds...")
+                print("Could not connect to the MySQL server: "+str(e))
+                print("Sleeping for 3 seconds...")
                 time.sleep(3)
                 if attempts > retries:
                     print("The MySQL server didn't respond after "+str(retries)+" requests; you might be flooding it with connections.")
                     print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
                     traceback.print_exc(file = sys.stderr)
+                    break
         try:
             self.cursor     = self.connection.cursor()
         except:
