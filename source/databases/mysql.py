@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import MySQLdb, warnings, time, traceback, sys
+import MySQLdb, warnings, time, traceback, json, base64
 
 class Database(object):
     """
@@ -159,7 +159,7 @@ class Database(object):
         for item in columns:
             query += ", `"+item+"`"
         query += """) VALUES ("""+str(hashid)
-        values = self._replaceNoneValue(values)
+        values = self._replace_values_(values)
         for item in values:
             query += ", '%s'"
         query += """);"""
@@ -186,7 +186,7 @@ class Database(object):
         for item in columns:
             query += " `"+item+"`,"
         query += """) VALUES ("""
-        values = self._replaceNoneValue(values)
+        values = self._replace_values_(values)
         for item in values:
             query += " '%s',"
         query += """);"""
@@ -199,13 +199,71 @@ class Database(object):
         escapedQuery = escapedQuery.replace("""'NULL'""","""NULL""")
         self.executeQuery(escapedQuery)
         
-    def _replaceNoneValue(self, values):
+    def _replace_values_(self, database_values):
         """
-        This methods replaces all None values to NULL
+        This methods replaces all None database_values to NULL
+        And converts a dictionary, list and tuple to JSON.
         """
         index = 0
-        for value in values:
-            if value is None:
-                values[index] = "NULL"
+        
+        # Loop through all values
+        for column_value in database_values:
+            
+            # If value is None replace it with NULL.
+            if column_value is None:
+                database_values[index] = "NULL"
+
+            # If value is a dictionary, list or tuple convert it to JSON.
+            if isinstance(column_value, dict) or isinstance(column_value, list) or isinstance(column_value, tuple):
+                database_values = self._convert_to_JSON_(database_values, column_value, index);
+
             index += 1
-        return values
+        return database_values
+    
+    def _convert_to_JSON_(self, database_values, column_value, index):
+        """
+        This method converts the database values to JSON
+        """
+        try:
+            # Try to convert to JSON.
+            database_values[index] = json.dumps(column_value)
+
+        # If JSON can't decode it to UTF8, try to encode it to base64
+        except UnicodeDecodeError:
+            try:
+                # Try encoding for a dictionary format
+                for key, dictValue in column_value.items():
+                    column_value[key] = base64.b64encode(dictValue)
+
+                # Try to convert to JSON.
+                database_values[index] = json.dumps(column_value)
+
+            except:
+                try:
+                    # Try encoding for list format
+                    new_column_value = (column_value[0], base64.b64encode(column_value[1]))
+
+                    # Try to convert to JSON.
+                    database_values[index] = json.dumps(new_column_value)
+
+                except:
+                    # Try encoding for list in a list format
+                    new_column_value = (column_value[0][0], base64.b64encode(column_value[0][1]))
+
+                    # Try to convert to JSON.
+                    database_values[index] = json.dumps(new_column_value)
+
+        # If JSON doesn't know the type, try to parse it to a normal list
+        except TypeError:
+            try:
+                # Try parsing to a list
+                for key, dictValue in column_value.items():
+                    column_value[key] = dictValue.tolist()
+                
+                # Try to convert to JSON.
+                database_values[index] = json.dumps(column_value)
+            except:
+                pass
+
+        # Return parsed JSON data
+        return database_values
