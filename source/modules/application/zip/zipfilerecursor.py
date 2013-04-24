@@ -35,7 +35,6 @@ def process(fullpath, config, columns=None):
         zip = zipfile.ZipFile(fullpath, mode = 'r')
         zip.extractall(tmpdir)
 
-        oldConfig = copyConfig(config)
         newConfig = copyConfig(config)
         newConfig.STARTDIR = str(tmpdir)
         newConfig.DROPTABLE = False
@@ -47,7 +46,6 @@ def process(fullpath, config, columns=None):
         newConfig.SPOOFSTARTDIR = spoofdir
 
         Uforia_debug.start(newConfig)
-        config = oldConfig
 
         # Close the zip file
         zip.close()
@@ -56,7 +54,7 @@ def process(fullpath, config, columns=None):
         # an error
         try:
             pass
-            #shutil.rmtree(tmpdir)
+            shutil.rmtree(tmpdir)
         except:
             traceback.print_exc(file = sys.stderr)
 
