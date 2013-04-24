@@ -11,6 +11,10 @@ OUTPUT = False
 # Example: STARTDIR = '/home/user/' 
 STARTDIR = '/home/TESTDATA/'
 
+# Can be used to fake the path of STARTDIR in the database output. Used
+# for running Uforia recursively. 
+SPOOFSTARTDIR = None
+
 # Should Uforia attempt to detect and run additional modules for each
 # of the found files/filetypes? If so, where should Uforia find the
 # modules to handle those files?

@@ -4,11 +4,11 @@
 import os, imp, sys, platform, traceback, site, ctypes
 
 # Loading of Uforia modules is deferred until run() is called
-config      = None
-File        = None
-magic       = None
-modules     = None
-database    = None
+#config      = None
+#File        = None
+#magic       = None
+#modules     = None
+#database    = None
 
 def writeToDB(table, hashid, columns, values, db=None):
     """
@@ -57,7 +57,8 @@ def fileScanner(dir,uforiamodules):
         if config.DEBUG:
             print("Starting in directory "+dir+"...")
             print("Starting filescanner...")
-        hashid=1
+        import random
+        hashid=random.randint(0, 1000000) # temporary workaround
         filelist=[]
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
@@ -126,7 +127,12 @@ def fileProcessor(item,uforiamodules):
             if config.DEBUG:
                 print("Exporting basic hashes and metadata to database.")
             columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-            values = (file.fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
+            if config.SPOOFSTARTDIR != None:
+                fullpath = config.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
+            else:
+                fullpath = file.fullpath
+            values = (fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
+
             writeToDB('files',hashid,columns,values)
         except:
             traceback.print_exc(file=sys.stderr)
@@ -194,20 +200,32 @@ def setupLibraryPaths():
         # sys.path.append is not reliable for this thing
         os.environ['PATH'] += ";./libraries/windows-deps"
 
-if __name__ == "__main__":
+def start(oconfig = None):
     setupLibraryPaths()
 
-    # Load Uforia custom modules
-    import libxmp    
+    global config
+    global File
+    global magic
+    global modules
+    global database
 
-    config      = imp.load_source('config','include/default_config.py')
-    try:
-        config      = imp.load_source('config','include/config.py')
-    except:
-        print("< WARNING! > Config file not found or not configured correctly, loading default config.")
+    # Load Uforia custom modules
+    import libxmp
+
+    if oconfig == None:
+        config      = imp.load_source('config','include/default_config.py')
+        try:
+            config      = imp.load_source('config','include/config.py')
+        except:
+            print("< WARNING! > Config file not found or not configured correctly, loading default config.")
+    else:
+        config = oconfig
     File        = imp.load_source('File','include/File.py')
     magic       = imp.load_source('magic','include/magic.py')
     modules     = imp.load_source('modulescanner','include/modulescanner.py')
     database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
 
     run()
+
+if __name__ == "__main__":
+    start()
