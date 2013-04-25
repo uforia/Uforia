@@ -4,6 +4,8 @@ Created on 24 apr. 2013
 @author: marcin
 '''
 
+import recursive;
+
 # Stores the zip file metadata and starts Uforia recursively on the
 # files inside the zip folder.
 
@@ -11,18 +13,6 @@ Created on 24 apr. 2013
 
 import sys, traceback, os, tempfile, shutil, copy
 import zipfile
-import Uforia_debug
-
-class DummyObject(object):
-    pass
-
-def copyConfig(config):
-    values = config.__dict__
-    newConfig = DummyObject()
-    for key, value in values.items():
-        if not key.startswith('__'):
-            setattr(newConfig, key, value)
-    return newConfig
 
 def process(fullpath, config, columns=None):
     try:
@@ -34,19 +24,9 @@ def process(fullpath, config, columns=None):
         # Extract the zip file
         zip = zipfile.ZipFile(fullpath, mode = 'r')
         zip.extractall(tmpdir)
-
-        newConfig = copyConfig(config)
-        newConfig.STARTDIR = str(tmpdir)
-        newConfig.DROPTABLE = False
-        newConfig.TRUNCATE = False
-        if config.SPOOFSTARTDIR != None:
-            spoofdir = config.SPOOFSTARTDIR + os.path.sep + os.path.relpath(fullpath, config.STARTDIR)
-        else:
-            spoofdir = fullpath
-        newConfig.SPOOFSTARTDIR = spoofdir
-
-        Uforia_debug.start(newConfig)
-
+        
+        recursive.call_Uforia_recursive(config, tmpdir, fullpath);
+        
         # Close the zip file
         zip.close()
 
