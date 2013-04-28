@@ -149,7 +149,7 @@ class Modules:
                         modulename = modulenamebase + '.' + modulenameend
 
                     module = Module(modulepath, modulename, mimetype, isGlobal=(depth==DEPTH_ROOT), asMimeHandler=not isInit)
-                    if module.isMimeHandler:
+                    if module.isMimeHandler and not config.RECURSIVE:
                         db.setupModuleTable(module.tablename, module.columndefinition)
 
                     self.modules.append(module)
