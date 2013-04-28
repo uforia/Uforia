@@ -2,8 +2,6 @@
 
 # Load basic Python modules
 import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess, ctypes
-# Fixes crash-on-exit bugs on Windows by loading it before libmagic
-import libxmp
 
 # Loading of Uforia modules is deferred until run() is called
 config      = None
@@ -307,6 +305,10 @@ def setupLibraryPaths():
         os.environ['PATH'] += ";./libraries/windows-deps"
 
 setupLibraryPaths()
+
+
+# Fixes crash-on-exit bugs on Windows by loading it before libmagic
+import libxmp
 
 config      = imp.load_source('config','include/default_config.py')
 try:
