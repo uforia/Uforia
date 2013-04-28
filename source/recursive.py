@@ -30,6 +30,7 @@ def call_Uforia_recursive(config, tmpdir, fullpath):
     else:
         spoofdir = fullpath
     newConfig.SPOOFSTARTDIR = spoofdir
+    newConfig.RECURSIVE = True
 
     uforia.config = newConfig
     uforia.run()

@@ -238,8 +238,9 @@ def run():
 
     # Create database tables
     db = database.Database(config)
-    db.setupMainTable()
-    db.setupMimeTypesTable()
+    if not config.RECURSIVE:
+        db.setupMainTable()
+        db.setupMimeTypesTable()
 
     for i in range(config.DBCONN):
         dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))

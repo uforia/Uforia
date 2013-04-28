@@ -167,8 +167,9 @@ def run():
     print("Uforia starting...")
 
     db = database.Database(config)
-    db.setupMainTable()
-    db.setupMimeTypesTable()
+    if not config.RECURSIVE:
+        db.setupMainTable()
+        db.setupMimeTypesTable()
 
     if config.ENABLEMODULES:
         if config.DEBUG:
