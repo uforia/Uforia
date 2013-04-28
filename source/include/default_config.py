@@ -11,10 +11,6 @@ OUTPUT = False
 # Example: STARTDIR = '/home/user/' 
 STARTDIR = '/home/TESTDATA/'
 
-# Can be used to fake the path of STARTDIR in the database output. Used
-# for running Uforia recursively. 
-SPOOFSTARTDIR = None
-
 # Should Uforia attempt to detect and run additional modules for each
 # of the found files/filetypes? If so, where should Uforia find the
 # modules to handle those files?
@@ -76,3 +72,11 @@ DBRETRY = 5
 # Example (Windows):  MAGICFILE = 'C:/Program Files (x86)/GnuWin32/share/misc/magic'
 # Example (Linux):    MAGICFILE = None
 MAGICFILE = './share/magic.mgc'
+
+# Can be used to fake the path of STARTDIR in the database output. Used
+# for running Uforia recursively. 
+SPOOFSTARTDIR = None
+
+# Used to notify the starting value of the hash id if Uforia was called
+# recursively. Do not change this value.
+STARTING_HASHID = 1

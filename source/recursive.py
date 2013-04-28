@@ -4,23 +4,24 @@ Created on 25 apr. 2013
 @author: Jimmy van den Berg
 '''
 
-import Uforia_debug
-import Uforia
-import os
+import os, sys
 
-class DummyObject(object):
-    pass
+def call_Uforia_recursive(config, tmpdir, fullpath):
+    """
+    Call Uforia recursively on the specified temporary directory.
+    config - The Uforia config object
+    tmpdir - The temporary directory to be used as STARTDIR
+    fullpath - The full path to the image/archive which shall be used
+        as prefix in the output columns
+    """
+    if config.UFORIA_RUNNING_VERSION == 'Uforia_debug':
+        import Uforia_debug
+        uforia = Uforia_debug
+    else:
+        import Uforia
+        uforia = Uforia
 
-def copyConfig(config):
-    values = config.__dict__
-    newConfig = DummyObject()
-    for key, value in values.items():
-        if not key.startswith('__'):
-            setattr(newConfig, key, value)
-    return newConfig
-
-def call_Uforia_recursive(config = None, tmpdir = None, fullpath = None):        
-    newConfig = copyConfig(config)
+    newConfig = uforia.configAsPickleable(config)
     newConfig.STARTDIR = str(tmpdir)
     newConfig.DROPTABLE = False
     newConfig.TRUNCATE = False
@@ -29,5 +30,7 @@ def call_Uforia_recursive(config = None, tmpdir = None, fullpath = None):
     else:
         spoofdir = fullpath
     newConfig.SPOOFSTARTDIR = spoofdir
-    
-    Uforia_debug.start(newConfig)
+
+    uforia.config = newConfig
+    uforia.run()
+    uforia.config = config

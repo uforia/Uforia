@@ -24,9 +24,9 @@ def process(fullpath, config, columns=None):
         # Extract the zip file
         zip = zipfile.ZipFile(fullpath, mode = 'r')
         zip.extractall(tmpdir)
-        
+
         recursive.call_Uforia_recursive(config, tmpdir, fullpath);
-        
+
         # Close the zip file
         zip.close()
 
