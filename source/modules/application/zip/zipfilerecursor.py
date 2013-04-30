@@ -9,20 +9,22 @@ import recursive;
 # Stores the zip file metadata and starts Uforia recursively on the
 # files inside the zip folder.
 
-#TABLE: test:LONGTEXT
+#TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT
 
 import sys, traceback, os, tempfile, shutil, copy
 import zipfile
 
 def process(fullpath, config, columns=None):
     try:
-        assorted = [ "test" ]
+        # Open the zipfile
+        zip = zipfile.ZipFile(fullpath, mode = 'r')
+
+        assorted = [zip.namelist(), len(zip.namelist()), zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED, zip.debug, zip.comment]
 
         # Create a temporary directory
         tmpdir = tempfile.mkdtemp("_uforiatmp")
-
+        
         # Extract the zip file
-        zip = zipfile.ZipFile(fullpath, mode = 'r')
         zip.extractall(tmpdir)
 
         recursive.call_Uforia_recursive(config, tmpdir, fullpath);
