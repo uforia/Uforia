@@ -175,7 +175,8 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config,db)
-        fillMimeTypesTable(uforiamodules)
+        if not config.RECURSIVE:
+            fillMimeTypesTable(uforiamodules)
     else:
         uforiamodules = '';
     if config.DEBUG:

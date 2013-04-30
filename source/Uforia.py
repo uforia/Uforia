@@ -250,7 +250,8 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config,db)
-        fillMimeTypesTable(dbqueue, uforiamodules)
+        if not config.RECURSIVE:
+            fillMimeTypesTable(dbqueue, uforiamodules)
     else:
         uforiamodules = '';
     del db
