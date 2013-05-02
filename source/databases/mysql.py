@@ -246,11 +246,14 @@ class Database(object):
                     database_values[index] = json.dumps(new_column_value)
 
                 except:
-                    # Try encoding for list in a list format
-                    new_column_value = (column_value[0][0], base64.b64encode(column_value[0][1]))
-
-                    # Try to convert to JSON.
-                    database_values[index] = json.dumps(new_column_value)
+                    try:
+                        # Try encoding for list in a list format
+                        new_column_value = (column_value[0][0], base64.b64encode(column_value[0][1]))
+    
+                        # Try to convert to JSON.
+                        database_values[index] = json.dumps(new_column_value)
+                    except:
+                        pass
 
         # If JSON doesn't know the type, try to parse it to a normal list
         except TypeError:

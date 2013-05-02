@@ -4,22 +4,53 @@ Created on 24 apr. 2013
 @author: marcin
 '''
 
-import recursive;
-
 # Stores the zip file metadata and starts Uforia recursively on the
 # files inside the zip folder.
 
-#TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT
+#TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT, contentInfo:LONGTEXT
 
-import sys, traceback, os, tempfile, shutil, copy
-import zipfile
+import sys, traceback, os, tempfile, shutil, copy;
+import zipfile, base64;
+import recursive;
 
 def process(fullpath, config, columns=None):
     try:
         # Open the zipfile
         zip = zipfile.ZipFile(fullpath, mode = 'r')
 
+        # Get .zip metadata
         assorted = [zip.namelist(), len(zip.namelist()), zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED, zip.debug, zip.comment]
+        
+        # Get .zip's content metadata and store it in an dictionary. 
+        # In the dictionary the key is the file name and the value is an other dict with its info.
+        contentInfo = {}
+        for info in zip.infolist():
+            content = {}
+            content["date_time"] = info.date_time
+            content["compress_type"] = info.compress_type
+            content["comment"] = info.comment
+            content["create_system"] = info.create_system
+            content["create_version"] = info.create_version
+            content["extract_version"] = info.extract_version
+            content["reserved"] = info.reserved
+            content["flag_bits"] = info.flag_bits
+            content["volume"] = info.volume
+            content["internal_attr"] = info.internal_attr
+            content["external_attr"] = info.external_attr
+            content["header_offset"] = info.header_offset
+            content["CRC"] = info.CRC
+            content["compress_size"] = info.compress_size
+            content["file_size"] = info.file_size
+            content["_raw_time"] = info._raw_time
+            
+            # The extra tag needs to be encoded for JSON
+            content["extra"] =  info.extra if not info.extra else base64.b64encode(info.extra)
+            
+            contentInfo[info.filename] = content
+            
+        # Store content info in DB.
+        assorted.append(contentInfo);
+        del contentInfo;
 
         # Create a temporary directory
         tmpdir = tempfile.mkdtemp("_uforiatmp")
