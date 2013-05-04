@@ -10,14 +10,18 @@ Created on 16 feb. 2013
 # TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CDID:INT, Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT, DurationInSeconds:DOUBLE, PlayCount:INT, TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:BLOB, XMP:LONGTEXT
 
 # import for external lib eyed3
-import sys, traceback
+import sys
+import traceback
 import eyed3
 from mutagen.apev2 import APEv2
 
+
 def process(fullpath, config, columns=None):
+
     # The whole parse data method is in a try block to catch any exception
     try:
-        # Read the audio file and get the two data classes from it (Tag and AudioInfo)
+        # Read the audio file and get the two data
+        # classes from it (Tag and AudioInfo)
         track = eyed3.load(fullpath)
         track_tag = track.tag
         track_info = track.info
@@ -32,16 +36,20 @@ def process(fullpath, config, columns=None):
         assorted.append(track_tag.title)
 
         '''
-        To get a tag from the audio file we need to set a frame in the eyed3 lib.
-        In return we get mutiple frames or NoneType.
-        For each frame we get the correct variable and this is stored in a list.
-        After the loop we parse all found data into one string, this string for example look like: subtitle / subtitle / subtitle
+        To get a tag from the audio file we need to set a frame
+        in the eyed3 lib. In return we get mutiple frames or NoneType.
+        For each frame we get the correct variable and this is stored
+        in a list. After the loop we parse all found data into one string,
+        this string for example look like: subtitle / subtitle / subtitle
 
-        *The eyed3 lib says that it will never occur that there are multiple frames, that is why we store all data in one string,
-         but to be sure of this, we still irritate through all frames*
+        *The eyed3 lib says that it will never occur that there are
+        multiple frames, that is why we store all data in one string,
+        but to be sure of this, we still irritate through all frames*
 
-        Because a NoneType can not be irritated we use the "or", so when we get a NoneType the for loop uses an empty list.
-        Wich will result in an empty string because nothing is added to the list.
+        Because a NoneType can not be irritated we use the "or",
+        so when we get a NoneType the for loop uses an empty list.
+        Wich will result in an empty string because
+        nothing is added to the list.
         '''
         # Store the subtitle in the list
         for subtitle_frame in track_tag.frame_set["TIT3"] or []:
@@ -62,10 +70,13 @@ def process(fullpath, config, columns=None):
 
         '''
         Some tags return an array or list of items.
-        To get the correct data of these lists we first need to know if the list is not a NoneType or empty.
-        If we don't check this an empty list will result in an exception, "[0]" can not be used an such list
+        To get the correct data of these lists we first need to know
+        if the list is not a NoneType or empty.
+        If we don't check this an empty list will result in an exception,
+        "[0]" can not be used an such list
 
-        If the list is empty we still need to give something in return to the database, so we first define the variable to None.
+        If the list is empty we still need to give something in return
+        to the database, so we first define the variable to None.
         '''
         # Store the track_number in the list
         track_number = None
@@ -214,13 +225,14 @@ def process(fullpath, config, columns=None):
             image_description = image.description
             image_url = image.image_url
             image_picturetype = image.picTypeToString(image.picture_type)
-            # TODO: do something with image itself (image module):  image.image_data
         assorted.append(image_description)
         assorted.append(image_picturetype)
         assorted.append(image_url)
 
         # delete variables
-        del user_text_description, user_text_text, lyrics_description, lyrics_lang, lyrics_text, image_description, image_url, image_picturetype
+        del user_text_description, user_text_text, lyrics_description
+        del lyrics_lang, lyrics_text, image_description, image_url
+        del image_picturetype
 
         # Store the chapter data in the list
         chapter_title = None
@@ -246,7 +258,8 @@ def process(fullpath, config, columns=None):
         assorted.append(chapter_endoffset)
 
         # delete variables
-        del chapter_title, chapter_subtitle, chapter_starttime, chapter_endtime, chapter_startoffset, chapter_endoffset
+        del chapter_title, chapter_subtitle, chapter_starttime
+        del chapter_endtime, chapter_startoffset, chapter_endoffset
 
         # Store all URL's in the list
         assorted.append(track_tag.commercial_url)
@@ -266,7 +279,8 @@ def process(fullpath, config, columns=None):
         # Delete all variables that are not used anymore
         del user_url, list_of_strings, track_info, track_tag, track
 
-        # Get APEv2 tag from MP3, because we don't know the key:value we store all data in one column
+        # Get APEv2 tag from MP3,
+        # because we don't know the key:value we store all data in one column
         try:
             apev2_tag = APEv2(fullpath)
         except:
@@ -302,4 +316,3 @@ def process(fullpath, config, columns=None):
     except:
         traceback.print_exc(file=sys.stderr)
         return None
-

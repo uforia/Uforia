@@ -9,9 +9,16 @@ Created on 24 apr. 2013
 
 # TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT, contentInfo:LONGTEXT
 
-import sys, traceback, os, tempfile, shutil, copy;
-import zipfile, base64;
-import recursive;
+import sys
+import traceback
+import os
+import tempfile
+import shutil
+import copy
+import zipfile
+import base64
+import recursive
+
 
 def process(fullpath, config, columns=None):
     try:
@@ -19,10 +26,12 @@ def process(fullpath, config, columns=None):
         zip = zipfile.ZipFile(fullpath, mode='r')
 
         # Get .zip metadata
-        assorted = [zip.namelist(), len(zip.namelist()), zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED, zip.debug, zip.comment]
-        
-        # Get .zip's content metadata and store it in an dictionary. 
-        # In the dictionary the key is the file name and the value is an other dict with its info.
+        assorted = [zip.namelist(), len(zip.namelist()), zipfile.ZIP_STORED,
+                    zipfile.ZIP_DEFLATED, zip.debug, zip.comment]
+
+        # Get .zip's content metadata and store it in an dictionary.
+        # In the dictionary the key is the file name and
+        # the value is an other dict with its info.
         contentInfo = {}
         for info in zip.infolist():
             content = {}
@@ -42,23 +51,26 @@ def process(fullpath, config, columns=None):
             content["compress_size"] = info.compress_size
             content["file_size"] = info.file_size
             content["_raw_time"] = info._raw_time
-            
+
             # The extra tag needs to be encoded for JSON
-            content["extra"] = info.extra if not info.extra else base64.b64encode(info.extra)
-            
+            if not info.extra:
+                content["extra"] = info.extra
+            else:
+                base64.b64encode(info.extra)
+
             contentInfo[info.filename] = content
-            
+
         # Store content info in DB.
-        assorted.append(contentInfo);
-        del contentInfo;
+        assorted.append(contentInfo)
+        del contentInfo
 
         # Create a temporary directory
         tmpdir = tempfile.mkdtemp("_uforiatmp")
-        
+
         # Extract the zip file
         zip.extractall(tmpdir)
 
-        recursive.call_Uforia_recursive(config, tmpdir, fullpath);
+        recursive.call_Uforia_recursive(config, tmpdir, fullpath)
 
         # Close the zip file
         zip.close()

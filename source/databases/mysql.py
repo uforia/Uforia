@@ -1,11 +1,19 @@
 #!/usr/bin/env python
 
-import MySQLdb, warnings, time, sys, traceback, json, base64
+import warnings
+import time
+import sys
+import traceback
+import json
+import base64
+import MySQLdb
+
 
 class Database(object):
     """
     This is a MySQL implementation of Uforia's data storage facility.
     """
+
     def __init__(self, config):
         """
         Initializes a MySQL database connection using the specified Uforia
@@ -13,8 +21,10 @@ class Database(object):
 
         config - The uforia configuration object
         """
-        if not config.DBHOST or not config.DBUSER or not config.DBPASS or not config.DBNAME:
-            raise ValueError('Cannot initialize a database connection without valid credentials.')
+        if (not config.DBHOST or not config.DBUSER
+                or not config.DBPASS or not config.DBNAME):
+            raise ValueError("""Cannot initialize a database
+                            connection without valid credentials.""")
         else:
             hostname = config.DBHOST
             username = config.DBUSER
@@ -28,14 +38,22 @@ class Database(object):
         while not self.connection:
             try:
                 attempts += 1
-                self.connection = MySQLdb.connect(host=hostname, user=username, passwd=password, db=database)
+                self.connection = MySQLdb.connect(host=hostname,
+                                                  user=username,
+                                                  passwd=password,
+                                                  db=database)
             except MySQLdb.OperationalError, e:
                 print("Could not connect to the MySQL server: " + str(e))
                 print("Sleeping for 3 seconds...")
                 time.sleep(3)
                 if attempts > retries:
-                    print("The MySQL server didn't respond after " + str(retries) + " requests; you might be flooding it with connections.")
-                    print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
+                    print("The MySQL server didn't respond after "
+                          + str(retries) +
+                          """ requests; you might be flooding it
+                          with connections.""")
+                    print("""Consider raising the maximum amount of
+                            connections on your MySQL server or lower
+                            the amount of concurrent Uforia threads!""")
                     traceback.print_exc(file=sys.stderr)
                     break
         try:
@@ -65,7 +83,7 @@ class Database(object):
         if self.droptable:
             query = """DROP TABLE IF EXISTS `files`"""
             self.executeQuery(query)
-        
+
         query = """CREATE TABLE IF NOT EXISTS `files`
             (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
             INDEX USING HASH (`hashid`),
@@ -85,27 +103,28 @@ class Database(object):
             `mtype` LONGTEXT,
             `btype` LONGTEXT)"""
         self.executeQuery(query)
-        
+
         # Truncate table if not already dropped before
         if self.truncate and not self.droptable:
             query = """TRUNCATE `files`"""
             self.executeQuery(query)
-        
+
     def setupMimeTypesTable(self):
         """
-        Sets up the glue data table, this table contains which mime-types uses which modules.
+        Sets up the glue data table,
+        this table contains which mime-types uses which modules.
         """
         # First drop table
         if self.droptable:
             query = """DROP TABLE IF EXISTS `supported_mimetypes`"""
             self.executeQuery(query)
 
-        query = """CREATE TABLE IF NOT EXISTS `supported_mimetypes`
-            (`mime_type` VARCHAR(255) NOT NULL PRIMARY KEY,
-            INDEX USING HASH (`mime_type`),
-            `modules` LONGTEXT)"""
+        query = "CREATE TABLE IF NOT EXISTS `supported_mimetypes`\
+            (`mime_type` VARCHAR(255) NOT NULL PRIMARY KEY,\
+            INDEX USING HASH (`mime_type`),\
+            `modules` LONGTEXT)"
         self.executeQuery(query)
-        
+
         # Truncate table if not already dropped before
         if self.truncate and not self.droptable:
             query = """TRUNCATE `supported_mimetypes`"""
@@ -122,13 +141,15 @@ class Database(object):
         """
         if not table or not columns:
             raise ValueError('Module table or columns missing.')
-        
+
         # First drop table
         if self.droptable:
             query = """DROP TABLE IF EXISTS `""" + table + """`"""
             self.executeQuery(query)
-        
-        query = """CREATE TABLE IF NOT EXISTS `""" + table + """` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
+
+        query = """CREATE TABLE IF NOT EXISTS `""" + table + "`\
+                (`hashid` BIGINT UNSIGNED NOT NULL,\
+                INDEX USING HASH (`hashid`)"
         for items in columns.split(','):
             name, type = items.split(':')
             name = name.strip()
@@ -170,7 +191,7 @@ class Database(object):
         escapedQuery = escapedQuery.replace(""" (, """, """ (""")
         escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
         self.executeQuery(escapedQuery)
-    
+
     def storeMimetypeValues(self, table, columns, values):
         """
         Inserts data into the specified table (supported_mimetypes).
@@ -180,7 +201,8 @@ class Database(object):
         values - A tuple with the value for each column
         """
         if not table or not columns or not values:
-            raise ValueError('supported_mimetypes table, columns or values missing.')
+            raise ValueError("""supported_mimetypes table,
+                                columns or values missing.""")
         query = """INSERT IGNORE INTO `""" + table + """` ("""
         for item in columns:
             query += " `" + item + "`,"
@@ -197,28 +219,31 @@ class Database(object):
         escapedQuery = escapedQuery.replace(""",)""", """)""")
         escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
         self.executeQuery(escapedQuery)
-        
+
     def _replace_values_(self, database_values):
         """
         This methods replaces all None database_values to NULL
         And converts a dictionary, list and tuple to JSON.
         """
         index = 0
-        
+
         # Loop through all values
         for column_value in database_values:
-            
+
             # If value is None replace it with NULL.
             if column_value is None:
                 database_values[index] = "NULL"
 
             # If value is a dictionary, list or tuple convert it to JSON.
-            if isinstance(column_value, dict) or isinstance(column_value, list) or isinstance(column_value, tuple):
-                database_values = self._convert_to_JSON_(database_values, column_value, index);
+            if (isinstance(column_value, dict) or
+                isinstance(column_value, list) or
+                isinstance(column_value, tuple)):
+                database_values = self._convert_to_JSON_(database_values,
+                                                         column_value, index)
 
             index += 1
         return database_values
-    
+
     def _convert_to_JSON_(self, database_values, column_value, index):
         """
         This method converts the database values to JSON
@@ -240,7 +265,8 @@ class Database(object):
             except:
                 try:
                     # Try encoding for list format
-                    new_column_value = (column_value[0], base64.b64encode(column_value[1]))
+                    new_column_value = (column_value[0],
+                                        base64.b64encode(column_value[1]))
 
                     # Try to convert to JSON.
                     database_values[index] = json.dumps(new_column_value)
@@ -248,8 +274,10 @@ class Database(object):
                 except:
                     try:
                         # Try encoding for list in a list format
-                        new_column_value = (column_value[0][0], base64.b64encode(column_value[0][1]))
-    
+                        new_column_value = (column_value[0][0],
+                                            base64.b64encode
+                                            (column_value[0][1]))
+
                         # Try to convert to JSON.
                         database_values[index] = json.dumps(new_column_value)
                     except:
@@ -261,7 +289,7 @@ class Database(object):
                 # Try parsing to a list
                 for key, dictValue in column_value.items():
                     column_value[key] = dictValue.tolist()
-                
+
                 # Try to convert to JSON.
                 database_values[index] = json.dumps(column_value)
             except:

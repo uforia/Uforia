@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess, ctypes
+import os
+import multiprocessing
+import imp
+import curses
+import sys
+import platform
+import traceback
+import site
+import subprocess
+import ctypes
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -9,6 +18,7 @@ File = None
 magic = None
 modules = None
 database = None
+
 
 def dbworker(dbqueue, db=None):
     """
@@ -35,6 +45,7 @@ def dbworker(dbqueue, db=None):
     db.connection.commit()
     dbqueue.task_done()
     db.connection.close()
+
 
 def monitorworker(monitorqueue):
     """
@@ -69,6 +80,7 @@ def monitorworker(monitorqueue):
     curses.echo()
     curses.endwin()
 
+
 def writeToMimeTypesTable(table, columns, values, db=None):
     """
     Method that writes to database
@@ -85,6 +97,7 @@ def writeToMimeTypesTable(table, columns, values, db=None):
 
     db.connection.commit()
     db.connection.close()
+
 
 def fileScanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
     """
@@ -108,10 +121,10 @@ def fileScanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
             for name in files:
                 fullpath = os.path.join(root, name)
                 filelist.append((fullpath, hashid))
-                hashid += 1;
+                hashid += 1
         config.STARTING_HASHID = hashid
         try:
-            consumermap = [ (item, dbqueue, monitorqueue, uforiamodules, config) for item in filelist ]
+            consumermap = [(item, dbqueue, monitorqueue, uforiamodules, config) for item in filelist]
             result = consumers.map_async(fileProcessor, consumermap)
 
             # Wait while fileProcessor is busy in order to catch a possible KeyboardInterrupt.
@@ -126,6 +139,7 @@ def fileScanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
     except:
         traceback.print_exc(file=sys.stderr)
         raise
+
 
 def invokeModules(dbqueue, uforiamodules, hashid, file, config):
     """
@@ -160,7 +174,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file, config):
                     module.loadSources()
                     processresult = None
                     if module.isMimeHandler:
-                        processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)                    
+                        processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)
                     if processresult != None:
                         dbqueue.put((module.tablename, hashid, module.columnnames, processresult))
                 except:
@@ -168,6 +182,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file, config):
         except:
             traceback.print_exc(file=sys.stderr)
             raise
+
 
 def fileProcessor((item, dbqueue, monitorqueue, uforiamodules, config)):
     """
@@ -210,6 +225,7 @@ def fileProcessor((item, dbqueue, monitorqueue, uforiamodules, config)):
         traceback.print_exc(file=sys.stderr)
         raise
 
+
 def fillMimeTypesTable(dbqueue, uforiamodules):
     """
     Fills the supported_mimetypes table with all available mime-types
@@ -219,6 +235,7 @@ def fillMimeTypesTable(dbqueue, uforiamodules):
     mime_types = uforiamodules.getAllSupportedMimeTypesWithModules()
     for mime_type in mime_types:
         writeToMimeTypesTable('supported_mimetypes', ["mime_type", "modules"], [mime_type, mime_types[mime_type]])
+
 
 def run():
     """
@@ -253,7 +270,7 @@ def run():
         if not config.RECURSIVE:
             fillMimeTypesTable(dbqueue, uforiamodules)
     else:
-        uforiamodules = '';
+        uforiamodules = ''
     del db
     monitorqueue = None
     if config.OUTPUT:
@@ -278,7 +295,11 @@ def run():
         monitorqueue.join()
     print("\nUforia completed...\n")
 
-class _Dummy(object): pass
+
+class _Dummy(object):
+    pass
+
+
 def configAsPickleable(config):
     """
     Converts config (which has the `module' type) to a pickleable object.
@@ -289,6 +310,7 @@ def configAsPickleable(config):
         if not key.startswith('__'):
             setattr(newConfig, key, value)
     return newConfig
+
 
 def setupLibraryPaths():
     """
@@ -327,4 +349,3 @@ config.UFORIA_RUNNING_VERSION = 'Uforia'
 
 if __name__ == "__main__":
     run()
-

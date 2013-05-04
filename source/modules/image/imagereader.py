@@ -8,8 +8,10 @@ Created on 11 mrt. 2013
 
 # TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Histogram:LONGTEXT, Palette:LONGTEXT, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
 
-import sys, traceback
+import sys
+import traceback
 from PIL import Image
+
 
 def process(fullpath, config, columns=None):
         # Try to parse image data
@@ -17,7 +19,10 @@ def process(fullpath, config, columns=None):
             # Open image file
             image = Image.open(fullpath, "r")
 
-            assorted = [image.format, image.mode, image.size[0], image.size[1], image.getcolors(), image.getextrema(), image.histogram()]
+            assorted = [image.format, image.mode,
+                        image.size[0], image.size[1],
+                        image.getcolors(), image.getextrema(),
+                        image.histogram()]
 
             # If palette is not None get it's data
             if image.palette == None:

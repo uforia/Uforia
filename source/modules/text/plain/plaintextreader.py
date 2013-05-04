@@ -10,7 +10,9 @@ Created on 02 feb. 2013
 
 # TABLE: Contents:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
+
 
 def process(fullpath, config, columns=None):
         # Try to parse TXT data
@@ -22,7 +24,8 @@ def process(fullpath, config, columns=None):
                 # specified!!
                 assert len(assorted) == len(columns)
 
-                # Print some data that is stored in the database if debug is true
+                # Print some data that is stored in
+                # the database if debug is true
                 if config.DEBUG:
                     print "\nTXT file data:"
                     for i in range(0, len(assorted)):

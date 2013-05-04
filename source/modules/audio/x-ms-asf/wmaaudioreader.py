@@ -6,7 +6,9 @@
 
 # import for external lib hsaudiotag
 from hsaudiotag import wma
-import sys, traceback
+import sys
+import traceback
+
 
 def process(fullpath, config, columns=None):
     try:
@@ -29,8 +31,7 @@ def process(fullpath, config, columns=None):
               myfile.track,
               myfile.year,
               myfile.album,
-              myfile.audio_size
-            ]
+              myfile.audio_size]
 
             # delete the wmaFile variable
             del myfile
@@ -50,11 +51,10 @@ def process(fullpath, config, columns=None):
             return assorted
 
         else:
-             return None
+            return None
 
     except:
         traceback.print_exc(file=sys.stderr)
 
         # Store nothing so the application won't crash
         return None
-

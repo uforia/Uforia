@@ -10,11 +10,16 @@ Created on 16 apr. 2013
 # TABLE: n_streams:INT, start_time:BIGINT, duration:BIGINT, title:LONGTEXT, author:LONGTEXT, copyright:LONGTEXT, comment:LONGTEXT, album:LONGTEXT, year:INT, track:INT, genre:LONGTEXT, width:INT UNSIGNED, height:INT UNSIGNED, sample_aspect:DOUBLE, frame_rate:DOUBLE, sample_format:INT UNSIGNED, sample_rate:INT UNSIGNED, sample_bits:INT UNSIGNED, channels:INT UNSIGNED, allStreams:LONGTEXT
 
 
-import sys, traceback, platform, ctypes
+import sys
+import traceback
+import platform
+import ctypes
 import libutil
+
 
 # Definitions of the C structures and functions from AVbin using ctypes
 # see: https://github.com/ardekantur/pyglet/blob/master/pyglet/media/avbin.py
+
 
 class AVbinFileInfo(ctypes.Structure):
     _fields_ = [
@@ -29,9 +34,9 @@ class AVbinFileInfo(ctypes.Structure):
         ('album', ctypes.c_char * 512),
         ('year', ctypes.c_int),
         ('track', ctypes.c_int),
-        ('genre', ctypes.c_char * 32),
-    ]
-#
+        ('genre', ctypes.c_char * 32), ]
+
+
 class _AVbinstreamVideo8(ctypes.Structure):
     _fields_ = [
         ('width', ctypes.c_uint),
@@ -39,32 +44,32 @@ class _AVbinstreamVideo8(ctypes.Structure):
         ('sample_aspect_num', ctypes.c_uint),
         ('sample_aspect_den', ctypes.c_uint),
         ('frame_rate_num', ctypes.c_uint),
-        ('frame_rate_den', ctypes.c_uint),
-    ]
+        ('frame_rate_den', ctypes.c_uint), ]
+
 # The _num/_den fields will be compressed into one, so we need to track
 # the number of fields manually.
 AVBIN_STREAM_ACTUAL_NUMBER_OF_VIDEO_INFO_FIELDS = 4
+
 
 class _AVbinstreamAudio8(ctypes.Structure):
     _fields_ = [
         ('sample_format', ctypes.c_int),
         ('sample_rate', ctypes.c_uint),
         ('sample_bits', ctypes.c_uint),
-        ('channels', ctypes.c_uint),
-    ]
+        ('channels', ctypes.c_uint), ]
+
 
 class _AVbinstreamUnion8(ctypes.Union):
     _fields_ = [
         ('video', _AVbinstreamVideo8),
-        ('audio', _AVbinstreamAudio8),
-    ]
+        ('audio', _AVbinstreamAudio8), ]
+
 
 class AVbinstream8(ctypes.Structure):
     _fields_ = [
         ('structure_size', ctypes.c_size_t),
         ('type', ctypes.c_int),
-        ('u', _AVbinstreamUnion8)
-    ]
+        ('u', _AVbinstreamUnion8)]
 
 AVBIN_STREAM_TYPE_UNKNOWN = 0
 AVBIN_STREAM_TYPE_VIDEO = 1
@@ -72,8 +77,7 @@ AVBIN_STREAM_TYPE_AUDIO = 2
 AVBIN_STREAM_TYPE_STRING_MAPPING = [
     'unknown',
     'video',
-    'audio'
-]
+    'audio']
 AVbinStreamType = ctypes.c_int
 
 AVBIN_LOG_QUIET = -8
@@ -102,6 +106,7 @@ av.avbin_set_log_level.argtypes = [AVbinLogLevel]
 
 av.avbin_init()
 av.avbin_set_log_level(AVBIN_LOG_QUIET)
+
 
 def getAllStreamInfo(file, fileInfo):
     """
@@ -139,6 +144,7 @@ def getAllStreamInfo(file, fileInfo):
 
         allStreams.append(stream)
     return allStreams
+
 
 def process(fullpath, config, columns=None):
     try:

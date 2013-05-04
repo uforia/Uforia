@@ -2,9 +2,12 @@
 
 # TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Remaining:LONGTEXT
 
-import sys, imp, traceback
+import sys
+import imp
+import traceback
 from PIL import Image
 from PIL.ExifTags import TAGS
+
 
 def process(fullpath, config, columns=None):
     # Try to parse BMP data

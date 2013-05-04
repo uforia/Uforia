@@ -8,8 +8,10 @@ Created on 2 mrt. 2013
 
 # TABLE: Length:REAL, Bitrate:INT, NumberOfChannels:INT, SampleRate:BIGINT, BitsPerSample:INT, Title:LONGTEXT, Album:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Composer:LONGTEXT, Year:INT, Comment:LONGTEXT, Description:LONGTEXT, PurschaseDate:DATE, Grouping:LONGTEXT, Genre:LONGTEXT, Lyrics:LONGTEXT, PodcastURL:LONGTEXT, PodcastEpisode:LONGTEXT, PodcastCategory:LONGTEXT, PodcastKeywords:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, AlbumSortOrder:LONGTEXT, AlbumArtistSortOrder:LONGTEXT, ArtistSortOrder:LONGTEXT, TitleSortOrder:LONGTEXT, ComposerSortOrder:LONGTEXT, ShowSortOrder:LONGTEXT, ShowName:LONGTEXT, PartOfCompilation:BOOLEAN, PartOfAlbum:BOOLEAN,Podcast:BOOLEAN, Tempo:BIGINT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CoversFormat:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
 import mutagen.mp4
+
 
 def process(fullpath, config, columns=None):
         # Try to parse mp4 data
@@ -22,12 +24,15 @@ def process(fullpath, config, columns=None):
                 audio.info.bitrate,
                 audio.info.channels,
                 audio.info.sample_rate,
-                audio.info.bits_per_sample
-            ]
+                audio.info.bits_per_sample]
 
             # Source of these properties: mp4.py from mutagen (MP4Tags class)
-            tag_names = ['\xa9nam', '\xa9alb', '\xa9ART', 'aART', '\xa9wrt', '\xa9day', '\xa9cmt', 'desc', 'purd', '\xa9grp', '\xa9gen', '\xa9lyr', 'purl',
-                          'egid', 'catg', 'keyw', '\xa9too', 'cprt', 'soal', 'soaa', 'soar', 'sonm', 'soco', 'sosn', 'tvsh', 'cpil', 'pgap', 'pcst', 'tmpo']
+            tag_names = ['\xa9nam', '\xa9alb', '\xa9ART', 'aART', '\xa9wrt',
+                         '\xa9day', '\xa9cmt', 'desc', 'purd', '\xa9grp',
+                         '\xa9gen', '\xa9lyr', 'purl', 'egid', 'catg', 'keyw',
+                         '\xa9too', 'cprt', 'soal', 'soaa', 'soar', 'sonm',
+                         'soco', 'sosn', 'tvsh', 'cpil', 'pgap', 'pcst',
+                         'tmpo']
 
             for tag_name in tag_names:
                 if audio.tags.get(tag_name):

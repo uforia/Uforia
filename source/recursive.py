@@ -4,7 +4,9 @@ Created on 25 apr. 2013
 @author: Jimmy van den Berg
 '''
 
-import os, sys
+import os
+import sys
+
 
 def call_Uforia_recursive(config, tmpdir, fullpath):
     """
@@ -26,7 +28,8 @@ def call_Uforia_recursive(config, tmpdir, fullpath):
     newConfig.DROPTABLE = False
     newConfig.TRUNCATE = False
     if config.SPOOFSTARTDIR != None:
-        spoofdir = config.SPOOFSTARTDIR + os.path.sep + os.path.relpath(fullpath, config.STARTDIR)
+        spoofdir = config.SPOOFSTARTDIR + os.path.sep + \
+        os.path.relpath(fullpath, config.STARTDIR)
     else:
         spoofdir = fullpath
     newConfig.SPOOFSTARTDIR = spoofdir

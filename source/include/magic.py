@@ -15,18 +15,20 @@ Usage:
 >>> magic.from_buffer(open("testdata/test.pdf").read(1024))
 'PDF document, version 1.2'
 >>>
-
-
 """
 
-import sys, traceback
+import sys
+import traceback
 import os.path
 import ctypes
 import ctypes.util
 
 from ctypes import c_char_p, c_int, c_size_t, c_void_p
 
-class MagicException(Exception): pass
+
+class MagicException(Exception):
+    pass
+
 
 class Magic:
     """
@@ -52,7 +54,6 @@ class Magic:
         self.cookie = magic_open(flags)
 
         magic_load(self.cookie, magic_file)
-
 
     def from_buffer(self, buf):
         """
@@ -80,11 +81,13 @@ class Magic:
 _magic_mime = None
 _magic = None
 
+
 def _get_magic_mime():
     global _magic_mime
     if not _magic_mime:
         _magic_mime = Magic(mime=False)
     return _magic_mime
+
 
 def _get_magic():
     global _magic
@@ -92,19 +95,23 @@ def _get_magic():
         _magic = Magic()
     return _magic
 
+
 def _get_magic_type(mime):
     if mime:
         return _get_magic_mime()
     else:
         return _get_magic()
 
+
 def from_file(filename, mime=False):
     m = _get_magic_type(mime)
     return m.from_file(filename)
 
+
 def from_buffer(buffer, mime=False):
     m = _get_magic_type(mime)
     return m.from_buffer(buffer)
+
 
 libmagic = None
 if not libmagic or not libmagic._name:
@@ -114,11 +121,11 @@ if not libmagic or not libmagic._name:
     """
     import sys
     platform_to_lib = {'darwin': ['./libraries/libmagic/libmagic.dylib'],
-                       'win32':  ['libmagic-1.dll'],
-                       'win64':  ['libmagic-1.dll'],
+                       'win32': ['libmagic-1.dll'],
+                       'win64': ['libmagic-1.dll'],
                        'windows': ['libmagic-1.dll'],
-                       'linux':  ['./libraries/libmagic/libmagic.so.1'],
-                       'linux2':  ['./libraries/libmagic/libmagic.so.1']}
+                       'linux': ['./libraries/libmagic/libmagic.so.1'],
+                       'linux2': ['./libraries/libmagic/libmagic.so.1']}
     for dll in platform_to_lib.get(sys.platform.lower(), []):
         try:
             libmagic = ctypes.CDLL(dll)
@@ -134,12 +141,14 @@ if not libmagic or not libmagic._name:
 
 magic_t = ctypes.c_void_p
 
+
 def errorcheck(result, func, args):
     err = magic_error(args[0])
     if err is not None:
         raise MagicException(err)
     else:
         return result
+
 
 def coerce_filename(filename):
     if filename is None:
@@ -167,6 +176,7 @@ _magic_file.restype = c_char_p
 _magic_file.argtypes = [magic_t, c_char_p]
 _magic_file.errcheck = errorcheck
 
+
 def magic_file(cookie, filename):
     return _magic_file(cookie, coerce_filename(filename))
 
@@ -185,6 +195,7 @@ _magic_load.restype = c_int
 _magic_load.argtypes = [magic_t, c_char_p]
 _magic_load.errcheck = errorcheck
 
+
 def magic_load(cookie, filename):
     return _magic_load(cookie, coerce_filename(filename))
 
@@ -199,8 +210,6 @@ magic_check.argtypes = [magic_t, c_char_p]
 magic_compile = libmagic.magic_compile
 magic_compile.restype = c_int
 magic_compile.argtypes = [magic_t, c_char_p]
-
-
 
 MAGIC_NONE = 0x000000  # No flags
 

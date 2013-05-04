@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 
 # Load basic Python modules
-import os, imp, sys, platform, traceback, site, ctypes
+import os
+import imp
+import sys
+import platform
+import traceback
+import site
+import ctypes
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -9,6 +15,7 @@ File = None
 magic = None
 modules = None
 database = None
+
 
 def writeToDB(table, hashid, columns, values, db=None):
     """
@@ -27,6 +34,7 @@ def writeToDB(table, hashid, columns, values, db=None):
     db.connection.commit()
     db.connection.close()
 
+
 def writeToMimeTypesTable(table, columns, values, db=None):
     """
     Method that writes to database
@@ -43,6 +51,7 @@ def writeToMimeTypesTable(table, columns, values, db=None):
 
     db.connection.commit()
     db.connection.close()
+
 
 def fileScanner(dir, uforiamodules):
     """
@@ -63,13 +72,14 @@ def fileScanner(dir, uforiamodules):
             for name in files:
                 fullpath = os.path.join(root, name)
                 filelist.append((fullpath, hashid))
-                hashid += 1;
+                hashid += 1
         config.STARTING_HASHID = hashid
         for item in filelist:
             fileProcessor(item, uforiamodules)
     except:
         traceback.print_exc(file=sys.stderr)
         raise
+
 
 def invokeModules(uforiamodules, hashid, file):
     """
@@ -111,6 +121,7 @@ def invokeModules(uforiamodules, hashid, file):
             traceback.print_exc(file=sys.stderr)
             raise
 
+
 def fileProcessor(item, uforiamodules):
     """
     Process a file item and export its information to the database.
@@ -146,6 +157,7 @@ def fileProcessor(item, uforiamodules):
         traceback.print_exc(file=sys.stderr)
         raise
 
+
 def fillMimeTypesTable(uforiamodules):
     """
     Fills the supported_mimetypes table with all available mime-types
@@ -155,6 +167,7 @@ def fillMimeTypesTable(uforiamodules):
     mime_types = uforiamodules.getAllSupportedMimeTypesWithModules()
     for mime_type in mime_types:
         writeToMimeTypesTable('supported_mimetypes', ["mime_type", "modules"], [mime_type, mime_types[mime_type]])
+
 
 def run():
     """
@@ -178,7 +191,7 @@ def run():
         if not config.RECURSIVE:
             fillMimeTypesTable(uforiamodules)
     else:
-        uforiamodules = '';
+        uforiamodules = ''
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
@@ -187,7 +200,11 @@ def run():
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
     print("\nUforia completed...\n")
 
-class _Dummy(object): pass
+
+class _Dummy(object):
+    pass
+
+
 def configAsPickleable(config):
     """
     Converts config (which has the `module' type) to a pickleable object.
@@ -198,6 +215,7 @@ def configAsPickleable(config):
         if not key.startswith('__'):
             setattr(newConfig, key, value)
     return newConfig
+
 
 def setupLibraryPaths():
     """

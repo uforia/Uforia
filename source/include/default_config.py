@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-    
+
 # Enable debug output. Prints lots of information about internal workings.
 # Note: Debug output is very noisy and should not be used in production.
 DEBUG = False
@@ -8,7 +8,7 @@ DEBUG = False
 OUTPUT = False
 
 # From which directory should Uforia start to scan?
-# Example: STARTDIR = '/home/user/' 
+# Example: STARTDIR = '/home/user/'
 STARTDIR = '/home/TESTDATA/'
 
 # Should Uforia attempt to detect and run additional modules for each
@@ -17,7 +17,7 @@ STARTDIR = '/home/TESTDATA/'
 # Note: You should not normally have to modify this!
 # Example: ENABLEMODULES = True
 # Example: MODULEDIR = './modules/'
-ENABLEMODULES = False
+ENABLEMODULES = True
 MODULEDIR = './modules/'
 
 # Should Uforia modules use the libxmp library for optional XMP support?
@@ -30,9 +30,9 @@ ENABLEXMP = True
 # Example: DBTYPE = 'mysql'
 DATABASEDIR = './databases/'
 DBTYPE = 'mysql'
-DBHOST = 'localhost'
-DBUSER = 'uforia'
-DBPASS = 'uforia'
+DBHOST = '127.0.0.1'
+DBUSER = 'root'
+DBPASS = 'root'
 DBNAME = 'uforia'
 
 # How many simultaneous database connections should we use to handle
@@ -58,8 +58,8 @@ TRUNCATE = True
 # Example: CONSUMERS = 2
 CONSUMERS = 2
 
-# ADVANCED CONFIGURATION, FOR EXPERTS ONLY.
 # Do not modify any of the settings below unless you know what you are doing!
+# ADVANCED CONFIGURATION, FOR EXPERTS ONLY
 
 # Tune the filesystem block reads
 # Example: CHUNKSIZE = 65536
@@ -68,13 +68,11 @@ CHUNKSIZE = 65536
 # Maximum number of database connection attempts before giving up
 DBRETRY = 5
 
-# Location of the magic file (needs only be supplied on Windows machines)
-# Example (Windows):  MAGICFILE = 'C:/Program Files (x86)/GnuWin32/share/misc/magic'
-# Example (Linux):    MAGICFILE = None
+# Location of the magic file
 MAGICFILE = './share/magic.mgc'
 
 # Can be used to fake the path of STARTDIR in the database output. Used
-# for running Uforia recursively. 
+# for running Uforia recursively.
 SPOOFSTARTDIR = None
 
 # Used to notify the starting value of the hash id if Uforia was called

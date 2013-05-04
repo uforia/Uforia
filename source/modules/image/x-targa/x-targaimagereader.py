@@ -8,8 +8,10 @@ Created on 18 mrt. 2013
 
 # TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:BLOB, XMPTag:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
 from PIL import Image
+
 
 def process(fullpath, config, columns=None):
 
@@ -20,21 +22,24 @@ def process(fullpath, config, columns=None):
             assorted = [image.tile]
             info_dictionary = image.info
 
-            # Check if compression is in info dictionary, if so put it in our list
+            # Check if compression is in info dictionary,
+            # if so put it in our list
             if "compression" in info_dictionary:
                 assorted.append(info_dictionary["compression"])
                 info_dictionary.pop("compression")
             else:
                 assorted.append(None)
 
-            # Check if orientation is in info dictionary, if so put it in our list
+            # Check if orientation is in info dictionary,
+            # if so put it in our list
             if "orientation" in info_dictionary:
                 assorted.append(info_dictionary["orientation"])
                 info_dictionary.pop("orientation")
             else:
                 assorted.append(None)
 
-            # If there are still other values in the dict then put those in column
+            # If there are still other values in the
+            # dict then put those in column
             assorted.append(info_dictionary)
 
             # Delete variable

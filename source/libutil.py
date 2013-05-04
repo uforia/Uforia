@@ -3,13 +3,14 @@ Created on 17 apr. 2013
 
 @author: marcin
 '''
-import ctypes, platform
+import ctypes
+import platform
 
 PLATFORM_SHARED_LIBRARY_EXTENSIONS = {
-    'Windows' : '.dll',
-    'Linux'   : '.so',
-    'Darwin'  : '.dylib'
-}
+    'Windows': '.dll',
+    'Linux': '.so',
+    'Darwin': '.dylib'}
+
 
 def loadLibrary(foldername, filename, apiversion=None):
     """
@@ -37,6 +38,5 @@ def loadLibrary(foldername, filename, apiversion=None):
         arch=architecture,
         os=os,
         filename=filename,
-        ext=extension
-    )
+        ext=extension)
     return ctypes.cdll.LoadLibrary(path)

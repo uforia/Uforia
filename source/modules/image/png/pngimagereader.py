@@ -8,8 +8,10 @@ Created on 11 mrt. 2013
 
 # TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:BLOB, Interlace:INT, Transparency:LONGTEXT, Gamma:INT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:BLOB, XMPtag:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
 from PIL import Image
+
 
 def process(fullpath, config, columns=None):
 
@@ -20,21 +22,24 @@ def process(fullpath, config, columns=None):
             assorted = [image.tile, image.text]
             info_dictionary = image.info
 
-            # Check if ICC profile is in info dictionary, if so put it in our list
+            # Check if ICC profile is in info dictionary
+            # if so put it in our list
             if "icc_profile" in info_dictionary:
                 assorted.append(info_dictionary["icc_profile"])
                 info_dictionary.pop("icc_profile")
             else:
                 assorted.append(None)
 
-            # Check if interlace is in info dictionary, if so put it in our list
+            # Check if interlace is in info dictionary
+            # if so put it in our list
             if "interlace" in info_dictionary:
                 assorted.append(info_dictionary["interlace"])
                 info_dictionary.pop("interlace")
             else:
                 assorted.append(None)
 
-            # Check if transparency is in info dictionary, if so put it in our list
+            # Check if transparency is in info dictionary
+            # if so put it in our list
             if "transparency" in info_dictionary:
                 assorted.append(info_dictionary["transparency"])
                 info_dictionary.pop("transparency")
@@ -64,7 +69,8 @@ def process(fullpath, config, columns=None):
             else:
                 assorted.append(None)
 
-            # If there are still other values in the dict then put those in column
+            # If there are still other values in the dict
+            # then put those in column
             assorted.append(info_dictionary)
 
             # Delete variable

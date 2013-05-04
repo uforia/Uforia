@@ -8,8 +8,10 @@ Created on 28 feb. 2013
 
 # TABLE: Artist:LONGTEXT, Album:LONGTEXT, Title:LONGTEXT, Genre:LONGTEXT, Year:INT(4), Track:INT, Comment:LONGTEXT, DurationInSeconds:DOUBLE, BitRate:INT, SampleRate:INT, AudioFileSize:INT, AudioOffset:INT
 
-import sys, traceback
+import sys
+import traceback
 from hsaudiotag import auto
+
 
 def process(fullpath, config, columns=None):
         # Try to parse .ogg data
@@ -33,8 +35,7 @@ def process(fullpath, config, columns=None):
                     oggFile.sample_rate,
                     oggFile.audio_size,
                     oggFile.bitrate,
-                    oggFile.audio_offset
-                    ]
+                    oggFile.audio_offset]
 
                 # delete the oggFile variable
                 del oggFile
@@ -43,7 +44,8 @@ def process(fullpath, config, columns=None):
                 # specified!!
                 assert len(assorted) == len(columns)
 
-                # Print some data that is stored in the database if debug is true
+                # Print some data that is stored in
+                # the database if debug is true
                 if config.DEBUG:
                     print "\nOGG file data:"
                     for i in range(0, len(assorted)):
@@ -60,5 +62,3 @@ def process(fullpath, config, columns=None):
 
             # Store values in database so not the whole application crashes
             return None
-
-

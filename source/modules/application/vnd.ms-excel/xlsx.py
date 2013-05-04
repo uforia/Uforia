@@ -3,7 +3,11 @@
 # TABLE: author:LONGTEXT, changedBy:LONGTEXT, createdOn:LONGTEXT, changedOn:LONGTEXT, appType:LONGTEXT, security:INT, company:LONGTEXT, shared:LONGTEXT, appVersion:FLOAT, totalSheets:INT
 
 import xml.etree.ElementTree as ET
-import re, zipfile, sys, os
+import re
+import zipfile
+import sys
+import os
+
 
 def process(fullpath, config, columns=None):
 	try:
@@ -11,7 +15,6 @@ def process(fullpath, config, columns=None):
 	except:
 		exit()
 
-	
 	worksheets = []
 	workTotal = 0
 	for x in document.namelist():
@@ -38,7 +41,7 @@ def process(fullpath, config, columns=None):
 	for basic in range(4):
 		dataTree.append(tree[basic].text)
 
-	
+
 # 	for app in range(10):
 # 		dataApp.append(treeApp[app].text)
 	dataApp.append(treeApp[0].text)
@@ -46,7 +49,6 @@ def process(fullpath, config, columns=None):
 	dataApp.append(treeApp[5].text)
 	dataApp.append(treeApp[7].text)
 	dataApp.append(treeApp[9].text)
-
 
 	merged = dataTree + dataApp
 	merged.append(workTotal)
@@ -62,4 +64,3 @@ def process(fullpath, config, columns=None):
 # 	company = treeApp[5].text
 # 	shared = treeApp[7].text
 # 	appversion = treeApp[9].text
-

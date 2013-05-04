@@ -8,9 +8,13 @@ Created on 26 feb. 2013
 #
 # TABLE: Length:REAL, SampleRate:BIGINT, TotalSamples:BIGINT, Channels:INT, BPS:INT, Md5Sig:LONGTEXT, MinBlocksize:BIGINT, MaxBlocksize:BIGINT, MinFramesize:BIGINT, MaxFrameSize:BIGINT, Title:LONGTEXT, Version:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, Artist:LONGTEXT, Performer:LONGTEXT, Copyright:LONGTEXT, License:LONGTEXT, Organization:LONGTEXT, Description:LONGTEXT, Genre:LONGTEXT, Date:Date, Location:LONGTEXT, Contact:LONGTEXT, ISRC: LONGTEXT, Unknown:LONGTEXT, Pictures:LONGTEXT, SeekTable:LONGTEXT, CueSheets:LONGTEXT
 
-import sys, traceback, json
-import mutagen, mutagen.flac
+import sys
+import traceback
+import json
+import mutagen
+import mutagen.flac
 from PIL import Image
+
 
 def lookupCaseInsensitive(dict, key):
     """
@@ -25,6 +29,7 @@ def lookupCaseInsensitive(dict, key):
         if caseKey.lower() == key:
             return value, caseKey
     return None, None
+
 
 def getStreamInfo(audio):
     """
@@ -41,16 +46,19 @@ def getStreamInfo(audio):
         audio.info.min_blocksize,
         audio.info.max_blocksize,
         audio.info.min_framesize,
-        audio.info.max_framesize
-    ]
+        audio.info.max_framesize]
+
 
 def getVorbisComments(audio):
     """
-    Returns common vorbis comments (now per http://xiph.org/vorbis/doc/v-comment.html)
+    Returns common vorbis comments
+    (now per http://xiph.org/vorbis/doc/v-comment.html)
     The rest of the values are stored in the 'Unknown' field.
     """
     values = []
-    common = ['TITLE', 'VERSION', 'ALBUM', 'TRACKNUMBER', 'ARTIST', 'PERFORMER', 'COPYRIGHT', 'LICENSE', 'ORGANIZATION', 'DESCRIPTION', 'GENRE', 'DATE', 'LOCATION', 'CONTACT', 'ISRC']
+    common = ['TITLE', 'VERSION', 'ALBUM', 'TRACKNUMBER', 'ARTIST',
+              'PERFORMER', 'COPYRIGHT', 'LICENSE', 'ORGANIZATION',
+              'DESCRIPTION', 'GENRE', 'DATE', 'LOCATION', 'CONTACT', 'ISRC']
     tags = audio.tags.as_dict().copy()
     for key in common:
         value, key = lookupCaseInsensitive(tags, key)
@@ -62,7 +70,8 @@ def getVorbisComments(audio):
             values.append(None)
 
     # Dump the rest of the tag metadata
-    dump = json.dumps(tags, ensure_ascii=False, encoding="utf-8", sort_keys=True)
+    dump = json.dumps(tags, ensure_ascii=False,
+                      encoding="utf-8", sort_keys=True)
     values.append(dump)
     return values
 
@@ -88,7 +97,11 @@ def getSeektable(audio):
     """
     Returns a JSON-encoded version of the file's seek table.
     """
-    return json.dumps(audio.seektable.seekpoints) if audio.seektable != None else '{}'
+    if audio.seektable != None:
+        return json.dumps(audio.seektable.seekpoints)
+    else:
+        '{}'
+
 
 def getCuesheet(audio):
     """
@@ -98,19 +111,21 @@ def getCuesheet(audio):
 
     if audio.cuesheet != None:
         # Source: CueSheet class in flac.py from mutagen
-        attrs = ['media_catalog_number', 'lead_in_samples', 'compact_disc' ]
+        attrs = ['media_catalog_number', 'lead_in_samples', 'compact_disc']
         for attr in attrs:
             cuedata[attr] = getattr(audio.cuesheet, attr)
 
         cuedata['tracks'] = []
         for track in audio.cuesheet.tracks:
             cuedatatrack = {}
-            attrs = ['track_number', 'start_offset', 'isrc', 'type', 'pre_emphasis', 'indexes']
+            attrs = ['track_number', 'start_offset', 'isrc', 'type',
+                     'pre_emphasis', 'indexes']
             for attr in attrs:
                 cuedatatrack[attr] = getattr(track, attr)
             cuedata['tracks'].append(cuedatatrack)
 
     return json.dumps(cuedata)
+
 
 def process(fullpath, config, columns=None):
     """
@@ -130,7 +145,9 @@ def process(fullpath, config, columns=None):
         # Make sure we stored exactly the same amount of columns as
         # specified!!
         assert len(assorted) == len(columns), \
-            "Previously defined column length (%d) is not equal to the length of assorted list (%d)" % (len(columns), len(assorted))
+            "Previously defined column length (%d) \
+            is not equal to the length of assorted list (%d)" \
+            % (len(columns), len(assorted))
 
         if config.DEBUG:
             print "\nFLAC file data:"
