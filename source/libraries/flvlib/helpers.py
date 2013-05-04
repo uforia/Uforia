@@ -6,9 +6,9 @@ from UserDict import DictMixin
 
 class LocalTimezone(datetime.tzinfo):
     """A tzinfo class representing the system's idea of the local timezone"""
-    STDOFFSET = datetime.timedelta(seconds=-time.timezone)
+    STDOFFSET = datetime.timedelta(seconds= -time.timezone)
     if time.daylight:
-        DSTOFFSET = datetime.timedelta(seconds=-time.altzone)
+        DSTOFFSET = datetime.timedelta(seconds= -time.altzone)
     else:
         DSTOFFSET = STDOFFSET
     DSTDIFF = DSTOFFSET - STDOFFSET
@@ -41,7 +41,7 @@ class FixedOffset(datetime.tzinfo):
     """Fixed offset in minutes east from UTC."""
 
     def __init__(self, offset, name):
-        self.__offset = datetime.timedelta(minutes = offset)
+        self.__offset = datetime.timedelta(minutes=offset)
         self.__name = name
 
     def utcoffset(self, dt):

@@ -16,23 +16,23 @@ from .util import tryint, FileOrPath
 
 HEADER_SIZE = 4
 
-ID_MPEG1  = 3
-ID_MPEG2  = 2
+ID_MPEG1 = 3
+ID_MPEG2 = 2
 ID_MPEG25 = 0
 
 ID_LAYER1 = 3
 ID_LAYER2 = 2
 ID_LAYER3 = 1
 
-MPEG_SYNC = 0xffe00000 # 11 bits set
-MPEG_PAD  = 0x200 #pad flag mask (pos 20)
+MPEG_SYNC = 0xffe00000  # 11 bits set
+MPEG_PAD = 0x200  # pad flag mask (pos 20)
 
-BR_NULL   = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+BR_NULL = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-BR_M1_L1  = (0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0)
-BR_M1_L2  = (0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0)
-BR_M1_L3  = (0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0)
-BR_M2_L1  = (0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0)
+BR_M1_L1 = (0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0)
+BR_M1_L2 = (0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0)
+BR_M1_L3 = (0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0)
+BR_M2_L1 = (0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0)
 BR_M2_L23 = (0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0)
 
 BR_M1 = (BR_NULL, BR_M1_L3, BR_M1_L2, BR_M1_L1)
@@ -43,8 +43,8 @@ BR_LIST = (BR_M2, BR_NULLS, BR_M2, BR_M1)
 
 SR_NULL = (0, 0, 0, 0)
 
-SR_M1  = (44100, 48000, 32000, 0)
-SR_M2  = (22050, 24000, 16000, 0)
+SR_M1 = (44100, 48000, 32000, 0)
+SR_M2 = (22050, 24000, 16000, 0)
 SR_M25 = (11025, 12000, 8000, 0)
 
 SR_LIST = (SR_M25, SR_NULL, SR_M2, SR_M1)
@@ -65,8 +65,8 @@ MPEG_CM_UNKNOWN = 4;
 MAX_SEEK_BYTES = 4096
 
 def get_vbr_offset(version, channel_mode):
-    #Depending on mpeg version and mode, the VBR header will be at a different offset
-    #after the mpeg header.
+    # Depending on mpeg version and mode, the VBR header will be at a different offset
+    # after the mpeg header.
     if version == ID_MPEG1:
         if channel_mode == MPEG_CM_MONO:
             return 17
@@ -94,7 +94,7 @@ def get_vbr_coefficient(version, layer):
 
 class MpegFrameHeader(object):
     def __init__(self, data):
-        #data = HEADER_SIZE bytes integer
+        # data = HEADER_SIZE bytes integer
         self.valid = False
         self.mpeg_id = 0
         self.layer = 0
@@ -129,7 +129,7 @@ class MpegFrameHeader(object):
 
 
 class XingHeader(object):
-    def __init__(self, data): #data is a 128 bytes str
+    def __init__(self, data):  # data is a 128 bytes str
         self.valid = data[:4] == 'Xing'
         self.frames = unpack('!I', data[8:12])[0]
         self.size = unpack('!I', data[12:16])[0]
@@ -160,7 +160,7 @@ class FrameBrowser(object):
         self.position = tryint(self.fp.tell())
         data = self.fp.read(HEADER_SIZE)
         try:
-            self.frame = MpegFrameHeader(unpack("!I",data)[0])
+            self.frame = MpegFrameHeader(unpack("!I", data)[0])
         except struct.error:
             self.frame = MpegFrameHeader(0)
         return self.frame.valid
@@ -180,18 +180,18 @@ class FrameBrowser(object):
         index = data.find('\xff')
         while (index > -1):
             try:
-                result = MpegFrameHeader(unpack('!I', data[index:index+HEADER_SIZE])[0])
+                result = MpegFrameHeader(unpack('!I', data[index:index + HEADER_SIZE])[0])
                 if result.valid:
                     nextindex = index + result.size
                     try:
-                        next = MpegFrameHeader(unpack('!I', data[nextindex:nextindex+HEADER_SIZE])[0])
+                        next = MpegFrameHeader(unpack('!I', data[nextindex:nextindex + HEADER_SIZE])[0])
                         if next.valid:
                             self.position += index
                             self.frame = result
                             return True
                     except struct.error:
                         pass
-                index = data.find('\xff', index+1)
+                index = data.find('\xff', index + 1)
             except struct.error:
                 index = -1
         return False
@@ -246,12 +246,12 @@ class Mpeg(object):
             b = FrameBrowser(fp)
             self._frameheader = b.frame
             self.audio_offset = b.position
-            fp.seek(b.position, 0) #Needed for VBR seeking
+            fp.seek(b.position, 0)  # Needed for VBR seeking
             self.vbr = get_vbr_info(fp, b)
             fp.seek(0, 2)
             self.size = tryint(fp.tell())
             if self.bitrate:
-                #(audio_size * 8) / (bitrate * 1000) == audio_size / (bitrate * 125)
+                # (audio_size * 8) / (bitrate * 1000) == audio_size / (bitrate * 125)
                 self.duration = self.audio_size // (self.bitrate * 125)
                 # 'and self.id3v2.duration' is there to avoid reading the mpeg frames when there is no TLEN in the tag.
                 if self.id3v2.exists and self.id3v2.duration and (self.id3v2.duration != self.duration):

@@ -48,7 +48,7 @@ TEXT, BINARY, EXTERNAL = range(3)
 
 HAS_HEADER = 1L << 31
 HAS_NO_FOOTER = 1L << 30
-IS_HEADER  = 1L << 29
+IS_HEADER = 1L << 29
 
 class error(IOError): pass
 class APENoHeaderError(error, ValueError): pass
@@ -104,7 +104,7 @@ class _APEv2Data(object):
             fileobj.seek(-128, 2)
             if fileobj.read(3) == "TAG":
 
-                fileobj.seek(-35, 1) # "TAG" + header length
+                fileobj.seek(-35, 1)  # "TAG" + header length
                 if fileobj.read(8) == "APETAGEX":
                     fileobj.seek(-8, 1)
                     self.footer = fileobj.tell()
@@ -115,7 +115,7 @@ class _APEv2Data(object):
                 # (header length - "APETAGEX") - "LYRICS200"
                 fileobj.seek(15, 1)
                 if fileobj.read(9) == 'LYRICS200':
-                    fileobj.seek(-15, 1) # "LYRICS200" + size tag
+                    fileobj.seek(-15, 1)  # "LYRICS200" + size tag
                     try: offset = int(fileobj.read(6))
                     except ValueError:
                         raise IOError
@@ -326,7 +326,7 @@ class APEv2(DictMixin, Metadata):
         num_tags = len(tags)
         tags = "".join(tags)
 
-        header = "APETAGEX%s%s" %(
+        header = "APETAGEX%s%s" % (
             # version, tag size, item count, flags
             struct.pack("<4I", 2000, len(tags) + 32, num_tags,
                         HAS_HEADER | IS_HEADER),
@@ -335,7 +335,7 @@ class APEv2(DictMixin, Metadata):
 
         fileobj.write(tags)
 
-        footer = "APETAGEX%s%s" %(
+        footer = "APETAGEX%s%s" % (
             # version, tag size, item count, flags
             struct.pack("<4I", 2000, len(tags) + 32, num_tags,
                         HAS_HEADER),
@@ -390,7 +390,7 @@ class _APEValue(object):
     # 1B: Null
     # Key value
     def _internal(self, key):
-        return "%s%s\0%s" %(
+        return "%s%s\0%s" % (
             struct.pack("<2I", len(self.value), self.kind << 1),
             key, self.value)
 

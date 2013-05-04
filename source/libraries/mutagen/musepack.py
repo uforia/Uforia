@@ -103,7 +103,7 @@ class MusepackInfo(object):
             self.bitrate = int(round(fileobj.tell() * 8 / self.length))
 
     def __parse_sv8(self, fileobj):
-        #SV8 http://trac.musepack.net/trac/wiki/SV8Specification
+        # SV8 http://trac.musepack.net/trac/wiki/SV8Specification
 
         key_size = 2
         mandatory_packets = ["SH", "RG"]
@@ -240,7 +240,7 @@ class Musepack(APEv2File):
     _mimes = ["audio/x-musepack", "audio/x-mpc"]
 
     def score(filename, fileobj, header):
-        return (header.startswith("MP+") + header.startswith("MPCK") +
+        return (header.startswith("MP+") + header.startswith("MPCK") + 
                 filename.lower().endswith(".mpc"))
     score = staticmethod(score)
 

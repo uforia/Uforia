@@ -6,7 +6,7 @@ Created on 25 mrt. 2013
 
 # This is the image module for GIF
 
-#TABLE: Version:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:LONGTEXT, XMP:LONGTEXT
+# TABLE: Version:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:LONGTEXT, XMP:LONGTEXT
 import sys, traceback
 from PIL import Image
 
@@ -27,7 +27,7 @@ def process(fullpath, config, columns=None):
         try:
             while True:
                 noframes += 1
-                image.seek(image.tell()+1)
+                image.seek(image.tell() + 1)
         except EOFError:
             pass
         assorted.append(noframes)
@@ -68,5 +68,5 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
         return None

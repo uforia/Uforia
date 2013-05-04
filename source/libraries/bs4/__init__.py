@@ -162,7 +162,7 @@ class BeautifulSoup(Tag):
 
         self.reset()
 
-        if hasattr(markup, 'read'):        # It's a file-type object.
+        if hasattr(markup, 'read'):  # It's a file-type object.
             markup = markup.read()
         (self.markup, self.original_encoding, self.declared_html_encoding,
          self.contains_replacement_characters) = (
@@ -215,13 +215,13 @@ class BeautifulSoup(Tag):
 
     def popTag(self):
         tag = self.tagStack.pop()
-        #print "Pop", tag.name
+        # print "Pop", tag.name
         if self.tagStack:
             self.currentTag = self.tagStack[-1]
         return self.currentTag
 
     def pushTag(self, tag):
-        #print "Push", tag.name
+        # print "Push", tag.name
         if self.currentTag:
             self.currentTag.contents.append(tag)
         self.tagStack.append(tag)
@@ -258,7 +258,7 @@ class BeautifulSoup(Tag):
         instance of the given tag. If inclusivePop is false, pops the tag
         stack up to but *not* including the most recent instqance of
         the given tag."""
-        #print "Popping to %s" % name
+        # print "Popping to %s" % name
         if name == self.ROOT_TAG_NAME:
             return
 
@@ -305,7 +305,7 @@ class BeautifulSoup(Tag):
         return tag
 
     def handle_endtag(self, name, nsprefix=None):
-        #print "End tag: " + name
+        # print "End tag: " + name
         self.endData()
         self._popToTag(name, nsprefix)
 
@@ -352,7 +352,7 @@ class FeatureNotFound(ValueError):
     pass
 
 
-#By default, act as an HTML pretty-printer.
+# By default, act as an HTML pretty-printer.
 if __name__ == '__main__':
     import sys
     soup = BeautifulSoup(sys.stdin)

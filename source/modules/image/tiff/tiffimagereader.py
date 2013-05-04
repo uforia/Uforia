@@ -6,7 +6,7 @@ Created on 14 mrt. 2013
 
 # This is the image module for TIFF
 
-#TABLE: Tile:LONGTEXT, ICC_Profile:BLOB, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:BLOB, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:BLOB, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:BLOB, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
+# TABLE: Tile:LONGTEXT, ICC_Profile:BLOB, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:BLOB, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:BLOB, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:BLOB, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
 
 import sys, traceback
 from PIL import Image, TiffImagePlugin
@@ -108,7 +108,7 @@ def process(fullpath, config, columns=None):
             return assorted
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

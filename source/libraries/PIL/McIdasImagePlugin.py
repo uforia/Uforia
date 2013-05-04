@@ -24,7 +24,7 @@ import Image, ImageFile
 def _accept(s):
     return s[:8] == "\x00\x00\x00\x00\x00\x00\x00\x04"
 
-##
+# #
 # Image plugin for McIdas area images.
 
 class McIdasImageFile(ImageFile.ImageFile):
@@ -58,7 +58,7 @@ class McIdasImageFile(ImageFile.ImageFile):
         self.size = w[10], w[9]
 
         offset = w[34] + w[15]
-        stride = w[15] + w[10]*w[11]*w[14]
+        stride = w[15] + w[10] * w[11] * w[14]
 
         self.tile = [("raw", (0, 0) + self.size, offset, (rawmode, stride, 1))]
 

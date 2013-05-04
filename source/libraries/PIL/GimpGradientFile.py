@@ -56,7 +56,7 @@ class GradientFile:
 
     gradient = None
 
-    def getpalette(self, entries = 256):
+    def getpalette(self, entries=256):
 
         palette = []
 
@@ -65,7 +65,7 @@ class GradientFile:
 
         for i in range(entries):
 
-            x = i / float(entries-1)
+            x = i / float(entries - 1)
 
             while x1 < x:
                 ix = ix + 1
@@ -89,7 +89,7 @@ class GradientFile:
 
         return string.join(palette, ""), "RGBA"
 
-##
+# #
 # File handler for GIMP's gradient format.
 
 class GimpGradientFile(GradientFile):
@@ -108,13 +108,13 @@ class GimpGradientFile(GradientFile):
             s = string.split(fp.readline())
             w = map(float, s[:11])
 
-            x0, x1  = w[0], w[2]
-            xm      = w[1]
-            rgb0    = w[3:7]
-            rgb1    = w[7:11]
+            x0, x1 = w[0], w[2]
+            xm = w[1]
+            rgb0 = w[3:7]
+            rgb1 = w[7:11]
 
             segment = SEGMENTS[int(s[11])]
-            cspace  = int(s[12])
+            cspace = int(s[12])
 
             if cspace != 0:
                 raise IOError, "cannot handle HSV colour space"

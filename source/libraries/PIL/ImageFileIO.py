@@ -14,7 +14,7 @@
 
 from StringIO import StringIO
 
-##
+# #
 # The <b>ImageFileIO</b> module can be used to read an image from a
 # socket, or any other stream device.
 # <p>
@@ -25,7 +25,7 @@ from StringIO import StringIO
 
 class ImageFileIO(StringIO):
 
-    ##
+    # #
     # Adds buffering to a stream file object, in order to
     # provide <b>seek</b> and <b>tell</b> methods required
     # by the <b>Image.open</b> method. The stream object must

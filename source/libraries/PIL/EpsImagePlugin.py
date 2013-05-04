@@ -27,10 +27,10 @@ import Image, ImageFile
 # --------------------------------------------------------------------
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
 def o32(i):
-    return chr(i&255) + chr(i>>8&255) + chr(i>>16&255) + chr(i>>24&255)
+    return chr(i & 255) + chr(i >> 8 & 255) + chr(i >> 16 & 255) + chr(i >> 24 & 255)
 
 split = re.compile(r"^%%([^:]*):[ \t]*(.*)[ \t]*$")
 field = re.compile(r"^%[%!\w]([^:]*)[ \t]*$")
@@ -48,11 +48,11 @@ def Ghostscript(tile, size, fp):
 
     # Build ghostscript command
     command = ["gs",
-               "-q",                    # quite mode
-               "-g%dx%d" % size,        # set output geometry (pixels)
-               "-dNOPAUSE -dSAFER",     # don't pause between pages, safe mode
-               "-sDEVICE=ppmraw",       # ppm driver
-               "-sOutputFile=%s" % file,# output file
+               "-q",  # quite mode
+               "-g%dx%d" % size,  # set output geometry (pixels)
+               "-dNOPAUSE -dSAFER",  # don't pause between pages, safe mode
+               "-sDEVICE=ppmraw",  # ppm driver
+               "-sOutputFile=%s" % file,  # output file
                "- >/dev/null 2>/dev/null"]
 
     command = string.join(command)
@@ -118,7 +118,7 @@ class PSFile:
 def _accept(prefix):
     return prefix[:4] == "%!PS" or i32(prefix) == 0xC6D3D0C5L
 
-##
+# #
 # Image plugin for Encapsulated Postscript.  This plugin supports only
 # a few variants of this format.
 
@@ -153,7 +153,7 @@ class EpsImageFile(ImageFile.ImageFile):
         box = None
 
         self.mode = "RGB"
-        self.size = 1, 1 # FIXME: huh?
+        self.size = 1, 1  # FIXME: huh?
 
         #
         # Load EPS header
@@ -185,7 +185,7 @@ class EpsImageFile(ImageFile.ImageFile):
                         # put floating point values there anyway.
                         box = map(int, map(float, string.split(v)))
                         self.size = box[2] - box[0], box[3] - box[1]
-                        self.tile = [("eps", (0,0) + self.size, offset,
+                        self.tile = [("eps", (0, 0) + self.size, offset,
                                       (length, box))]
                     except:
                         pass
@@ -230,7 +230,7 @@ class EpsImageFile(ImageFile.ImageFile):
 
             if s[:11] == "%ImageData:":
 
-                [x, y, bi, mo, z3, z4, en, id] =\
+                [x, y, bi, mo, z3, z4, en, id] = \
                     string.split(s[11:], maxsplit=7)
 
                 x = int(x); y = int(y)
@@ -315,7 +315,7 @@ def _save(im, fp, filename, eps=1):
         # write EPS header
         fp.write("%!PS-Adobe-3.0 EPSF-3.0\n")
         fp.write("%%Creator: PIL 0.1 EpsEncode\n")
-        #fp.write("%%CreationDate: %s"...)
+        # fp.write("%%CreationDate: %s"...)
         fp.write("%%%%BoundingBox: 0 0 %d %d\n" % im.size)
         fp.write("%%Pages: 1\n")
         fp.write("%%EndComments\n")
@@ -329,12 +329,12 @@ def _save(im, fp, filename, eps=1):
     fp.write("10 dict begin\n")
     fp.write("/buf %d string def\n" % (im.size[0] * operator[1]))
     fp.write("%d %d scale\n" % im.size)
-    fp.write("%d %d 8\n" % im.size) # <= bits
+    fp.write("%d %d 8\n" % im.size)  # <= bits
     fp.write("[%d 0 0 -%d 0 %d]\n" % (im.size[0], im.size[1], im.size[1]))
     fp.write("{ currentfile buf readhexstring pop } bind\n")
     fp.write("%s\n" % operator[2])
 
-    ImageFile._save(im, fp, [("eps", (0,0)+im.size, 0, None)])
+    ImageFile._save(im, fp, [("eps", (0, 0) + im.size, 0, None)])
 
     fp.write("\n%%%%EndBinary\n")
     fp.write("grestore end\n")

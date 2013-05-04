@@ -6,7 +6,7 @@ class Database(object):
     """
     This is a MySQL implementation of Uforia's data storage facility.
     """
-    def __init__(self,config):
+    def __init__(self, config):
         """
         Initializes a MySQL database connection using the specified Uforia
         configuration.
@@ -16,45 +16,45 @@ class Database(object):
         if not config.DBHOST or not config.DBUSER or not config.DBPASS or not config.DBNAME:
             raise ValueError('Cannot initialize a database connection without valid credentials.')
         else:
-            hostname        = config.DBHOST
-            username        = config.DBUSER
-            password        = config.DBPASS
-            database        = config.DBNAME
-            self.truncate   = config.TRUNCATE
-            self.droptable  = config.DROPTABLE
+            hostname = config.DBHOST
+            username = config.DBUSER
+            password = config.DBPASS
+            database = config.DBNAME
+            self.truncate = config.TRUNCATE
+            self.droptable = config.DROPTABLE
             self.connection = None
-            attempts        = 0
-            retries         = config.DBRETRY
+            attempts = 0
+            retries = config.DBRETRY
         while not self.connection:
             try:
-                attempts    += 1
-                self.connection  = MySQLdb.connect(host = hostname, user = username, passwd = password, db = database)
+                attempts += 1
+                self.connection = MySQLdb.connect(host=hostname, user=username, passwd=password, db=database)
             except MySQLdb.OperationalError, e:
-                print("Could not connect to the MySQL server: "+str(e))
+                print("Could not connect to the MySQL server: " + str(e))
                 print("Sleeping for 3 seconds...")
                 time.sleep(3)
                 if attempts > retries:
-                    print("The MySQL server didn't respond after "+str(retries)+" requests; you might be flooding it with connections.")
+                    print("The MySQL server didn't respond after " + str(retries) + " requests; you might be flooding it with connections.")
                     print("Consider raising the maximum amount of connections on your MySQL server or lower the amount of concurrent Uforia threads!")
-                    traceback.print_exc(file = sys.stderr)
+                    traceback.print_exc(file=sys.stderr)
                     break
         try:
-            self.cursor     = self.connection.cursor()
+            self.cursor = self.connection.cursor()
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
-    def executeQuery(self,query):
+    def executeQuery(self, query):
         """
         Executes a query (which should have no data to return).
 
         query - The query string
         """
         try:
-            warnings.filterwarnings('ignore',category=self.connection.Warning)
+            warnings.filterwarnings('ignore', category=self.connection.Warning)
             self.cursor.execute(query)
             warnings.resetwarnings()
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
     def setupMainTable(self):
         """
@@ -66,7 +66,7 @@ class Database(object):
             query = """DROP TABLE IF EXISTS `files`"""
             self.executeQuery(query)
         
-        query="""CREATE TABLE IF NOT EXISTS `files`
+        query = """CREATE TABLE IF NOT EXISTS `files`
             (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
             INDEX USING HASH (`hashid`),
             `fullpath` LONGTEXT,
@@ -100,7 +100,7 @@ class Database(object):
             query = """DROP TABLE IF EXISTS `supported_mimetypes`"""
             self.executeQuery(query)
 
-        query="""CREATE TABLE IF NOT EXISTS `supported_mimetypes`
+        query = """CREATE TABLE IF NOT EXISTS `supported_mimetypes`
             (`mime_type` VARCHAR(255) NOT NULL PRIMARY KEY,
             INDEX USING HASH (`mime_type`),
             `modules` LONGTEXT)"""
@@ -111,7 +111,7 @@ class Database(object):
             query = """TRUNCATE `supported_mimetypes`"""
             self.executeQuery(query)
 
-    def setupModuleTable(self,table,columns):
+    def setupModuleTable(self, table, columns):
         """
         Sets up a specified table.
 
@@ -125,24 +125,24 @@ class Database(object):
         
         # First drop table
         if self.droptable:
-            query = """DROP TABLE IF EXISTS `"""+table+"""`"""
+            query = """DROP TABLE IF EXISTS `""" + table + """`"""
             self.executeQuery(query)
         
-        query = """CREATE TABLE IF NOT EXISTS `"""+table+"""` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
+        query = """CREATE TABLE IF NOT EXISTS `""" + table + """` (`hashid` BIGINT UNSIGNED NOT NULL, INDEX USING HASH (`hashid`)"""
         for items in columns.split(','):
-            name,type = items.split(':')
+            name, type = items.split(':')
             name = name.strip()
             type = type.strip()
-            query += """,`"""+name+"""` """+type
+            query += """,`""" + name + """` """ + type
         query += """, PRIMARY KEY(`hashid`));"""
         self.executeQuery(query)
 
         # Truncate table if not already dropped before
         if self.truncate and not self.droptable:
-            query = """TRUNCATE `"""+table+"""`"""
+            query = """TRUNCATE `""" + table + """`"""
             self.executeQuery(query)
 
-    def store(self,table,hashid,columns,values):
+    def store(self, table, hashid, columns, values):
         """
         Inserts data into the specified table (main table or module
         table).
@@ -154,10 +154,10 @@ class Database(object):
         """
         if not table or not columns or not values:
             raise ValueError('Module table, columns or values missing.')
-        query = """INSERT IGNORE INTO `"""+table+"""` (`hashid`"""
+        query = """INSERT IGNORE INTO `""" + table + """` (`hashid`"""
         for item in columns:
-            query += ", `"+item+"`"
-        query += """) VALUES ("""+str(hashid)
+            query += ", `" + item + "`"
+        query += """) VALUES (""" + str(hashid)
         values = self._replace_values_(values)
         for item in values:
             query += ", '%s'"
@@ -166,12 +166,12 @@ class Database(object):
         for i in values:
             escaped.append(MySQLdb.escape_string(str(i)))
         escaped = tuple(escaped)
-        escapedQuery = query%escaped
-        escapedQuery = escapedQuery.replace(""" (, """,""" (""")
-        escapedQuery = escapedQuery.replace("""'NULL'""","""NULL""")
+        escapedQuery = query % escaped
+        escapedQuery = escapedQuery.replace(""" (, """, """ (""")
+        escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
         self.executeQuery(escapedQuery)
     
-    def storeMimetypeValues(self,table,columns,values):
+    def storeMimetypeValues(self, table, columns, values):
         """
         Inserts data into the specified table (supported_mimetypes).
 
@@ -181,9 +181,9 @@ class Database(object):
         """
         if not table or not columns or not values:
             raise ValueError('supported_mimetypes table, columns or values missing.')
-        query = """INSERT IGNORE INTO `"""+table+"""` ("""
+        query = """INSERT IGNORE INTO `""" + table + """` ("""
         for item in columns:
-            query += " `"+item+"`,"
+            query += " `" + item + "`,"
         query += """) VALUES ("""
         values = self._replace_values_(values)
         for item in values:
@@ -193,9 +193,9 @@ class Database(object):
         for i in values:
             escaped.append(MySQLdb.escape_string(str(i)))
         escaped = tuple(escaped)
-        escapedQuery = query%escaped
-        escapedQuery = escapedQuery.replace(""",)""",""")""")
-        escapedQuery = escapedQuery.replace("""'NULL'""","""NULL""")
+        escapedQuery = query % escaped
+        escapedQuery = escapedQuery.replace(""",)""", """)""")
+        escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
         self.executeQuery(escapedQuery)
         
     def _replace_values_(self, database_values):

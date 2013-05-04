@@ -25,16 +25,16 @@ import Image, ImageFile
 
 
 def i16(c):
-    return ord(c[1]) + (ord(c[0])<<8)
+    return ord(c[1]) + (ord(c[0]) << 8)
 
 def i32(c):
-    return ord(c[3]) + (ord(c[2])<<8) + (ord(c[1])<<16) + (ord(c[0])<<24)
+    return ord(c[3]) + (ord(c[2]) << 8) + (ord(c[1]) << 16) + (ord(c[0]) << 24)
 
 
 def _accept(prefix):
     return i16(prefix) == 474
 
-##
+# #
 # Image plugin for SGI images.
 
 class SgiImageFile(ImageFile.ImageFile):
@@ -72,13 +72,13 @@ class SgiImageFile(ImageFile.ImageFile):
         # decoder info
         if compression == 0:
             offset = 512
-            pagesize = self.size[0]*self.size[1]*layout[0]
+            pagesize = self.size[0] * self.size[1] * layout[0]
             self.tile = []
             for layer in self.mode:
-                self.tile.append(("raw", (0,0)+self.size, offset, (layer,0,-1)))
+                self.tile.append(("raw", (0, 0) + self.size, offset, (layer, 0, -1)))
                 offset = offset + pagesize
         elif compression == 1:
-            self.tile = [("sgi_rle", (0,0)+self.size, 512, (self.mode, 0, -1))]
+            self.tile = [("sgi_rle", (0, 0) + self.size, 512, (self.mode, 0, -1))]
 
 #
 # registry
@@ -89,4 +89,4 @@ Image.register_extension("SGI", ".bw")
 Image.register_extension("SGI", ".rgb")
 Image.register_extension("SGI", ".rgba")
 
-Image.register_extension("SGI", ".sgi") # really?
+Image.register_extension("SGI", ".sgi")  # really?

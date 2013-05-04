@@ -404,7 +404,7 @@ def peakgain_list(id3, key):
 for frameid, key in {
     "TALB": "album",
     "TBPM": "bpm",
-    "TCMP": "compilation", # iTunes extension
+    "TCMP": "compilation",  # iTunes extension
     "TCOM": "composer",
     "TCOP": "copyright",
     "TENC": "encodedby",
@@ -422,9 +422,9 @@ for frameid, key in {
     "TPUB": "organization",
     "TRCK": "tracknumber",
     "TOLY": "author",
-    "TSO2": "albumartistsort", # iTunes extension
+    "TSO2": "albumartistsort",  # iTunes extension
     "TSOA": "albumsort",
-    "TSOC": "composersort", # iTunes extension
+    "TSOC": "composersort",  # iTunes extension
     "TSOP": "artistsort",
     "TSOT": "titlesort",
     "TSRC": "isrc",

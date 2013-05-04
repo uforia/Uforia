@@ -32,7 +32,7 @@ class MetaDataBlockHeader(object):
         self.last_before_audio = bool(unpacked >> 31)
         self.type = (unpacked >> 24) & 0x7f
         self.size = unpacked & 0xffffff
-        self.valid = self.type != 0x7f #invalid type
+        self.valid = self.type != 0x7f  # invalid type
 
     def data(self):
         self.file.seek(self.offset + self.HEADER_SIZE)
@@ -75,7 +75,7 @@ class FLAC(object):
             fp.seek(0, 0)
             try:
                 self._read(fp)
-            except Exception: #The unpack error doesn't seem to have a class. I have to catch all here
+            except Exception:  # The unpack error doesn't seem to have a class. I have to catch all here
                 self._empty()
 
     def _empty(self):

@@ -45,11 +45,11 @@ class Tag(core.Tag):
         self.clear()
 
     def clear(self):
-        ## ID3 tag header
+        # # ID3 tag header
         self.header = TagHeader()
-        ## Optional extended header in v2 tags.
+        # # Optional extended header in v2 tags.
         self.extended_header = ExtendedTagHeader()
-        ## Contains the tag's frames. ID3v1 fields are read and converted
+        # # Contains the tag's frames. ID3v1 fields are read and converted
         #  the the corresponding v2 frame.
         self.frame_set = frames.FrameSet()
         self._comments = CommentsAccessor(self.frame_set)
@@ -94,7 +94,7 @@ class Tag(core.Tag):
                     self.extended_header = None
 
             if tag_found and self.isV2():
-                self.file_info.tag_size = (TagHeader.SIZE +
+                self.file_info.tag_size = (TagHeader.SIZE + 
                                            self.header.tag_size)
         finally:
             if close_file:
@@ -102,7 +102,7 @@ class Tag(core.Tag):
 
         return tag_found
 
-    ## returns (tag_found, padding_len)
+    # # returns (tag_found, padding_len)
     def _loadV2Tag(self, fp):
         padding = 0
         # Look for a tag and if found load it.
@@ -203,10 +203,10 @@ class Tag(core.Tag):
     def version(self, v):
         self.header.version = v
 
-    ## Test ID3 major version for v1.x
+    # # Test ID3 major version for v1.x
     def isV1(self):
         return self.header.major_version == 1
-    ## Test ID3 major version for v2.x
+    # # Test ID3 major version for v2.x
     def isV2(self):
         return self.header.major_version == 2
 
@@ -841,7 +841,7 @@ class Tag(core.Tag):
 
         # Render the tag header.
         total_size = pending_size + padding_size
-        log.debug("Rendering %s tag header with size %d" %
+        log.debug("Rendering %s tag header with size %d" % 
                   (versionToString(version),
                    total_size - TagHeader.SIZE))
         header_data = self.header.render(total_size - TagHeader.SIZE)
@@ -972,12 +972,12 @@ class Tag(core.Tag):
                         converted_frames.append(DateFrame("TYER",
                                                           unicode(date.year)))
                         if None not in (date.month, date.day):
-                            date_str = u"%s%s" %\
+                            date_str = u"%s%s" % \
                                     (str(date.day).rjust(2, "0"),
                                      str(date.month).rjust(2, "0"))
                             converted_frames.append(TextFrame("TDAT", date_str))
                         if None not in (date.hour, date.minute):
-                            date_str = u"%s%s" %\
+                            date_str = u"%s%s" % \
                                     (str(date.hour).rjust(2, "0"),
                                      str(date.minute).rjust(2, "0"))
                             converted_frames.append(TextFrame("TIME", date_str))
@@ -995,7 +995,7 @@ class Tag(core.Tag):
 
             # All other date frames have no conversion
             for fid in date_frames:
-                log.warning("%s frame being dropped due to conversion to %s" %
+                log.warning("%s frame being dropped due to conversion to %s" % 
                             (fid, versionToString(version)))
                 flist.remove(date_frames[fid])
 
@@ -1042,7 +1042,7 @@ class Tag(core.Tag):
             with open(filename, "rb") as tag_file:
                 found = tag.parse(tag_file, ID3_V2)
                 if found:
-                    log.debug("Removing ID3 %s tag" %
+                    log.debug("Removing ID3 %s tag" % 
                               versionToString(tag.version))
                     tag_file.seek(tag.file_info.tag_size)
 
@@ -1068,7 +1068,7 @@ class Tag(core.Tag):
         return self._tocs
 
 
-##
+# #
 # This class is for storing information about a parsed file. It containts info
 # such as the filename, original tag size, and amount of padding all of which
 # can make rewriting faster.
@@ -1084,7 +1084,7 @@ class FileInfo:
             except UnicodeDecodeError:
                 # Work around the local encoding not matching that of a mounted
                 # filesystem
-                log.warning(u"Mismatched file system encoding for file '%s'" %
+                log.warning(u"Mismatched file system encoding for file '%s'" % 
                             file_name)
                 self.name = file_name
 

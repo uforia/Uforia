@@ -76,7 +76,7 @@ from types import IntType, StringType, TupleType
 
 try:
     UnicodeStringType = type(unicode(""))
-    ##
+    # #
     # (Internal) Checks if an object is a string.  If the current
     # Python version supports Unicode, this checks for both 8-bit
     # and Unicode strings.
@@ -86,19 +86,19 @@ except NameError:
     def isStringType(t):
         return isinstance(t, StringType)
 
-##
+# #
 # (Internal) Checks if an object is a tuple.
 
 def isTupleType(t):
     return isinstance(t, TupleType)
 
-##
+# #
 # (Internal) Checks if an object is an image object.
 
 def isImageType(t):
     return hasattr(t, "im")
 
-##
+# #
 # (Internal) Checks if an object is a string, and that it points to a
 # directory.
 
@@ -134,16 +134,16 @@ MESH = 4
 # resampling filters
 NONE = 0
 NEAREST = 0
-ANTIALIAS = 1 # 3-lobed lanczos
+ANTIALIAS = 1  # 3-lobed lanczos
 LINEAR = BILINEAR = 2
 CUBIC = BICUBIC = 3
 
 # dithers
 NONE = 0
 NEAREST = 0
-ORDERED = 1 # Not yet implemented
-RASTERIZE = 2 # Not yet implemented
-FLOYDSTEINBERG = 3 # default
+ORDERED = 1  # Not yet implemented
+RASTERIZE = 2  # Not yet implemented
+FLOYDSTEINBERG = 3  # default
 
 # palettes/quantizers
 WEB = 0
@@ -204,7 +204,7 @@ else:
 
 _MODE_CONV = {
     # official modes
-    "1": ('|b1', None), # broken
+    "1": ('|b1', None),  # broken
     "L": ('|u1', None),
     "I": (_ENDIAN + 'i4', None),
     "F": (_ENDIAN + 'f4', None),
@@ -222,7 +222,7 @@ def _conv_type_shape(im):
     if extra is None:
         return shape, typ
     else:
-        return shape+(extra,), typ
+        return shape + (extra,), typ
 
 
 MODES = _MODEINFO.keys()
@@ -232,7 +232,7 @@ MODES.sort()
 # may have to modify the stride calculation in map.c too!
 _MAPMODES = ("L", "P", "RGBX", "RGBA", "CMYK", "I;16", "I;16L", "I;16B")
 
-##
+# #
 # Gets the "base" mode for given mode.  This function returns "L" for
 # images that contain grayscale data, and "RGB" for images that
 # contain color data.
@@ -244,7 +244,7 @@ _MAPMODES = ("L", "P", "RGBX", "RGBA", "CMYK", "I;16", "I;16L", "I;16B")
 def getmodebase(mode):
     return ImageMode.getmode(mode).basemode
 
-##
+# #
 # Gets the storage type mode.  Given a mode, this function returns a
 # single-layer mode suitable for storing individual bands.
 #
@@ -255,7 +255,7 @@ def getmodebase(mode):
 def getmodetype(mode):
     return ImageMode.getmode(mode).basetype
 
-##
+# #
 # Gets a list of individual band names.  Given a mode, this function
 # returns a tuple containing the names of individual bands (use
 # {@link #getmodetype} to get the mode used to store each individual
@@ -269,7 +269,7 @@ def getmodetype(mode):
 def getmodebandnames(mode):
     return ImageMode.getmode(mode).bands
 
-##
+# #
 # Gets the number of individual bands for this mode.
 #
 # @param mode Input mode.
@@ -284,7 +284,7 @@ def getmodebands(mode):
 
 _initialized = 0
 
-##
+# #
 # Explicitly loads standard file format drivers.
 
 def preinit():
@@ -321,7 +321,7 @@ def preinit():
 
     _initialized = 1
 
-##
+# #
 # Explicitly initializes the Python Imaging Library.  This function
 # loads all available file format drivers.
 
@@ -414,14 +414,14 @@ def _getscaleoffset(expr):
     stub = ["stub"]
     data = expr(_E(stub)).data
     try:
-        (a, b, c) = data # simplified syntax
+        (a, b, c) = data  # simplified syntax
         if (a is stub and b == "__mul__" and isNumberType(c)):
             return c, 0.0
         if (a is stub and b == "__add__" and isNumberType(c)):
             return 1.0, c
     except TypeError: pass
     try:
-        ((a, b, c), d, e) = data # full syntax
+        ((a, b, c), d, e) = data  # full syntax
         if (a is stub and b == "__mul__" and isNumberType(c) and
             d == "__add__" and isNumberType(e)):
             return c, e
@@ -432,7 +432,7 @@ def _getscaleoffset(expr):
 # --------------------------------------------------------------------
 # Implementation wrapper
 
-##
+# #
 # This class represents an image object.  To create Image objects, use
 # the appropriate factory functions.  There's hardly ever any reason
 # to call the Image constructor directly.
@@ -474,7 +474,7 @@ class Image:
                 new.info[k] = v
         return new
 
-    _makeself = _new # compatibility
+    _makeself = _new  # compatibility
 
     def _copy(self):
         self.load()
@@ -511,7 +511,7 @@ class Image:
             return new
         raise AttributeError(name)
 
-    ##
+    # #
     # Returns a string containing pixel data.
     #
     # @param encoder_name What encoder to use.  The default is to
@@ -535,7 +535,7 @@ class Image:
         e = _getencoder(self.mode, encoder_name, args)
         e.setimage(self.im)
 
-        bufsize = max(65536, self.size[0] * 4) # see RawEncode.c
+        bufsize = max(65536, self.size[0] * 4)  # see RawEncode.c
 
         data = []
         while 1:
@@ -548,7 +548,7 @@ class Image:
 
         return string.join(data, "")
 
-    ##
+    # #
     # Returns the image converted to an X11 bitmap.  This method
     # only works for mode "1" images.
     #
@@ -564,10 +564,10 @@ class Image:
             raise ValueError("not a bitmap")
         data = self.tostring("xbm")
         return string.join(["#define %s_width %d\n" % (name, self.size[0]),
-                "#define %s_height %d\n"% (name, self.size[1]),
+                "#define %s_height %d\n" % (name, self.size[1]),
                 "static char %s_bits[] = {\n" % name, data, "};"], "")
 
-    ##
+    # #
     # Loads this image with pixel data from a string.
     # <p>
     # This method is similar to the {@link #fromstring} function, but
@@ -595,7 +595,7 @@ class Image:
         if s[1] != 0:
             raise ValueError("cannot decode image data")
 
-    ##
+    # #
     # Allocates storage for the image and loads the pixel data.  In
     # normal cases, you don't need to call this method, since the
     # Image class automatically loads an opened image when it is
@@ -617,7 +617,7 @@ class Image:
         if self.im:
             return self.im.pixel_access(self.readonly)
 
-    ##
+    # #
     # Verifies the contents of a file. For data read from a file, this
     # method attempts to determine if the file is broken, without
     # actually decoding the image data.  If this method finds any
@@ -629,7 +629,7 @@ class Image:
         "Verify file contents."
         pass
 
-    ##
+    # #
     # Returns a converted copy of this image. For the "P" mode, this
     # method translates pixels through the palette.  If mode is
     # omitted, a mode is chosen so that all information in the image
@@ -731,7 +731,7 @@ class Image:
         im = self.im.quantize(colors, method, kmeans)
         return self._new(im)
 
-    ##
+    # #
     # Copies this image. Use this method if you wish to paste things
     # into an image, but still retain the original.
     #
@@ -744,7 +744,7 @@ class Image:
         im = self.im.copy()
         return self._new(im)
 
-    ##
+    # #
     # Returns a rectangular region from this image. The box is a
     # 4-tuple defining the left, upper, right, and lower pixel
     # coordinate.
@@ -767,7 +767,7 @@ class Image:
         # lazy operation
         return _ImageCrop(self, box)
 
-    ##
+    # #
     # Configures the image file loader so it returns a version of the
     # image that as closely as possible matches the given mode and
     # size.  For example, you can use this method to convert a colour
@@ -791,7 +791,7 @@ class Image:
         self.load()
         return self._new(self.im.expand(xmargin, ymargin, 0))
 
-    ##
+    # #
     # Filters this image using the given filter.  For a list of
     # available filters, see the <b>ImageFilter</b> module.
     #
@@ -817,7 +817,7 @@ class Image:
             ims.append(self._new(filter.filter(self.im.getband(c))))
         return merge(self.mode, ims)
 
-    ##
+    # #
     # Returns a tuple containing the name of each band in this image.
     # For example, <b>getbands</b> on an RGB image returns ("R", "G", "B").
     #
@@ -828,7 +828,7 @@ class Image:
 
         return ImageMode.getmode(self.mode).bands
 
-    ##
+    # #
     # Calculates the bounding box of the non-zero regions in the
     # image.
     #
@@ -842,7 +842,7 @@ class Image:
         self.load()
         return self.im.getbbox()
 
-    ##
+    # #
     # Returns a list of colors used in this image.
     #
     # @param maxcolors Maximum number of colors.  If this number is
@@ -865,7 +865,7 @@ class Image:
             return out
         return self.im.getcolors(maxcolors)
 
-    ##
+    # #
     # Returns the contents of this image as a sequence object
     # containing pixel values.  The sequence object is flattened, so
     # that values for line one follow directly after the values of
@@ -881,15 +881,15 @@ class Image:
     #    value (e.g. 0 to get the "R" band from an "RGB" image).
     # @return A sequence-like object.
 
-    def getdata(self, band = None):
+    def getdata(self, band=None):
         "Get image data as sequence object."
 
         self.load()
         if band is not None:
             return self.im.getband(band)
-        return self.im # could be abused
+        return self.im  # could be abused
 
-    ##
+    # #
     # Gets the the minimum and maximum pixel values for each band in
     # the image.
     #
@@ -908,7 +908,7 @@ class Image:
             return tuple(extrema)
         return self.im.getextrema()
 
-    ##
+    # #
     # Returns a PyCObject that points to the internal image memory.
     #
     # @return A PyCObject object.
@@ -920,7 +920,7 @@ class Image:
         return self.im.ptr
 
 
-    ##
+    # #
     # Returns the image palette as a list.
     #
     # @return A list of color values [r, g, b, ...], or None if the
@@ -933,10 +933,10 @@ class Image:
         try:
             return map(ord, self.im.getpalette())
         except ValueError:
-            return None # no palette
+            return None  # no palette
 
 
-    ##
+    # #
     # Returns the pixel value at a given position.
     #
     # @param xy The coordinate, given as (x, y).
@@ -949,7 +949,7 @@ class Image:
         self.load()
         return self.im.getpixel(xy)
 
-    ##
+    # #
     # Returns the horizontal and vertical projection.
     #
     # @return Two sequences, indicating where there are non-zero
@@ -962,7 +962,7 @@ class Image:
         x, y = self.im.getprojection()
         return map(ord, x), map(ord, y)
 
-    ##
+    # #
     # Returns a histogram for the image. The histogram is returned as
     # a list of pixel counts, one for each pixel value in the source
     # image. If the image has more than one band, the histograms for
@@ -994,7 +994,7 @@ class Image:
             return self.im.histogram(extrema)
         return self.im.histogram()
 
-    ##
+    # #
     # (Deprecated) Returns a copy of the image where the data has been
     # offset by the given distances. Data wraps around the edges. If
     # yoffset is omitted, it is assumed to be equal to xoffset.
@@ -1017,7 +1017,7 @@ class Image:
         import ImageChops
         return ImageChops.offset(self, xoffset, yoffset)
 
-    ##
+    # #
     # Pastes another image into this image. The box argument is either
     # a 2-tuple giving the upper left corner, a 4-tuple defining the
     # left, upper, right, and lower pixel coordinate, or None (same as
@@ -1078,7 +1078,7 @@ class Image:
                 raise ValueError(
                     "cannot determine region size; use 4-item box"
                     )
-            box = box + (box[0]+size[0], box[1]+size[1])
+            box = box + (box[0] + size[0], box[1] + size[1])
 
         if isStringType(im):
             import ImageColor
@@ -1102,7 +1102,7 @@ class Image:
         else:
             self.im.paste(im, box)
 
-    ##
+    # #
     # Maps this image through a lookup table or function.
     #
     # @param lut A lookup table, containing 256 values per band in the
@@ -1138,7 +1138,7 @@ class Image:
 
         return self._new(self.im.point(lut, mode))
 
-    ##
+    # #
     # Adds or replaces the alpha layer in this image.  If the image
     # does not have an alpha layer, it's converted to "LA" or "RGBA".
     # The new layer must be either "L" or "1".
@@ -1164,7 +1164,7 @@ class Image:
                     # do things the hard way
                     im = self.im.convert(mode)
                     if im.mode not in ("LA", "RGBA"):
-                        raise ValueError # sanity check
+                        raise ValueError  # sanity check
                     self.im = im
                 self.mode = self.im.mode
             except (KeyError, ValueError):
@@ -1194,7 +1194,7 @@ class Image:
 
         self.im.putband(alpha.im, band)
 
-    ##
+    # #
     # Copies pixel data to this image.  This method copies data from a
     # sequence object into the image, starting at the upper left
     # corner (0, 0), and continuing until either the image or the
@@ -1214,7 +1214,7 @@ class Image:
 
         self.im.putdata(data, scale, offset)
 
-    ##
+    # #
     # Attaches a palette to this image.  The image must be a "P" or
     # "L" image, and the palette sequence must contain 768 integer
     # values, where each group of three values represent the red,
@@ -1240,9 +1240,9 @@ class Image:
         self.mode = "P"
         self.palette = palette
         self.palette.mode = "RGB"
-        self.load() # install new palette
+        self.load()  # install new palette
 
-    ##
+    # #
     # Modifies the pixel at the given position. The colour is given as
     # a single numerical value for single-band images, and a tuple for
     # multi-band images.
@@ -1266,7 +1266,7 @@ class Image:
 
         return self.im.putpixel(xy, value)
 
-    ##
+    # #
     # Returns a resized copy of this image.
     #
     # @def resize(size, filter=NEAREST)
@@ -1303,7 +1303,7 @@ class Image:
 
         return self._new(im)
 
-    ##
+    # #
     # Returns a rotated copy of this image.  This method returns a
     # copy of this image, rotated the given number of degrees counter
     # clockwise around its centre.
@@ -1330,10 +1330,10 @@ class Image:
             angle = -angle * math.pi / 180
             matrix = [
                  math.cos(angle), math.sin(angle), 0.0,
-                -math.sin(angle), math.cos(angle), 0.0
+                - math.sin(angle), math.cos(angle), 0.0
                  ]
             def transform(x, y, (a, b, c, d, e, f)=matrix):
-                return a*x + b*y + c, d*x + e*y + f
+                return a * x + b * y + c, d * x + e * y + f
 
             # calculate output size
             w, h = self.size
@@ -1363,7 +1363,7 @@ class Image:
 
         return self._new(self.im.rotate(angle, resample))
 
-    ##
+    # #
     # Saves this image under the given filename.  If no format is
     # specified, the format to use is determined from the filename
     # extension, if possible.
@@ -1420,13 +1420,13 @@ class Image:
                 try:
                     format = EXTENSION[ext]
                 except KeyError:
-                    raise KeyError(ext) # unknown extension
+                    raise KeyError(ext)  # unknown extension
 
         try:
             save_handler = SAVE[string.upper(format)]
         except KeyError:
             init()
-            save_handler = SAVE[string.upper(format)] # unknown format
+            save_handler = SAVE[string.upper(format)]  # unknown format
 
         if isStringType(fp):
             import __builtin__
@@ -1442,7 +1442,7 @@ class Image:
             if close:
                 fp.close()
 
-    ##
+    # #
     # Seeks to the given frame in this sequence file. If you seek
     # beyond the end of the sequence, the method raises an
     # <b>EOFError</b> exception. When a sequence file is opened, the
@@ -1463,7 +1463,7 @@ class Image:
         if frame != 0:
             raise EOFError
 
-    ##
+    # #
     # Displays this image. This method is mainly intended for
     # debugging purposes.
     # <p>
@@ -1482,7 +1482,7 @@ class Image:
 
         _show(self, title=title, command=command)
 
-    ##
+    # #
     # Split this image into individual bands. This method returns a
     # tuple of individual image bands from an image. For example,
     # splitting an "RGB" image creates three new images each
@@ -1503,7 +1503,7 @@ class Image:
                 ims.append(self._new(self.im.getband(i)))
         return tuple(ims)
 
-    ##
+    # #
     # Returns the current frame number.
     #
     # @return Frame number, starting with 0.
@@ -1514,7 +1514,7 @@ class Image:
 
         return 0
 
-    ##
+    # #
     # Make this image into a thumbnail.  This method modifies the
     # image to contain a thumbnail version of itself, no larger than
     # the given size.  This method calculates an appropriate thumbnail
@@ -1563,7 +1563,7 @@ class Image:
         except ValueError:
             if resample != ANTIALIAS:
                 raise
-            im = self.resize(size, NEAREST) # fallback
+            im = self.resize(size, NEAREST)  # fallback
 
         self.im = im.im
         self.mode = im.mode
@@ -1574,7 +1574,7 @@ class Image:
     # FIXME: the different tranform methods need further explanation
     # instead of bloating the method docs, add a separate chapter.
 
-    ##
+    # #
     # Transforms this image.  This method creates a new image with the
     # given size, and the same mode as the original, and copies data
     # to the new image using the given transform.
@@ -1612,7 +1612,7 @@ class Image:
             for box, quad in data:
                 im.__transformer(box, self, QUAD, quad, resample, fill)
         else:
-            im.__transformer((0, 0)+size, self, method, data, resample, fill)
+            im.__transformer((0, 0) + size, self, method, data, resample, fill)
 
         return im
 
@@ -1621,8 +1621,8 @@ class Image:
 
         # FIXME: this should be turned into a lazy operation (?)
 
-        w = box[2]-box[0]
-        h = box[3]-box[1]
+        w = box[2] - box[0]
+        h = box[3] - box[1]
 
         if method == AFFINE:
             # change argument order to match implementation
@@ -1634,7 +1634,7 @@ class Image:
             xs = float(x1 - x0) / w
             ys = float(y1 - y0) / h
             method = AFFINE
-            data = (x0 + xs/2, xs, 0, y0 + ys/2, 0, ys)
+            data = (x0 + xs / 2, xs, 0, y0 + ys / 2, 0, ys)
         elif method == PERSPECTIVE:
             # change argument order to match implementation
             data = (data[2], data[0], data[1],
@@ -1645,10 +1645,10 @@ class Image:
             # given as NW, SW, SE, and NE.
             nw = data[0:2]; sw = data[2:4]; se = data[4:6]; ne = data[6:8]
             x0, y0 = nw; As = 1.0 / w; At = 1.0 / h
-            data = (x0, (ne[0]-x0)*As, (sw[0]-x0)*At,
-                    (se[0]-sw[0]-ne[0]+x0)*As*At,
-                    y0, (ne[1]-y0)*As, (sw[1]-y0)*At,
-                    (se[1]-sw[1]-ne[1]+y0)*As*At)
+            data = (x0, (ne[0] - x0) * As, (sw[0] - x0) * At,
+                    (se[0] - sw[0] - ne[0] + x0) * As * At,
+                    y0, (ne[1] - y0) * As, (sw[1] - y0) * At,
+                    (se[1] - sw[1] - ne[1] + y0) * As * At)
         else:
             raise ValueError("unknown transformation method")
 
@@ -1664,7 +1664,7 @@ class Image:
 
         self.im.transform2(box, image.im, method, data, resample, fill)
 
-    ##
+    # #
     # Returns a flipped or rotated copy of this image.
     #
     # @param method One of <b>FLIP_LEFT_RIGHT</b>, <b>FLIP_TOP_BOTTOM</b>,
@@ -1693,7 +1693,7 @@ class _ImageCrop(Image):
             y1 = y0
 
         self.mode = im.mode
-        self.size = x1-x0, y1-y0
+        self.size = x1 - x0, y1 - y0
 
         self.__crop = x0, y0, x1, y1
 
@@ -1734,7 +1734,7 @@ def _wedge():
 
     return Image()._new(core.wedge("L"))
 
-##
+# #
 # Creates a new image with the given mode and size.
 #
 # @param mode The mode to use for the new image.
@@ -1762,7 +1762,7 @@ def new(mode, size, color=0):
 
     return Image()._new(core.fill(mode, size, color))
 
-##
+# #
 # Creates an image memory from pixel data in a string.
 # <p>
 # In its simplest form, this function takes three arguments
@@ -1797,7 +1797,7 @@ def fromstring(mode, size, data, decoder_name="raw", *args):
     im.fromstring(data, decoder_name, args)
     return im
 
-##
+# #
 # (New in 1.1.4) Creates an image memory from pixel data in a string
 # or byte buffer.
 # <p>
@@ -1846,9 +1846,9 @@ def frombuffer(mode, size, data, decoder_name="raw", *args):
                     "  frombuffer(mode, size, data, 'raw', mode, 0, 1)",
                     RuntimeWarning, stacklevel=2
                 )
-            args = mode, 0, -1 # may change to (mode, 0, 1) post-1.1.6
+            args = mode, 0, -1  # may change to (mode, 0, 1) post-1.1.6
         if args[0] in _MAPMODES:
-            im = new(mode, (1,1))
+            im = new(mode, (1, 1))
             im = im._new(
                 core.map_buffer(data, size, decoder_name, None, 0, args)
                 )
@@ -1858,7 +1858,7 @@ def frombuffer(mode, size, data, decoder_name="raw", *args):
     return fromstring(mode, size, data, decoder_name, args)
 
 
-##
+# #
 # (New in 1.1.6) Creates an image memory from an object exporting
 # the array interface (using the buffer protocol).
 #
@@ -1923,7 +1923,7 @@ _fromarray_typemap = {
 _fromarray_typemap[((1, 1), _ENDIAN + "i4")] = ("I", "I")
 _fromarray_typemap[((1, 1), _ENDIAN + "f4")] = ("F", "F")
 
-##
+# #
 # Opens and identifies the given image file.
 # <p>
 # This is a lazy operation; this function identifies the file, but the
@@ -1982,7 +1982,7 @@ def open(fp, mode="r"):
 #
 # Image processing.
 
-##
+# #
 # Creates a new image by interpolating between two input images, using
 # a constant alpha.
 #
@@ -2007,7 +2007,7 @@ def blend(im1, im2, alpha):
     im2.load()
     return im1._new(core.blend(im1.im, im2.im, alpha))
 
-##
+# #
 # Creates a new image by interpolating between two input images,
 # using the mask as alpha.
 #
@@ -2025,7 +2025,7 @@ def composite(image1, image2, mask):
     image.paste(image1, None, mask)
     return image
 
-##
+# #
 # Applies the function (which should take one argument) to each pixel
 # in the given image. If the image has more than one band, the same
 # function is applied to each band. Note that the function is
@@ -2042,7 +2042,7 @@ def eval(image, *args):
 
     return image.point(args[0])
 
-##
+# #
 # Creates a new image from a number of single-band images.
 #
 # @param mode The mode to use for the output image.
@@ -2070,7 +2070,7 @@ def merge(mode, bands):
 # --------------------------------------------------------------------
 # Plugin registry
 
-##
+# #
 # Register an image file plugin.  This function should not be used
 # in application code.
 #
@@ -2084,7 +2084,7 @@ def register_open(id, factory, accept=None):
     ID.append(id)
     OPEN[id] = factory, accept
 
-##
+# #
 # Registers an image MIME type.  This function should not be used
 # in application code.
 #
@@ -2094,7 +2094,7 @@ def register_open(id, factory, accept=None):
 def register_mime(id, mimetype):
     MIME[string.upper(id)] = mimetype
 
-##
+# #
 # Registers an image save function.  This function should not be
 # used in application code.
 #
@@ -2104,7 +2104,7 @@ def register_mime(id, mimetype):
 def register_save(id, driver):
     SAVE[string.upper(id)] = driver
 
-##
+# #
 # Registers an image extension.  This function should not be
 # used in application code.
 #

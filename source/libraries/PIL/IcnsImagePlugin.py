@@ -77,7 +77,7 @@ def read_mk(fobj, (start, length), size):
     # Alpha masks seem to be uncompressed
     fobj.seek(start)
     band = Image.frombuffer(
-        "L", size, fobj.read(size[0]*size[1]), "raw", "L", 0, 1
+        "L", size, fobj.read(size[0] * size[1]), "raw", "L", 0, 1
         )
     return {"A": band}
 
@@ -160,7 +160,7 @@ class IcnsFile:
             pass
         return im
 
-##
+# #
 # Image plugin for Mac OS icons.
 
 class IcnsImageFile(ImageFile.ImageFile):

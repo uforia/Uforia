@@ -15,7 +15,7 @@
 
 import string
 
-##
+# #
 # File handler for Teragon-style palette files.
 
 class PaletteFile:

@@ -33,7 +33,7 @@ import ctypes
 import sys
 
 try:
-	is_64 = sys.maxsize > 2**32
+	is_64 = sys.maxsize > 2 ** 32
 except AttributeError:
 	is_64 = False
 
@@ -120,11 +120,11 @@ _typeconv = {
 	'int64_t *' : ctypes.c_void_p,
 	'double' : ctypes.c_double,
 	'double *' : ctypes.c_void_p,
-	'bool' : ctypes.c_int, # c_bool only defined in 2.6+
+	'bool' : ctypes.c_int,  # c_bool only defined in 2.6+
 	'bool *' : ctypes.c_void_p,
 }
 
-def _convert_type( t ):
+def _convert_type(t):
 	"""
 	Convert a C type into ctype type
 	"""
@@ -133,7 +133,7 @@ def _convert_type( t ):
 	except KeyError:
 		raise Exception("Type conversion from %s to ctypes type has not been defined" % t)
 
-def _convert_args( argtypes ):
+def _convert_args(argtypes):
 	"""
 	Convert the type for each argument in argtypes
 	"""
@@ -150,20 +150,20 @@ def _convert_args( argtypes ):
 		else:
 			del arg[-1]
 
-		arg =  " ".join(arg)
-		tmp.append( _convert_type( arg ) )
+		arg = " ".join(arg)
+		tmp.append(_convert_type(arg))
 	return tmp
 
 
-def define_function_types( exempi ):
+def define_function_types(exempi):
 	"""
 	Take ctypes exempi library and set proper return/argument types.
 	"""
 	for func, functypes in _function_types.items():
-		res = _convert_type( functypes['restype'] )
-		args = _convert_args( functypes['argstypes'] )
-		if hasattr( exempi, func ):
+		res = _convert_type(functypes['restype'])
+		args = _convert_args(functypes['argstypes'])
+		if hasattr(exempi, func):
 			if res:
-				getattr( exempi, func ).restype = res
+				getattr(exempi, func).restype = res
 			if args:
-				getattr( exempi, func ).argtypes = args
+				getattr(exempi, func).argtypes = args

@@ -171,9 +171,9 @@ class Element(html5lib.treebuilders._base.Node):
     def insertBefore(self, node, refNode):
         index = self.element.index(refNode.element)
         if (node.element.__class__ == NavigableString and self.element.contents
-            and self.element.contents[index-1].__class__ == NavigableString):
+            and self.element.contents[index - 1].__class__ == NavigableString):
             # (See comments in appendChild)
-            old_node = self.element.contents[index-1]
+            old_node = self.element.contents[index - 1]
             new_str = self.soup.new_string(old_node + node.element)
             old_node.replace_with(new_str)
         else:
@@ -197,7 +197,7 @@ class Element(html5lib.treebuilders._base.Node):
     def cloneNode(self):
         tag = self.soup.new_tag(self.element.name, self.namespace)
         node = Element(tag, self.soup, self.namespace)
-        for key,value in self.attributes:
+        for key, value in self.attributes:
             node.attributes[key] = value
         return node
 

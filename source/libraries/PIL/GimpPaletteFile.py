@@ -16,7 +16,7 @@
 
 import re, string
 
-##
+# #
 # File handler for GIMP's palette format.
 
 class GimpPaletteFile:
@@ -25,7 +25,7 @@ class GimpPaletteFile:
 
     def __init__(self, fp):
 
-        self.palette = map(lambda i: chr(i)*3, range(256))
+        self.palette = map(lambda i: chr(i) * 3, range(256))
 
         if fp.readline()[:12] != "GIMP Palette":
             raise SyntaxError, "not a GIMP palette file"

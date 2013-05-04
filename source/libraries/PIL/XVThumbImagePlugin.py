@@ -27,9 +27,9 @@ PALETTE = ""
 for r in range(8):
     for g in range(8):
         for b in range(4):
-            PALETTE = PALETTE + (chr((r*255)/7)+chr((g*255)/7)+chr((b*255)/3))
+            PALETTE = PALETTE + (chr((r * 255) / 7) + chr((g * 255) / 7) + chr((b * 255) / 3))
 
-##
+# #
 # Image plugin for XV thumbnail images.
 
 class XVThumbImageFile(ImageFile.ImageFile):
@@ -64,7 +64,7 @@ class XVThumbImageFile(ImageFile.ImageFile):
         self.palette = ImagePalette.raw("RGB", PALETTE)
 
         self.tile = [
-            ("raw", (0, 0)+self.size,
+            ("raw", (0, 0) + self.size,
              self.fp.tell(), (self.mode, 0, 1)
              )]
 

@@ -33,10 +33,10 @@ def loadLibrary(foldername, filename, apiversion=None):
         extension += '.' + str(apiversion)
 
     path = './libraries/{foldername}/bin-{arch}-{os}/{filename}{ext}'.format(
-        foldername = foldername,
-        arch = architecture,
-        os = os,
-        filename = filename,
-        ext = extension
+        foldername=foldername,
+        arch=architecture,
+        os=os,
+        filename=filename,
+        ext=extension
     )
     return ctypes.cdll.LoadLibrary(path)

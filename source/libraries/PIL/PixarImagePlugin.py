@@ -27,12 +27,12 @@ import Image, ImageFile
 # helpers
 
 def i16(c):
-    return ord(c[0]) + (ord(c[1])<<8)
+    return ord(c[0]) + (ord(c[1]) << 8)
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
-##
+# #
 # Image plugin for PIXAR raster images.
 
 class PixarImageFile(ImageFile.ImageFile):
@@ -60,7 +60,7 @@ class PixarImageFile(ImageFile.ImageFile):
         # FIXME: to be continued...
 
         # create tile descriptor (assuming "dumped")
-        self.tile = [("raw", (0,0)+self.size, 1024, (self.mode, 0, 1))]
+        self.tile = [("raw", (0, 0) + self.size, 1024, (self.mode, 0, 1))]
 
 #
 # --------------------------------------------------------------------

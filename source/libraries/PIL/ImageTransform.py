@@ -25,7 +25,7 @@ class Transform(Image.ImageTransformHandler):
         method, data = self.getdata()
         return image.transform(size, method, data, **options)
 
-##
+# #
 # Define an affine image transform.
 # <p>
 # This function takes a 6-tuple (<i>a, b, c, d, e, f</i>) which
@@ -46,7 +46,7 @@ class Transform(Image.ImageTransformHandler):
 class AffineTransform(Transform):
     method = Image.AFFINE
 
-##
+# #
 # Define a transform to extract a subregion from an image.
 # <p>
 # Maps a rectangle (defined by two corners) from the image to a
@@ -68,7 +68,7 @@ class AffineTransform(Transform):
 class ExtentTransform(Transform):
     method = Image.EXTENT
 
-##
+# #
 # Define an quad image transform.
 # <p>
 # Maps a quadrilateral (a region defined by four corners) from the
@@ -83,7 +83,7 @@ class ExtentTransform(Transform):
 class QuadTransform(Transform):
     method = Image.QUAD
 
-##
+# #
 # Define an mesh image transform.  A mesh transform consists of one
 # or more individual quad transforms.
 #

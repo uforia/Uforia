@@ -57,7 +57,7 @@ def bytes2bin(bytes, sz=8):
     return retVal
 
 
-## Convert an array of bits (MSB first) into a string of characters.
+# # Convert an array of bits (MSB first) into a string of characters.
 def bin2bytes(x):
     bits = []
     bits.extend(x)
@@ -128,7 +128,7 @@ def bin2synchsafe(x):
     '''Convert ``x``, a list of bits (MSB first), to a synch safe list of bits.
     (section 6.2 of the ID3 2.4 spec).'''
     n = bin2dec(x)
-    if len(x) > 32 or n > 268435456:   # 2^28
+    if len(x) > 32 or n > 268435456:  # 2^28
         raise ValueError("Invalid value: %s" % str(x))
     elif len(x) < 8:
         return x
@@ -136,8 +136,8 @@ def bin2synchsafe(x):
     bites = ""
     bites += chr((n >> 21) & 0x7f)
     bites += chr((n >> 14) & 0x7f)
-    bites += chr((n >>  7) & 0x7f)
-    bites += chr((n >>  0) & 0x7f)
+    bites += chr((n >> 7) & 0x7f)
+    bites += chr((n >> 0) & 0x7f)
     bits = bytes2bin(bites)
     assert(len(bits) == 32)
 

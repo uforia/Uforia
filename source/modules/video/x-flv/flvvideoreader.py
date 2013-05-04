@@ -4,7 +4,7 @@ Created on 19 mrt. 2013
 @author: Ramon
 '''
 
-#TABLE: Signature:LONGTEXT, Version:INT, TypeFlags:INT, DataOffSet:INT, ExtraDataLen:INT, ExtraData:INT
+# TABLE: Signature:LONGTEXT, Version:INT, TypeFlags:INT, DataOffSet:INT, ExtraDataLen:INT, ExtraData:INT
 
 import sys, imp, traceback, os
 import flvlib

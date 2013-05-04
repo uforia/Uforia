@@ -12,12 +12,12 @@
 # See the README file for information on usage and redistribution.
 #
 
-##
+# #
 # This module provides constants and clear-text names for various
 # well-known TIFF tags.
-##
+# #
 
-##
+# #
 # Map tag numbers (or tag number, tag value tuples) to tag names.
 
 TAGS = {
@@ -46,8 +46,8 @@ TAGS = {
     (262, 5): "CMYK",
     (262, 6): "YCbCr",
     (262, 8): "CieLAB",
-    (262, 32803): "CFA", # TIFF/EP, Adobe DNG
-    (262, 32892): "LinearRaw", # Adobe DNG
+    (262, 32803): "CFA",  # TIFF/EP, Adobe DNG
+    (262, 32892): "LinearRaw",  # Adobe DNG
 
     263: "Thresholding",
     264: "CellWidth",
@@ -188,7 +188,7 @@ TAGS = {
     50741: "MakerNoteSafety",
 }
 
-##
+# #
 # Map type numbers to type names.
 
 TYPES = {

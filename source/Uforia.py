@@ -4,11 +4,11 @@
 import os, multiprocessing, imp, curses, sys, platform, traceback, site, subprocess, ctypes
 
 # Loading of Uforia modules is deferred until run() is called
-config      = None
-File        = None
-magic       = None
-modules     = None
-database    = None
+config = None
+File = None
+magic = None
+modules = None
+database = None
 
 def dbworker(dbqueue, db=None):
     """
@@ -25,9 +25,9 @@ def dbworker(dbqueue, db=None):
         db = database.Database(config)
 
     while True:
-        table,hashid,columns,values = dbqueue.get()
+        table, hashid, columns, values = dbqueue.get()
         if table != "No more tasks":
-            db.store(table,hashid,columns,values)
+            db.store(table, hashid, columns, values)
             dbqueue.task_done()
         else:
             break
@@ -52,11 +52,11 @@ def monitorworker(monitorqueue):
         val = monitorqueue.get()
         if val != None:
             stdscr.clear()
-            stdscr.addstr(0,0,"=== Uforia ===")
-            stdscr.addstr(2,0,"Examining:")
-            stdscr.addstr(2,20,str(val))
+            stdscr.addstr(0, 0, "=== Uforia ===")
+            stdscr.addstr(2, 0, "Examining:")
+            stdscr.addstr(2, 20, str(val))
             if config.DEBUG:
-                stdscr.addstr(24,0,"Warning: console output will be severely mangled with debug enabled.")
+                stdscr.addstr(24, 0, "Warning: console output will be severely mangled with debug enabled.")
             stdscr.clrtoeol()
             stdscr.refresh()
             monitorqueue.task_done()
@@ -81,12 +81,12 @@ def writeToMimeTypesTable(table, columns, values, db=None):
     if db == None:
         db = database.Database(config)
 
-    db.storeMimetypeValues(table,columns,values)
+    db.storeMimetypeValues(table, columns, values)
 
     db.connection.commit()
     db.connection.close()
 
-def fileScanner(dir,consumers,dbqueue,monitorqueue,uforiamodules,config):
+def fileScanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
     """
     Walks through the specified directory tree to find all files. Each
     file is passed through fileProcessor, which is called asynchronously
@@ -100,18 +100,18 @@ def fileScanner(dir,consumers,dbqueue,monitorqueue,uforiamodules,config):
     """
     try:
         if config.DEBUG:
-            print("Starting in directory "+dir+"...")
+            print("Starting in directory " + dir + "...")
             print("Starting filescanner...")
         hashid = config.STARTING_HASHID
-        filelist=[]
+        filelist = []
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
-                fullpath = os.path.join(root,name)
-                filelist.append((fullpath,hashid))
+                fullpath = os.path.join(root, name)
+                filelist.append((fullpath, hashid))
                 hashid += 1;
         config.STARTING_HASHID = hashid
         try:
-            consumermap = [ (item,dbqueue,monitorqueue,uforiamodules,config) for item in filelist ]
+            consumermap = [ (item, dbqueue, monitorqueue, uforiamodules, config) for item in filelist ]
             result = consumers.map_async(fileProcessor, consumermap)
 
             # Wait while fileProcessor is busy in order to catch a possible KeyboardInterrupt.
@@ -143,7 +143,7 @@ def invokeModules(dbqueue, uforiamodules, hashid, file, config):
     nrHandlers = 0
     for module in modules:
         if module.isMimeHandler:
-            nrHandlers+=1
+            nrHandlers += 1
 
     if nrHandlers == 0:
         if config.DEBUG:
@@ -164,12 +164,12 @@ def invokeModules(dbqueue, uforiamodules, hashid, file, config):
                     if processresult != None:
                         dbqueue.put((module.tablename, hashid, module.columnnames, processresult))
                 except:
-                    traceback.print_exc(file = sys.stderr)
+                    traceback.print_exc(file=sys.stderr)
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
             raise
 
-def fileProcessor((item,dbqueue,monitorqueue,uforiamodules,config)):
+def fileProcessor((item, dbqueue, monitorqueue, uforiamodules, config)):
     """
     Process a file item and export its information to the database
     queue. Also calls invokeModules() if modules are enabled in the
@@ -182,9 +182,9 @@ def fileProcessor((item,dbqueue,monitorqueue,uforiamodules,config)):
     uforiamodules - The uforia module objects from modulescanner
     """
     try:
-        multiprocessing.current_process().daemon=False
-        fullpath,hashid=item
-        file=File.File(fullpath,config,magic)
+        multiprocessing.current_process().daemon = False
+        fullpath, hashid = item
+        file = File.File(fullpath, config, magic)
         if config.OUTPUT:
             monitorqueue.put(fullpath)
         try:
@@ -197,7 +197,7 @@ def fileProcessor((item,dbqueue,monitorqueue,uforiamodules,config)):
                 fullpath = file.fullpath
             fullpath = os.path.normpath(fullpath)
             values = (fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
-            dbqueue.put(('files',hashid,columns,values))
+            dbqueue.put(('files', hashid, columns, values))
         except:
             traceback.print_exc(file=sys.stderr)
             raise
@@ -218,7 +218,7 @@ def fillMimeTypesTable(dbqueue, uforiamodules):
         print "Getting available mimetypes..."
     mime_types = uforiamodules.getAllSupportedMimeTypesWithModules()
     for mime_type in mime_types:
-        writeToMimeTypesTable('supported_mimetypes', ["mime_type", "modules"],[mime_type, mime_types[mime_type]])
+        writeToMimeTypesTable('supported_mimetypes', ["mime_type", "modules"], [mime_type, mime_types[mime_type]])
 
 def run():
     """
@@ -230,7 +230,7 @@ def run():
     print("Uforia starting...")
 
     if config.DEBUG:
-        print("Initializing "+str(config.DBCONN)+" "+config.DBTYPE+" database worker thread(s)...")
+        print("Initializing " + str(config.DBCONN) + " " + config.DBTYPE + " database worker thread(s)...")
 
     manager = multiprocessing.Manager()
     dbqueue = manager.JoinableQueue()
@@ -243,13 +243,13 @@ def run():
         db.setupMimeTypesTable()
 
     for i in range(config.DBCONN):
-        dbworkers.append(multiprocessing.Process(target = dbworker, args = (dbqueue,)))
+        dbworkers.append(multiprocessing.Process(target=dbworker, args=(dbqueue,)))
         dbworkers[i].daemon = True
         dbworkers[i].start()
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
-        uforiamodules = modules.Modules(config,db)
+        uforiamodules = modules.Modules(config, db)
         if not config.RECURSIVE:
             fillMimeTypesTable(dbqueue, uforiamodules)
     else:
@@ -258,20 +258,20 @@ def run():
     monitorqueue = None
     if config.OUTPUT:
         monitorqueue = manager.JoinableQueue()
-        monitorthread = multiprocessing.Process(target = monitorworker, args = (monitorqueue,))
+        monitorthread = multiprocessing.Process(target=monitorworker, args=(monitorqueue,))
         monitorthread.daemon = True
         monitorthread.start()
     if config.DEBUG:
-        print("Setting up "+str(config.CONSUMERS)+" consumer(s)...")
+        print("Setting up " + str(config.CONSUMERS) + " consumer(s)...")
     consumers = multiprocessing.Pool(processes=config.CONSUMERS)
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        fileScanner(config.STARTDIR,consumers,dbqueue,monitorqueue,uforiamodules,config)
+        fileScanner(config.STARTDIR, consumers, dbqueue, monitorqueue, uforiamodules, config)
     else:
-        print("The pathname "+config.STARTDIR+" does not exist, stopping...")
+        print("The pathname " + config.STARTDIR + " does not exist, stopping...")
     for i in range(config.DBCONN):
-        dbqueue.put(('No more tasks','','',''))
+        dbqueue.put(('No more tasks', '', '', ''))
     dbqueue.join()
     if config.OUTPUT:
         monitorqueue.put(None)
@@ -296,7 +296,7 @@ def setupLibraryPaths():
     .dll files can be loaded without intervention. This does not work for Linux
     shared object files loaded with ctypes.
     """
-    architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
+    architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp) == 8 else 'x86'
     operatingSystem = platform.system()
 
     # Needs to be loaded first, otherwise system-wide libraries are preferred
@@ -312,15 +312,15 @@ setupLibraryPaths()
 # Fixes crash-on-exit bugs on Windows by loading it before libmagic
 import libxmp
 
-config      = imp.load_source('config','include/default_config.py')
+config = imp.load_source('config', 'include/default_config.py')
 try:
-    config  = imp.load_source('config','include/config.py')
+    config = imp.load_source('config', 'include/config.py')
 except:
     print("< WARNING! > Config file not found or not configured correctly, loading default config.")
-File        = imp.load_source('File','include/File.py')
-magic       = imp.load_source('magic','include/magic.py')
-modules     = imp.load_source('modulescanner','include/modulescanner.py')
-database    = imp.load_source(config.DBTYPE,config.DATABASEDIR+config.DBTYPE+".py")
+File = imp.load_source('File', 'include/File.py')
+magic = imp.load_source('magic', 'include/magic.py')
+modules = imp.load_source('modulescanner', 'include/modulescanner.py')
+database = imp.load_source(config.DBTYPE, config.DATABASEDIR + config.DBTYPE + ".py")
 
 config = configAsPickleable(config)
 config.UFORIA_RUNNING_VERSION = 'Uforia'

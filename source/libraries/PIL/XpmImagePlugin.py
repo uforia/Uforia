@@ -28,7 +28,7 @@ xpm_head = re.compile("\"([0-9]*) ([0-9]*) ([0-9]*) ([0-9]*)")
 def _accept(prefix):
     return prefix[:9] == "/* XPM */"
 
-##
+# #
 # Image plugin for X11 pixel maps.
 
 class XpmImageFile(ImageFile.ImageFile):
@@ -79,14 +79,14 @@ class XpmImageFile(ImageFile.ImageFile):
                 if s[i] == "c":
 
                     # process colour key
-                    rgb = s[i+1]
+                    rgb = s[i + 1]
                     if rgb == "None":
                         self.info["transparency"] = c
                     elif rgb[0] == "#":
                         # FIXME: handle colour names (see ImagePalette.py)
                         rgb = string.atoi(rgb[1:], 16)
-                        palette[c] = chr((rgb >> 16) & 255) +\
-                                     chr((rgb >> 8) & 255) +\
+                        palette[c] = chr((rgb >> 16) & 255) + \
+                                     chr((rgb >> 8) & 255) + \
                                      chr(rgb & 255)
                     else:
                         # unknown colour
@@ -101,7 +101,7 @@ class XpmImageFile(ImageFile.ImageFile):
         self.mode = "P"
         self.palette = ImagePalette.raw("RGB", string.join(palette, ""))
 
-        self.tile = [("raw", (0, 0)+self.size, self.fp.tell(), ("P", 0, 1))]
+        self.tile = [("raw", (0, 0) + self.size, self.fp.tell(), ("P", 0, 1))]
 
     def load_read(self, bytes):
 
@@ -113,7 +113,7 @@ class XpmImageFile(ImageFile.ImageFile):
         s = [None] * ysize
 
         for i in range(ysize):
-            s[i] = string.ljust(self.fp.readline()[1:xsize+1], xsize)
+            s[i] = string.ljust(self.fp.readline()[1:xsize + 1], xsize)
 
         self.fp = None
 

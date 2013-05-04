@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#TABLE: wordCount:INT, imageCount:INT, objectCount:INT, pageCount:INT, charCount: INT, parCount: INT, tableCount: INT, content:TEXT 
+# TABLE: wordCount:INT, imageCount:INT, objectCount:INT, pageCount:INT, charCount: INT, parCount: INT, tableCount: INT, content:TEXT 
 
 import re, zipfile, sys, bs4
 
@@ -12,10 +12,10 @@ def process(fullpath, config, columns=None):
     	exit()
 
 
-    #get content/text
+    # get content/text
     xml = document.read("content.xml")
 
-    #get metadata	
+    # get metadata	
     xmlmeta = document.read("meta.xml")
 
     # Finding content (Text)
@@ -23,12 +23,12 @@ def process(fullpath, config, columns=None):
     listtotal = maincontent.findall(xml)
     textcontent = ""
     
-    #MSWord/odt splits every word into seperate xml tags. Adding them to a single string instead
+    # MSWord/odt splits every word into seperate xml tags. Adding them to a single string instead
     for words in listtotal:		
-    	textcontent = textcontent + "%s" % (words[1].rstrip('\n') )
+    	textcontent = textcontent + "%s" % (words[1].rstrip('\n'))
 
 
-    #Minidom alternative
+    # Minidom alternative
     xmlsoup = bs4.BeautifulSoup(xmlmeta)
     
     odtdict = ""
@@ -36,7 +36,7 @@ def process(fullpath, config, columns=None):
     	odtdict = dict(message.attrs)
 
     results = []
-    for i in ('meta:word-count','meta:image-count','meta:row-count','meta:character-count','meta:non-whitespace-character-count','meta:paragraph-count','meta-page-count'):
+    for i in ('meta:word-count', 'meta:image-count', 'meta:row-count', 'meta:character-count', 'meta:non-whitespace-character-count', 'meta:paragraph-count', 'meta-page-count'):
         try:
             results.append(odtdict[i])
         except KeyError:

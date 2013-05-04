@@ -6,7 +6,7 @@ Created on 18 mrt. 2013
 
 # This is the image module for TGA
 
-#TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:BLOB, XMPTag:LONGTEXT
+# TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:BLOB, XMPTag:LONGTEXT
 
 import sys, traceback
 from PIL import Image
@@ -63,7 +63,7 @@ def process(fullpath, config, columns=None):
             return assorted
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

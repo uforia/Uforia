@@ -28,7 +28,7 @@ except TypeError:
 else:
     str2int = int
 
-##
+# #
 # Convert color string to RGB tuple.
 #
 # @param color A CSS3-style colour string.
@@ -56,9 +56,9 @@ def getrgb(color):
     m = re.match("#\w\w\w$", color)
     if m:
         return (
-            str2int(color[1]*2, 16),
-            str2int(color[2]*2, 16),
-            str2int(color[3]*2, 16)
+            str2int(color[1] * 2, 16),
+            str2int(color[2] * 2, 16),
+            str2int(color[3] * 2, 16)
             )
     m = re.match("#\w\w\w\w\w\w$", color)
     if m:
@@ -106,7 +106,7 @@ def getcolor(color, mode):
         return r, g, b, 255
     if Image.getmodebase(mode) == "L":
         r, g, b = color
-        return (r*299 + g*587 + b*114)/1000
+        return (r * 299 + g * 587 + b * 114) / 1000
     return color
 
 colormap = {

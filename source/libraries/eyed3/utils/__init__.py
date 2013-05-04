@@ -145,12 +145,12 @@ def requireUnicode(*args):
                     # The ith argument is not there, as in optional arguments
                     break
                 if args[i] is not None and not isinstance(args[i], unicode):
-                    raise TypeError("%s(argument %d) must be unicode" %
+                    raise TypeError("%s(argument %d) must be unicode" % 
                                     (fn.__name__, i))
             for name in kwarg_names:
                 if (name in kwargs and kwargs[name] is not None and
                         not isinstance(kwargs[name], unicode)):
-                    raise TypeError("%s(argument %s) must be unicode" %
+                    raise TypeError("%s(argument %s) must be unicode" % 
                                     (fn.__name__, name))
             return fn(*args, **kwargs)
         return wrapped_fn
@@ -178,7 +178,7 @@ def encodeUnicode(replace=True):
     return wrapper
 
 
-##
+# #
 # \brief Format 'curr' seconds into a string represntation.
 # \param curr The number of seconds
 # \param total An optional total number of seconds to append to the end of
@@ -203,21 +203,21 @@ def formatTime(curr, total=None):
     return retval
 
 
-## Number of bytes per KB (2^10)
+# # Number of bytes per KB (2^10)
 KB_BYTES = 1024
-## Number of bytes per MB (2^20)
+# # Number of bytes per MB (2^20)
 MB_BYTES = 1048576
-## Number of bytes per GB (2^30)
+# # Number of bytes per GB (2^30)
 GB_BYTES = 1073741824
-## Kilobytes abbreviation
+# # Kilobytes abbreviation
 KB_UNIT = "KB"
-## Megabytes abbreviation
+# # Megabytes abbreviation
 MB_UNIT = "MB"
-## Gigabytes abbreviation
+# # Gigabytes abbreviation
 GB_UNIT = "GB"
 
 
-##
+# #
 # \brief Format sz bytes into string format doing KB, MB, or GB conversion
 #        where necessary.
 # \param sz The number of bytes
@@ -235,7 +235,7 @@ def formatSize(sz):
     return "%.2f %s" % (sz, unit)
 
 
-##
+# #
 # \brief Format a timedelta object into a string
 # \param td The timedelta to represent.
 def formatTimeDelta(td):

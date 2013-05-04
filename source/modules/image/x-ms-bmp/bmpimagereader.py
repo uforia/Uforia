@@ -1,6 +1,6 @@
 # This is the image module for BMP
 
-#TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Remaining:LONGTEXT
+# TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Remaining:LONGTEXT
 
 import sys, imp, traceback
 from PIL import Image
@@ -41,7 +41,7 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
         # Store values in database so not the whole application crashes
         return None

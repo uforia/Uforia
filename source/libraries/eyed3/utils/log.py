@@ -59,7 +59,7 @@ def _initLogging():
 
     return log
 
-## The main logger
+# # The main logger
 log = _initLogging()
 del _initLogging
 

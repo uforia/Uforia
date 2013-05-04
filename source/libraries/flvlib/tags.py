@@ -66,7 +66,7 @@ class Tag(object):
         previous_tag_size = get_ui32(f)
         ensure(previous_tag_size, self.size + 11,
                "PreviousTagSize of %d (0x%08X) "
-               "not equal to actual tag size of %d (0x%08X)" %
+               "not equal to actual tag size of %d (0x%08X)" % 
                (previous_tag_size, previous_tag_size,
                 self.size + 11, self.size + 11))
         log.debug("Ready to read another tag")
@@ -105,11 +105,11 @@ class AudioTag(Tag):
             read_bytes += 1
             # AAC always has sampling rate of 44 kHz
             ensure(self.sound_rate, SOUND_RATE_44_KHZ,
-                   "AAC sound format with incorrect sound rate: %d" %
+                   "AAC sound format with incorrect sound rate: %d" % 
                    self.sound_rate)
             # AAC is always stereo
             ensure(self.sound_type, SOUND_TYPE_STEREO,
-                   "AAC sound format with incorrect sound type: %d" %
+                   "AAC sound format with incorrect sound type: %d" % 
                    self.sound_type)
 
         if strict_parser():
@@ -146,14 +146,14 @@ class AudioTag(Tag):
         if self.offset is None:
             return "<AudioTag unparsed>"
         elif self.sound_format is None:
-            return ("<AudioTag at offset 0x%08X, time %d, size %d>" %
+            return ("<AudioTag at offset 0x%08X, time %d, size %d>" % 
                     (self.offset, self.timestamp, self.size))
         elif self.aac_packet_type is None:
-            return ("<AudioTag at offset 0x%08X, time %d, size %d, %s>" %
+            return ("<AudioTag at offset 0x%08X, time %d, size %d, %s>" % 
                     (self.offset, self.timestamp, self.size,
                      sound_format_to_string[self.sound_format]))
         else:
-            return ("<AudioTag at offset 0x%08X, time %d, size %d, %s, %s>" %
+            return ("<AudioTag at offset 0x%08X, time %d, size %d, %s, %s>" % 
                     (self.offset, self.timestamp, self.size,
                      sound_format_to_string[self.sound_format],
                      aac_packet_type_to_string[self.aac_packet_type]))
@@ -165,7 +165,7 @@ class VideoTag(Tag):
         Tag.__init__(self, parent_flv, f)
         self.frame_type = None
         self.codec_id = None
-        self.h264_packet_type = None # Always None for non-H.264 tags
+        self.h264_packet_type = None  # Always None for non-H.264 tags
 
     def parse_tag_content(self):
         f = self.f
@@ -204,15 +204,15 @@ class VideoTag(Tag):
         if self.offset is None:
             return "<VideoTag unparsed>"
         elif self.frame_type is None:
-            return ("<VideoTag at offset 0x%08X, time %d, size %d>" %
+            return ("<VideoTag at offset 0x%08X, time %d, size %d>" % 
                     (self.offset, self.timestamp, self.size))
         elif self.h264_packet_type is None:
-            return ("<VideoTag at offset 0x%08X, time %d, size %d, %s (%s)>" %
+            return ("<VideoTag at offset 0x%08X, time %d, size %d, %s (%s)>" % 
                     (self.offset, self.timestamp, self.size,
                      codec_id_to_string[self.codec_id],
                      frame_type_to_string[self.frame_type]))
         else:
-            return ("<VideoTag at offset 0x%08X, time %d, size %d, %s (%s), %s>" %
+            return ("<VideoTag at offset 0x%08X, time %d, size %d, %s (%s), %s>" % 
                     (self.offset, self.timestamp, self.size,
                      codec_id_to_string[self.codec_id],
                      frame_type_to_string[self.frame_type],
@@ -258,10 +258,10 @@ class ScriptTag(Tag):
         if self.offset is None:
             return "<ScriptTag unparsed>"
         elif not self.name:
-            return ("<ScriptTag at offset 0x%08X, time %d, size %d>" %
+            return ("<ScriptTag at offset 0x%08X, time %d, size %d>" % 
                     (self.offset, self.timestamp, self.size))
         else:
-            return ("<ScriptTag %s at offset 0x%08X, time %d, size %d>" %
+            return ("<ScriptTag %s at offset 0x%08X, time %d, size %d>" % 
                     (self.name, self.offset, self.timestamp, self.size))
 
 
@@ -292,7 +292,7 @@ class FLV(object):
 
         # Do this irrelevant of STRICT_PARSING, to catch bogus files
         if header != "FLV":
-            raise MalformedFLV("File signature is incorrect: 0x%X 0x%X 0x%X" %
+            raise MalformedFLV("File signature is incorrect: 0x%X 0x%X 0x%X" % 
                                struct.unpack("3B", header))
 
         # File version

@@ -19,7 +19,7 @@ import Image
 
 from PyQt4.QtGui import QImage, qRgb
 
-##
+# #
 # (Internal) Turns an RGB color into a Qt compatible color integer.
 
 def rgb(r, g, b):
@@ -27,7 +27,7 @@ def rgb(r, g, b):
     # into a negative integer with the same bitpattern.
     return (qRgb(r, g, b) & 0xffffff) - 0x1000000
 
-##
+# #
 # An PIL image wrapper for Qt.  This is a subclass of PyQt4's QImage
 # class.
 #
@@ -60,7 +60,7 @@ class ImageQt(QImage):
             colortable = []
             palette = im.getpalette()
             for i in range(0, len(palette), 3):
-                colortable.append(rgb(*palette[i:i+3]))
+                colortable.append(rgb(*palette[i:i + 3]))
         elif im.mode == "RGB":
             data = im.tostring("raw", "BGRX")
             format = QImage.Format_RGB32

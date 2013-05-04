@@ -37,7 +37,7 @@ try:
 except ImportError:
     warnings = None
 
-##
+# #
 # A simple 2D drawing interface for PIL images.
 # <p>
 # Application code should use the <b>Draw</b> factory, instead of
@@ -45,7 +45,7 @@ except ImportError:
 
 class ImageDraw:
 
-    ##
+    # #
     # Create a drawing instance.
     #
     # @param im The image to draw in.
@@ -58,7 +58,7 @@ class ImageDraw:
     def __init__(self, im, mode=None):
         im.load()
         if im.readonly:
-            im._copy() # make it writable
+            im._copy()  # make it writable
         blend = 0
         if mode is None:
             mode = im.mode
@@ -82,11 +82,11 @@ class ImageDraw:
             # FIXME: fix Fill2 to properly support matte for I+F images
             self.fontmode = "1"
         else:
-            self.fontmode = "L" # aliasing is okay for other modes
+            self.fontmode = "L"  # aliasing is okay for other modes
         self.fill = 0
         self.font = None
 
-    ##
+    # #
     # Set the default pen color.
 
     def setink(self, ink):
@@ -102,7 +102,7 @@ class ImageDraw:
             ink = self.palette.getcolor(ink)
         self.ink = self.draw.draw_ink(ink, self.mode)
 
-    ##
+    # #
     # Set the default background color.
 
     def setfill(self, onoff):
@@ -114,14 +114,14 @@ class ImageDraw:
                 )
         self.fill = onoff
 
-    ##
+    # #
     # Set the default font.
 
     def setfont(self, font):
         # compatibility
         self.font = font
 
-    ##
+    # #
     # Get the current default font.
 
     def getfont(self):
@@ -152,7 +152,7 @@ class ImageDraw:
                 fill = self.draw.draw_ink(fill, self.mode)
         return ink, fill
 
-    ##
+    # #
     # Draw an arc.
 
     def arc(self, xy, start, end, fill=None):
@@ -160,7 +160,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_arc(xy, start, end, ink)
 
-    ##
+    # #
     # Draw a bitmap.
 
     def bitmap(self, xy, bitmap, fill=None):
@@ -171,7 +171,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_bitmap(xy, bitmap.im, ink)
 
-    ##
+    # #
     # Draw a chord.
 
     def chord(self, xy, start, end, fill=None, outline=None):
@@ -181,7 +181,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_chord(xy, start, end, ink, 0)
 
-    ##
+    # #
     # Draw an ellipse.
 
     def ellipse(self, xy, fill=None, outline=None):
@@ -191,7 +191,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_ellipse(xy, ink, 0)
 
-    ##
+    # #
     # Draw a line, or a connected sequence of line segments.
 
     def line(self, xy, fill=None, width=0):
@@ -199,7 +199,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_lines(xy, ink, width)
 
-    ##
+    # #
     # (Experimental) Draw a shape.
 
     def shape(self, shape, fill=None, outline=None):
@@ -211,7 +211,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_outline(shape, ink, 0)
 
-    ##
+    # #
     # Draw a pieslice.
 
     def pieslice(self, xy, start, end, fill=None, outline=None):
@@ -221,7 +221,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_pieslice(xy, start, end, ink, 0)
 
-    ##
+    # #
     # Draw one or more individual pixels.
 
     def point(self, xy, fill=None):
@@ -229,7 +229,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_points(xy, ink)
 
-    ##
+    # #
     # Draw a polygon.
 
     def polygon(self, xy, fill=None, outline=None):
@@ -239,7 +239,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_polygon(xy, ink, 0)
 
-    ##
+    # #
     # Draw a rectangle.
 
     def rectangle(self, xy, fill=None, outline=None):
@@ -249,7 +249,7 @@ class ImageDraw:
         if ink is not None:
             self.draw.draw_rectangle(xy, ink, 0)
 
-    ##
+    # #
     # Draw text.
 
     def text(self, xy, text, fill=None, font=None, anchor=None):
@@ -269,7 +269,7 @@ class ImageDraw:
                     mask = font.getmask(text)
             self.draw.draw_bitmap(xy, mask, ink)
 
-    ##
+    # #
     # Get the size of a given string, in pixels.
 
     def textsize(self, text, font=None):
@@ -277,7 +277,7 @@ class ImageDraw:
             font = self.getfont()
         return font.getsize(text)
 
-##
+# #
 # A simple 2D drawing interface for PIL images.
 #
 # @param im The image to draw in.
@@ -299,7 +299,7 @@ try:
 except:
     Outline = None
 
-##
+# #
 # (Experimental) A more advanced 2D drawing interface for PIL images,
 # based on the WCK interface.
 #
@@ -324,7 +324,7 @@ def getdraw(im=None, hints=None):
         im = handler.Draw(im)
     return im, handler
 
-##
+# #
 # (experimental) Fills a bounded region with a given color.
 #
 # @param image Target image.
@@ -343,16 +343,16 @@ def floodfill(image, xy, value, border=None):
     try:
         background = pixel[x, y]
         if background == value:
-            return # seed point already has fill color
+            return  # seed point already has fill color
         pixel[x, y] = value
     except IndexError:
-        return # seed point outside image
+        return  # seed point outside image
     edge = [(x, y)]
     if border is None:
         while edge:
             newedge = []
             for (x, y) in edge:
-                for (s, t) in ((x+1, y), (x-1, y), (x, y+1), (x, y-1)):
+                for (s, t) in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
                     try:
                         p = pixel[s, t]
                     except IndexError:
@@ -366,7 +366,7 @@ def floodfill(image, xy, value, border=None):
         while edge:
             newedge = []
             for (x, y) in edge:
-                for (s, t) in ((x+1, y), (x-1, y), (x, y+1), (x, y-1)):
+                for (s, t) in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
                     try:
                         p = pixel[s, t]
                     except IndexError:

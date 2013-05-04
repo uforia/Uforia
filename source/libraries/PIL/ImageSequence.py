@@ -13,13 +13,13 @@
 # See the README file for information on usage and redistribution.
 #
 
-##
+# #
 # This class implements an iterator object that can be used to loop
 # over an image sequence.
 
 class Iterator:
 
-    ##
+    # #
     # Create an iterator.
     #
     # @param im An image object.
@@ -35,4 +35,4 @@ class Iterator:
                 self.im.seek(ix)
             return self.im
         except EOFError:
-            raise IndexError # end of sequence
+            raise IndexError  # end of sequence

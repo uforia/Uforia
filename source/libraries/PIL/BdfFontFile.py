@@ -59,7 +59,7 @@ def bdf_char(f):
         if not s or s[:6] == "BITMAP":
             break
         i = string.find(s, " ")
-        props[s[:i]] = s[i+1:-1]
+        props[s[:i]] = s[i + 1:-1]
 
     # load bitmap
     bitmap = []
@@ -73,7 +73,7 @@ def bdf_char(f):
     [x, y, l, d] = map(int, string.split(props["BBX"]))
     [dx, dy] = map(int, string.split(props["DWIDTH"]))
 
-    bbox = (dx, dy), (l, -d-y, x+l, -d), (0, 0, x, y)
+    bbox = (dx, dy), (l, -d - y, x + l, -d), (0, 0, x, y)
 
     try:
         im = Image.fromstring("1", (x, y), bitmap, "hex", "1")
@@ -83,7 +83,7 @@ def bdf_char(f):
 
     return id, int(props["ENCODING"]), bbox, im
 
-##
+# #
 # Font file plugin for the X11 BDF format.
 
 class BdfFontFile(FontFile.FontFile):
@@ -104,10 +104,10 @@ class BdfFontFile(FontFile.FontFile):
             if not s or s[:13] == "ENDPROPERTIES":
                 break
             i = string.find(s, " ")
-            props[s[:i]] = s[i+1:-1]
+            props[s[:i]] = s[i + 1:-1]
             if s[:i] in ["COMMENT", "COPYRIGHT"]:
                 if string.find(s, "LogicalFontDescription") < 0:
-                    comments.append(s[i+1:-1])
+                    comments.append(s[i + 1:-1])
 
         font = string.split(props["FONT"], "-")
 

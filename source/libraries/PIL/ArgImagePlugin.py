@@ -158,7 +158,7 @@ class ArgStream(ChunkStream):
 
         if full:
             if ord(s[12]):
-                pass # interlace not yet supported
+                pass  # interlace not yet supported
             if ord(s[11]):
                 raise SyntaxError, "unknown filter category"
 
@@ -186,7 +186,7 @@ class ArgStream(ChunkStream):
         s = self.fp.read(bytes)
         im = self.images[i16(s)]
         x, y = i32(s[2:6]), i32(s[6:10])
-        bbox = x, y, im.size[0]+x, im.size[1]+y
+        bbox = x, y, im.size[0] + x, im.size[1] + y
 
         if im.mode in ["RGBA"]:
             # paste with transparency
@@ -233,7 +233,7 @@ class ArgStream(ChunkStream):
         self.action = ("IHDR",)
         self.im = Image.core.new(mode, size)
         self.decoder = Image.core.zip_decoder(rawmode)
-        self.decoder.setimage(self.im, (0,0) + size)
+        self.decoder.setimage(self.im, (0, 0) + size)
         self.data = ""
 
         return s
@@ -253,7 +253,7 @@ class ArgStream(ChunkStream):
         diff = ord(s[13])
         offs = i32(s[14:18]), i32(s[18:22])
 
-        bbox = offs + (offs[0]+size[0], offs[1]+size[1])
+        bbox = offs + (offs[0] + size[0], offs[1] + size[1])
 
         if Image.DEBUG:
             print "DHDR", diff, bbox
@@ -265,7 +265,7 @@ class ArgStream(ChunkStream):
         self.im = Image.core.new(mode, size)
 
         self.decoder = Image.core.zip_decoder(rawmode)
-        self.decoder.setimage(self.im, (0,0) + size)
+        self.decoder.setimage(self.im, (0, 0) + size)
 
         self.data = ""
 
@@ -286,7 +286,7 @@ class ArgStream(ChunkStream):
         self.action = ("JHDR",)
         self.im = Image.core.new(mode, size)
         self.decoder = Image.core.jpeg_decoder(rawmode)
-        self.decoder.setimage(self.im, (0,0) + size)
+        self.decoder.setimage(self.im, (0, 0) + size)
         self.data = ""
 
         return s
@@ -306,7 +306,7 @@ class ArgStream(ChunkStream):
         self.action = ("UHDR",)
         self.im = Image.core.new(mode, size)
         self.decoder = Image.core.raw_decoder(rawmode)
-        self.decoder.setimage(self.im, (0,0) + size)
+        self.decoder.setimage(self.im, (0, 0) + size)
         self.data = ""
 
         return s
@@ -372,7 +372,7 @@ class ArgStream(ChunkStream):
 
         if self.count == 0 and self.show:
             self.im = self.images[self.id]
-            raise EOFError # end of this frame
+            raise EOFError  # end of this frame
 
     def chunk_PLTE(self, offset, bytes):
         "PLTE -- palette data"
@@ -399,7 +399,7 @@ class ArgStream(ChunkStream):
 def _accept(prefix):
     return prefix[:8] == MAGIC
 
-##
+# #
 # Image plugin for the experimental Animated Raster Graphics format.
 
 class ArgImageFile(ImageFile.ImageFile):
@@ -471,14 +471,14 @@ class ArgImageFile(ImageFile.ImageFile):
             except EOFError:
                 break
 
-            except "glurk": # AttributeError
+            except "glurk":  # AttributeError
                 if Image.DEBUG:
                     print cid, bytes, "(unknown)"
                 s = self.fp.read(bytes)
 
             self.arg.crc(cid, s)
 
-        self.fp.read(4) # ship extra CRC
+        self.fp.read(4)  # ship extra CRC
 
     def tell(self):
         return 0

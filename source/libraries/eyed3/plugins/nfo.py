@@ -93,10 +93,10 @@ class NfoPlugin(LoaderPlugin):
             printMsg("Source  : ")
             printMsg("Encoder : %s" % encoder_info)
             printMsg("Codec   : mp3")
-            printMsg("Bitrate : ~%s K/s @ %s Hz, %s" %
+            printMsg("Bitrate : ~%s K/s @ %s Hz, %s" % 
                      (avg_bitrate, audio_files[0].info.sample_freq,
                       audio_files[0].info.mode))
-            printMsg("Tag     : ID3 %s" %
+            printMsg("Tag     : ID3 %s" % 
                      versionToString(audio_files[0].tag.version))
 
             printMsg("")
@@ -120,20 +120,20 @@ class NfoPlugin(LoaderPlugin):
                 total_size += audio_file.info.size_bytes
 
                 zero_pad = "0" * (len(str(len(audio_files))) - len(str(count)))
-                printMsg(" %s%d. %s%s(%s)" %
+                printMsg(" %s%d. %s%s(%s)" % 
                          (zero_pad, count, title, padding,
                           formatTime(time_secs)))
 
             printMsg("")
-            printMsg("Total play time : %s" %
+            printMsg("Total play time : %s" % 
                      formatTime(total_time))
-            printMsg("Total size      : %s" %
+            printMsg("Total size      : %s" % 
                      formatSize(total_size))
 
             printMsg("")
             printMsg("=" * 78)
-            printMsg(".NFO file created with eyeD3 %s on %s" %
+            printMsg(".NFO file created with eyeD3 %s on %s" % 
                      (VERSION, time.asctime()))
-            printMsg("For more information about eyeD3 go to %s" %
+            printMsg("For more information about eyeD3 go to %s" % 
                      "http://eyeD3.nicfit.net/")
             printMsg("=" * 78)

@@ -157,7 +157,7 @@ class Atoms(object):
         """
         path = [self]
         for name in names:
-            path.append(path[-1][name,])
+            path.append(path[-1][name, ])
         return path[1:]
 
     def __getitem__(self, names):
@@ -383,7 +383,7 @@ class M4ATags(DictProxy, Metadata):
                 "unexpected atom %r inside 'covr'" % name)
         if imageformat not in (M4ACover.FORMAT_JPEG, M4ACover.FORMAT_PNG):
             imageformat = M4ACover.FORMAT_JPEG
-        self[atom.name]= M4ACover(data[16:length], imageformat)
+        self[atom.name] = M4ACover(data[16:length], imageformat)
     def __render_cover(self, key, value):
         try: imageformat = value.imageformat
         except AttributeError: imageformat = M4ACover.FORMAT_JPEG

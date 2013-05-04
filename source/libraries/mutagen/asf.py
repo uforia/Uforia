@@ -130,7 +130,7 @@ class ASFBaseAttribute(object):
     def render(self, name):
         name = name.encode("utf-16-le") + "\x00\x00"
         data = self._render()
-        return (struct.pack("<H", len(name)) + name +
+        return (struct.pack("<H", len(name)) + name + 
                 struct.pack("<HH", self.TYPE, len(data)) + data)
 
     def render_m(self, name):
@@ -431,13 +431,13 @@ class ExtendedContentDescriptionObject(BaseObject):
         num_attributes, = struct.unpack("<H", data[0:2])
         pos = 2
         for i in range(num_attributes):
-            name_length, = struct.unpack("<H", data[pos:pos+2])
+            name_length, = struct.unpack("<H", data[pos:pos + 2])
             pos += 2
-            name = data[pos:pos+name_length].decode("utf-16-le").strip("\x00")
+            name = data[pos:pos + name_length].decode("utf-16-le").strip("\x00")
             pos += name_length
-            value_type, value_length = struct.unpack("<HH", data[pos:pos+4])
+            value_type, value_length = struct.unpack("<HH", data[pos:pos + 4])
             pos += 4
-            value = data[pos:pos+value_length]
+            value = data[pos:pos + value_length]
             pos += value_length
             attr = _attribute_types[value_type](data=value)
             asf.tags.append((name, attr))
@@ -482,20 +482,20 @@ class HeaderExtensionObject(BaseObject):
         datapos = 0
         self.objects = []
         while datapos < datasize:
-            guid, size = struct.unpack("<16sQ", data[22+datapos:22+datapos+24])
+            guid, size = struct.unpack("<16sQ", data[22 + datapos:22 + datapos + 24])
             if guid in _object_types:
                 obj = _object_types[guid]()
             else:
                 obj = UnknownObject(guid)
-            obj.parse(asf, data[22+datapos+24:22+datapos+size], fileobj, size)
+            obj.parse(asf, data[22 + datapos + 24:22 + datapos + size], fileobj, size)
             self.objects.append(obj)
             datapos += size
 
     def render(self, asf):
         data = "".join([obj.render(asf) for obj in self.objects])
-        return (self.GUID + struct.pack("<Q", 24 + 16 + 6 + len(data)) +
-                "\x11\xD2\xD3\xAB\xBA\xA9\xcf\x11" +
-                "\x8E\xE6\x00\xC0\x0C\x20\x53\x65" +
+        return (self.GUID + struct.pack("<Q", 24 + 16 + 6 + len(data)) + 
+                "\x11\xD2\xD3\xAB\xBA\xA9\xcf\x11" + 
+                "\x8E\xE6\x00\xC0\x0C\x20\x53\x65" + 
                 "\x06\x00" + struct.pack("<I", len(data)) + data)
 
 
@@ -510,11 +510,11 @@ class MetadataObject(BaseObject):
         pos = 2
         for i in range(num_attributes):
             (reserved, stream, name_length, value_type,
-             value_length) = struct.unpack("<HHHHI", data[pos:pos+12])
+             value_length) = struct.unpack("<HHHHI", data[pos:pos + 12])
             pos += 12
-            name = data[pos:pos+name_length].decode("utf-16-le").strip("\x00")
+            name = data[pos:pos + name_length].decode("utf-16-le").strip("\x00")
             pos += name_length
-            value = data[pos:pos+value_length]
+            value = data[pos:pos + value_length]
             pos += value_length
             args = {'data': value, 'stream': stream}
             if value_type == 2:
@@ -525,7 +525,7 @@ class MetadataObject(BaseObject):
     def render(self, asf):
         attrs = asf.to_metadata.items()
         data = "".join([attr.render_m(name) for (name, attr) in attrs])
-        return (self.GUID + struct.pack("<QH", 26 + len(data), len(attrs)) +
+        return (self.GUID + struct.pack("<QH", 26 + len(data), len(attrs)) + 
                 data)
 
 
@@ -540,11 +540,11 @@ class MetadataLibraryObject(BaseObject):
         pos = 2
         for i in range(num_attributes):
             (language, stream, name_length, value_type,
-             value_length) = struct.unpack("<HHHHI", data[pos:pos+12])
+             value_length) = struct.unpack("<HHHHI", data[pos:pos + 12])
             pos += 12
-            name = data[pos:pos+name_length].decode("utf-16-le").strip("\x00")
+            name = data[pos:pos + name_length].decode("utf-16-le").strip("\x00")
             pos += name_length
-            value = data[pos:pos+value_length]
+            value = data[pos:pos + value_length]
             pos += value_length
             args = {'data': value, 'language': language, 'stream': stream}
             if value_type == 2:
@@ -555,7 +555,7 @@ class MetadataLibraryObject(BaseObject):
     def render(self, asf):
         attrs = asf.to_metadata_library
         data = "".join([attr.render_ml(name) for (name, attr) in attrs])
-        return (self.GUID + struct.pack("<QH", 26 + len(data), len(attrs)) +
+        return (self.GUID + struct.pack("<QH", 26 + len(data), len(attrs)) + 
                 data)
 
 
@@ -635,8 +635,8 @@ class ASF(FileType):
 
         # Render the header
         data = "".join([obj.render(self) for obj in self.objects])
-        data = (HeaderObject.GUID +
-                struct.pack("<QL", len(data) + 30, len(self.objects)) +
+        data = (HeaderObject.GUID + 
+                struct.pack("<QL", len(data) + 30, len(self.objects)) + 
                 "\x01\x02" + data)
 
         fileobj = open(self.filename, "rb+")

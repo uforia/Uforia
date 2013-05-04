@@ -6,7 +6,7 @@ class TestDbworker(unittest.TestCase):
     def setUp(self):
         self.db = mock.Mock()
 
-        self.sentinel = ('No more tasks','','','')
+        self.sentinel = ('No more tasks', '', '', '')
         self.testdata = [
             ('test1', 1, ('column1', 'column2'), ('abc', 'xyz')),
             ('test2', 2, ('column1', 'column2'), ('123', '456')),

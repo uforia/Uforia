@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#TABLE: author:LONGTEXT, changedBy:LONGTEXT, createdOn:LONGTEXT, changedOn:LONGTEXT, appType:LONGTEXT, security:INT, company:LONGTEXT, shared:LONGTEXT, appVersion:FLOAT, totalSheets:INT
+# TABLE: author:LONGTEXT, changedBy:LONGTEXT, createdOn:LONGTEXT, changedOn:LONGTEXT, appType:LONGTEXT, security:INT, company:LONGTEXT, shared:LONGTEXT, appVersion:FLOAT, totalSheets:INT
 
 import xml.etree.ElementTree as ET
 import re, zipfile, sys, os
@@ -19,15 +19,15 @@ def process(fullpath, config, columns=None):
 			worksheets.append(x)
 			workTotal += 1
 
-#	xml = document.read("xl/worksheets/sheet1.xml")
+# 	xml = document.read("xl/worksheets/sheet1.xml")
 	
-	#document core, ie. keywords/title/subject and mod+creation dates
+	# document core, ie. keywords/title/subject and mod+creation dates
 	xmlprop = document.read("docProps/core.xml")
 
-	#data regarding ammount of pages/words. Also contains app version and OS.
+	# data regarding ammount of pages/words. Also contains app version and OS.
 	xmlapp = document.read("docProps/app.xml")
 
-	#Minidom alternative
+	# Minidom alternative
 	tree = ET.fromstring(xmlprop)
 	treeApp = ET.fromstring(xmlapp)
 
@@ -39,8 +39,8 @@ def process(fullpath, config, columns=None):
 		dataTree.append(tree[basic].text)
 
 	
-#	for app in range(10):
-#		dataApp.append(treeApp[app].text)
+# 	for app in range(10):
+# 		dataApp.append(treeApp[app].text)
 	dataApp.append(treeApp[0].text)
 	dataApp.append(treeApp[1].text)
 	dataApp.append(treeApp[5].text)
@@ -52,14 +52,14 @@ def process(fullpath, config, columns=None):
 	merged.append(workTotal)
 	return merged
 
-#	author = tree[0].text
-#	changedBy = tree[1].text
-#	createdOn = tree[2].text
-#	changedOn = tree[3].text
+# 	author = tree[0].text
+# 	changedBy = tree[1].text
+# 	createdOn = tree[2].text
+# 	changedOn = tree[3].text
 
-#	apptype = treeApp[0].text
-#	security = treeApp[1].text
-#	company = treeApp[5].text
-#	shared = treeApp[7].text
-#	appversion = treeApp[9].text
+# 	apptype = treeApp[0].text
+# 	security = treeApp[1].text
+# 	company = treeApp[5].text
+# 	shared = treeApp[7].text
+# 	appversion = treeApp[9].text
 

@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 AUDIO_NONE = 0
 '''Audio type selecter for no audio.'''
-AUDIO_MP3 =  1
+AUDIO_MP3 = 1
 '''Audio type selecter for mpeg (mp3) audio.'''
 
 AUDIO_TYPES = (AUDIO_NONE, AUDIO_MP3)
@@ -67,7 +67,7 @@ def load(path, tag_version=None):
 
 class AudioInfo(object):
     '''A base container for common audio details.'''
-    time_secs  = 0
+    time_secs = 0
     '''The number of seconds of audio data (i.e., the playtime)'''
     size_bytes = 0
     '''The number of bytes of audio data.'''

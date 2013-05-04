@@ -25,8 +25,8 @@ class Module:
         """
         with open(self.path) as file:
             for line in file:
-                if line.startswith("""#TABLE: """):
-                    self.columndefinition = line.strip('\n').replace("""#TABLE: """, '')
+                if line.startswith("""# TABLE: """):
+                    self.columndefinition = line.strip('\n').replace("""# TABLE: """, '')
                     self.tablename = self.name.replace('.', '_')
                     for columnelement in self.columndefinition.split(','):
                         column = columnelement.split(':')[0].strip()
@@ -78,17 +78,17 @@ class Modules:
         mime_types_with_columns = {}
         mime_types = []
         
-        #First get all mime-types
+        # First get all mime-types
         for module in self.modules:
-            if (not module.isGlobal and not "__init__.py" in module.path): # Global module is for each mime-type so ingnore it.
-                if not module.mimetype in mime_types: # If key not already exists, append to the list with mime-types
+            if (not module.isGlobal and not "__init__.py" in module.path):  # Global module is for each mime-type so ingnore it.
+                if not module.mimetype in mime_types:  # If key not already exists, append to the list with mime-types
                     mime_types.append(module.mimetype)
         
-        #Then get all columns for a mime-type
+        # Then get all columns for a mime-type
         for mime_type in mime_types:
             modules = []
             for module in self.modules:
-                if (not module.isGlobal and not "__init__.py" in module.path): # Global module is for each mime-type so ingnore it.
+                if (not module.isGlobal and not "__init__.py" in module.path):  # Global module is for each mime-type so ingnore it.
                     if module.mimetype == mime_type or (module.mimetype and mime_type.startswith(module.mimetype)):
                         modules.append(module.tablename)
                         
@@ -104,9 +104,9 @@ class Modules:
         config - The uforia configuration object
         db - The uforia database object
         """
-        DEPTH_ROOT=0
-        DEPTH_TYPE=1
-        DEPTH_SUBTYPE=2
+        DEPTH_ROOT = 0
+        DEPTH_TYPE = 1
+        DEPTH_SUBTYPE = 2
 
         for root, subFolders, files in os.walk("modules"):
             nicepath = os.path.relpath(root, "modules")
@@ -130,7 +130,7 @@ class Modules:
                     warnings.warn("__init__.py not found in module folder '%s'." % nicepath)
                     continue
 
-                modulepath =  fullpath + os.path.sep + "__init__.py"
+                modulepath = fullpath + os.path.sep + "__init__.py"
                 module = Module(modulepath, modulenamebase, mimetype)
                 self.modules.append(module)
 
@@ -138,17 +138,17 @@ class Modules:
             for file in files:
                 modulenameend, extension = os.path.splitext(file)
                 if extension.lower() == ".py":
-                    isInit = file=="__init__.py"
+                    isInit = file == "__init__.py"
                     modulepath = fullpath + os.path.sep + file
                     modulename = None
                     if isInit:
                         modulename = modulenamebase
-                    elif depth==DEPTH_ROOT:
+                    elif depth == DEPTH_ROOT:
                         modulename = modulenameend
                     else:
                         modulename = modulenamebase + '.' + modulenameend
 
-                    module = Module(modulepath, modulename, mimetype, isGlobal=(depth==DEPTH_ROOT), asMimeHandler=not isInit)
+                    module = Module(modulepath, modulename, mimetype, isGlobal=(depth == DEPTH_ROOT), asMimeHandler=not isInit)
                     if module.isMimeHandler and not config.RECURSIVE:
                         db.setupModuleTable(module.tablename, module.columndefinition)
 

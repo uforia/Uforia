@@ -26,7 +26,7 @@ import Image, ImageFile
 
 field = re.compile(r"([a-z]*) ([^ \r\n]*)")
 
-##
+# #
 # Image plugin for IM Tools images.
 
 class ImtImageFile(ImageFile.ImageFile):
@@ -54,7 +54,7 @@ class ImtImageFile(ImageFile.ImageFile):
             if s == chr(12):
 
                 # image data begins
-                self.tile = [("raw", (0,0)+self.size,
+                self.tile = [("raw", (0, 0) + self.size,
                              self.fp.tell(),
                              (self.mode, 0, 1))]
 
@@ -68,12 +68,12 @@ class ImtImageFile(ImageFile.ImageFile):
                 if len(s) == 1 or len(s) > 100:
                     break
                 if s[0] == "*":
-                    continue # comment
+                    continue  # comment
 
                 m = field.match(s)
                 if not m:
                     break
-                k, v = m.group(1,2)
+                k, v = m.group(1, 2)
                 if k == "width":
                     xsize = int(v)
                     self.size = xsize, ysize

@@ -119,7 +119,7 @@ class TestFindAllBasicNamespaces(TreeTest):
     def test_find_by_namespaced_name(self):
         soup = self.soup('<mathml:msqrt>4</mathml:msqrt><a svg:fill="red">')
         self.assertEqual("4", soup.find("mathml:msqrt").string)
-        self.assertEqual("a", soup.find(attrs= { "svg:fill" : "red" }).name)
+        self.assertEqual("a", soup.find(attrs={ "svg:fill" : "red" }).name)
 
 
 class TestFindAllByName(TreeTest):
@@ -127,7 +127,7 @@ class TestFindAllByName(TreeTest):
 
     def setUp(self):
         super(TreeTest, self).setUp()
-        self.tree =  self.soup("""<a>First tag.</a>
+        self.tree = self.soup("""<a>First tag.</a>
                                   <b>Second tag.</b>
                                   <c>Third <a>Nested tag.</a> tag.</c>""")
 
@@ -203,8 +203,8 @@ class TestFindAllByAttribute(TreeTest):
                            ["Matching a.", "Matching b."])
 
     def test_find_all_by_utf8_attribute_value(self):
-        peace = u"םולש".encode("utf8")
-        data = u'<a title="םולש"></a>'.encode("utf8")
+        peace = u"�?ולש".encode("utf8")
+        data = u'<a title="�?ולש"></a>'.encode("utf8")
         soup = self.soup(data)
         self.assertEqual([soup.a], soup.find_all(title=peace))
         self.assertEqual([soup.a], soup.find_all(title=peace.decode("utf8")))
@@ -505,7 +505,7 @@ class TestPreviousOperations(ProximityTest):
     def test_previous_of_root_is_none(self):
         # The document root is outside the next/previous chain.
         # XXX This is broken!
-        #self.assertEqual(self.tree.previous_element, None)
+        # self.assertEqual(self.tree.previous_element, None)
         pass
 
     def test_find_all_previous(self):
@@ -1172,7 +1172,7 @@ class TestCDAtaListAttributes(SoupTest):
     """
     def test_single_value_becomes_list(self):
         soup = self.soup("<a class='foo'>")
-        self.assertEqual(["foo"],soup.a['class'])
+        self.assertEqual(["foo"], soup.a['class'])
 
     def test_multiple_values_becomes_list(self):
         soup = self.soup("<a class='foo bar'>")
@@ -1180,7 +1180,7 @@ class TestCDAtaListAttributes(SoupTest):
 
     def test_multiple_values_separated_by_weird_whitespace(self):
         soup = self.soup("<a class='foo\tbar\nbaz'>")
-        self.assertEqual(["foo", "bar", "baz"],soup.a['class'])
+        self.assertEqual(["foo", "bar", "baz"], soup.a['class'])
 
     def test_attributes_joined_into_string_on_output(self):
         soup = self.soup("<a class='foo\tbar'>")
@@ -1286,7 +1286,7 @@ class TestSubstitutions(SoupTest):
     def test_formatter_custom(self):
         markup = u"<b>&lt;foo&gt;</b><b>bar</b>"
         soup = self.soup(markup)
-        decoded = soup.decode(formatter = lambda x: x.upper())
+        decoded = soup.decode(formatter=lambda x: x.upper())
         # Instead of normal entity conversion code, the custom
         # callable is called on every string.
         self.assertEqual(
@@ -1312,7 +1312,7 @@ class TestSubstitutions(SoupTest):
 
     def test_prettify_accepts_formatter(self):
         soup = BeautifulSoup("<html><body>foo</body></html>")
-        pretty = soup.prettify(formatter = lambda x: x.upper())
+        pretty = soup.prettify(formatter=lambda x: x.upper())
         self.assertTrue("FOO" in pretty)
 
     def test_prettify_outputs_unicode_by_default(self):

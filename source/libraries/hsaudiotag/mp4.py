@@ -65,7 +65,7 @@ class Atom(object):
         return struct.unpack(dm, data)
 
     #--- Public
-    def read(self, startat=0, readcount=-1):
+    def read(self, startat=0, readcount= -1):
         if readcount < 0:
             readcount = self.content_size
         return self.parent.read(self.start_offset + HEADER_SIZE + startat, readcount)
@@ -94,16 +94,16 @@ class AtomBox(Atom):
     #--- Protected
     def _read_children(self):
         children = []
-        self.data #pre-read data
-        #self.data[-1] is the data of the children
+        self.data  # pre-read data
+        # self.data[-1] is the data of the children
         startat = self._datasize
         while startat < self.content_size:
             header = read_atom_header(self.read, startat)
             if not header:
                 break
-            if header[0] == 0: #when size is zero, it takes the rest of the atom
+            if header[0] == 0:  # when size is zero, it takes the rest of the atom
                 header = (self.content_size - startat, header[1])
-            if header[0] < HEADER_SIZE: #safeguard
+            if header[0] < HEADER_SIZE:  # safeguard
                 header = (HEADER_SIZE, header[1])
             if is_valid_atom_type(header[1]):
                 subatom = self._get_atom_class(header[1])(self, startat, header)
@@ -158,7 +158,7 @@ class AttributeDataAtom(Atom):
 
     def _read_atom_data(self):
         result = Atom._read_atom_data(self)
-        #Convert to unicode if needed
+        # Convert to unicode if needed
         if isinstance(result[2], str):
             result = list(result)
             result[2] = result[2].decode(u'utf-8', u'ignore')
@@ -258,7 +258,7 @@ class File(AtomBox):
             self._fp.close()
             self._fp = None
 
-    def read(self, startat=0, readcount=-1):
+    def read(self, startat=0, readcount= -1):
         if startat < 0:
             startat = 0
         self._fp.seek(startat)

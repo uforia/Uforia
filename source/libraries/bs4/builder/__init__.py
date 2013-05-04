@@ -84,7 +84,7 @@ class TreeBuilder(object):
 
     is_xml = False
     preserve_whitespace_tags = set()
-    empty_element_tags = None # A tag will be considered an empty-element
+    empty_element_tags = None  # A tag will be considered an empty-element
                               # tag when and only when it has no contents.
 
     # A value for these tag/attribute combinations is a space- or
@@ -181,11 +181,11 @@ class SAXTreeBuilder(TreeBuilder):
 
     def startElement(self, name, attrs):
         attrs = dict((key[1], value) for key, value in list(attrs.items()))
-        #print "Start %s, %r" % (name, attrs)
+        # print "Start %s, %r" % (name, attrs)
         self.soup.handle_starttag(name, attrs)
 
     def endElement(self, name):
-        #print "End %s" % name
+        # print "End %s" % name
         self.soup.handle_endtag(name)
 
     def startElementNS(self, nsTuple, nodeName, attrs):
@@ -195,7 +195,7 @@ class SAXTreeBuilder(TreeBuilder):
     def endElementNS(self, nsTuple, nodeName):
         # Throw away (ns, nodeName) for now.
         self.endElement(nodeName)
-        #handler.endElementNS((ns, node.nodeName), node.nodeName)
+        # handler.endElementNS((ns, node.nodeName), node.nodeName)
 
     def startPrefixMapping(self, prefix, nodeValue):
         # Ignore the prefix for now.

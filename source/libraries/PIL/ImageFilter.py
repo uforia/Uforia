@@ -18,12 +18,12 @@
 class Filter:
     pass
 
-##
+# #
 # Convolution filter kernel.
 
 class Kernel(Filter):
 
-    ##
+    # #
     # Create a convolution kernel.  The current version only
     # supports 3x3 and 5x5 integer and floating point kernels.
     # <p>
@@ -44,7 +44,7 @@ class Kernel(Filter):
     def __init__(self, size, kernel, scale=None, offset=0):
         if scale is None:
             # default scale is sum of kernel
-            scale = reduce(lambda a,b: a+b, kernel)
+            scale = reduce(lambda a, b: a + b, kernel)
         if size[0] * size[1] != len(kernel):
             raise ValueError("not enough coefficients in kernel")
         self.filterargs = size, scale, offset, kernel
@@ -58,13 +58,13 @@ class BuiltinFilter(Kernel):
     def __init__(self):
         pass
 
-##
+# #
 # Rank filter.
 
 class RankFilter(Filter):
     name = "Rank"
 
-    ##
+    # #
     # Create a rank filter.  The rank filter sorts all pixels in
     # a window of the given size, and returns the rank'th value.
     #
@@ -80,33 +80,33 @@ class RankFilter(Filter):
     def filter(self, image):
         if image.mode == "P":
             raise ValueError("cannot filter palette images")
-        image = image.expand(self.size/2, self.size/2)
+        image = image.expand(self.size / 2, self.size / 2)
         return image.rankfilter(self.size, self.rank)
 
-##
+# #
 # Median filter.  Picks the median pixel value in a window with the
 # given size.
 
 class MedianFilter(RankFilter):
     name = "Median"
 
-    ##
+    # #
     # Create a median filter.
     #
     # @param size The kernel size, in pixels.
 
     def __init__(self, size=3):
         self.size = size
-        self.rank = size*size/2
+        self.rank = size * size / 2
 
-##
+# #
 # Min filter.  Picks the lowest pixel value in a window with the given
 # size.
 
 class MinFilter(RankFilter):
     name = "Min"
 
-    ##
+    # #
     # Create a min filter.
     #
     # @param size The kernel size, in pixels.
@@ -115,23 +115,23 @@ class MinFilter(RankFilter):
         self.size = size
         self.rank = 0
 
-##
+# #
 # Max filter.  Picks the largest pixel value in a window with the
 # given size.
 
 class MaxFilter(RankFilter):
     name = "Max"
 
-    ##
+    # #
     # Create a max filter.
     #
     # @param size The kernel size, in pixels.
 
     def __init__(self, size=3):
         self.size = size
-        self.rank = size*size-1
+        self.rank = size * size - 1
 
-##
+# #
 # Mode filter.  Picks the most frequent pixel value in a box with the
 # given size.  Pixel values that occur only once or twice are ignored;
 # if no pixel value occurs more than twice, the original pixel value
@@ -140,7 +140,7 @@ class MaxFilter(RankFilter):
 class ModeFilter(Filter):
     name = "Mode"
 
-    ##
+    # #
     # Create a mode filter.
     #
     # @param size The kernel size, in pixels.
@@ -150,7 +150,7 @@ class ModeFilter(Filter):
     def filter(self, image):
         return image.modefilter(self.size)
 
-##
+# #
 # Gaussian blur filter.
 
 class GaussianBlur(Filter):
@@ -161,7 +161,7 @@ class GaussianBlur(Filter):
     def filter(self, image):
         return image.gaussian_blur(self.radius)
 
-##
+# #
 # Unsharp mask filter.
 
 class UnsharpMask(Filter):
@@ -174,116 +174,116 @@ class UnsharpMask(Filter):
     def filter(self, image):
         return image.unsharp_mask(self.radius, self.percent, self.threshold)
 
-##
+# #
 # Simple blur filter.
 
 class BLUR(BuiltinFilter):
     name = "Blur"
     filterargs = (5, 5), 16, 0, (
-        1,  1,  1,  1,  1,
-        1,  0,  0,  0,  1,
-        1,  0,  0,  0,  1,
-        1,  0,  0,  0,  1,
-        1,  1,  1,  1,  1
+        1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1,
+        1, 0, 0, 0, 1,
+        1, 0, 0, 0, 1,
+        1, 1, 1, 1, 1
         )
 
-##
+# #
 # Simple contour filter.
 
 class CONTOUR(BuiltinFilter):
     name = "Contour"
     filterargs = (3, 3), 1, 255, (
-        -1, -1, -1,
-        -1,  8, -1,
-        -1, -1, -1
+ -1, -1, -1,
+        - 1, 8, -1,
+        - 1, -1, -1
         )
 
-##
+# #
 # Simple detail filter.
 
 class DETAIL(BuiltinFilter):
     name = "Detail"
     filterargs = (3, 3), 6, 0, (
-        0, -1,  0,
-        -1, 10, -1,
-        0, -1,  0
+        0, -1, 0,
+        - 1, 10, -1,
+        0, -1, 0
         )
 
-##
+# #
 # Simple edge enhancement filter.
 
 class EDGE_ENHANCE(BuiltinFilter):
     name = "Edge-enhance"
     filterargs = (3, 3), 2, 0, (
-        -1, -1, -1,
-        -1, 10, -1,
-        -1, -1, -1
+ -1, -1, -1,
+        - 1, 10, -1,
+        - 1, -1, -1
         )
 
-##
+# #
 # Simple stronger edge enhancement filter.
 
 class EDGE_ENHANCE_MORE(BuiltinFilter):
     name = "Edge-enhance More"
     filterargs = (3, 3), 1, 0, (
-        -1, -1, -1,
-        -1,  9, -1,
-        -1, -1, -1
+ -1, -1, -1,
+        - 1, 9, -1,
+        - 1, -1, -1
         )
 
-##
+# #
 # Simple embossing filter.
 
 class EMBOSS(BuiltinFilter):
     name = "Emboss"
     filterargs = (3, 3), 1, 128, (
-        -1,  0,  0,
-        0,  1,  0,
-        0,  0,  0
+ -1, 0, 0,
+        0, 1, 0,
+        0, 0, 0
         )
 
-##
+# #
 # Simple edge-finding filter.
 
 class FIND_EDGES(BuiltinFilter):
     name = "Find Edges"
     filterargs = (3, 3), 1, 0, (
-        -1, -1, -1,
-        -1,  8, -1,
-        -1, -1, -1
+ -1, -1, -1,
+        - 1, 8, -1,
+        - 1, -1, -1
         )
 
-##
+# #
 # Simple smoothing filter.
 
 class SMOOTH(BuiltinFilter):
     name = "Smooth"
     filterargs = (3, 3), 13, 0, (
-        1,  1,  1,
-        1,  5,  1,
-        1,  1,  1
+        1, 1, 1,
+        1, 5, 1,
+        1, 1, 1
         )
 
-##
+# #
 # Simple stronger smoothing filter.
 
 class SMOOTH_MORE(BuiltinFilter):
     name = "Smooth More"
     filterargs = (5, 5), 100, 0, (
-        1,  1,  1,  1,  1,
-        1,  5,  5,  5,  1,
-        1,  5, 44,  5,  1,
-        1,  5,  5,  5,  1,
-        1,  1,  1,  1,  1
+        1, 1, 1, 1, 1,
+        1, 5, 5, 5, 1,
+        1, 5, 44, 5, 1,
+        1, 5, 5, 5, 1,
+        1, 1, 1, 1, 1
         )
 
-##
+# #
 # Simple sharpening filter.
 
 class SHARPEN(BuiltinFilter):
     name = "Sharpen"
     filterargs = (3, 3), 16, 0, (
-        -2, -2, -2,
-        -2, 32, -2,
-        -2, -2, -2
+ -2, -2, -2,
+        - 2, 32, -2,
+        - 2, -2, -2
         )

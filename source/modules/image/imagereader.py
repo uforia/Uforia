@@ -6,7 +6,7 @@ Created on 11 mrt. 2013
 
 # This is the image module reading all images
 
-#TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Histogram:LONGTEXT, Palette:LONGTEXT, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
+# TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Histogram:LONGTEXT, Palette:LONGTEXT, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
 
 import sys, traceback
 from PIL import Image
@@ -14,7 +14,7 @@ from PIL import Image
 def process(fullpath, config, columns=None):
         # Try to parse image data
         try:
-            #Open image file
+            # Open image file
             image = Image.open(fullpath, "r")
 
             assorted = [image.format, image.mode, image.size[0], image.size[1], image.getcolors(), image.getextrema(), image.histogram()]
@@ -51,7 +51,7 @@ def process(fullpath, config, columns=None):
             return assorted
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

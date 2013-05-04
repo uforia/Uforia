@@ -26,16 +26,16 @@ import Image, BmpImagePlugin
 # --------------------------------------------------------------------
 
 def i16(c):
-    return ord(c[0]) + (ord(c[1])<<8)
+    return ord(c[0]) + (ord(c[1]) << 8)
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
 
 def _accept(prefix):
     return prefix[:4] == "\0\0\2\0"
 
-##
+# #
 # Image plugin for Windows Cursor files.
 
 class CurImageFile(BmpImagePlugin.BmpImageFile):
@@ -60,22 +60,22 @@ class CurImageFile(BmpImagePlugin.BmpImageFile):
                 m = s
             elif ord(s[0]) > ord(m[0]) and ord(s[1]) > ord(m[1]):
                 m = s
-            #print "width", ord(s[0])
-            #print "height", ord(s[1])
-            #print "colors", ord(s[2])
-            #print "reserved", ord(s[3])
-            #print "hotspot x", i16(s[4:])
-            #print "hotspot y", i16(s[6:])
-            #print "bytes", i32(s[8:])
-            #print "offset", i32(s[12:])
+            # print "width", ord(s[0])
+            # print "height", ord(s[1])
+            # print "colors", ord(s[2])
+            # print "reserved", ord(s[3])
+            # print "hotspot x", i16(s[4:])
+            # print "hotspot y", i16(s[6:])
+            # print "bytes", i32(s[8:])
+            # print "offset", i32(s[12:])
 
         # load as bitmap
         self._bitmap(i32(m[12:]) + offset)
 
         # patch up the bitmap height
-        self.size = self.size[0], self.size[1]/2
+        self.size = self.size[0], self.size[1] / 2
         d, e, o, a = self.tile[0]
-        self.tile[0] = d, (0,0)+self.size, o, a
+        self.tile[0] = d, (0, 0) + self.size, o, a
 
         return
 

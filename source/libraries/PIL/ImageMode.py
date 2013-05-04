@@ -16,7 +16,7 @@
 # mode descriptor cache
 _modes = {}
 
-##
+# #
 # Wrapper for mode strings.
 
 class ModeDescriptor:
@@ -30,7 +30,7 @@ class ModeDescriptor:
     def __str__(self):
         return self.mode
 
-##
+# #
 # Gets a mode descriptor for the given mode.
 
 def getmode(mode):

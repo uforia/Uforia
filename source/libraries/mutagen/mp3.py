@@ -47,10 +47,10 @@ class MPEGInfo(object):
     # Map (version, layer) tuples to bitrates.
     __BITRATE = {
         (1, 1): range(0, 480, 32),
-        (1, 2): [0, 32, 48, 56, 64, 80, 96, 112,128,160,192,224,256,320,384],
-        (1, 3): [0, 32, 40, 48, 56, 64, 80, 96, 112,128,160,192,224,256,320],
-        (2, 1): [0, 32, 48, 56, 64, 80, 96, 112,128,144,160,176,192,224,256],
-        (2, 2): [0,  8, 16, 24, 32, 40, 48,  56, 64, 80, 96,112,128,144,160],
+        (1, 2): [0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384],
+        (1, 3): [0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320],
+        (2, 1): [0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256],
+        (2, 2): [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160],
         }
 
     __BITRATE[(2, 3)] = __BITRATE[(2, 2)]
@@ -223,8 +223,8 @@ class MP3(ID3FileType):
 
     def score(filename, fileobj, header):
         filename = filename.lower()
-        return (header.startswith("ID3") * 2 + filename.endswith(".mp3") +
-                filename.endswith(".mp2") + filename.endswith(".mpg") +
+        return (header.startswith("ID3") * 2 + filename.endswith(".mp3") + 
+                filename.endswith(".mp2") + filename.endswith(".mpg") + 
                 filename.endswith(".mpeg"))
     score = staticmethod(score)
 

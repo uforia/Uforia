@@ -6,18 +6,18 @@ Created on 28 feb. 2013
 
 # This is the audio module for .ogg
 
-#TABLE: Artist:LONGTEXT, Album:LONGTEXT, Title:LONGTEXT, Genre:LONGTEXT, Year:INT(4), Track:INT, Comment:LONGTEXT, DurationInSeconds:DOUBLE, BitRate:INT, SampleRate:INT, AudioFileSize:INT, AudioOffset:INT
+# TABLE: Artist:LONGTEXT, Album:LONGTEXT, Title:LONGTEXT, Genre:LONGTEXT, Year:INT(4), Track:INT, Comment:LONGTEXT, DurationInSeconds:DOUBLE, BitRate:INT, SampleRate:INT, AudioFileSize:INT, AudioOffset:INT
 
 import sys, traceback
 from hsaudiotag import auto
 
 def process(fullpath, config, columns=None):
-        #Try to parse .ogg data
+        # Try to parse .ogg data
         try:
-            #Read the .ogg file
+            # Read the .ogg file
             oggFile = auto.File(fullpath)
 
-            #Check if .ogg file is readed correctly
+            # Check if .ogg file is readed correctly
             if oggFile.valid:
 
                 # Store audio data in list
@@ -56,7 +56,7 @@ def process(fullpath, config, columns=None):
                 return None
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

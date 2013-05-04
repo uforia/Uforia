@@ -6,17 +6,17 @@ Created on 21 feb. 2013
 
 # This is the audio module for wav files
 
-#TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
+# TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
 
 import sys, traceback
 import wave
 
 def process(fullpath, config, columns=None):
     try:
-        #open the wave file
+        # open the wave file
         waveFile = wave.open(fullpath, "rb")
 
-        #fill variables from the wave file, (nchannels, sampwidth, framerate, nframes, comptype, compname)
+        # fill variables from the wave file, (nchannels, sampwidth, framerate, nframes, comptype, compname)
         assorted = list(waveFile.getparams())
 
         # duration of the wave file is amount of frames divided by framerate
@@ -48,6 +48,6 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
         return None

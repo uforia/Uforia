@@ -45,7 +45,7 @@ class ArgumentParser(argparse.ArgumentParser):
                 help="Set a log level. This option may be specified multiple "
                      "times. If a logger name is specified than the level "
                      "applies only to that logger, otherwise the level is set "
-                     "on the top-level logger. Acceptable levels are %s. " %
+                     "on the top-level logger. Acceptable levels are %s. " % 
                      (", ".join("'%s'" % l for l in self.log_levels)))
 
 
@@ -68,45 +68,45 @@ class LoggingAction(argparse._AppendAction):
                                             option_string)
 
 # ANSI terminal codes
-RESET           = '\033[0m'
-BOLD            = '\033[1m'
-BOLD_OFF        = '\033[22m'
-REVERSE         = '\033[2m'
-ITALICS         = '\033[3m'
-ITALICS_OFF     = '\033[23m'
-UNDERLINE       = '\033[4m'
-UNDERLINE_OFF   = '\033[24m'
-BLINK_SLOW      = '\033[5m'
-BLINK_SLOW_OFF  = '\033[25m'
-BLINK_FAST      = '\033[6m'
-BLINK_FAST_OFF  = '\033[26m'
-INVERSE         = '\033[7m'
-INVERSE_OFF     = '\033[27m'
-STRIKE_THRU     = '\033[9m'
+RESET = '\033[0m'
+BOLD = '\033[1m'
+BOLD_OFF = '\033[22m'
+REVERSE = '\033[2m'
+ITALICS = '\033[3m'
+ITALICS_OFF = '\033[23m'
+UNDERLINE = '\033[4m'
+UNDERLINE_OFF = '\033[24m'
+BLINK_SLOW = '\033[5m'
+BLINK_SLOW_OFF = '\033[25m'
+BLINK_FAST = '\033[6m'
+BLINK_FAST_OFF = '\033[26m'
+INVERSE = '\033[7m'
+INVERSE_OFF = '\033[27m'
+STRIKE_THRU = '\033[9m'
 STRIKE_THRU_OFF = '\033[29m'
 
-GREY      = '\033[30m'
-RED       = '\033[31m'
-GREEN     = '\033[32m'
-YELLOW    = '\033[33m'
-BLUE      = '\033[34m'
-MAGENTA   = '\033[35m'
-CYAN      = '\033[36m'
-WHITE     = '\033[37m'
+GREY = '\033[30m'
+RED = '\033[31m'
+GREEN = '\033[32m'
+YELLOW = '\033[33m'
+BLUE = '\033[34m'
+MAGENTA = '\033[35m'
+CYAN = '\033[36m'
+WHITE = '\033[37m'
 
-GREYBG    = '\033[40m'
-REDBG     = '\033[41m'
-GREENBG   = '\033[42m'
-YELLOWBG  = '\033[43m'
-BLUEBG    = '\033[44m'
+GREYBG = '\033[40m'
+REDBG = '\033[41m'
+GREENBG = '\033[42m'
+YELLOWBG = '\033[43m'
+BLUEBG = '\033[44m'
 MAGENTABG = '\033[45m'
-CYANBG    = '\033[46m'
-WHITEBG   = '\033[47m'
+CYANBG = '\033[46m'
+WHITEBG = '\033[47m'
 
 # Default colors
-ERROR_COLOR   = RED
+ERROR_COLOR = RED
 WARNING_COLOR = YELLOW
-HEADER_COLOR  = GREEN
+HEADER_COLOR = GREEN
 
 # Set this to disable terminal color codes
 __ENABLE_COLOR_OUTPUT = defaultdict(bool)

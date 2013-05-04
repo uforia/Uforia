@@ -23,32 +23,32 @@ log = logging.getLogger(__name__)
 from ..utils import requireUnicode
 
 # Version constants and helpers
-ID3_V1              = (1, None, None)
+ID3_V1 = (1, None, None)
 '''Version 1, 1.0 or 1.1'''
-ID3_V1_0            = (1, 0, 0)
+ID3_V1_0 = (1, 0, 0)
 '''Version 1.0, specifically'''
-ID3_V1_1            = (1, 1, 0)
+ID3_V1_1 = (1, 1, 0)
 '''Version 1.1, specifically'''
-ID3_V2              = (2, None, None)
+ID3_V2 = (2, None, None)
 '''Version 2, 2.2, 2.3 or 2.4'''
-ID3_V2_2            = (2, 2, 0)
+ID3_V2_2 = (2, 2, 0)
 '''Version 2.2, specifically'''
-ID3_V2_3            = (2, 3, 0)
+ID3_V2_3 = (2, 3, 0)
 '''Version 2.3, specifically'''
-ID3_V2_4            = (2, 4, 0)
+ID3_V2_4 = (2, 4, 0)
 '''Version 2.4, specifically'''
 ID3_DEFAULT_VERSION = ID3_V2_4
 '''The default version for eyeD3 tags and save operations.'''
-ID3_ANY_VERSION     = (ID3_V1[0] | ID3_V2[0], None, None)
+ID3_ANY_VERSION = (ID3_V1[0] | ID3_V2[0], None, None)
 '''Useful for operations where any version will suffice.'''
 
-LATIN1_ENCODING   = b"\x00"
+LATIN1_ENCODING = b"\x00"
 '''Byte code for latin1'''
-UTF_16_ENCODING   = b"\x01"
+UTF_16_ENCODING = b"\x01"
 '''Byte code for UTF-16'''
 UTF_16BE_ENCODING = b"\x02"
 '''Byte code for UTF-16 (big endian)'''
-UTF_8_ENCODING    = b"\x03"
+UTF_8_ENCODING = b"\x03"
 '''Byte code for UTF-8 (Not supported in ID3 versions < 2.4)'''
 
 DEFAULT_LANG = "eng"
@@ -89,7 +89,7 @@ def normalizeVersion(v):
     return v
 
 
-## Convert an ID3 version constant to a display string
+# # Convert an ID3 version constant to a display string
 def versionToString(v):
     '''Conversion version tuple ``v`` to a string description.'''
     if v == ID3_ANY_VERSION:
@@ -211,7 +211,7 @@ class Genre(object):
             self._id = None
             self._name = val
 
-    ##
+    # #
     # Parses genre information from \a genre_str.
     # The following formats are supported:
     # 01, 2, 23, 125 - ID3 v1.x style.

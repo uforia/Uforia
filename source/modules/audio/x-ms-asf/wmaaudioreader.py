@@ -2,7 +2,7 @@
 
 # This is the audio module for WMA
 
-#TABLE: ARTIST:LONGTEXT, TITLE:LONGTEXT, CHANNELS:LONGTEXT, COMMENT:INT, DURATION:INT, GENRE:LONGTEXT, SAMPLERATE:INT, SIZE:INT, TRACK:INT(3), YEAR:INT(4), ALBUM:LONGTEXT, AUDIO_SIZE:INT
+# TABLE: ARTIST:LONGTEXT, TITLE:LONGTEXT, CHANNELS:LONGTEXT, COMMENT:INT, DURATION:INT, GENRE:LONGTEXT, SAMPLERATE:INT, SIZE:INT, TRACK:INT(3), YEAR:INT(4), ALBUM:LONGTEXT, AUDIO_SIZE:INT
 
 # import for external lib hsaudiotag
 from hsaudiotag import wma
@@ -53,7 +53,7 @@ def process(fullpath, config, columns=None):
              return None
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
         # Store nothing so the application won't crash
         return None

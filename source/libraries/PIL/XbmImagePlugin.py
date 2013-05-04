@@ -38,7 +38,7 @@ xbm_head = re.compile(
 def _accept(prefix):
     return string.lstrip(prefix)[:7] == "#define"
 
-##
+# #
 # Image plugin for X11 bitmaps.
 
 class XbmImageFile(ImageFile.ImageFile):
@@ -63,7 +63,7 @@ class XbmImageFile(ImageFile.ImageFile):
             self.mode = "1"
             self.size = xsize, ysize
 
-            self.tile = [("xbm", (0, 0)+self.size, m.end(), None)]
+            self.tile = [("xbm", (0, 0) + self.size, m.end(), None)]
 
 
 def _save(im, fp, filename):
@@ -81,7 +81,7 @@ def _save(im, fp, filename):
 
     fp.write("static char im_bits[] = {\n")
 
-    ImageFile._save(im, fp, [("xbm", (0,0)+im.size, 0, None)])
+    ImageFile._save(im, fp, [("xbm", (0, 0) + im.size, 0, None)])
 
     fp.write("};\n")
 

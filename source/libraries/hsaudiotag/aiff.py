@@ -23,7 +23,7 @@ class NotAChunk(Exception):
 
 # based on stdlib's aifc
 _HUGE_VAL = 1.79769313486231e+308
-def read_float(s): # 10 bytes
+def read_float(s):  # 10 bytes
     expon, himant, lomant = struct.unpack('>hLL', s)
     sign = 1
     if expon < 0:

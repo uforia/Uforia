@@ -24,16 +24,16 @@ import Image, ImageFile, ImagePalette
 
 
 def i16(c):
-    return ord(c[1]) + (ord(c[0])<<8)
+    return ord(c[1]) + (ord(c[0]) << 8)
 
 def i32(c):
-    return ord(c[3]) + (ord(c[2])<<8) + (ord(c[1])<<16) + (ord(c[0])<<24)
+    return ord(c[3]) + (ord(c[2]) << 8) + (ord(c[1]) << 16) + (ord(c[0]) << 24)
 
 
 def _accept(prefix):
     return i32(prefix) == 0x59a66a95
 
-##
+# #
 # Image plugin for Sun raster files.
 
 class SunImageFile(ImageFile.ImageFile):
@@ -74,9 +74,9 @@ class SunImageFile(ImageFile.ImageFile):
         stride = (((self.size[0] * depth + 7) / 8) + 3) & (~3)
 
         if compression == 1:
-            self.tile = [("raw", (0,0)+self.size, offset, (rawmode, stride))]
+            self.tile = [("raw", (0, 0) + self.size, offset, (rawmode, stride))]
         elif compression == 2:
-            self.tile = [("sun_rle", (0,0)+self.size, offset, rawmode)]
+            self.tile = [("sun_rle", (0, 0) + self.size, offset, rawmode)]
 
 #
 # registry

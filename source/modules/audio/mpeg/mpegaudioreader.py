@@ -7,7 +7,7 @@ Created on 16 feb. 2013
 
 # This is the audio module for mp3 and mpeg
 
-#TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CDID:INT, Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT, DurationInSeconds:DOUBLE, PlayCount:INT, TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:BLOB, XMP:LONGTEXT
+# TABLE: Title:LONGTEXT, Subtitle:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CDID:INT, Publisher:LONGTEXT, Composer:LONGTEXT, Conductor:LONGTEXT, GroupContent:LONGTEXT, ReleaseDate:DATE, RecordingYear:INT(4), BeatsPerMinute:INT, DurationInSeconds:DOUBLE, PlayCount:INT, TermsOfUse:LONGTEXT, Language:LONGTEXT, Rating:INT(3), Genre:LONGTEXT, CommentText:LONGTEXT, CommentDescription:LONGTEXT, CommentLanguage:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, Mood:LONGTEXT, Compilation:LONGTEXT, UserText:LONGTEXT, UserDescription:LONGTEXT, LyricsText:LONGTEXT, LyricsDescription:LONGTEXT, LyricsLanguage:LONGTEXT, ImageDescription:LONGTEXT, ImageType:LONGTEXT, ImageURL:LONGTEXT, ChapterTitle:LONGTEXT, ChapterSubtitle:LONGTEXT, ChapterStartTime:DATE, ChapterEndTime:DATE, ChapterStartOffset:DATE, ChapterEndOffset:DATE, CommercialURL:LONGTEXT, CopyrightURL:LONGTEXT, ArtistURL:LONGTEXT, AudioFileURL:LONGTEXT, AudioScourceURL:LONGTEXT, InternetRadioURL:LONGTEXT, PaymentURL:LONGTEXT, PublisherURL:LONGTEXT, UserURL:LONGTEXT , APEv2Tag:BLOB, XMP:LONGTEXT
 
 # import for external lib eyed3
 import sys, traceback
@@ -46,7 +46,7 @@ def process(fullpath, config, columns=None):
         # Store the subtitle in the list
         for subtitle_frame in track_tag.frame_set["TIT3"] or []:
             list_of_strings.append(subtitle_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the artist in the list
         assorted.append(track_tag.artist)
@@ -55,7 +55,7 @@ def process(fullpath, config, columns=None):
         list_of_strings = []
         for album_artist_frame in track_tag.frame_set["TPE2"] or []:
             list_of_strings.append(album_artist_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the album in the list
         assorted.append(track_tag.album)
@@ -98,19 +98,19 @@ def process(fullpath, config, columns=None):
         list_of_strings = []
         for composer_frame in track_tag.frame_set["TCOM"] or []:
             list_of_strings.append(composer_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the conductor in the list
         list_of_strings = []
         for conductor_frame in track_tag.frame_set["TPE3"] or []:
             list_of_strings.append(conductor_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the group content in the list
         list_of_strings = []
         for group_content_frame in track_tag.frame_set["TIT1"] or []:
             list_of_strings.append(group_content_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the releasedate and the recording year in the list
         assorted.append(track_tag.release_date)
@@ -132,7 +132,7 @@ def process(fullpath, config, columns=None):
         list_of_strings = []
         for language_frame in track_tag.frame_set["TLAN"] or []:
             list_of_strings.append(language_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the rating in the list
         rating = 0
@@ -165,25 +165,25 @@ def process(fullpath, config, columns=None):
         list_of_strings = []
         for encoded_by_frame in track_tag.frame_set["TENC"] or []:
             list_of_strings.append(encoded_by_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the copyright in the list
         list_of_strings = []
         for copyright_frame in track_tag.frame_set["TCOP"] or []:
             list_of_strings.append(copyright_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the mood in the list
         list_of_strings = []
         for mood_frame in track_tag.frame_set["TMOO"] or []:
             list_of_strings.append(mood_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the compilation in the list
         list_of_strings = []
         for compitation_frame in track_tag.frame_set["TPE4"] or []:
             list_of_strings.append(compitation_frame.text)
-        assorted.append( ' / '.join(list_of_strings) )
+        assorted.append(' / '.join(list_of_strings))
 
         # Store the user text data in the list
         user_text_description = None
@@ -214,12 +214,12 @@ def process(fullpath, config, columns=None):
             image_description = image.description
             image_url = image.image_url
             image_picturetype = image.picTypeToString(image.picture_type)
-            #TODO: do something with image itself (image module):  image.image_data
+            # TODO: do something with image itself (image module):  image.image_data
         assorted.append(image_description)
         assorted.append(image_picturetype)
         assorted.append(image_url)
 
-        #delete variables
+        # delete variables
         del user_text_description, user_text_text, lyrics_description, lyrics_lang, lyrics_text, image_description, image_url, image_picturetype
 
         # Store the chapter data in the list
@@ -245,7 +245,7 @@ def process(fullpath, config, columns=None):
         assorted.append(chapter_startoffset)
         assorted.append(chapter_endoffset)
 
-        #delete variables
+        # delete variables
         del chapter_title, chapter_subtitle, chapter_starttime, chapter_endtime, chapter_startoffset, chapter_endoffset
 
         # Store all URL's in the list
@@ -280,7 +280,7 @@ def process(fullpath, config, columns=None):
         if config.ENABLEXMP:
             import libxmp
             xmpfile = libxmp.XMPFiles(file_path=fullpath)
-            assorted.append( str(xmpfile.get_xmp()))
+            assorted.append(str(xmpfile.get_xmp()))
             xmpfile.close_file()
         else:
             assorted.append(None)
@@ -300,6 +300,6 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
         return None
 

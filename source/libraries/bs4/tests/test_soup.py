@@ -28,8 +28,8 @@ try:
 except ImportError, e:
     LXML_PRESENT = False
 
-PYTHON_2_PRE_2_7 = (sys.version_info < (2,7))
-PYTHON_3_PRE_3_2 = (sys.version_info[0] == 3 and sys.version_info < (3,2))
+PYTHON_2_PRE_2_7 = (sys.version_info < (2, 7))
+PYTHON_3_PRE_3_2 = (sys.version_info[0] == 3 and sys.version_info < (3, 2))
 
 class TestDeprecatedConstructorArguments(SoupTest):
 
@@ -312,13 +312,13 @@ class TestUnicodeDammit(unittest.TestCase):
         self.assertRaises(UnicodeDecodeError, doc.decode, "utf8")
 
         # Unicode, Dammit thinks the whole document is Windows-1252,
-        # and decodes it into "â˜ƒâ˜ƒâ˜ƒ“Hi, I like Windows!”â˜ƒâ˜ƒâ˜ƒ"
+        # and decodes it into "â˜ƒâ˜ƒâ˜ƒ“Hi, I like Windows!�?â˜ƒâ˜ƒâ˜ƒ"
 
         # But if we run it through fix_embedded_windows_1252, it's fixed:
 
         fixed = UnicodeDammit.detwingle(doc)
         self.assertEqual(
-            u"☃☃☃“Hi, I like Windows!”☃☃☃", fixed.decode("utf8"))
+            u"☃☃☃“Hi, I like Windows!�?☃☃☃", fixed.decode("utf8"))
 
     def test_detwingle_ignores_multibyte_characters(self):
         # Each of these characters has a UTF-8 representation ending
@@ -326,9 +326,9 @@ class TestUnicodeDammit(unittest.TestCase):
         # Windows-1252. But our code knows to skip over multibyte
         # UTF-8 characters, so they'll survive the process unscathed.
         for tricky_unicode_char in (
-            u"\N{LATIN SMALL LIGATURE OE}", # 2-byte char '\xc5\x93'
-            u"\N{LATIN SUBSCRIPT SMALL LETTER X}", # 3-byte char '\xe2\x82\x93'
-            u"\xf0\x90\x90\x93", # This is a CJK character, not sure which one.
+            u"\N{LATIN SMALL LIGATURE OE}",  # 2-byte char '\xc5\x93'
+            u"\N{LATIN SUBSCRIPT SMALL LETTER X}",  # 3-byte char '\xe2\x82\x93'
+            u"\xf0\x90\x90\x93",  # This is a CJK character, not sure which one.
             ):
             input = tricky_unicode_char.encode("utf8")
             self.assertTrue(input.endswith(b'\x93'))

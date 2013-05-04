@@ -99,7 +99,7 @@ def number(s):
     except ValueError:
         return float(s)
 
-##
+# #
 # Image plugin for the IFUNC IM file format.
 
 class ImImageFile(ImageFile.ImageFile):
@@ -154,7 +154,7 @@ class ImImageFile(ImageFile.ImageFile):
 
             if m:
 
-                k, v = m.group(1,2)
+                k, v = m.group(1, 2)
 
                 # Convert value as appropriate
                 if k in [FRAMES, SCALE, SIZE]:
@@ -198,10 +198,10 @@ class ImImageFile(ImageFile.ImageFile):
         if self.info.has_key(LUT):
             # convert lookup table to palette or lut attribute
             palette = self.fp.read(768)
-            greyscale = 1 # greyscale palette
-            linear = 1 # linear greyscale palette
+            greyscale = 1  # greyscale palette
+            linear = 1  # linear greyscale palette
             for i in range(256):
-                if palette[i] == palette[i+256] == palette[i+512]:
+                if palette[i] == palette[i + 256] == palette[i + 512]:
                     if palette[i] != chr(i):
                         linear = 0
                 else:
@@ -224,7 +224,7 @@ class ImImageFile(ImageFile.ImageFile):
 
         self.__offset = offs = self.fp.tell()
 
-        self.__fp = self.fp # FIXME: hack
+        self.__fp = self.fp  # FIXME: hack
 
         if self.rawmode[:2] == "F;":
 
@@ -233,7 +233,7 @@ class ImImageFile(ImageFile.ImageFile):
                 # use bit decoder (if necessary)
                 bits = int(self.rawmode[2:])
                 if bits not in [8, 16, 32]:
-                    self.tile = [("bit", (0,0)+self.size, offs,
+                    self.tile = [("bit", (0, 0) + self.size, offs,
                                  (bits, 8, 3, 0, -1))]
                     return
             except ValueError:
@@ -243,12 +243,12 @@ class ImImageFile(ImageFile.ImageFile):
             # Old LabEye/3PC files.  Would be very surprised if anyone
             # ever stumbled upon such a file ;-)
             size = self.size[0] * self.size[1]
-            self.tile = [("raw", (0,0)+self.size, offs, ("G", 0, -1)),
-                         ("raw", (0,0)+self.size, offs+size, ("R", 0, -1)),
-                         ("raw", (0,0)+self.size, offs+2*size, ("B", 0, -1))]
+            self.tile = [("raw", (0, 0) + self.size, offs, ("G", 0, -1)),
+                         ("raw", (0, 0) + self.size, offs + size, ("R", 0, -1)),
+                         ("raw", (0, 0) + self.size, offs + 2 * size, ("B", 0, -1))]
         else:
             # LabEye/IFUNC files
-            self.tile = [("raw", (0,0)+self.size, offs, (self.rawmode, 0, -1))]
+            self.tile = [("raw", (0, 0) + self.size, offs, (self.rawmode, 0, -1))]
 
     def seek(self, frame):
 
@@ -270,7 +270,7 @@ class ImImageFile(ImageFile.ImageFile):
 
         self.fp = self.__fp
 
-        self.tile = [("raw", (0,0)+self.size, offs, (self.rawmode, 0, -1))]
+        self.tile = [("raw", (0, 0) + self.size, offs, (self.rawmode, 0, -1))]
 
     def tell(self):
 
@@ -321,10 +321,10 @@ def _save(im, fp, filename, check=0):
     fp.write("File size (no of images): %d\r\n" % frames)
     if im.mode == "P":
         fp.write("Lut: 1\r\n")
-    fp.write("\000" * (511-fp.tell()) + "\032")
+    fp.write("\000" * (511 - fp.tell()) + "\032")
     if im.mode == "P":
-        fp.write(im.im.getpalette("RGB", "RGB;L")) # 768 bytes
-    ImageFile._save(im, fp, [("raw", (0,0)+im.size, 0, (rawmode, 0, -1))])
+        fp.write(im.im.getpalette("RGB", "RGB;L"))  # 768 bytes
+    ImageFile._save(im, fp, [("raw", (0, 0) + im.size, 0, (rawmode, 0, -1))])
 
 #
 # --------------------------------------------------------------------

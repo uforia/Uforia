@@ -13,7 +13,7 @@ import Image, ImageFile
 
 _handler = None
 
-##
+# #
 # Install application-specific FITS image handler.
 #
 # @param handler Handler object.

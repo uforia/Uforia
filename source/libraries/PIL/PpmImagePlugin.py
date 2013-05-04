@@ -40,7 +40,7 @@ MODES = {
 def _accept(prefix):
     return prefix[0] == "P" and prefix[1] in "0456y"
 
-##
+# #
 # Image plugin for PBM, PGM, and PPM images.
 
 class PpmImageFile(ImageFile.ImageFile):
@@ -48,8 +48,8 @@ class PpmImageFile(ImageFile.ImageFile):
     format = "PPM"
     format_description = "Pbmplus image"
 
-    def _token(self, s = ""):
-        while 1: # read until next whitespace
+    def _token(self, s=""):
+        while 1:  # read until next whitespace
             c = self.fp.read(1)
             if not c or c in string.whitespace:
                 break
@@ -115,7 +115,7 @@ def _save(im, fp, filename):
     fp.write(head + "\n%d %d\n" % im.size)
     if head != "P4":
         fp.write("255\n")
-    ImageFile._save(im, fp, [("raw", (0,0)+im.size, 0, (rawmode, 0, 1))])
+    ImageFile._save(im, fp, [("raw", (0, 0) + im.size, 0, (rawmode, 0, 1))])
 
     # ALTERNATIVE: save via builtin debug function
     # im._dump(filename)

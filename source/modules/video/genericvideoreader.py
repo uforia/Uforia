@@ -7,7 +7,7 @@ Created on 16 apr. 2013
 # Generic video module using avbin (which is a stable API for libav, a
 # fork of the widely used ffmpeg library)
 
-#TABLE: n_streams:INT, start_time:BIGINT, duration:BIGINT, title:LONGTEXT, author:LONGTEXT, copyright:LONGTEXT, comment:LONGTEXT, album:LONGTEXT, year:INT, track:INT, genre:LONGTEXT, width:INT UNSIGNED, height:INT UNSIGNED, sample_aspect:DOUBLE, frame_rate:DOUBLE, sample_format:INT UNSIGNED, sample_rate:INT UNSIGNED, sample_bits:INT UNSIGNED, channels:INT UNSIGNED, allStreams:LONGTEXT
+# TABLE: n_streams:INT, start_time:BIGINT, duration:BIGINT, title:LONGTEXT, author:LONGTEXT, copyright:LONGTEXT, comment:LONGTEXT, album:LONGTEXT, year:INT, track:INT, genre:LONGTEXT, width:INT UNSIGNED, height:INT UNSIGNED, sample_aspect:DOUBLE, frame_rate:DOUBLE, sample_format:INT UNSIGNED, sample_rate:INT UNSIGNED, sample_bits:INT UNSIGNED, channels:INT UNSIGNED, allStreams:LONGTEXT
 
 
 import sys, traceback, platform, ctypes
@@ -211,6 +211,6 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
         # Store values in database so not the whole application crashes
         return None

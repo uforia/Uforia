@@ -293,7 +293,7 @@ def main():
         sys.exit(128 + 2)
     except EnvironmentError, (errno, strerror):
         try:
-            print >>sys.stderr, strerror
+            print >> sys.stderr, strerror
         except StandardError:
             pass
         sys.exit(2)

@@ -13,16 +13,16 @@ from io import BytesIO
 
 from .util import FileOrPath
 
-#Object IDs
+# Object IDs
 WMA_ID_SIZE = 16
-WMA_OB_HEADER_SIZE = 20 #ID + Size
-WMA_HEADER_ID                       = '\x30\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9\x00\xaa\x00\x62\xce\x6c'
-WMA_DATA_ID                         = '\x36\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9\x00\xaa\x00\x62\xce\x6c'
-WMA_FILE_PROPERTIES_ID              = '\xa1\xdc\xab\x8c\x47\xa9\xcf\x11\x8e\xe4\x00\xc0\x0c\x20\x53\x65'
-WMA_STREAM_PROPERTIES_ID            = '\x91\x07\xdc\xb7\xb7\xa9\xcf\x11\x8e\xe6\x00\xc0\x0c\x20\x53\x65'
-WMA_CONTENT_DESCRIPTION_ID          = '\x33\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9\x00\xaa\x00\x62\xce\x6c'
+WMA_OB_HEADER_SIZE = 20  # ID + Size
+WMA_HEADER_ID = '\x30\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9\x00\xaa\x00\x62\xce\x6c'
+WMA_DATA_ID = '\x36\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9\x00\xaa\x00\x62\xce\x6c'
+WMA_FILE_PROPERTIES_ID = '\xa1\xdc\xab\x8c\x47\xa9\xcf\x11\x8e\xe4\x00\xc0\x0c\x20\x53\x65'
+WMA_STREAM_PROPERTIES_ID = '\x91\x07\xdc\xb7\xb7\xa9\xcf\x11\x8e\xe6\x00\xc0\x0c\x20\x53\x65'
+WMA_CONTENT_DESCRIPTION_ID = '\x33\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9\x00\xaa\x00\x62\xce\x6c'
 WMA_EXTENDED_CONTENT_DESCRIPTION_ID = '\x40\xa4\xd0\xd2\x07\xe3\xd2\x11\x97\xf0\x00\xa0\xc9\x5e\xa8\x50'
-WMA_STREAM_BITRATE_PROPERTIES_ID    = '\xce\x75\xf8\x7b\x8d\x46\xd1\x11\x8d\x82\x00\x60\x97\xc9\xa2\xb2'
+WMA_STREAM_BITRATE_PROPERTIES_ID = '\xce\x75\xf8\x7b\x8d\x46\xd1\x11\x8d\x82\x00\x60\x97\xc9\xa2\xb2'
 
 # Names of supported comment fields
 TITLE = 'WM/TITLE'
@@ -33,7 +33,7 @@ YEAR = 'WM/YEAR'
 GENRE = 'WM/GENRE'
 DESCRIPTION = 'WM/DESCRIPTION'
 
-#Max. number of characters in tag field
+# Max. number of characters in tag field
 WMA_MAX_STRING_SIZE = 250;
 
 class WMADecoder(object):
@@ -53,7 +53,7 @@ class WMADecoder(object):
 
     def _read_file_prop(self, data):
         data.seek(48)
-        play_time1, play_time2 = unpack('<2I', data.read(8)) # in 100-nanosec increment
+        play_time1, play_time2 = unpack('<2I', data.read(8))  # in 100-nanosec increment
         play_time = (play_time1 << 32) + play_time2
         # For some reason I have to remove 2 seconds
         self.duration = (play_time // 10000000)
@@ -70,8 +70,8 @@ class WMADecoder(object):
         self._avg_br = avg_br // 8
 
     def _read_content_desc(self, data):
-        #There are 6 fields in this object, and the size of the 6 objects
-        #are at the beginning of the object
+        # There are 6 fields in this object, and the size of the 6 objects
+        # are at the beginning of the object
         sizes = unpack("<7h", data.read(14))
         fields = [self._decode_string(data.read(size)) if size > 0 else u'' for size in sizes]
         if TITLE not in self._fields:
@@ -89,9 +89,9 @@ class WMADecoder(object):
             except UnicodeEncodeError:
                 field_name = u''
             data_type, data_size = unpack("<2h", data.read(4))
-            if data_type == 0: # string
+            if data_type == 0:  # string
                 field_data = self._decode_string(data.read(data_size))
-            elif data_type == 3: # int
+            elif data_type == 3:  # int
                 [field_data] = unpack("<i", data.read(4))
             else:
                 field_data = u''
@@ -99,7 +99,7 @@ class WMADecoder(object):
             self._fields[field_name] = field_data
 
     def _read_file(self, fp):
-        #private init
+        # private init
         self.valid = False
         fp.seek(0, 2)
         self.size = fp.tell()

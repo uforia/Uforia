@@ -25,7 +25,7 @@ from .. import core, utils
 import logging
 log = logging.getLogger(__name__)
 
-##
+# #
 # \brief used to signal mp3-related errors.
 class Mp3Exception(BaseException):
     pass
@@ -68,7 +68,7 @@ class Mp3AudioInfo(core.AudioInfo):
 
             try:
                 self.mp3_header = headers.Mp3Header(header_int)
-                log.debug("mp3 header %x found at position: 0x%x" %
+                log.debug("mp3 header %x found at position: 0x%x" % 
                           (header_int, header_pos))
             except headers.Mp3Exception as ex:
                 log.debug("Invalid mp3 header: %s" % str(ex))
@@ -117,9 +117,9 @@ class Mp3AudioInfo(core.AudioInfo):
 
         # Compute bitate
         if (self.xing_header and self.xing_header.vbr and
-                self.xing_header.numFrames): # if xing_header.numFrames == 0
+                self.xing_header.numFrames):  # if xing_header.numFrames == 0
                                              # ZeroDivisionError
-            br = int((self.xing_header.numBytes * 8) /
+            br = int((self.xing_header.numBytes * 8) / 
                      (tpf * self.xing_header.numFrames * 1000))
             vbr = True
         else:
@@ -130,7 +130,7 @@ class Mp3AudioInfo(core.AudioInfo):
         self.sample_freq = self.mp3_header.sample_freq
         self.mode = self.mp3_header.mode
 
-    ##
+    # #
     # Helper to get the bitrate as a string. The prefix '~' is used to denote
     # variable bit rates.
     @property
@@ -141,7 +141,7 @@ class Mp3AudioInfo(core.AudioInfo):
           brs = "~" + brs
        return brs
 
-##
+# #
 # Audio file container for mp3 files.
 class Mp3AudioFile(core.AudioFile):
     def __init__(self, path, version=id3.ID3_ANY_VERSION):

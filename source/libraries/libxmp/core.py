@@ -7,17 +7,17 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-#	  * Redistributions of source code must retain the above copyright
-#		notice, this list of conditions and the following disclaimer.
+# 	  * Redistributions of source code must retain the above copyright
+# 		notice, this list of conditions and the following disclaimer.
 #
-#	  * Redistributions in binary form must reproduce the above copyright
-#		notice, this list of conditions and the following disclaimer in the
-#		documentation and/or other materials provided with the distribution.
+# 	  * Redistributions in binary form must reproduce the above copyright
+# 		notice, this list of conditions and the following disclaimer in the
+# 		documentation and/or other materials provided with the distribution.
 #
-#	  * Neither the name of the European Space Agency, European Southern
-#		Observatory, CRS4 nor the names of its contributors may be used to endorse or
-#		promote products derived from this software without specific prior
-#		written permission.
+# 	  * Neither the name of the European Space Agency, European Southern
+# 		Observatory, CRS4 nor the names of its contributors may be used to endorse or
+# 		promote products derived from this software without specific prior
+# 		written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY ESA/ESO AND CRS4 ``AS IS'' AND ANY EXPRESS OR IMPLIED
 # WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -43,7 +43,7 @@ from libxmp import _exempi, _XMP_ERROR_CODES, _check_for_error
 from libxmp.consts import *
 from libxmp import consts
 
-__all__ = ['XMPMeta','XMPIterator']
+__all__ = ['XMPMeta', 'XMPIterator']
 
 
 
@@ -52,7 +52,7 @@ class _XMPString(object):
 	Helper class (not intended to be exposed) to help managed strings in Exempi
 	"""
 	def __init__(self):
-		self._ptr  = _exempi.xmp_string_new()
+		self._ptr = _exempi.xmp_string_new()
 
 	def __del__(self):
 		_exempi.xmp_string_free(self._ptr)
@@ -72,24 +72,24 @@ class _XMPString(object):
 		is not included.
 		"""
 		s = _exempi.xmp_string_cstr(self._ptr)
-		return s.decode('utf-8') #,errors='ignore')
+		return s.decode('utf-8')  # ,errors='ignore')
 
-def _encode_as_utf8( obj, input_encoding=None ):
+def _encode_as_utf8(obj, input_encoding=None):
 	"""
 	Helper function to ensure that a proper string object in UTF-8 encoding.
 
 	If obj is not a string, it will try to convert the object into a unicode
 	string and thereafter encode as UTF-8.
 	"""
-	if isinstance( obj, unicode ):
+	if isinstance(obj, unicode):
 		return obj.encode('utf-8')
-	elif isinstance( obj, str ):
+	elif isinstance(obj, str):
 		if not input_encoding or input_encoding == 'utf-8':
 			return obj
 		else:
 			return obj.decode(input_encoding).encode('utf-8')
 	else:
-		return unicode( obj ).encode('utf-8')
+		return unicode(obj).encode('utf-8')
 
 
 
@@ -116,7 +116,7 @@ class XMPMeta(object):
 	XMPMeta is the class providing the core services of the library
 	"""
 
-	def __init__( self, **kwargs ):
+	def __init__(self, **kwargs):
 		"""
 		:param xmp_str Optional.
 		:param xmp_internal_ref Optional - used for internal purposes.
@@ -128,7 +128,7 @@ class XMPMeta(object):
 			_check_for_error()
 
 			if 'xmp_str' in kwargs:
-				self.parse_from_str( kwargs['xmp_str'] )
+				self.parse_from_str(kwargs['xmp_str'])
 
 		self.iterator = None
 
@@ -187,14 +187,14 @@ class XMPMeta(object):
 		value = None
 		the_prop = _exempi.xmp_string_new()
 
-		if _exempi.xmp_get_property( self.xmpptr, schema_ns, prop_name, the_prop, 0 ): #we're never returning options
+		if _exempi.xmp_get_property(self.xmpptr, schema_ns, prop_name, the_prop, 0):  # we're never returning options
 			value = _exempi.xmp_string_cstr(the_prop)
 
 		_exempi.xmp_string_free(the_prop)
 		return value
 
 
-	def get_array_item( self, schema_ns, array_name, item_index ):
+	def get_array_item(self, schema_ns, array_name, item_index):
 		"""
 		get_array_item() provides access to items within an array.
 
@@ -207,7 +207,7 @@ class XMPMeta(object):
 		the_prop = _exempi.xmp_string_new()
 		options = c_int32()
 
-		if _exempi.xmp_get_array_item( self.xmpptr, schema_ns, array_name, item_index, the_prop, byref(options)): #we're never returning options
+		if _exempi.xmp_get_array_item(self.xmpptr, schema_ns, array_name, item_index, the_prop, byref(options)):  # we're never returning options
 			return {_exempi.xmp_string_cstr(the_prop):options.value}
 		else:
 			raise Exception, "Array's over"
@@ -216,7 +216,7 @@ class XMPMeta(object):
 	# -------------------------------------
 	# Functions for setting property values
 	# -------------------------------------
-	def set_property(self, schema_ns, prop_name, prop_value, **kwargs ):
+	def set_property(self, schema_ns, prop_name, prop_value, **kwargs):
 		"""
 		set_property() creates or sets a property value.
 
@@ -233,7 +233,7 @@ class XMPMeta(object):
 		options = options_mask(XMP_PROP_OPTIONS, **kwargs) if kwargs else 0
 		return bool(_exempi.xmp_set_property(self.xmpptr, schema_ns, prop_name, prop_value, options))
 
-	def set_array_item( self, schema_ns, array_name, item_index, item_value, **kwargs ):
+	def set_array_item(self, schema_ns, array_name, item_index, item_value, **kwargs):
 		"""
 		set_array_item() creates or sets the value of an item within an array.
 
@@ -253,7 +253,7 @@ class XMPMeta(object):
 		options = options_mask(XMP_PROP_OPTIONS, **kwargs) if kwargs else 0
 		return bool(_exempi.xmp_set_array_item(self.xmpptr, schema_ns, array_name, item_index, item_value, options))
 
-	def append_array_item( self, schema_ns, array_name,  item_value, array_options={}, **kwargs ):
+	def append_array_item(self, schema_ns, array_name, item_value, array_options={}, **kwargs):
 		"""
 		append_array_item() adds an item to an array, creating the array if necessary.
 
@@ -277,7 +277,7 @@ class XMPMeta(object):
 	# -----------------------------------------------
 	# Functions accessing properties as binary values
 	# -----------------------------------------------
-	def get_property_bool(self, schema_ns, prop_name ):
+	def get_property_bool(self, schema_ns, prop_name):
 		"""
 		get_property_bool is just like get_property(), but it's only to be used to get boolean properties.
 
@@ -289,10 +289,10 @@ class XMPMeta(object):
 		.. todo:: Make get_property_bool optionally return keywords describing property's options
 		"""
 		prop_value = c_int()
-		_exempi.xmp_get_property_bool(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0 ) #we never return options
+		_exempi.xmp_get_property_bool(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0)  # we never return options
 		return bool(prop_value.value)
 
-	def get_property_int(self, schema_ns, prop_name ):
+	def get_property_int(self, schema_ns, prop_name):
 		"""
 		get_property_int is just like get_property(), but it's only to be used to get integer properties.
 
@@ -302,11 +302,11 @@ class XMPMeta(object):
 
 		.. todo:: Make get_property_int optionally return keywords describing property's options
 		"""
-		prop_value =  c_int32()
-		_exempi.xmp_get_property_int32(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0 )
+		prop_value = c_int32()
+		_exempi.xmp_get_property_int32(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0)
 		return prop_value.value
 
-	def get_property_long(self, schema_ns, prop_name ):
+	def get_property_long(self, schema_ns, prop_name):
 		"""
 		get_property_long is just like get_property(), but it's only to be used to get long nteger properties.
 
@@ -316,11 +316,11 @@ class XMPMeta(object):
 
 		.. todo:: Make get_property_long optionally return keywords describing property's options
 		"""
-		prop_value =  c_int64()
-		_exempi.xmp_get_property_int64(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0 )
+		prop_value = c_int64()
+		_exempi.xmp_get_property_int64(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0)
 		return prop_value.value
 
-	def get_property_float(self, schema_ns, prop_name ):
+	def get_property_float(self, schema_ns, prop_name):
 		"""
 		get_property_float is just like get_property(), but it's only to be used to get float properties.
 
@@ -330,11 +330,11 @@ class XMPMeta(object):
 
 		.. todo:: Make get_property_float optionally return keywords describing property's options
 		"""
-		prop_value =  c_float()
-		_exempi.xmp_get_property_float(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0 )
+		prop_value = c_float()
+		_exempi.xmp_get_property_float(self.xmpptr, schema_ns, prop_name, byref(prop_value), 0)
 		return prop_value.value
 
-	def get_property_datetime(self, schema_ns, prop_name ):
+	def get_property_datetime(self, schema_ns, prop_name):
 		"""
 		get_property_date is just like get_property(), but it's only to be used to get datetime properties.
 		It returns a standart datetime.datetime instance.
@@ -347,10 +347,10 @@ class XMPMeta(object):
 		.. todo:: Ad the tzInfo to the datetime.datetime object
 		"""
 		d = _XmpDateTime()
-		_exempi.xmp_get_property_date(self.xmpptr, schema_ns, prop_name, byref(d), 0 )
-		return datetime.datetime(d.year,d.month,d.day,d.hour,d.minute,d.second)
+		_exempi.xmp_get_property_date(self.xmpptr, schema_ns, prop_name, byref(d), 0)
+		return datetime.datetime(d.year, d.month, d.day, d.hour, d.minute, d.second)
 
-	def get_localized_text(self, schema_ns, alt_text_name, generic_lang, specific_lang, **kwargs ):
+	def get_localized_text(self, schema_ns, alt_text_name, generic_lang, specific_lang, **kwargs):
 		"""
 		get_localized_text() returns information about a selected item in an alt-text array.
 
@@ -367,7 +367,7 @@ class XMPMeta(object):
 		actual_lang = _exempi.xmp_string_new()
 		options = c_int32()
 
-		if _exempi.xmp_get_localized_text( self.xmpptr, schema_ns, alt_text_name, generic_lang, specific_lang, actual_lang, the_prop, byref(options) ):
+		if _exempi.xmp_get_localized_text(self.xmpptr, schema_ns, alt_text_name, generic_lang, specific_lang, actual_lang, the_prop, byref(options)):
 			value = _exempi.xmp_string_cstr(the_prop)
 			value_lang = _exempi.xmp_string_cstr(actual_lang)
 
@@ -376,7 +376,7 @@ class XMPMeta(object):
 
 		return value
 
-	def set_property_bool(self, schema_ns, prop_name, prop_value, **kwargs ):
+	def set_property_bool(self, schema_ns, prop_name, prop_value, **kwargs):
 		"""
 		set_property_bool is just like set_property(), but it's only to be used to set boolean properties
 		"""
@@ -384,21 +384,21 @@ class XMPMeta(object):
 		prop_value = int(prop_value)
 		return bool(_exempi.xmp_set_property_bool(self.xmpptr, schema_ns, prop_name, prop_value, options))
 
-	def set_property_int(self, schema_ns, prop_name, prop_value, **kwargs ):
+	def set_property_int(self, schema_ns, prop_name, prop_value, **kwargs):
 		"""
 		set_property_int is just like set_property(), but it's only to be used to set integer properties
 		"""
 		options = options_mask(XMP_PROP_OPTIONS, **kwargs) if kwargs else 0
-		return bool(_exempi.xmp_set_property_int32(self.xmpptr, schema_ns, prop_name, prop_value,options))
+		return bool(_exempi.xmp_set_property_int32(self.xmpptr, schema_ns, prop_name, prop_value, options))
 
-	def set_property_long(self, schema_ns, prop_name, prop_value, **kwargs ):
+	def set_property_long(self, schema_ns, prop_name, prop_value, **kwargs):
 		"""
 		set_property_long is just like set_property(), but it's only to be used to set long integer properties
 		"""
 		options = options_mask(XMP_PROP_OPTIONS, **kwargs) if kwargs else 0
 		return bool(_exempi.xmp_set_property_int64(self.xmpptr, schema_ns, prop_name, prop_value, options))
 
-	def set_property_float(self, schema_ns, prop_name, prop_value, **kwargs ):
+	def set_property_float(self, schema_ns, prop_name, prop_value, **kwargs):
 		"""
 		set_property_float is just like set_property(), but it's only to be used to set float properties
 		"""
@@ -407,14 +407,14 @@ class XMPMeta(object):
 		return bool(_exempi.xmp_set_property_float(self.xmpptr, schema_ns, prop_name, prop_value, options))
 
 
-	def set_property_datetime(self, schema_ns, prop_name, prop_value, **kwargs ):
+	def set_property_datetime(self, schema_ns, prop_name, prop_value, **kwargs):
 		"""
 		set_property_datetime is just like set_property(), but it's only to be used to set datetime properties
 
 		.. todo:: Add tzInfo support
 		"""
 		options = options_mask(XMP_PROP_OPTIONS, **kwargs) if kwargs else 0
-		d = _XmpDateTime(prop_value.year, prop_value.month, prop_value.day, prop_value.hour, prop_value.minute, prop_value.second,0,0,0)
+		d = _XmpDateTime(prop_value.year, prop_value.month, prop_value.day, prop_value.hour, prop_value.minute, prop_value.second, 0, 0, 0)
 		return bool(_exempi.xmp_set_property_date(self.xmpptr, schema_ns, prop_name, byref(d), options))
 
 	def set_localized_text(self, schema_ns, alt_text_name, generic_lang, specific_lang, prop_value, **kwargs):
@@ -437,7 +437,7 @@ class XMPMeta(object):
 	# ------------------------------------------------
 	# Functions for deleting and detecting properties.
 	# ------------------------------------------------
-	def delete_property(self, schema_ns, prop_name ):
+	def delete_property(self, schema_ns, prop_name):
 		"""
 		delete_property() deletes an XMP subtree rooted at a given property.
 		It is not an error if the property does not exist.
@@ -445,7 +445,7 @@ class XMPMeta(object):
 		_exempi.xmp_delete_property(self.xmpptr, schema_ns, prop_name);
 		return None
 
-	def does_property_exist(self, schema_ns, prop_name ):
+	def does_property_exist(self, schema_ns, prop_name):
 		"""
 		does_property_exist() reports whether a property currently exists.
 
@@ -456,7 +456,7 @@ class XMPMeta(object):
 		"""
 		return bool(_exempi.xmp_has_property(self.xmpptr, schema_ns, prop_name))
 
-	def does_array_item_exist(self, schema_ns, array_name, item ):
+	def does_array_item_exist(self, schema_ns, array_name, item):
 		"""
 		does_array_item_exist() reports whether an array's item currently exists.
 
@@ -467,8 +467,8 @@ class XMPMeta(object):
 
 		the_prop = _exempi.xmp_string_new()
 
-		while( True ):
-			if _exempi.xmp_get_array_item( self.xmpptr, str(schema_ns), str(array_name), index+1, the_prop, None):
+		while(True):
+			if _exempi.xmp_get_array_item(self.xmpptr, str(schema_ns), str(array_name), index + 1, the_prop, None):
 				index += 1
 			else:
 				break
@@ -480,7 +480,7 @@ class XMPMeta(object):
 	# -------------------------------------
 	# These functions support parsing serialized RDF into an XMP object, and serailizing an XMP object into RDF.
 	# Serialization is always as UTF-8.
-	def parse_from_str( self, xmp_packet_str, xmpmeta_wrap = False, input_encoding = None ):
+	def parse_from_str(self, xmp_packet_str, xmpmeta_wrap=False, input_encoding=None):
 		"""
 		Parses RDF from a string into a XMP object. The input for parsing may be any valid
 		Unicode encoding. ISO Latin-1 is also recognized, but its use is strongly discouraged.
@@ -493,17 +493,17 @@ class XMPMeta(object):
 		:return:  true if :class:`libxmp.core.XMPMeta` object can be written in file.
 		:rtype: bool
 		"""
-		xmp_packet_str = _encode_as_utf8( xmp_packet_str, input_encoding )
+		xmp_packet_str = _encode_as_utf8(xmp_packet_str, input_encoding)
 
 		if xmpmeta_wrap:
 			xmp_packet_str = "<x:xmpmeta xmlns:x='adobe:ns:meta/'>%s</x:xmpmeta>" % xmp_packet_str
 
 		l = len(xmp_packet_str)
-		res = _exempi.xmp_parse(self.xmpptr, xmp_packet_str, l )
+		res = _exempi.xmp_parse(self.xmpptr, xmp_packet_str, l)
 		_check_for_error()
 		return res
 
-	def serialize_and_format( self, padding=0, newlinechr='\n', tabchr = '\t', indent=0, **kwargs ):
+	def serialize_and_format(self, padding=0, newlinechr='\n', tabchr='\t', indent=0, **kwargs):
 		"""
 		Serializes an XMPMeta object into a string as RDF. Note, normally it is sufficient to use either
 		`serialize_to_str` or `serialize_to_unicode` unless you need high degree of control over the serialization.
@@ -534,11 +534,11 @@ class XMPMeta(object):
 		newlinechr = str(newlinechr)
 
 		# Define options bitmask
-		options = options_mask( XMP_SERIAL_OPTIONS, **kwargs )
+		options = options_mask(XMP_SERIAL_OPTIONS, **kwargs)
 
 		# Serialize
 		xmpstring = _XMPString()
-		res = _exempi.xmp_serialize_and_format( self.xmpptr, xmpstring.ptr, options, padding, newlinechr, tabchr, indent )
+		res = _exempi.xmp_serialize_and_format(self.xmpptr, xmpstring.ptr, options, padding, newlinechr, tabchr, indent)
 		_check_for_error()
 
 		# Get string
@@ -549,7 +549,7 @@ class XMPMeta(object):
 		return res_str
 
 
-	def serialize_to_unicode( self, **kwargs ):
+	def serialize_to_unicode(self, **kwargs):
 		"""
 		Serializes an XMPMeta object into a Unicode string as RDF and format. Note, this is
 		wrapper around `serialize_to_str`.
@@ -568,12 +568,12 @@ class XMPMeta(object):
 		:return: XMPMeta object serialized into a string as RDF.
 		:rtype: `unicode` string.
 		"""
-		tmp =  self.serialize_to_str( **kwargs )
+		tmp = self.serialize_to_str(**kwargs)
 
 		return (tmp.decode('utf-8') if tmp else None)
 
 
-	def serialize_to_str( self, padding = 0, **kwargs ):
+	def serialize_to_str(self, padding=0, **kwargs):
 		"""
 		Serializes an XMPMeta object into a string (8-bit, UTF-8 encoded) as RDF and format.
 
@@ -594,11 +594,11 @@ class XMPMeta(object):
 		padding = int(padding)
 
 		# Define options bitmask
-		options = options_mask( XMP_SERIAL_OPTIONS, **kwargs )
+		options = options_mask(XMP_SERIAL_OPTIONS, **kwargs)
 
 		# Serialize
 		xmpstring = _XMPString()
-		res = _exempi.xmp_serialize( self.xmpptr, xmpstring.ptr, options, padding )
+		res = _exempi.xmp_serialize(self.xmpptr, xmpstring.ptr, options, padding)
 		_check_for_error()
 
 		# Get string
@@ -612,16 +612,16 @@ class XMPMeta(object):
 	# -------------------------------------
 	# Misceallaneous functions
 	# -------------------------------------
-	def clone( self ):
+	def clone(self):
 		"""
 		Create a new XMP packet from this one.
 		"""
-		newptr = _exempi.xmp_copy( self.xmpptr )
+		newptr = _exempi.xmp_copy(self.xmpptr)
 
-		return (XMPMeta( _xmp_internal_ref = newptr ) if newptr else None)
+		return (XMPMeta(_xmp_internal_ref=newptr) if newptr else None)
 
 
-	def count_array_items( self, schema_ns, array_name ):
+	def count_array_items(self, schema_ns, array_name):
 		"""
 		count_array_items returns the number of a given array's items
 		"""
@@ -629,8 +629,8 @@ class XMPMeta(object):
 
 		the_prop = _exempi.xmp_string_new()
 
-		while( True ):
-			if _exempi.xmp_get_array_item( self.xmpptr, str(schema_ns), str(array_name), index+1, the_prop, None):
+		while(True):
+			if _exempi.xmp_get_array_item(self.xmpptr, str(schema_ns), str(array_name), index + 1, the_prop, None):
 				index += 1
 			else:
 				break
@@ -672,7 +672,7 @@ class XMPMeta(object):
 			return None
 
 	@staticmethod
-	def register_namespace( namespace_uri, suggested_prefix ):
+	def register_namespace(namespace_uri, suggested_prefix):
 		"""
 		Register a new namespace to save properties to.
 
@@ -702,9 +702,9 @@ class XMPIterator:
 	:param **kwargs : Optional keyword arguments from XMP_ITERATOR_OPTIONS
 	:returns: an iterator for the given xmp_obj
 	"""
-	def __init__( self, xmp_obj, schema_ns=None, prop_name=None, **kwargs ):
+	def __init__(self, xmp_obj, schema_ns=None, prop_name=None, **kwargs):
 		self.options = options_mask(consts.XMP_ITERATOR_OPTIONS, **kwargs) if kwargs else 0
-		self.xmpiteratorptr = _exempi.xmp_iterator_new( xmp_obj.xmpptr, schema_ns, prop_name, self.options)
+		self.xmpiteratorptr = _exempi.xmp_iterator_new(xmp_obj.xmpptr, schema_ns, prop_name, self.options)
 		_check_for_error()
 		self.schema = schema_ns
 		self.prop_name = prop_name
@@ -727,7 +727,7 @@ class XMPIterator:
 
 		if _exempi.xmp_iterator_next(self.xmpiteratorptr, schema_ns.get_ptr(), prop_name.get_ptr(), prop_value.get_ptr(),
 byref(options)):
-			#decode option bits into a human-readable format (that is, a dict)
+			# decode option bits into a human-readable format (that is, a dict)
 			opts = {
 				'VALUE_IS_URI' : False,
 				'IS_QUALIFIER' : False,
@@ -748,14 +748,14 @@ byref(options)):
 			}
 
 			for opt in opts:
-				if has_option(options.value, getattr(consts,'XMP_PROP_'+opt)):
+				if has_option(options.value, getattr(consts, 'XMP_PROP_' + opt)):
 					opts[opt] = True
 
-			return (unicode(schema_ns),unicode(prop_name),unicode(prop_value), opts)
+			return (unicode(schema_ns), unicode(prop_name), unicode(prop_value), opts)
 		else:
 			raise StopIteration
 
-	def skip(**kwargs ):
+	def skip(**kwargs):
 		"""
 		skip() skips some portion of the remaining iterations.
 
@@ -764,6 +764,6 @@ byref(options)):
 		:rtype: NoneType
 		"""
 		options = options_mask(consts.XMP_SKIP_OPTIONS, **kwargs) if kwargs else 0
-		_exempi.xmp_iterator_skip( self.xmpiteratorptr, options );
+		_exempi.xmp_iterator_skip(self.xmpiteratorptr, options);
 		_check_for_error()
 		return None

@@ -31,9 +31,9 @@ def puti16(fp, values):
     for v in values:
         if v < 0:
             v = v + 65536
-        fp.write(chr(v>>8&255) + chr(v&255))
+        fp.write(chr(v >> 8 & 255) + chr(v & 255))
 
-##
+# #
 # Base class for raster font file handlers.
 
 class FontFile:
@@ -107,7 +107,7 @@ class FontFile:
         # font metrics
         fp = open(os.path.splitext(filename)[0] + ".pil", "wb")
         fp.write("PILfont\n")
-        fp.write(";;;;;;%d;\n" % self.ysize) # HACK!!!
+        fp.write(";;;;;;%d;\n" % self.ysize)  # HACK!!!
         fp.write("DATA\n")
         for id in range(256):
             m = self.metrics[id]
@@ -143,4 +143,4 @@ class FontFile:
         fp.close()
 
 
-    save = save1 # for now
+    save = save1  # for now

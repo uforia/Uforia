@@ -13,7 +13,7 @@ import Image, ImageFile
 
 _handler = None
 
-##
+# #
 # Install application-specific HDF5 image handler.
 #
 # @param handler Handler object.

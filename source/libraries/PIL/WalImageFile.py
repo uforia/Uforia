@@ -24,9 +24,9 @@
 import Image
 
 def i32(c, o=0):
-    return ord(c[o])+(ord(c[o+1])<<8)+(ord(c[o+2])<<16)+(ord(c[o+3])<<24)
+    return ord(c[o]) + (ord(c[o + 1]) << 8) + (ord(c[o + 2]) << 16) + (ord(c[o + 3]) << 24)
 
-##
+# #
 # Load texture from a Quake2 WAL texture file.
 # <p>
 # By default, a Quake2 standard palette is attached to the texture.
@@ -46,7 +46,7 @@ def open(filename):
         fp = __builtin__.open(filename, "rb")
 
     # read header fields
-    header = fp.read(32+24+32+12)
+    header = fp.read(32 + 24 + 32 + 12)
     size = i32(header, 32), i32(header, 36)
     offset = i32(header, 40)
 
@@ -61,7 +61,7 @@ def open(filename):
 
     # strings are null-terminated
     im.info["name"] = header[:32].split("\0", 1)[0]
-    next_name = header[56:56+32].split("\0", 1)[0]
+    next_name = header[56:56 + 32].split("\0", 1)[0]
     if next_name:
         im.info["next_name"] = next_name
 

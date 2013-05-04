@@ -53,7 +53,7 @@ class _Operand:
             out = Image.new(mode or im1.mode, im1.size, None)
             im1.load()
             try:
-                op = getattr(_imagingmath, op+"_"+im1.mode)
+                op = getattr(_imagingmath, op + "_" + im1.mode)
             except AttributeError:
                 raise TypeError, "bad operand type for '%s'" % op
             _imagingmath.unop(op, out.im.id, im1.im.id)
@@ -77,7 +77,7 @@ class _Operand:
                 out = Image.new(mode or im1.mode, im1.size, None)
             im1.load(); im2.load()
             try:
-                op = getattr(_imagingmath, op+"_"+im1.mode)
+                op = getattr(_imagingmath, op + "_" + im1.mode)
             except AttributeError:
                 raise TypeError, "bad operand type for '%s'" % op
             _imagingmath.binop(op, out.im.id, im1.im.id, im2.im.id)
@@ -179,7 +179,7 @@ for k, v in globals().items():
     if k[:10] == "imagemath_":
         ops[k[10:]] = v
 
-##
+# #
 # Evaluates an image expression.
 #
 # @param expression A string containing a Python-style expression.
@@ -200,7 +200,7 @@ def eval(expression, _dict={}, **kw):
             args[k] = _Operand(v)
 
     import __builtin__
-    out =__builtin__.eval(expression, args)
+    out = __builtin__.eval(expression, args)
     try:
         return out.im
     except AttributeError:

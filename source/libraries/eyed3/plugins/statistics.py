@@ -100,11 +100,11 @@ class Stat(Counter):
             key_name = self._key_names[k] if k in self._key_names else k
             value = self[k]
             percent = self.percent(k) if value and k != "total" else ""
-            print("%(padding)s%(key)s:%(value)s%(percent)s" %
+            print("%(padding)s%(key)s:%(value)s%(percent)s" % 
                   { "padding": ' ' * 4,
                     "key":   str(key_name).ljust(key_col_width),
                     "value": str(value).rjust(val_col_width),
-                    "percent": " ( %s%.2f%%%s )" %
+                    "percent": " ( %s%.2f%%%s )" % 
                                  (cli.GREEN, percent, cli.RESET) if percent
                                                                  else "",
                   })
@@ -192,10 +192,10 @@ class BitrateCounter(AudioStat):
 
     def _compute(self, audio_file):
         if audio_file.type != AUDIO_MP3 or audio_file.info is None:
-            self["total"] -=1
+            self["total"] -= 1
             return
 
-        vbr, br =  audio_file.info.bit_rate
+        vbr, br = audio_file.info.bit_rate
         if vbr:
             self["vbr"] += 1
         else:

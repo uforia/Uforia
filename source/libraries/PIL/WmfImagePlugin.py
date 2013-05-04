@@ -21,7 +21,7 @@ import Image, ImageFile
 
 _handler = None
 
-##
+# #
 # Install application-specific WMF image handler.
 #
 # @param handler Handler object.
@@ -40,11 +40,11 @@ if hasattr(Image.core, "drawwmf"):
             self.bbox = im.info["wmf_bbox"]
 
         def load(self, im):
-            im.fp.seek(0) # rewind
+            im.fp.seek(0)  # rewind
             return Image.fromstring(
                 "RGB", im.size,
                 Image.core.drawwmf(im.fp.read(), im.size, self.bbox),
-                "raw", "BGR", (im.size[0]*3 + 3) & -4, -1
+                "raw", "BGR", (im.size[0] * 3 + 3) & -4, -1
                 )
 
     register_handler(WmfHandler())
@@ -52,16 +52,16 @@ if hasattr(Image.core, "drawwmf"):
 # --------------------------------------------------------------------
 
 def word(c, o=0):
-    return ord(c[o]) + (ord(c[o+1])<<8)
+    return ord(c[o]) + (ord(c[o + 1]) << 8)
 
 def short(c, o=0):
-    v = ord(c[o]) + (ord(c[o+1])<<8)
+    v = ord(c[o]) + (ord(c[o + 1]) << 8)
     if v >= 32768:
         v = v - 65536
     return v
 
 def dword(c, o=0):
-    return ord(c[o]) + (ord(c[o+1])<<8) + (ord(c[o+2])<<16) + (ord(c[o+3])<<24)
+    return ord(c[o]) + (ord(c[o + 1]) << 8) + (ord(c[o + 2]) << 16) + (ord(c[o + 3]) << 24)
 
 def long(c, o=0):
     return dword(c, o)
@@ -76,7 +76,7 @@ def _accept(prefix):
         prefix[:4] == "\x01\x00\x00\x00"
         )
 
-##
+# #
 # Image plugin for Windows metafiles.
 
 class WmfStubImageFile(ImageFile.StubImageFile):

@@ -7,7 +7,7 @@ Created on 24 apr. 2013
 # Stores the zip file metadata and starts Uforia recursively on the
 # files inside the zip folder.
 
-#TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT, contentInfo:LONGTEXT
+# TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT, contentInfo:LONGTEXT
 
 import sys, traceback, os, tempfile, shutil, copy;
 import zipfile, base64;
@@ -16,7 +16,7 @@ import recursive;
 def process(fullpath, config, columns=None):
     try:
         # Open the zipfile
-        zip = zipfile.ZipFile(fullpath, mode = 'r')
+        zip = zipfile.ZipFile(fullpath, mode='r')
 
         # Get .zip metadata
         assorted = [zip.namelist(), len(zip.namelist()), zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED, zip.debug, zip.comment]
@@ -44,7 +44,7 @@ def process(fullpath, config, columns=None):
             content["_raw_time"] = info._raw_time
             
             # The extra tag needs to be encoded for JSON
-            content["extra"] =  info.extra if not info.extra else base64.b64encode(info.extra)
+            content["extra"] = info.extra if not info.extra else base64.b64encode(info.extra)
             
             contentInfo[info.filename] = content
             
@@ -69,7 +69,7 @@ def process(fullpath, config, columns=None):
             pass
             shutil.rmtree(tmpdir)
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
         # Make sure we stored exactly the same amount of columns as
         # specified!!
@@ -85,5 +85,5 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
         return None
