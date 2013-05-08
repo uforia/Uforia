@@ -64,16 +64,20 @@ def process(fullpath, config, columns=None):
         assorted.append(contentInfo)
         del contentInfo
 
-        # Create a temporary directory
-        tmpdir = tempfile.mkdtemp("_uforiatmp")
+        # Try to extract the content of the zip file.
+        try:
+            # Create a temporary directory
+            tmpdir = tempfile.mkdtemp("_uforiatmp")
 
-        # Extract the zip file
-        zip.extractall(tmpdir)
+            # Extract the zip file
+            zip.extractall(tmpdir)
 
-        recursive.call_Uforia_recursive(config, tmpdir, fullpath)
+            recursive.call_Uforia_recursive(config, tmpdir, fullpath)
 
-        # Close the zip file
-        zip.close()
+            # Close the zip file
+            zip.close()
+        except:
+            pass
 
         # Delete the temporary directory, proceed even if it causes
         # an error
