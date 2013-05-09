@@ -67,7 +67,7 @@ def process(fullpath, config, columns=None):
             # Close the rar file
             rar.close()
         except:
-            pass
+            traceback.print_exc(file=sys.stderr)
 
         # Delete the temporary directory, proceed even if it causes
         # an error
