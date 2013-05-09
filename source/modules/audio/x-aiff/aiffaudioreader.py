@@ -13,7 +13,7 @@ import traceback
 import aifc
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
         # Try to parse AIFF data
         try:
             # Open the AIFF file

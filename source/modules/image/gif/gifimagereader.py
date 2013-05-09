@@ -12,7 +12,7 @@ import traceback
 from PIL import Image
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     # Try to parse the GIF data
     try:
         image = Image.open(fullpath, "r")

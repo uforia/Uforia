@@ -14,7 +14,7 @@ import sys
 import traceback
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
         # Try to parse TXT data
         try:
             with open(fullpath, 'rb') as f:

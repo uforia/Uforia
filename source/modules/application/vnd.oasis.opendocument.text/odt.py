@@ -5,7 +5,7 @@
 import re, zipfile, sys, bs4
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     try:
     	document = zipfile.ZipFile(fullpath)
     except:

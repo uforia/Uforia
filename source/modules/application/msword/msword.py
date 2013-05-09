@@ -9,7 +9,7 @@ import sys
 import string
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
 	try:
 		document = zipfile.ZipFile(fullpath)
 	# 	xmlfile = open("test.xml", "rw+")

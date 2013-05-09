@@ -8,6 +8,7 @@ import platform
 import traceback
 import site
 import ctypes
+import recursive
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -66,14 +67,14 @@ def file_scanner(dir, uforiamodules):
         if config.DEBUG:
             print("Starting in directory " + dir + "...")
             print("Starting filescanner...")
-        hashid = config.STARTING_HASHID
+        hashid = rcontext.STARTING_HASHID
         filelist = []
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
                 fullpath = os.path.join(root, name)
                 filelist.append((fullpath, hashid))
                 hashid += 1
-        config.STARTING_HASHID = hashid
+        rcontext.STARTING_HASHID = hashid
         for item in filelist:
             file_processor(item, uforiamodules)
     except:
@@ -112,7 +113,7 @@ def invoke_modules(uforiamodules, hashid, file):
                     module.load_sources()
                     processresult = None
                     if module.is_mime_handler:
-                        processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)
+                        processresult = module.pymodule.process(file.fullpath, config, rcontext, columns=module.columnnames)
                     if processresult != None:
                         write_to_db(module.tablename, hashid, module.columnnames, processresult)
                 except:
@@ -138,8 +139,8 @@ def file_processor(item, uforiamodules):
             if config.DEBUG:
                 print("Exporting basic hashes and metadata to database.")
             columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-            if config.SPOOFSTARTDIR != None:
-                fullpath = config.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
+            if rcontext.SPOOFSTARTDIR != None:
+                fullpath = rcontext.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
             else:
                 fullpath = file.fullpath
             values = (fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
@@ -180,7 +181,7 @@ def run():
     print("Uforia starting...")
 
     db = database.Database(config)
-    if not config.RECURSIVE:
+    if not rcontext.RECURSIVE:
         db.setup_main_table()
         db.setup_mimetypes_table()
 
@@ -188,7 +189,7 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db)
-        if not config.RECURSIVE:
+        if not rcontext.RECURSIVE:
             fill_mimetypes_table(uforiamodules)
     else:
         uforiamodules = ''
@@ -249,6 +250,7 @@ database = imp.load_source(config.DBTYPE, config.DATABASEDIR + config.DBTYPE + "
 
 config.UFORIA_RUNNING_VERSION = 'Uforia_debug'
 config = config_as_pickleable(config)
+rcontext = recursive.RecursionContext()
 
 if __name__ == "__main__":
     run()

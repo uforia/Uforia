@@ -11,6 +11,7 @@ import traceback
 import site
 import subprocess
 import ctypes
+import recursive
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -99,7 +100,8 @@ def write_to_mimetypes_table(table, columns, values, db=None):
     db.connection.close()
 
 
-def file_scanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
+def file_scanner(dir, consumers, dbqueue, monitorqueue, uforiamodules,
+                 config, rcontext):
     """
     Walks through the specified directory tree to find all files. Each
     file is passed through file_processor, which is called asynchronously
@@ -115,16 +117,16 @@ def file_scanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
         if config.DEBUG:
             print("Starting in directory " + dir + "...")
             print("Starting filescanner...")
-        hashid = config.STARTING_HASHID
+        hashid = rcontext.STARTING_HASHID
         filelist = []
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
                 fullpath = os.path.join(root, name)
                 filelist.append((fullpath, hashid))
                 hashid += 1
-        config.STARTING_HASHID = hashid
+        rcontext.STARTING_HASHID = hashid
         try:
-            consumermap = [(item, dbqueue, monitorqueue, uforiamodules, config) for item in filelist]
+            consumermap = [(item, dbqueue, monitorqueue, uforiamodules, config, rcontext) for item in filelist]
             result = consumers.map_async(file_processor, consumermap)
 
             # Wait while file_processor is busy in order to catch a possible KeyboardInterrupt.
@@ -141,7 +143,7 @@ def file_scanner(dir, consumers, dbqueue, monitorqueue, uforiamodules, config):
         raise
 
 
-def invoke_modules(dbqueue, uforiamodules, hashid, file, config):
+def invoke_modules(dbqueue, uforiamodules, hashid, file, config, rcontext):
     """
     Loads all Uforia modules in the current process and invokes them.
     Only modules that apply to the current MIME-type are loaded.
@@ -174,7 +176,7 @@ def invoke_modules(dbqueue, uforiamodules, hashid, file, config):
                     module.load_sources()
                     processresult = None
                     if module.is_mime_handler:
-                        processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)
+                        processresult = module.pymodule.process(file.fullpath, config, rcontext, columns=module.columnnames)
                     if processresult != None:
                         dbqueue.put((module.tablename, hashid, module.columnnames, processresult))
                 except:
@@ -184,7 +186,8 @@ def invoke_modules(dbqueue, uforiamodules, hashid, file, config):
             raise
 
 
-def file_processor((item, dbqueue, monitorqueue, uforiamodules, config)):
+def file_processor((item, dbqueue, monitorqueue, uforiamodules, config,
+                    rcontext)):
     """
     Process a file item and export its information to the database
     queue. Also calls invoke_modules() if modules are enabled in the
@@ -206,8 +209,8 @@ def file_processor((item, dbqueue, monitorqueue, uforiamodules, config)):
             if config.DEBUG:
                 print("Exporting basic hashes and metadata to database.")
             columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-            if config.SPOOFSTARTDIR != None:
-                fullpath = config.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
+            if rcontext.SPOOFSTARTDIR != None:
+                fullpath = rcontext.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
             else:
                 fullpath = file.fullpath
             fullpath = os.path.normpath(fullpath)
@@ -220,7 +223,7 @@ def file_processor((item, dbqueue, monitorqueue, uforiamodules, config)):
             if config.DEBUG:
                 print("Additional module parsing disabled by config, skipping...")
         else:
-            invoke_modules(dbqueue, uforiamodules, hashid, file, config)
+            invoke_modules(dbqueue, uforiamodules, hashid, file, config, rcontext)
     except:
         traceback.print_exc(file=sys.stderr)
         raise
@@ -255,7 +258,7 @@ def run():
 
     # Create database tables
     db = database.Database(config)
-    if not config.RECURSIVE:
+    if not rcontext.RECURSIVE:
         db.setup_main_table()
         db.setup_mimetypes_table()
 
@@ -267,7 +270,7 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db)
-        if not config.RECURSIVE:
+        if not rcontext.RECURSIVE:
             fill_mimetypes_table(dbqueue, uforiamodules)
     else:
         uforiamodules = ''
@@ -284,7 +287,7 @@ def run():
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        file_scanner(config.STARTDIR, consumers, dbqueue, monitorqueue, uforiamodules, config)
+        file_scanner(config.STARTDIR, consumers, dbqueue, monitorqueue, uforiamodules, config, rcontext)
     else:
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
     for i in range(config.DBCONN):
@@ -346,6 +349,7 @@ database = imp.load_source(config.DBTYPE, config.DATABASEDIR + config.DBTYPE + "
 
 config = config_as_pickleable(config)
 config.UFORIA_RUNNING_VERSION = 'Uforia'
+rcontext = recursive.RecursionContext()
 
 if __name__ == "__main__":
     run()

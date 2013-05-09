@@ -9,7 +9,7 @@ import sys
 import os
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
 	try:
 		document = zipfile.ZipFile(fullpath)
 	except:

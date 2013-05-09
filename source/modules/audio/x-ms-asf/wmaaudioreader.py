@@ -10,7 +10,7 @@ import sys
 import traceback
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     try:
         # Gets the WMA file from the path
         myfile = wma.WMADecoder(fullpath)

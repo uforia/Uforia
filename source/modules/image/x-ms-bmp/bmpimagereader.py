@@ -9,7 +9,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     # Try to parse BMP data
     try:
         image = Image.open(fullpath, "r")

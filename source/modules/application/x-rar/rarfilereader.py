@@ -16,7 +16,7 @@ import rarfilelib.rarfile as rarfile
 import recursive
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     # Try to parse RAR data
     try:
         # Set to full path of unrar.exe if it is not in PATH
@@ -65,7 +65,7 @@ def process(fullpath, config, columns=None):
             # Extract the rar file
             rar.extractall(tmpdir)
 
-            recursive.call_uforia_recursive(config, tmpdir, fullpath)
+            recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
 
             # Close the rar file
             rar.close()

@@ -81,14 +81,3 @@ DBRETRY = 5
 
 # Location of the magic file
 MAGICFILE = './share/magic.mgc'
-
-# Can be used to fake the path of STARTDIR in the database output. Used
-# for running Uforia recursively.
-SPOOFSTARTDIR = None
-
-# Used to notify the starting value of the hash id if Uforia was called
-# recursively. Do not change this value.
-STARTING_HASHID = 1
-
-# Used to notify that Uforia was started recursively
-RECURSIVE = False

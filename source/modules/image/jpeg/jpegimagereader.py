@@ -8,7 +8,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
         try:
             # Try to parse JPG data
             image = Image.open(fullpath, "r")

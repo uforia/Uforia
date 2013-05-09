@@ -5,7 +5,7 @@
 import xml.etree.ElementTree as ET
 import re, zipfile, sys
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
 	try:
 		document = zipfile.ZipFile(fullpath)
 	except:

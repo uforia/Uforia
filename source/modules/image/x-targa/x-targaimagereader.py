@@ -13,7 +13,7 @@ import traceback
 from PIL import Image
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
 
         # Try to parse TGA data
         try:

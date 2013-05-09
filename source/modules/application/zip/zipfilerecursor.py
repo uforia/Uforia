@@ -20,7 +20,7 @@ import base64
 import recursive
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     try:
         # Open the zipfile
         zip = zipfile.ZipFile(fullpath, mode='r')
@@ -72,7 +72,7 @@ def process(fullpath, config, columns=None):
             # Extract the zip file
             zip.extractall(tmpdir)
 
-            recursive.call_uforia_recursive(config, tmpdir, fullpath)
+            recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
 
             # Close the zip file
             zip.close()

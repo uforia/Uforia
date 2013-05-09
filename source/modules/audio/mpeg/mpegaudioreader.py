@@ -16,7 +16,7 @@ import eyed3
 from mutagen.apev2 import APEv2
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
 
     # The whole parse data method is in a try block to catch any exception
     try:

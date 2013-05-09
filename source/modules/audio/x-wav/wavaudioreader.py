@@ -13,7 +13,7 @@ import traceback
 import wave
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     try:
         # open the wave file
         wave_file = wave.open(fullpath, "rb")

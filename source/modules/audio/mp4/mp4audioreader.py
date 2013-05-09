@@ -13,7 +13,7 @@ import traceback
 import mutagen.mp4
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
         # Try to parse mp4 data
         try:
             audio = mutagen.mp4.MP4(fullpath)
