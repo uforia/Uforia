@@ -29,6 +29,11 @@ MODULEDIR = './modules/'
 # Should Uforia modules use the libxmp library for optional XMP support?
 ENABLEXMP = True
 
+# Which tool should Uforia use to extract RAR files?
+# Default: UNRAR_TOOL = "unrar"
+# Example: UNRAR_TOOL = "C:\Program Files\WinRAR\WinRAR.exe"
+UNRAR_TOOL = "unrar"
+
 # Database configuration. The name should match the handler providing
 # the appropriate Database class with setupMainTable() and setupTable()
 # and store() methods. See one of the provided database handlers for more

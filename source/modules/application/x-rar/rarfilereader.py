@@ -19,6 +19,9 @@ import recursive
 def process(fullpath, config, columns=None):
     # Try to parse RAR data
     try:
+        # Set to full path of unrar.exe if it is not in PATH
+        rarfile.UNRAR_TOOL = config.UNRAR_TOOL
+
         # Set up to 1 if you don't want to deal with decoding comments
         # from unknown encoding.  rarfile will try couple of common
         # encodings in sequence.
