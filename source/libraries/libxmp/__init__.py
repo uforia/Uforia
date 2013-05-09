@@ -113,7 +113,7 @@ def _check_for_error():
 #
 try:
 	try:
-		_exempi = libutil.loadLibrary('libxmp', 'libexempi')
+		_exempi = libutil.load_library('libxmp', 'libexempi')
 	except:
 		# Unsupported platform (Mac?), try loading system-wide installed exempi
 		lib = ctypes.util.find_library('exempi')
