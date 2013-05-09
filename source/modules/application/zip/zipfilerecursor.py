@@ -67,7 +67,7 @@ def process(fullpath, config, columns=None):
         # Try to extract the content of the zip file.
         try:
             # Create a temporary directory
-            tmpdir = tempfile.mkdtemp("_uforiatmp")
+            tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the zip file
             zip.extractall(tmpdir)

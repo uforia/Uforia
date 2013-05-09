@@ -11,6 +11,12 @@ OUTPUT = False
 # Example: STARTDIR = '/home/user/'
 STARTDIR = '/home/TESTDATA/'
 
+# In which directory should Uforia extract all archive files?
+# If set to None, a temporary directory is created inside the users default
+# temporary direcotory. 
+# Example: EXTRACTDIR = '/home/ARCHIVES/'
+EXTRACTDIR = None
+
 # Should Uforia attempt to detect and run additional modules for each
 # of the found files/filetypes? If so, where should Uforia find the
 # modules to handle those files?

@@ -15,6 +15,7 @@ import shutil
 import rarfilelib.rarfile as rarfile
 import recursive
 
+
 def process(fullpath, config, columns=None):
     # Try to parse RAR data
     try:
@@ -25,7 +26,7 @@ def process(fullpath, config, columns=None):
 
         rar = rarfile.RarFile(fullpath)
 
-        assorted = [rar.namelist(), len(rar.namelist()), 
+        assorted = [rar.namelist(), len(rar.namelist()),
                     rar.needs_password(), rar.comment]
 
         # Get .rar's content metadata and store it in an dictionary.
@@ -56,7 +57,7 @@ def process(fullpath, config, columns=None):
         # Try to extract the content of the rar file.
         try:
             # Create a temporary directory
-            tmpdir = tempfile.mkdtemp("_uforiatmp")
+            tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the rar file
             rar.extractall(tmpdir)
@@ -84,12 +85,12 @@ def process(fullpath, config, columns=None):
         if config.DEBUG:
             print "\nRAR file data:"
             for i in range(0, len(assorted)):
-                print "%-18s %s" % (columns[i]+':', assorted[i])
+                print "%-18s %s" % (columns[i] + ':', assorted[i])
 
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
         # Store values in database so not the whole application crashes
         return None
