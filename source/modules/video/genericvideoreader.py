@@ -108,14 +108,14 @@ av.avbin_init()
 av.avbin_set_log_level(AVBIN_LOG_QUIET)
 
 
-def getAllStreamInfo(file, fileInfo):
+def get_all_stream_info(file, fileInfo):
     """
     Returns all stream information from the AVbinFileInfo structure as
     a dictionary.
     file - The AVbin file handle
     fileInfo - The AVbinFileInfo structure
     """
-    allStreams = []
+    all_streams = []
     for i in xrange(fileInfo.n_streams):
         stream = {}
         info = AVbinstream8()
@@ -142,8 +142,8 @@ def getAllStreamInfo(file, fileInfo):
                 key = field[0]
                 stream[key] = getattr(info.u.audio, key)
 
-        allStreams.append(stream)
-    return allStreams
+        all_streams.append(stream)
+    return all_streams
 
 
 def process(fullpath, config, columns=None):
@@ -167,41 +167,41 @@ def process(fullpath, config, columns=None):
             if field[0] != 'structure_size':
                 assorted.append(getattr(fileInfo, field[0]))
 
-        allStreams = getAllStreamInfo(file, fileInfo)
+        all_streams = get_all_stream_info(file, fileInfo)
 
         # Get the information of the first video- and audiostream.
         # If there's more than one stream, the data is made
         # available in the all_streams column as structured data.
 
-        firstVideoStream = None
-        firstAudioStream = None
-        for stream in allStreams:
+        first_video_stream = None
+        first_audio_stream = None
+        for stream in all_streams:
             if stream['type'] == AVBIN_STREAM_TYPE_STRING_MAPPING[AVBIN_STREAM_TYPE_VIDEO]:
-                firstVideoStream = stream
+                first_video_stream = stream
             elif stream['type'] == AVBIN_STREAM_TYPE_STRING_MAPPING[AVBIN_STREAM_TYPE_AUDIO]:
-                firstAudioStream = stream
+                first_audio_stream = stream
 
-        if firstVideoStream != None:
+        if first_video_stream != None:
             # Can't iterate here because we need to maintain a
             # specific order
-            assorted.append(firstVideoStream['width'])
-            assorted.append(firstVideoStream['height'])
-            assorted.append(firstVideoStream['sample_aspect'])
-            assorted.append(firstVideoStream['frame_rate'])
+            assorted.append(first_video_stream['width'])
+            assorted.append(first_video_stream['height'])
+            assorted.append(first_video_stream['sample_aspect'])
+            assorted.append(first_video_stream['frame_rate'])
         else:
             for i in xrange(AVBIN_STREAM_ACTUAL_NUMBER_OF_VIDEO_INFO_FIELDS):
                 assorted.append(None)
 
-        if firstAudioStream != None:
-            assorted.append(firstAudioStream['sample_format'])
-            assorted.append(firstAudioStream['sample_rate'])
-            assorted.append(firstAudioStream['sample_bits'])
-            assorted.append(firstAudioStream['channels'])
+        if first_audio_stream != None:
+            assorted.append(first_audio_stream['sample_format'])
+            assorted.append(first_audio_stream['sample_rate'])
+            assorted.append(first_audio_stream['sample_bits'])
+            assorted.append(first_audio_stream['channels'])
         else:
             for i in xrange(len(_AVbinstreamAudio8._fields_)):
                 assorted.append(None)
 
-        assorted.append(allStreams)
+        assorted.append(all_streams)
 
         # Make sure we stored exactly the same amount of columns as
         # specified!!

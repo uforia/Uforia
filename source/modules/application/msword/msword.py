@@ -47,42 +47,42 @@ def process(fullpath, config, columns=None):
 
 	# Minidom alternative
 	tree = ET.fromstring(xmlprop)
-	treeApp = ET.fromstring(xmlapp)
+	tree_app = ET.fromstring(xmlapp)
 
 	#### Just some data, might be usefull lat0r ####
-	dataTree = []
-	dataApp = []
+	data_tree = []
+	data_app = []
 	merged = []
 
 # 	for basic in range(9):
-# 		dataTree.append(tree[basic].text)
+# 		data_tree.append(tree[basic].text)
 
 # 	for app in range(16):
-# 		dataApp.append(treeApp[app].text)
+# 		data_app.append(tree_app[app].text)
 
-	dataTree.append(tree[0].text)
-	dataTree.append(tree[1].text)
-	dataTree.append(tree[2].text)
-	dataTree.append(tree[5].text)        
-	dataTree.append(tree[6].text)
-	dataTree.append(tree[7].text)
-	dataTree.append(tree[8].text)
-	dataApp.append(treeApp[2].text)
-	dataApp.append(treeApp[3].text)
-	dataApp.append(treeApp[4].text)
-	dataApp.append(treeApp[5].text)
-	dataApp.append(treeApp[6].text)
-	dataApp.append(treeApp[7].text)
-	dataApp.append(treeApp[8].text)
-	dataApp.append(treeApp[10].text)
-	dataApp.append(treeApp[12].text)
-	dataApp.append(treeApp[12].text)
-	dataApp.append(treeApp[15].text)
+	data_tree.append(tree[0].text)
+	data_tree.append(tree[1].text)
+	data_tree.append(tree[2].text)
+	data_tree.append(tree[5].text)        
+	data_tree.append(tree[6].text)
+	data_tree.append(tree[7].text)
+	data_tree.append(tree[8].text)
+	data_app.append(tree_app[2].text)
+	data_app.append(tree_app[3].text)
+	data_app.append(tree_app[4].text)
+	data_app.append(tree_app[5].text)
+	data_app.append(tree_app[6].text)
+	data_app.append(tree_app[7].text)
+	data_app.append(tree_app[8].text)
+	data_app.append(tree_app[10].text)
+	data_app.append(tree_app[12].text)
+	data_app.append(tree_app[12].text)
+	data_app.append(tree_app[15].text)
 	
-# 	merged = dataTree + dataApp
+# 	merged = data_tree + data_app
 # 	merged.append(textcontent) 
 
-	merged = dataTree + dataApp
+	merged = data_tree + data_app
 	merged.append(textcontent)
 	return merged
 	
@@ -94,14 +94,14 @@ def process(fullpath, config, columns=None):
 # 	createdOn = tree[7].text
 # 	changedOn = tree[8].text
 #
-# 	pages = treeApp[2].text
-# 	words = treeApp[3].text
-# 	chars = treeApp[4].text
-# 	apptype = treeApp[5].text
-# 	security = treeApp[6].text
-# 	lines = treeApp[7].text
-# 	parag = treeApp[8].text
-# 	comp = treeApp[10[.text
-# 	charspace = treeApp[12].text
-# 	shared = treeApp[12].text
-# 	appversion = treeApp[15.text
+# 	pages = tree_app[2].text
+# 	words = tree_app[3].text
+# 	chars = tree_app[4].text
+# 	apptype = tree_app[5].text
+# 	security = tree_app[6].text
+# 	lines = tree_app[7].text
+# 	parag = tree_app[8].text
+# 	comp = tree_app[10[.text
+# 	charspace = tree_app[12].text
+# 	shared = tree_app[12].text
+# 	appversion = tree_app[15.text

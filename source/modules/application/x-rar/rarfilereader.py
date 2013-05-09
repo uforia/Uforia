@@ -35,7 +35,7 @@ def process(fullpath, config, columns=None):
         # Get .rar's content metadata and store it in an dictionary.
         # In the dictionary the key is the file name and
         # the value is an other dict with its info.
-        contentInfo = {}
+        content_info = {}
         for info in rar.infolist():
             content = {}
             content["date_time"] = info.date_time
@@ -51,11 +51,11 @@ def process(fullpath, config, columns=None):
             content["is_directory"] = info.isdir()
             content["needs_password"] = info.needs_password()
 
-            contentInfo[info.filename] = content
+            content_info[info.filename] = content
 
         # Store content info in DB.
-        assorted.append(contentInfo)
-        del contentInfo
+        assorted.append(content_info)
+        del content_info
 
         # Try to extract the content of the rar file.
         try:
@@ -65,7 +65,7 @@ def process(fullpath, config, columns=None):
             # Extract the rar file
             rar.extractall(tmpdir)
 
-            recursive.call_Uforia_recursive(config, tmpdir, fullpath)
+            recursive.call_uforia_recursive(config, tmpdir, fullpath)
 
             # Close the rar file
             rar.close()

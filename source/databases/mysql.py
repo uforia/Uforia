@@ -61,7 +61,7 @@ class Database(object):
         except:
             traceback.print_exc(file=sys.stderr)
 
-    def executeQuery(self, query):
+    def execute_query(self, query):
         """
         Executes a query (which should have no data to return).
 
@@ -74,7 +74,7 @@ class Database(object):
         except:
             traceback.print_exc(file=sys.stderr)
 
-    def setupMainTable(self):
+    def setup_main_table(self):
         """
         Sets up the main data table, which contains general information
         about each file.
@@ -82,7 +82,7 @@ class Database(object):
         # First drop table
         if self.droptable:
             query = """DROP TABLE IF EXISTS `files`"""
-            self.executeQuery(query)
+            self.execute_query(query)
 
         query = """CREATE TABLE IF NOT EXISTS `files`
             (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
@@ -102,14 +102,14 @@ class Database(object):
             `ftype` LONGTEXT,
             `mtype` LONGTEXT,
             `btype` LONGTEXT)"""
-        self.executeQuery(query)
+        self.execute_query(query)
 
         # Truncate table if not already dropped before
         if self.truncate and not self.droptable:
             query = """TRUNCATE `files`"""
-            self.executeQuery(query)
+            self.execute_query(query)
 
-    def setupMimeTypesTable(self):
+    def setup_mimetypes_table(self):
         """
         Sets up the glue data table,
         this table contains which mime-types uses which modules.
@@ -117,20 +117,20 @@ class Database(object):
         # First drop table
         if self.droptable:
             query = """DROP TABLE IF EXISTS `supported_mimetypes`"""
-            self.executeQuery(query)
+            self.execute_query(query)
 
         query = "CREATE TABLE IF NOT EXISTS `supported_mimetypes`\
             (`mime_type` VARCHAR(255) NOT NULL PRIMARY KEY,\
             INDEX USING HASH (`mime_type`),\
             `modules` LONGTEXT)"
-        self.executeQuery(query)
+        self.execute_query(query)
 
         # Truncate table if not already dropped before
         if self.truncate and not self.droptable:
             query = """TRUNCATE `supported_mimetypes`"""
-            self.executeQuery(query)
+            self.execute_query(query)
 
-    def setupModuleTable(self, table, columns):
+    def setup_module_table(self, table, columns):
         """
         Sets up a specified table.
 
@@ -145,7 +145,7 @@ class Database(object):
         # First drop table
         if self.droptable:
             query = """DROP TABLE IF EXISTS `""" + table + """`"""
-            self.executeQuery(query)
+            self.execute_query(query)
 
         query = """CREATE TABLE IF NOT EXISTS `""" + table + "`\
                 (`hashid` BIGINT UNSIGNED NOT NULL,\
@@ -156,12 +156,12 @@ class Database(object):
             type = type.strip()
             query += """,`""" + name + """` """ + type
         query += """, PRIMARY KEY(`hashid`));"""
-        self.executeQuery(query)
+        self.execute_query(query)
 
         # Truncate table if not already dropped before
         if self.truncate and not self.droptable:
             query = """TRUNCATE `""" + table + """`"""
-            self.executeQuery(query)
+            self.execute_query(query)
 
     def store(self, table, hashid, columns, values):
         """
@@ -179,7 +179,7 @@ class Database(object):
         for item in columns:
             query += ", `" + item + "`"
         query += """) VALUES (""" + str(hashid)
-        values = self._replace_values_(values)
+        values = self._replace_values(values)
         for item in values:
             query += ", '%s'"
         query += """);"""
@@ -190,9 +190,9 @@ class Database(object):
         escapedQuery = query % escaped
         escapedQuery = escapedQuery.replace(""" (, """, """ (""")
         escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
-        self.executeQuery(escapedQuery)
+        self.execute_query(escapedQuery)
 
-    def storeMimetypeValues(self, table, columns, values):
+    def store_mimetype_values(self, table, columns, values):
         """
         Inserts data into the specified table (supported_mimetypes).
 
@@ -207,7 +207,7 @@ class Database(object):
         for item in columns:
             query += " `" + item + "`,"
         query += """) VALUES ("""
-        values = self._replace_values_(values)
+        values = self._replace_values(values)
         for item in values:
             query += " '%s',"
         query += """);"""
@@ -218,9 +218,9 @@ class Database(object):
         escapedQuery = query % escaped
         escapedQuery = escapedQuery.replace(""",)""", """)""")
         escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
-        self.executeQuery(escapedQuery)
+        self.execute_query(escapedQuery)
 
-    def _replace_values_(self, database_values):
+    def _replace_values(self, database_values):
         """
         This methods replaces all None database_values to NULL
         And converts a dictionary, list and tuple to JSON.
@@ -238,13 +238,13 @@ class Database(object):
             if (isinstance(column_value, dict) or
                 isinstance(column_value, list) or
                 isinstance(column_value, tuple)):
-                database_values = self._convert_to_JSON_(database_values,
+                database_values = self._convert_to_JSON(database_values,
                                                          column_value, index)
 
             index += 1
         return database_values
 
-    def _convert_to_JSON_(self, database_values, column_value, index):
+    def _convert_to_JSON(self, database_values, column_value, index):
         """
         This method converts the database values to JSON
         """

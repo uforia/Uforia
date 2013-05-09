@@ -17,28 +17,28 @@ def process(fullpath, config, columns=None):
         # Try to parse .ogg data
         try:
             # Read the .ogg file
-            oggFile = auto.File(fullpath)
+            ogg_file = auto.File(fullpath)
 
             # Check if .ogg file is readed correctly
-            if oggFile.valid:
+            if ogg_file.valid:
 
                 # Store audio data in list
                 assorted = [
-                    oggFile.title,
-                    oggFile.artist,
-                    oggFile.album,
-                    oggFile.genre,
-                    oggFile.year,
-                    oggFile.track,
-                    oggFile.comment,
-                    oggFile.duration,
-                    oggFile.sample_rate,
-                    oggFile.audio_size,
-                    oggFile.bitrate,
-                    oggFile.audio_offset]
+                    ogg_file.title,
+                    ogg_file.artist,
+                    ogg_file.album,
+                    ogg_file.genre,
+                    ogg_file.year,
+                    ogg_file.track,
+                    ogg_file.comment,
+                    ogg_file.duration,
+                    ogg_file.sample_rate,
+                    ogg_file.audio_size,
+                    ogg_file.bitrate,
+                    ogg_file.audio_offset]
 
-                # delete the oggFile variable
-                del oggFile
+                # delete the ogg_file variable
+                del ogg_file
 
                 # Make sure we stored exactly the same amount of columns as
                 # specified!!

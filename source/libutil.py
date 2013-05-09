@@ -12,7 +12,7 @@ PLATFORM_SHARED_LIBRARY_EXTENSIONS = {
     'Darwin': '.dylib'}
 
 
-def loadLibrary(foldername, filename, apiversion=None):
+def load_library(foldername, filename, apiversion=None):
     """
     Returns the correct version of the shared library/DLL with ctypes
     based on the OS version or architecture.

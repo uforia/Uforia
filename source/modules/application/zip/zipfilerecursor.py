@@ -32,7 +32,7 @@ def process(fullpath, config, columns=None):
         # Get .zip's content metadata and store it in an dictionary.
         # In the dictionary the key is the file name and
         # the value is an other dict with its info.
-        contentInfo = {}
+        content_info = {}
         for info in zip.infolist():
             content = {}
             content["date_time"] = info.date_time
@@ -58,11 +58,11 @@ def process(fullpath, config, columns=None):
             else:
                 base64.b64encode(info.extra)
 
-            contentInfo[info.filename] = content
+            content_info[info.filename] = content
 
         # Store content info in DB.
-        assorted.append(contentInfo)
-        del contentInfo
+        assorted.append(content_info)
+        del content_info
 
         # Try to extract the content of the zip file.
         try:
@@ -72,7 +72,7 @@ def process(fullpath, config, columns=None):
             # Extract the zip file
             zip.extractall(tmpdir)
 
-            recursive.call_Uforia_recursive(config, tmpdir, fullpath)
+            recursive.call_uforia_recursive(config, tmpdir, fullpath)
 
             # Close the zip file
             zip.close()

@@ -16,7 +16,7 @@ import mutagen.flac
 from PIL import Image
 
 
-def lookupCaseInsensitive(dict, key):
+def _lookup_case_insensitive(dict, key):
     """
     Helper function to lookup a key in a dictionary, disregarding the
     case sensitivity. This is an O(n) operation, unlike normal dict
@@ -25,13 +25,13 @@ def lookupCaseInsensitive(dict, key):
     is not found None will be returned twice.
     """
     key = key.lower()
-    for caseKey, value in dict.items():
-        if caseKey.lower() == key:
-            return value, caseKey
+    for case_key, value in dict.items():
+        if case_key.lower() == key:
+            return value, case_key
     return None, None
 
 
-def getStreamInfo(audio):
+def _get_stream_info(audio):
     """
     Returns the stream information of the audio.
     """
@@ -49,7 +49,7 @@ def getStreamInfo(audio):
         audio.info.max_framesize]
 
 
-def getVorbisComments(audio):
+def _get_vorbis_comments(audio):
     """
     Returns common vorbis comments
     (now per http://xiph.org/vorbis/doc/v-comment.html)
@@ -61,7 +61,7 @@ def getVorbisComments(audio):
               'DESCRIPTION', 'GENRE', 'DATE', 'LOCATION', 'CONTACT', 'ISRC']
     tags = audio.tags.as_dict().copy()
     for key in common:
-        value, key = lookupCaseInsensitive(tags, key)
+        value, key = _lookup_case_insensitive(tags, key)
         # Remove known values so they don't show up in the 'Unknown' column
         if key != None:
             del tags[key]
@@ -76,7 +76,7 @@ def getVorbisComments(audio):
     return values
 
 
-def getPictureInfo(audio):
+def _get_picture_info(audio):
     """
     Returns JSON-encoded picture metadata, but not the actual pictures.
     """
@@ -93,7 +93,7 @@ def getPictureInfo(audio):
     return json.dumps(picturesinfo)
 
 
-def getSeektable(audio):
+def _get_seektable(audio):
     """
     Returns a JSON-encoded version of the file's seek table.
     """
@@ -103,7 +103,7 @@ def getSeektable(audio):
         '{}'
 
 
-def getCuesheet(audio):
+def _get_cuesheet(audio):
     """
     Returns the embedded cuesheet of the audio file in JSON.
     """
@@ -136,11 +136,11 @@ def process(fullpath, config, columns=None):
     try:
         audio = mutagen.flac.FLAC(fullpath)
 
-        assorted = getStreamInfo(audio)
-        assorted += getVorbisComments(audio)
-        assorted.append(getPictureInfo(audio))
-        assorted.append(getSeektable(audio))
-        assorted.append(getCuesheet(audio))
+        assorted = _get_stream_info(audio)
+        assorted += _get_vorbis_comments(audio)
+        assorted.append(_get_picture_info(audio))
+        assorted.append(_get_seektable(audio))
+        assorted.append(_get_cuesheet(audio))
 
         # Make sure we stored exactly the same amount of columns as
         # specified!!

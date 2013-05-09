@@ -16,17 +16,17 @@ import wave
 def process(fullpath, config, columns=None):
     try:
         # open the wave file
-        waveFile = wave.open(fullpath, "rb")
+        wave_file = wave.open(fullpath, "rb")
 
         # fill variables from the wave file, (nchannels, sampwidth,
         # framerate, nframes, comptype, compname)
-        assorted = list(waveFile.getparams())
+        assorted = list(wave_file.getparams())
 
         # duration of the wave file is amount of frames divided by framerate
-        assorted.append(waveFile.getnframes() / float(waveFile.getframerate()))
+        assorted.append(wave_file.getnframes() / float(wave_file.getframerate()))
 
         # close the wavefile first before opening using the XMP toolkit
-        waveFile.close()
+        wave_file.close()
 
         # Store the embedded XMP metadata
         if config.ENABLEXMP:

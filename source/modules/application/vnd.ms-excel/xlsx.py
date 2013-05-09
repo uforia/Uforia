@@ -16,11 +16,11 @@ def process(fullpath, config, columns=None):
 		exit()
 
 	worksheets = []
-	workTotal = 0
+	work_total = 0
 	for x in document.namelist():
 		if "/worksheets/" in x:
 			worksheets.append(x)
-			workTotal += 1
+			work_total += 1
 
 # 	xml = document.read("xl/worksheets/sheet1.xml")
 	
@@ -32,26 +32,26 @@ def process(fullpath, config, columns=None):
 
 	# Minidom alternative
 	tree = ET.fromstring(xmlprop)
-	treeApp = ET.fromstring(xmlapp)
+	tree_app = ET.fromstring(xmlapp)
 
 	#### Just some data, might be usefull lat0r ####
-	dataTree = []
-	dataApp = []
+	data_tree = []
+	data_app = []
 
 	for basic in range(4):
-		dataTree.append(tree[basic].text)
+		data_tree.append(tree[basic].text)
 
 
 # 	for app in range(10):
-# 		dataApp.append(treeApp[app].text)
-	dataApp.append(treeApp[0].text)
-	dataApp.append(treeApp[1].text)
-	dataApp.append(treeApp[5].text)
-	dataApp.append(treeApp[7].text)
-	dataApp.append(treeApp[9].text)
+# 		data_app.append(tree_app[app].text)
+	data_app.append(tree_app[0].text)
+	data_app.append(tree_app[1].text)
+	data_app.append(tree_app[5].text)
+	data_app.append(tree_app[7].text)
+	data_app.append(tree_app[9].text)
 
-	merged = dataTree + dataApp
-	merged.append(workTotal)
+	merged = data_tree + data_app
+	merged.append(work_total)
 	return merged
 
 # 	author = tree[0].text
@@ -59,8 +59,8 @@ def process(fullpath, config, columns=None):
 # 	createdOn = tree[2].text
 # 	changedOn = tree[3].text
 
-# 	apptype = treeApp[0].text
-# 	security = treeApp[1].text
-# 	company = treeApp[5].text
-# 	shared = treeApp[7].text
-# 	appversion = treeApp[9].text
+# 	apptype = tree_app[0].text
+# 	security = tree_app[1].text
+# 	company = tree_app[5].text
+# 	shared = tree_app[7].text
+# 	appversion = tree_app[9].text

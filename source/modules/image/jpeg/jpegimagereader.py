@@ -126,18 +126,18 @@ def process(fullpath, config, columns=None):
             # Check if exif is in info dictionary,
             # if so decode and put in our list
             if "exif" in info_dictionary:
-                GpsKeyExists = False
+                gps_key_exists = False
                 # Get all keys and check if they are in the JPEG
                 for key in TAGS:
                     if key == 0x8825:
                         # In Key 0x8825 some GPS data is stored
-                        GpsKeyExists = True
+                        gps_key_exists = True
                         for gpskey in GPSTAGS:
                             assorted.append(image._getexif().get(gpskey))
                     else:
                         assorted.append(image._getexif().get(key))
-                if GpsKeyExists == False:
-                    for gpsKey in GPSTAGS:
+                if gps_key_exists == False:
+                    for gpskey in GPSTAGS:
                         assorted.append(None)
                 info_dictionary.pop("exif")
             else:

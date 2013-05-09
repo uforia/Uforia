@@ -11,20 +11,20 @@ class Module:
     for MIME types or a __init__.py file.
     """
 
-    def __init__(self, path, name, mimetype=None, isGlobal=False,
-                 asMimeHandler=False):
+    def __init__(self, path, name, mimetype=None, is_global=False,
+                 as_mime_handler=False):
         self.path = path
         self.name = name
-        self.isGlobal = isGlobal
+        self.is_global = is_global
         self.mimetype = mimetype
-        self.isMimeHandler = False
+        self.is_mime_handler = False
         self.tablename = ""
         self.columndefinition = ""
         self.columnnames = []
         self.pymodule = None
-        self.__loadHandler()
+        self.__load_handler()
 
-    def __loadHandler(self):
+    def __load_handler(self):
         """
         Parses the table information inside a MIME handler module file.
         """
@@ -34,13 +34,14 @@ class Module:
                     self.columndefinition = (line.strip('\n')
                                             .replace("""# TABLE: """, ''))
                     self.tablename = self.name.replace('.', '_')
+                    self.tablename = self.tablename.replace('-', '_')
                     for columnelement in self.columndefinition.split(','):
                         column = columnelement.split(':')[0].strip()
                         self.columnnames.append(column)
 
-                    self.isMimeHandler = True
+                    self.is_mime_handler = True
 
-    def loadSources(self):
+    def load_sources(self):
         """
         Because the result of imp.load_source can't be shared between
         processes, each process
@@ -66,21 +67,21 @@ class Modules:
 
     def __init__(self, config, db):
         self.modules = []
-        self.__setupModules(config, db)
+        self.__setup_modules(config, db)
 
-    def getModulesForMimetype(self, mimetype):
+    def get_modules_for_mimetype(self, mimetype):
         """
         Returns all modules that apply to the given mimetype.
         """
         modules = []
         for module in self.modules:
-            if (module.isGlobal or module.mimetype == mimetype or
+            if (module.is_global or module.mimetype == mimetype or
                     (module.mimetype and
                      mimetype.startswith(module.mimetype))):
                 modules.append(module)
         return modules
 
-    def getAllSupportedMimeTypesWithModules(self):
+    def get_all_supported_mimetypes_with_modules(self):
         """
         Returns all mime-types which Uforia supports with modules.
         """
@@ -92,7 +93,7 @@ class Modules:
         # First get all mime-types
         for module in self.modules:
             # Global module is for each mime-type so ingnore it.
-            if (not module.isGlobal and not "__init__.py" in module.path):
+            if (not module.is_global and not "__init__.py" in module.path):
                 # If key not already exists, append to the list with mime-types
                 if not module.mimetype in mime_types:
                     mime_types.append(module.mimetype)
@@ -102,7 +103,7 @@ class Modules:
             modules = []
             for module in self.modules:
                 # Global module is for each mime-type so ingnore it.
-                if (not module.isGlobal and not "__init__.py" in module.path):
+                if (not module.is_global and not "__init__.py" in module.path):
                     if module.mimetype == (mime_type
                                            or (module.mimetype and
                                                mime_type.startswith
@@ -114,7 +115,7 @@ class Modules:
         del mime_types
         return mime_types_with_columns
 
-    def __setupModules(self, config, db):
+    def __setup_modules(self, config, db):
         """
         Loads all modules in the modules directory, including subdirectories
         and top-level modules.
@@ -125,7 +126,7 @@ class Modules:
         DEPTH_TYPE = 1
         DEPTH_SUBTYPE = 2
 
-        for root, subFolders, files in os.walk("modules"):
+        for root, sub_folders, files in os.walk("modules"):
             nicepath = os.path.relpath(root, "modules")
             fullpath = root
 
@@ -157,10 +158,10 @@ class Modules:
             for file in files:
                 modulenameend, extension = os.path.splitext(file)
                 if extension.lower() == ".py":
-                    isInit = file == "__init__.py"
+                    is_init = file == "__init__.py"
                     modulepath = fullpath + os.path.sep + file
                     modulename = None
-                    if isInit:
+                    if is_init:
                         modulename = modulenamebase
                     elif depth == DEPTH_ROOT:
                         modulename = modulenameend
@@ -168,10 +169,10 @@ class Modules:
                         modulename = modulenamebase + '.' + modulenameend
 
                     module = Module(modulepath, modulename, mimetype,
-                                    isGlobal=(depth == DEPTH_ROOT),
-                                    asMimeHandler=not isInit)
-                    if module.isMimeHandler and not config.RECURSIVE:
-                        db.setupModuleTable(module.tablename,
+                                    is_global=(depth == DEPTH_ROOT),
+                                    as_mime_handler=not is_init)
+                    if module.is_mime_handler and not config.RECURSIVE:
+                        db.setup_module_table(module.tablename,
                                             module.columndefinition)
 
                     self.modules.append(module)

@@ -19,40 +19,40 @@ def process(fullpath, config, columns=None):
 
 	# Minidom alternative
 	tree = ET.fromstring(xmlprop)
-	treeApp = ET.fromstring(xmlapp)
+	tree_app = ET.fromstring(xmlapp)
 
 	#### Just some data, might be usefull lat0r ####
-	dataTree = []
-	dataApp = []
+	data_tree = []
+	data_app = []
 
 # 	for basic in range(6):
-# 		dataTree.append(tree[basic].text)
+# 		data_tree.append(tree[basic].text)
 	
 # 	for app in range(17):
-# 		dataApp.append(treeApp[app].text)
+# 		data_app.append(tree_app[app].text)
 
 
-	dataTree.append(tree[0].text)
-	dataTree.append(tree[1].text)
-	dataTree.append(tree[2].text)
-	dataTree.append(tree[3].text)
-	dataTree.append(tree[4].text)
-	dataTree.append(tree[5].text)
+	data_tree.append(tree[0].text)
+	data_tree.append(tree[1].text)
+	data_tree.append(tree[2].text)
+	data_tree.append(tree[3].text)
+	data_tree.append(tree[4].text)
+	data_tree.append(tree[5].text)
 
-	dataApp.append(treeApp[0].text)
-	dataApp.append(treeApp[1].text)
-	dataApp.append(treeApp[2].text)
-	dataApp.append(treeApp[3].text)
-	dataApp.append(treeApp[4].text)
-	dataApp.append(treeApp[5].text)
-	dataApp.append(treeApp[6].text)
-	dataApp.append(treeApp[7].text)
-	dataApp.append(treeApp[8].text)
-	dataApp.append(treeApp[12].text)
-	dataApp.append(treeApp[14].text)
-	dataApp.append(treeApp[16].text)
+	data_app.append(tree_app[0].text)
+	data_app.append(tree_app[1].text)
+	data_app.append(tree_app[2].text)
+	data_app.append(tree_app[3].text)
+	data_app.append(tree_app[4].text)
+	data_app.append(tree_app[5].text)
+	data_app.append(tree_app[6].text)
+	data_app.append(tree_app[7].text)
+	data_app.append(tree_app[8].text)
+	data_app.append(tree_app[12].text)
+	data_app.append(tree_app[14].text)
+	data_app.append(tree_app[16].text)
 
-	merged = dataTree + dataApp
+	merged = data_tree + data_app
 	return merged
 
 # 	title = tree[0].text
@@ -62,18 +62,18 @@ def process(fullpath, config, columns=None):
 # 	madeon = tree[4].text
 # 	changedon = tree[5].text
 
-# 	time = treeApp[0].text
-# 	words = treeApp[1].text
-# 	application = treeApp[2].text
-# 	ppFormat = treeApp[3].text
-# 	paragraphs = treeApp[4].text
-# 	slides = treeApp[5].text
-# 	notes = treeApp[6].text
-# 	hiddenslides = treeApp[7].text
-# 	multimediaclips = treeApp[8].text
-# 	company = treeApp[12].text
-# 	shared = treeApp[14].text
-# 	version = treeApp[16].text
+# 	time = tree_app[0].text
+# 	words = tree_app[1].text
+# 	application = tree_app[2].text
+# 	ppFormat = tree_app[3].text
+# 	paragraphs = tree_app[4].text
+# 	slides = tree_app[5].text
+# 	notes = tree_app[6].text
+# 	hiddenslides = tree_app[7].text
+# 	multimediaclips = tree_app[8].text
+# 	company = tree_app[12].text
+# 	shared = tree_app[14].text
+# 	version = tree_app[16].text
 
 
 

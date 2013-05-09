@@ -26,7 +26,7 @@ import ctypes.util
 from ctypes import c_char_p, c_int, c_size_t, c_void_p
 
 
-class MagicException(Exception):
+class MagicError(Exception):
     pass
 
 
@@ -145,7 +145,7 @@ magic_t = ctypes.c_void_p
 def errorcheck(result, func, args):
     err = magic_error(args[0])
     if err is not None:
-        raise MagicException(err)
+        raise MagicError(err)
     else:
         return result
 

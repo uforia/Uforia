@@ -8,7 +8,7 @@ import os
 import sys
 
 
-def call_Uforia_recursive(config, tmpdir, fullpath):
+def call_uforia_recursive(config, tmpdir, fullpath):
     """
     Call Uforia recursively on the specified temporary directory.
     config - The Uforia config object
@@ -17,24 +17,24 @@ def call_Uforia_recursive(config, tmpdir, fullpath):
         as prefix in the output columns
     """
     if config.UFORIA_RUNNING_VERSION == 'Uforia_debug':
-        import Uforia_debug
-        uforia = Uforia_debug
+        import uforia_debug
+        uforia = uforia_debug
     else:
-        import Uforia
-        uforia = Uforia
+        import uforia
+        uforia = uforia
 
-    newConfig = uforia.configAsPickleable(config)
-    newConfig.STARTDIR = str(tmpdir)
-    newConfig.DROPTABLE = False
-    newConfig.TRUNCATE = False
+    new_config = uforia.config_as_pickleable(config)
+    new_config.STARTDIR = str(tmpdir)
+    new_config.DROPTABLE = False
+    new_config.TRUNCATE = False
     if config.SPOOFSTARTDIR != None:
         spoofdir = config.SPOOFSTARTDIR + os.path.sep + \
         os.path.relpath(fullpath, config.STARTDIR)
     else:
         spoofdir = fullpath
-    newConfig.SPOOFSTARTDIR = spoofdir
-    newConfig.RECURSIVE = True
+    new_config.SPOOFSTARTDIR = spoofdir
+    new_config.RECURSIVE = True
 
-    uforia.config = newConfig
+    uforia.config = new_config
     uforia.run()
     uforia.config = config

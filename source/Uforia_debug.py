@@ -17,7 +17,7 @@ modules = None
 database = None
 
 
-def writeToDB(table, hashid, columns, values, db=None):
+def write_to_db(table, hashid, columns, values, db=None):
     """
     Method that writes to database
 
@@ -35,7 +35,7 @@ def writeToDB(table, hashid, columns, values, db=None):
     db.connection.close()
 
 
-def writeToMimeTypesTable(table, columns, values, db=None):
+def write_to_mimetypes_table(table, columns, values, db=None):
     """
     Method that writes to database
 
@@ -47,20 +47,20 @@ def writeToMimeTypesTable(table, columns, values, db=None):
     if db == None:
         db = database.Database(config)
 
-    db.storeMimetypeValues(table, columns, values)
+    db.store_mimetype_values(table, columns, values)
 
     db.connection.commit()
     db.connection.close()
 
 
-def fileScanner(dir, uforiamodules):
+def file_scanner(dir, uforiamodules):
     """
     Walks through the specified directory tree to find all files. Each
-    file is passed through fileProcessor, which is called asynchronously
+    file is passed through file_processor, which is called asynchronously
     through the multiprocessing pool (consumers).
 
     dir - The path to search
-    uforiamodules - Loaded uforia modules, passed to fileProcessor
+    uforiamodules - Loaded uforia modules, passed to file_processor
     """
     try:
         if config.DEBUG:
@@ -75,13 +75,13 @@ def fileScanner(dir, uforiamodules):
                 hashid += 1
         config.STARTING_HASHID = hashid
         for item in filelist:
-            fileProcessor(item, uforiamodules)
+            file_processor(item, uforiamodules)
     except:
         traceback.print_exc(file=sys.stderr)
         raise
 
 
-def invokeModules(uforiamodules, hashid, file):
+def invoke_modules(uforiamodules, hashid, file):
     """
     Loads all Uforia modules.
     Only modules that apply to the current MIME-type are loaded.
@@ -92,29 +92,29 @@ def invokeModules(uforiamodules, hashid, file):
     hashid - The hash id of the currently processed file
     file - The file currently being processed
     """
-    modules = uforiamodules.getModulesForMimetype(file.mtype)
-    nrHandlers = 0
+    modules = uforiamodules.get_modules_for_mimetype(file.mtype)
+    nr_handlers = 0
     for module in modules:
-        if module.isMimeHandler:
-            nrHandlers += 1
+        if module.is_mime_handler:
+            nr_handlers += 1
 
-    if nrHandlers == 0:
+    if nr_handlers == 0:
         if config.DEBUG:
             print "No modules found to handle MIME-type " + file.mtype + ", skipping additional file parsing..."
     else:
         try:
-            modules = uforiamodules.getModulesForMimetype(file.mtype)
+            modules = uforiamodules.get_modules_for_mimetype(file.mtype)
             if config.DEBUG:
-                print "Setting up " + str(nrHandlers) + " module workers..."
+                print "Setting up " + str(nr_handlers) + " module workers..."
             for module in modules:
                 try:
                     # If module fails catch it's exception and continue running Uforia.
-                    module.loadSources()
+                    module.load_sources()
                     processresult = None
-                    if module.isMimeHandler:
+                    if module.is_mime_handler:
                         processresult = module.pymodule.process(file.fullpath, config, columns=module.columnnames)
                     if processresult != None:
-                        writeToDB(module.tablename, hashid, module.columnnames, processresult)
+                        write_to_db(module.tablename, hashid, module.columnnames, processresult)
                 except:
                     traceback.print_exc(file=sys.stderr)
         except:
@@ -122,10 +122,10 @@ def invokeModules(uforiamodules, hashid, file):
             raise
 
 
-def fileProcessor(item, uforiamodules):
+def file_processor(item, uforiamodules):
     """
     Process a file item and export its information to the database.
-    Also calls invokeModules() if modules are enabled in the
+    Also calls invoke_modules() if modules are enabled in the
     configuration.
 
     item - Tuple containing the fullpath and hashid of the file
@@ -144,7 +144,7 @@ def fileProcessor(item, uforiamodules):
                 fullpath = file.fullpath
             values = (fullpath, file.name, file.size, file.owner, file.group, file.perm, file.mtime, file.atime, file.ctime, file.md5, file.sha1, file.sha256, file.ftype, file.mtype, file.btype)
 
-            writeToDB('files', hashid, columns, values)
+            write_to_db('files', hashid, columns, values)
         except:
             traceback.print_exc(file=sys.stderr)
             raise
@@ -152,21 +152,21 @@ def fileProcessor(item, uforiamodules):
             if config.DEBUG:
                 print("Additional module parsing disabled by config, skipping...")
         else:
-            invokeModules(uforiamodules, hashid, file)
+            invoke_modules(uforiamodules, hashid, file)
     except:
         traceback.print_exc(file=sys.stderr)
         raise
 
 
-def fillMimeTypesTable(uforiamodules):
+def fill_mimetypes_table(uforiamodules):
     """
     Fills the supported_mimetypes table with all available mime-types
     """
     if config.DEBUG:
         print "Getting available mimetypes..."
-    mime_types = uforiamodules.getAllSupportedMimeTypesWithModules()
+    mime_types = uforiamodules.get_all_supported_mimetypes_with_modules()
     for mime_type in mime_types:
-        writeToMimeTypesTable('supported_mimetypes', ["mime_type", "modules"], [mime_type, mime_types[mime_type]])
+        write_to_mimetypes_table('supported_mimetypes', ["mime_type", "modules"], [mime_type, mime_types[mime_type]])
 
 
 def run():
@@ -174,28 +174,28 @@ def run():
     Starts Uforia.
 
     Sets up the database, modules, and then
-    invokes the fileScanner.
+    invokes the file_scanner.
     """
 
     print("Uforia starting...")
 
     db = database.Database(config)
     if not config.RECURSIVE:
-        db.setupMainTable()
-        db.setupMimeTypesTable()
+        db.setup_main_table()
+        db.setup_mimetypes_table()
 
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db)
         if not config.RECURSIVE:
-            fillMimeTypesTable(uforiamodules)
+            fill_mimetypes_table(uforiamodules)
     else:
         uforiamodules = ''
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        fileScanner(config.STARTDIR, uforiamodules)
+        file_scanner(config.STARTDIR, uforiamodules)
     else:
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
     print("\nUforia completed...\n")
@@ -205,7 +205,7 @@ class _Dummy(object):
     pass
 
 
-def configAsPickleable(config):
+def config_as_pickleable(config):
     """
     Converts config (which has the `module' type) to a pickleable object.
     """
@@ -217,7 +217,7 @@ def configAsPickleable(config):
     return newConfig
 
 
-def setupLibraryPaths():
+def setup_library_paths():
     """
     Setup the PATH environmental variable so that python libraries, .pyd, .so and
     .dll files can be loaded without intervention. This does not work for Linux
@@ -232,7 +232,7 @@ def setupLibraryPaths():
         # sys.path.append is not reliable for this thing
         os.environ['PATH'] += ";./libraries/windows-deps"
 
-setupLibraryPaths()
+setup_library_paths()
 
 # Fixes crash-on-exit bugs on Windows by loading it before libmagic
 import libxmp
@@ -248,7 +248,7 @@ modules = imp.load_source('modulescanner', 'include/modulescanner.py')
 database = imp.load_source(config.DBTYPE, config.DATABASEDIR + config.DBTYPE + ".py")
 
 config.UFORIA_RUNNING_VERSION = 'Uforia_debug'
-config = configAsPickleable(config)
+config = config_as_pickleable(config)
 
 if __name__ == "__main__":
     run()
