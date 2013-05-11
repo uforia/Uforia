@@ -90,7 +90,7 @@ AVBIN_LOG_VERBOSE = 40
 AVBIN_LOG_DEBUG = 48
 AVbinLogLevel = ctypes.c_int
 
-av = libutil.loadLibrary('avbin', 'libavbin', 11)
+av = libutil.load_library('avbin', 'libavbin', 11)
 
 av.avbin_open_filename.restype = ctypes.c_void_p
 av.avbin_open_filename.argtypes = [ctypes.c_char_p]
@@ -146,7 +146,7 @@ def get_all_stream_info(file, fileInfo):
     return all_streams
 
 
-def process(fullpath, config, columns=None):
+def process(fullpath, config, rcontext, columns=None):
     try:
         fileInfo = AVbinFileInfo()
         fileInfo.structure_size = ctypes.sizeof(fileInfo)

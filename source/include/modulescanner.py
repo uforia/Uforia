@@ -65,9 +65,9 @@ class Modules:
     tuple with the data for each column.
     """
 
-    def __init__(self, config, db):
+    def __init__(self, config, db, rcontext):
         self.modules = []
-        self.__setup_modules(config, db)
+        self.__setup_modules(config, db, rcontext)
 
     def get_modules_for_mimetype(self, mimetype):
         """
@@ -115,7 +115,7 @@ class Modules:
         del mime_types
         return mime_types_with_columns
 
-    def __setup_modules(self, config, db):
+    def __setup_modules(self, config, db, rcontext):
         """
         Loads all modules in the modules directory, including subdirectories
         and top-level modules.
@@ -171,7 +171,7 @@ class Modules:
                     module = Module(modulepath, modulename, mimetype,
                                     is_global=(depth == DEPTH_ROOT),
                                     as_mime_handler=not is_init)
-                    if module.is_mime_handler and not config.RECURSIVE:
+                    if module.is_mime_handler and not rcontext.RECURSIVE:
                         db.setup_module_table(module.tablename,
                                             module.columndefinition)
 

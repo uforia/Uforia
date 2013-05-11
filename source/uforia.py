@@ -269,7 +269,7 @@ def run():
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
-        uforiamodules = modules.Modules(config, db)
+        uforiamodules = modules.Modules(config, db, rcontext)
         if not rcontext.RECURSIVE:
             fill_mimetypes_table(dbqueue, uforiamodules)
     else:

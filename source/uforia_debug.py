@@ -54,7 +54,7 @@ def write_to_mimetypes_table(table, columns, values, db=None):
     db.connection.close()
 
 
-def file_scanner(dir, uforiamodules):
+def file_scanner(dir, uforiamodules, rcontext):
     """
     Walks through the specified directory tree to find all files. Each
     file is passed through file_processor, which is called asynchronously
@@ -188,7 +188,7 @@ def run():
     if config.ENABLEMODULES:
         if config.DEBUG:
             print("Detecting available modules...")
-        uforiamodules = modules.Modules(config, db)
+        uforiamodules = modules.Modules(config, db, rcontext)
         if not rcontext.RECURSIVE:
             fill_mimetypes_table(uforiamodules)
     else:
@@ -196,7 +196,7 @@ def run():
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        file_scanner(config.STARTDIR, uforiamodules)
+        file_scanner(config.STARTDIR, uforiamodules, rcontext)
     else:
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
     print("\nUforia completed...\n")
