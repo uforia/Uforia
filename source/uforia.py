@@ -179,7 +179,7 @@ def invoke_modules(dbqueue, uforiamodules, hashid, file, config, rcontext):
                     if module.is_mime_handler:
                         processresult = module.pymodule.process(file.fullpath, config, rcontext, columns=module.columnnames)
                     if processresult != None:
-                        dbqueue.put((hashlib.md5(module.tablename).hexdigest()[:31], hashid, module.columnnames, processresult))
+                        dbqueue.put((hashlib.md5(module.tablename).hexdigest()[:30], hashid, module.columnnames, processresult))
                 except:
                     traceback.print_exc(file=sys.stderr)
         except:

@@ -108,7 +108,7 @@ class Modules:
                                            or (module.mimetype and
                                                mime_type.startswith
                                                (module.mimetype))):
-                        modules[module.tablename] = hashlib.md5(module.tablename).hexdigest()[:31]
+                        modules[module.tablename] = hashlib.md5(module.tablename).hexdigest()[:30]
 
             mime_types_with_columns[mime_type] = modules
 
@@ -172,7 +172,7 @@ class Modules:
                                     is_global=(depth == DEPTH_ROOT),
                                     as_mime_handler=not is_init)
                     if module.is_mime_handler and not rcontext.RECURSIVE:
-                        db.setup_module_table(hashlib.md5(module.tablename).hexdigest()[:31],
+                        db.setup_module_table(hashlib.md5(module.tablename).hexdigest()[:30],
                                             module.columndefinition)
 
                     self.modules.append(module)
