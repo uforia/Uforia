@@ -9,6 +9,7 @@ import traceback
 import site
 import ctypes
 import recursive
+import hashlib
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -115,7 +116,7 @@ def invoke_modules(uforiamodules, hashid, file):
                     if module.is_mime_handler:
                         processresult = module.pymodule.process(file.fullpath, config, rcontext, columns=module.columnnames)
                     if processresult != None:
-                        write_to_db(module.tablename, hashid, module.columnnames, processresult)
+                        write_to_db(module.md5_tablename, hashid, module.columnnames, processresult)
                 except:
                     traceback.print_exc(file=sys.stderr)
         except:

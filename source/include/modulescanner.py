@@ -5,13 +5,14 @@ import imp
 import warnings
 import hashlib
 
+
 class Module:
     """
     Represents a single Uforia module file. This might be a handler
     for MIME types or a __init__.py file.
     """
 
-    def __init__(self, path, name, mimetype=None, is_global=False,
+    def __init__(self, database, path, name, mimetype=None, is_global=False,
                  as_mime_handler=False):
         self.path = path
         self.name = name
@@ -19,12 +20,13 @@ class Module:
         self.mimetype = mimetype
         self.is_mime_handler = False
         self.tablename = ""
+        self.md5_tablename = ""
         self.columndefinition = ""
         self.columnnames = []
         self.pymodule = None
-        self.__load_handler()
+        self.__load_handler(database)
 
-    def __load_handler(self):
+    def __load_handler(self, database):
         """
         Parses the table information inside a MIME handler module file.
         """
@@ -35,6 +37,15 @@ class Module:
                                             .replace("""# TABLE: """, ''))
                     self.tablename = self.name.replace('.', '_')
                     self.tablename = self.tablename.replace('-', '_')
+
+                    # Get hash value from database, if not found calculate it
+                    md5hash = database.get_md5_tablename(self.mimetype)
+                    if(md5hash):
+                        self.md5_tablename = md5hash
+                    else:
+                        self.md5_tablename = (hashlib.md5(self.tablename)
+                                              .hexdigest()[:30])
+
                     for columnelement in self.columndefinition.split(','):
                         column = columnelement.split(':')[0].strip()
                         self.columnnames.append(column)
@@ -108,7 +119,7 @@ class Modules:
                                            or (module.mimetype and
                                                mime_type.startswith
                                                (module.mimetype))):
-                        modules[module.tablename] = hashlib.md5(module.tablename).hexdigest()[:30]
+                        modules[module.tablename] = module.md5_tablename
 
             mime_types_with_columns[mime_type] = modules
 
@@ -151,7 +162,7 @@ class Modules:
                     continue
 
                 modulepath = fullpath + os.path.sep + "__init__.py"
-                module = Module(modulepath, modulenamebase, mimetype)
+                module = Module(db, modulepath, modulenamebase, mimetype)
                 self.modules.append(module)
 
             # Now load each handler .py file
@@ -168,11 +179,11 @@ class Modules:
                     else:
                         modulename = modulenamebase + '.' + modulenameend
 
-                    module = Module(modulepath, modulename, mimetype,
+                    module = Module(db, modulepath, modulename, mimetype,
                                     is_global=(depth == DEPTH_ROOT),
                                     as_mime_handler=not is_init)
                     if module.is_mime_handler and not rcontext.RECURSIVE:
-                        db.setup_module_table(hashlib.md5(module.tablename).hexdigest()[:30],
+                        db.setup_module_table(module.md5_tablename,
                                             module.columndefinition)
 
                     self.modules.append(module)
