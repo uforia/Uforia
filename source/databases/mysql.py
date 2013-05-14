@@ -89,12 +89,13 @@ class Database(object):
         except:
             traceback.print_exc(file=sys.stderr)
 
-    def get_md5_tablename(self, mimetype):
+    def get_md5_tablename(self, mimetype, tablename):
         """
         Gets the MD5 hash of a given tablename from database
         This is less intensive then recalculate a hash value
 
         mimetype - The mimetype name
+        tablename - The table name
         """
         query = """SELECT modules FROM `supported_mimetypes`
             WHERE mime_type = \'""" + mimetype + """\'"""
@@ -104,7 +105,7 @@ class Database(object):
         if value:
             # Convert tuple to dict and pop the value
             dictionary = ast.literal_eval(value[0])
-            return dictionary.values().pop()
+            return dictionary[tablename]
         else:
             return value
 

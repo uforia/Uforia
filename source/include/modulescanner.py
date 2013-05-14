@@ -39,7 +39,8 @@ class Module:
                     self.tablename = self.tablename.replace('-', '_')
 
                     # Get hash value from database, if not found calculate it
-                    md5hash = database.get_md5_tablename(self.mimetype)
+                    md5hash = database.get_md5_tablename(self.mimetype,
+                                                          self.tablename)
                     if(md5hash):
                         self.md5_tablename = md5hash
                     else:
@@ -115,7 +116,7 @@ class Modules:
             for module in self.modules:
                 # Global module is for each mime-type so ingnore it.
                 if (not module.is_global and not "__init__.py" in module.path):
-                    if module.mimetype == (mime_type
+                    if (module.mimetype == (mime_type)
                                            or (module.mimetype and
                                                mime_type.startswith
                                                (module.mimetype))):
