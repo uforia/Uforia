@@ -3,7 +3,7 @@
 import os
 import imp
 import warnings
-
+import hashlib
 
 class Module:
     """
@@ -56,9 +56,9 @@ class Modules:
 
     The format for defining module columns is as follows (this should
     be inside a normal python comment):
-    #TABLE: <column name>:<data type>, <column name>:<data type>,
+    # TABLE: <column name>:<data type>, <column name>:<data type>,
     Example:
-    #TABLE: Title:LONGTEXT, Subject:LONGTEXT
+    # TABLE: Title:LONGTEXT, Subject:LONGTEXT
 
     Each defined MIME type handler should have a process() function
     which accepts a path to the file to analyze. It should return a
@@ -100,7 +100,7 @@ class Modules:
 
         # Then get all columns for a mime-type
         for mime_type in mime_types:
-            modules = []
+            modules = {}
             for module in self.modules:
                 # Global module is for each mime-type so ingnore it.
                 if (not module.is_global and not "__init__.py" in module.path):
@@ -108,7 +108,7 @@ class Modules:
                                            or (module.mimetype and
                                                mime_type.startswith
                                                (module.mimetype))):
-                        modules.append(module.tablename)
+                        modules[module.tablename] = hashlib.md5(module.tablename).hexdigest()[:31]
 
             mime_types_with_columns[mime_type] = modules
 
@@ -172,7 +172,7 @@ class Modules:
                                     is_global=(depth == DEPTH_ROOT),
                                     as_mime_handler=not is_init)
                     if module.is_mime_handler and not rcontext.RECURSIVE:
-                        db.setup_module_table(module.tablename,
+                        db.setup_module_table(hashlib.md5(module.tablename).hexdigest()[:31],
                                             module.columndefinition)
 
                     self.modules.append(module)
