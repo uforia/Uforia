@@ -17,6 +17,7 @@ import stat
 import recursive
 import tarfile
 
+
 def process(fullpath, config, rcontext, columns=None):
     try:
         # Open the tar file
@@ -38,8 +39,7 @@ def process(fullpath, config, rcontext, columns=None):
                                  'uid',
                                  'gid',
                                  'uname',
-                                 'gname'
-                                 ]
+                                 'gname']
             for attribute in wanted_attributes:
                 member_dict[attribute] = getattr(member, attribute)
             member_info.append(member_dict)
