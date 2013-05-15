@@ -6,7 +6,6 @@ import sys
 import traceback
 import json
 import base64
-import ast
 import MySQLdb
 
 
