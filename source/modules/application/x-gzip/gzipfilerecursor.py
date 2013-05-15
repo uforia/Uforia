@@ -6,7 +6,7 @@ Created on 13 mei 2013
 # Module for extracting .gz files and running uforia over the extracted
 # file
 
-# TABLE: offset:INT, extrabuf:LONGTEXT, extrasize:INT, extrastart:INT
+# TABLE: extrabuf:LONGTEXT, extrasize:INT, extrastart:INT
 
 import sys
 import traceback
@@ -42,8 +42,7 @@ def process(fullpath, config, rcontext, columns=None):
         file = gzip.open(fullpath, 'rb')
 
         # Store gzip metadata values
-        assorted = [file.offset,
-                    file.extrabuf,
+        assorted = [file.extrabuf,
                     file.extrasize,
                     file.extrastart]
 
