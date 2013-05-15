@@ -6,7 +6,7 @@ Created on 13 mei 2013
 # Module for extracting .gz files and running uforia over the extracted
 # file
 
-# TABLE: dummy:LONGTEXT
+# TABLE: offset:INT, extrabuf:LONGTEXT, extrasize:INT, extrastart:INT
 
 import sys
 import traceback
@@ -15,6 +15,7 @@ import shutil
 import gzip
 import os
 import recursive
+
 
 def _uncompressed_filename(fullpath):
     """
@@ -31,6 +32,7 @@ def _uncompressed_filename(fullpath):
     else:
         return lastpart + "~ungzipped"
 
+
 def process(fullpath, config, rcontext, columns=None):
     try:
          # Create a temporary directory
@@ -38,6 +40,12 @@ def process(fullpath, config, rcontext, columns=None):
 
         # Open gzip file for reading
         file = gzip.open(fullpath, 'rb')
+
+        # Store gzip metadata values
+        assorted = [file.offset,
+                    file.extrabuf,
+                    file.extrasize,
+                    file.extrastart]
 
         # Read the uncompressed data
         file_content = file.read()
@@ -60,10 +68,11 @@ def process(fullpath, config, rcontext, columns=None):
         # Delete the temporary directory, proceed even if it causes
         # an error
         try:
-            pass
             shutil.rmtree(tmpdir)
         except:
             traceback.print_exc(file=sys.stderr)
+
+        return assorted
     except:
         traceback.print_exc(file=sys.stderr)
     return None
