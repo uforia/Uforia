@@ -75,40 +75,6 @@ class Database(object):
         except:
             traceback.print_exc(file=sys.stderr)
 
-    def execute_query_with_result(self, query):
-        """
-        Executes a query which should have data to return.
-
-        query - The query string
-        """
-        try:
-            warnings.filterwarnings('ignore', category=self.connection.Warning)
-            self.cursor.execute(query)
-            warnings.resetwarnings()
-            return self.cursor.fetchone()
-        except:
-            traceback.print_exc(file=sys.stderr)
-
-    def get_md5_tablename(self, mimetype, tablename):
-        """
-        Gets the MD5 hash of a given tablename from database
-        This is less intensive then recalculate a hash value
-
-        mimetype - The mimetype name
-        tablename - The table name
-        """
-        query = """SELECT modules FROM `supported_mimetypes`
-            WHERE mime_type = \'""" + mimetype + """\'"""
-
-        # Value is a tuple or None if no result found
-        value = self.execute_query_with_result(query)
-        if value:
-            # Convert tuple to dict and pop the value
-            dictionary = ast.literal_eval(value[0])
-            return dictionary[tablename]
-        else:
-            return value
-
     def setup_main_table(self):
         """
         Sets up the main data table, which contains general information

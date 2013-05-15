@@ -12,7 +12,7 @@ class Module:
     for MIME types or a __init__.py file.
     """
 
-    def __init__(self, database, path, name, mimetype=None, is_global=False,
+    def __init__(self, path, name, mimetype=None, is_global=False,
                  as_mime_handler=False):
         self.path = path
         self.name = name
@@ -24,9 +24,9 @@ class Module:
         self.columndefinition = ""
         self.columnnames = []
         self.pymodule = None
-        self.__load_handler(database)
+        self.__load_handler()
 
-    def __load_handler(self, database):
+    def __load_handler(self):
         """
         Parses the table information inside a MIME handler module file.
         """
@@ -37,16 +37,8 @@ class Module:
                                             .replace("""# TABLE: """, ''))
                     self.tablename = self.name.replace('.', '_')
                     self.tablename = self.tablename.replace('-', '_')
-
-                    # Get hash value from database, if not found calculate it
-                    md5hash = database.get_md5_tablename(self.mimetype,
-                                                          self.tablename)
-                    if(md5hash):
-                        self.md5_tablename = md5hash
-                    else:
-                        self.md5_tablename = (hashlib.md5(self.tablename)
+                    self.md5_tablename = (hashlib.md5(self.tablename)
                                               .hexdigest()[:30])
-
                     for columnelement in self.columndefinition.split(','):
                         column = columnelement.split(':')[0].strip()
                         self.columnnames.append(column)
@@ -163,7 +155,7 @@ class Modules:
                     continue
 
                 modulepath = fullpath + os.path.sep + "__init__.py"
-                module = Module(db, modulepath, modulenamebase, mimetype)
+                module = Module(modulepath, modulenamebase, mimetype)
                 self.modules.append(module)
 
             # Now load each handler .py file
@@ -180,7 +172,7 @@ class Modules:
                     else:
                         modulename = modulenamebase + '.' + modulenameend
 
-                    module = Module(db, modulepath, modulename, mimetype,
+                    module = Module(modulepath, modulename, mimetype,
                                     is_global=(depth == DEPTH_ROOT),
                                     as_mime_handler=not is_init)
                     if module.is_mime_handler and not rcontext.RECURSIVE:
