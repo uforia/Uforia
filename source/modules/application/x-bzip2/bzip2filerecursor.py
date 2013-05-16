@@ -19,10 +19,10 @@ import recursive
 
 def _uncompressed_filename(fullpath):
     """
-    Returns the filename for the ungzipped file. Examples:
-    test.txt.gz => test.txt
-    test.tgz => test.tar
-    test => test~ungzipped
+    Returns the filename for the unbzipped file. Examples:
+    test.txt.bz2 => test.txt
+    test.tbz => test.tar
+    test => test~unbzipped
     """
     lastpart = os.path.relpath(fullpath, os.path.dirname(fullpath))
     if lastpart.endswith(".bz2"):
@@ -38,7 +38,7 @@ def process(fullpath, config, rcontext, columns=None):
          # Create a temporary directory
         tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
-        # Open gzip file for reading
+        # Open bzip2 file for reading
         file = bz2.BZ2File(fullpath, 'rb')
 
         # Read the uncompressed data
