@@ -6,7 +6,7 @@ Created on 16 mei 2013
 # Module for extracting .bz2 files and running uforia over the extracted
 # file
 
-# TABLE: 
+# TABLE: Dummy:INT
 
 import sys
 import traceback
