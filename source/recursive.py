@@ -7,6 +7,7 @@ Created on 25 apr. 2013
 import os
 import sys
 import copy
+import multiprocessing
 
 class RecursionContext:
     """
@@ -20,7 +21,10 @@ class RecursionContext:
 
         # Used to change the starting value of the hash id if Uforia was 
         # called recursively
-        self.STARTING_HASHID = 1
+        self.STARTING_HASHID = multiprocessing.Value('i', 1)
+
+        # Lock for changing the HASHID
+        self.HASHID_LOCK = multiprocessing.Lock()
 
         # Used to notify that Uforia was started recursively
         self.RECURSIVE = False
@@ -45,18 +49,19 @@ def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     new_config.DROPTABLE = False
     new_config.TRUNCATE = False
 
-    new_rcontext = copy.copy(rcontext)
+    new_rcontext = RecursionContext()
     if new_rcontext.SPOOFSTARTDIR != None:
         spoofdir = new_rcontext.SPOOFSTARTDIR + os.path.sep + \
         os.path.relpath(fullpath, config.STARTDIR)
     else:
         spoofdir = fullpath
     new_rcontext.SPOOFSTARTDIR = spoofdir
+    new_rcontext.STARTING_HASHID = rcontext.STARTING_HASHID
+    new_rcontext.HASHID_LOCK = rcontext.HASHID_LOCK
     new_rcontext.RECURSIVE = True
 
     uforia.config = new_config
     uforia.rcontext = new_rcontext
     uforia.run()
     uforia.config = config
-    rcontext.STARTING_HASHID = new_rcontext.STARTING_HASHID
     uforia.rcontext = rcontext

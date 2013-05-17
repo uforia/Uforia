@@ -68,14 +68,14 @@ def file_scanner(dir, uforiamodules, rcontext):
         if config.DEBUG:
             print("Starting in directory " + dir + "...")
             print("Starting filescanner...")
-        hashid = rcontext.STARTING_HASHID
+
         filelist = []
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
                 fullpath = os.path.join(root, name)
-                filelist.append((fullpath, hashid))
-                hashid += 1
-        rcontext.STARTING_HASHID = hashid
+                filelist.append((fullpath, rcontext.STARTING_HASHID.value))
+                rcontext.STARTING_HASHID.value += 1
+
         for item in filelist:
             file_processor(item, uforiamodules)
     except:
