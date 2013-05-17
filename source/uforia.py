@@ -83,6 +83,32 @@ def monitorworker(monitorqueue):
     curses.endwin()
 
 
+def fileworker(filequeue, dbqueue, monitorqueue, uforiamodules, config,
+               rcontext):
+    """
+    Receives a file item from file_scanner inside the filequeue and
+    executes the file_processor for that file.
+
+    filequeue - The file queue
+    dbqueue - The database queue
+    monitorqueue - The monitoring queue to show information about the
+        current file
+    uforiamodules - The uforia module objects from modulescanner
+    config - The uforia configuration file
+    rcontext - The recursion context
+    """
+    while True:
+        item = filequeue.get()
+        if item == None:
+            # Finished.
+            break
+        else:
+            file_processor(item, dbqueue, monitorqueue, uforiamodules,
+                           config, rcontext)
+            filequeue.task_done()
+    filequeue.task_done()
+
+
 def write_to_mimetypes_table(table, columns, values, db=None):
     """
     Method that writes to database
@@ -101,8 +127,8 @@ def write_to_mimetypes_table(table, columns, values, db=None):
     db.connection.close()
 
 
-def file_scanner(dir, consumers, dbqueue, monitorqueue, uforiamodules,
-                 config, rcontext):
+def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
+                 rcontext):
     """
     Walks through the specified directory tree to find all files. Each
     file is passed through file_processor, which is called asynchronously
@@ -118,27 +144,35 @@ def file_scanner(dir, consumers, dbqueue, monitorqueue, uforiamodules,
         if config.DEBUG:
             print("Starting in directory " + dir + "...")
             print("Starting filescanner...")
-        hashid = rcontext.STARTING_HASHID
+
         filelist = []
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
                 fullpath = os.path.join(root, name)
-                filelist.append((fullpath, hashid))
-                hashid += 1
-        rcontext.STARTING_HASHID = hashid
-        try:
-            consumermap = [(item, dbqueue, monitorqueue, uforiamodules, config, rcontext) for item in filelist]
-            result = consumers.map_async(file_processor, consumermap)
+                with rcontext.hashid_lock:
+                    filelist.append((fullpath, rcontext.hashid.value))
+                    rcontext.hashid.value += 1
 
-            # Wait while file_processor is busy in order to catch a possible KeyboardInterrupt.
-            #
-            # An infinite float was used;we can't use get() with no arguments as it will
-            # ignore the exception.
-            result.get(float('inf'))
-            consumers.close()
-            consumers.join()
+        try:
+            lock = multiprocessing.Lock()
+            filequeue = multiprocessing.JoinableQueue()
+            consumers = [multiprocessing.Process(
+                             target=fileworker,
+                             args=(filequeue, dbqueue, monitorqueue,
+                                   uforiamodules, config, rcontext))
+                         for i in range(config.CONSUMERS)]
+
+            for consumer in consumers:
+                consumer.start()
+
+            for item in filelist:
+                filequeue.put(item)
+
+            filequeue.put(None)
+            filequeue.join()
         except KeyboardInterrupt:
-            consumers.terminate()
+            for consumer in consumers:
+                consumer.terminate()
     except:
         traceback.print_exc(file=sys.stderr)
         raise
@@ -187,8 +221,8 @@ def invoke_modules(dbqueue, uforiamodules, hashid, file, config, rcontext):
             raise
 
 
-def file_processor((item, dbqueue, monitorqueue, uforiamodules, config,
-                    rcontext)):
+def file_processor(item, dbqueue, monitorqueue, uforiamodules, config,
+                    rcontext):
     """
     Process a file item and export its information to the database
     queue. Also calls invoke_modules() if modules are enabled in the
@@ -210,8 +244,8 @@ def file_processor((item, dbqueue, monitorqueue, uforiamodules, config,
             if config.DEBUG:
                 print("Exporting basic hashes and metadata to database.")
             columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-            if rcontext.SPOOFSTARTDIR != None:
-                fullpath = rcontext.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
+            if rcontext.spoofed_startdir != None:
+                fullpath = rcontext.spoofed_startdir + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
             else:
                 fullpath = file.fullpath
             fullpath = os.path.normpath(fullpath)
@@ -259,7 +293,7 @@ def run():
 
     # Create database tables
     db = database.Database(config)
-    if not rcontext.RECURSIVE:
+    if not rcontext.is_recursive:
         db.setup_main_table()
         db.setup_mimetypes_table()
 
@@ -271,7 +305,7 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db, rcontext)
-        if not rcontext.RECURSIVE:
+        if not rcontext.is_recursive:
             fill_mimetypes_table(dbqueue, uforiamodules)
     else:
         uforiamodules = ''
@@ -284,11 +318,10 @@ def run():
         monitorthread.start()
     if config.DEBUG:
         print("Setting up " + str(config.CONSUMERS) + " consumer(s)...")
-    consumers = multiprocessing.Pool(processes=config.CONSUMERS)
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
-        file_scanner(config.STARTDIR, consumers, dbqueue, monitorqueue, uforiamodules, config, rcontext)
+        file_scanner(config.STARTDIR, dbqueue, monitorqueue, uforiamodules, config, rcontext)
     else:
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
     for i in range(config.DBCONN):
@@ -298,6 +331,7 @@ def run():
         monitorqueue.put(None)
         monitorqueue.join()
     print("\nUforia completed...\n")
+    sys.stdout.flush()
 
 
 class _Dummy(object):
