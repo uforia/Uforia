@@ -50,8 +50,8 @@ def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     new_config.TRUNCATE = False
 
     new_rcontext = RecursionContext()
-    if new_rcontext.SPOOFSTARTDIR != None:
-        spoofdir = new_rcontext.SPOOFSTARTDIR + os.path.sep + \
+    if rcontext.SPOOFSTARTDIR != None:
+        spoofdir = rcontext.SPOOFSTARTDIR + os.path.sep + \
         os.path.relpath(fullpath, config.STARTDIR)
     else:
         spoofdir = fullpath
