@@ -117,6 +117,8 @@ def fileworker(filequeue, dbqueue, monitorqueue, uforiamodules, config,
         else:
             file_processor(item, dbqueue, monitorqueue, uforiamodules,
                            config, rcontext)
+            filequeue.task_done()
+    filequeue.task_done()
 
 
 def write_to_mimetypes_table(table, columns, values, db=None):
@@ -166,6 +168,9 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
         try:
             lock = multiprocessing.Lock()
             filequeue = multiprocessing.JoinableQueue()
+            if config.DEBUG:
+                print("Setting up " + str(config.CONSUMERS) + " consumer(s)...")
+
             consumers = [multiprocessing.Process(
                              target=fileworker,
                              args=(filequeue, dbqueue, monitorqueue,
@@ -178,10 +183,10 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
             for item in filelist:
                 filequeue.put(item)
 
-            filequeue.put(None)
+            for i in range(config.CONSUMERS):
+                filequeue.put(None)
 
-            for consumer in consumers:
-                consumer.join()
+            filequeue.join()
         except KeyboardInterrupt:
             for consumer in consumers:
                 consumer.terminate()
@@ -328,8 +333,6 @@ def run():
         monitorthread = multiprocessing.Process(target=monitorworker, args=(monitorqueue,))
         monitorthread.daemon = True
         monitorthread.start()
-    if config.DEBUG:
-        print("Setting up " + str(config.CONSUMERS) + " consumer(s)...")
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):
