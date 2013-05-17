@@ -187,7 +187,7 @@ class Modules:
                     module = Module(modulepath, modulename, mimetype,
                                     is_global=(depth == DEPTH_ROOT),
                                     as_mime_handler=not is_init)
-                    if module.is_mime_handler and len(module.columndefinition) and not rcontext.is_recursive:
+                    if module.is_mime_handler and not rcontext.is_recursive:
                         db.setup_module_table(module.md5_tablename,
                                             module.columndefinition)
 
