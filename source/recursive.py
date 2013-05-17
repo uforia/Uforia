@@ -17,17 +17,17 @@ class RecursionContext:
     def __init__(self):
         # Can be used to fake the path of STARTDIR in the database
         # output.
-        self.SPOOFSTARTDIR = None
+        self.spoofed_startdir = None
 
         # Used to change the starting value of the hash id if Uforia was 
         # called recursively
-        self.STARTING_HASHID = multiprocessing.Value('i', 1)
+        self.hashid = multiprocessing.Value('i', 1)
 
         # Lock for changing the HASHID
-        self.HASHID_LOCK = multiprocessing.Lock()
+        self.hashid_lock = multiprocessing.Lock()
 
         # Used to notify that Uforia was started recursively
-        self.RECURSIVE = False
+        self.is_recursive = False
 
 def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     """
@@ -50,15 +50,15 @@ def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     new_config.TRUNCATE = False
 
     new_rcontext = RecursionContext()
-    if rcontext.SPOOFSTARTDIR != None:
-        spoofdir = rcontext.SPOOFSTARTDIR + os.path.sep + \
+    if rcontext.spoofed_startdir != None:
+        spoofdir = rcontext.spoofed_startdir + os.path.sep + \
         os.path.relpath(fullpath, config.STARTDIR)
     else:
         spoofdir = fullpath
-    new_rcontext.SPOOFSTARTDIR = spoofdir
-    new_rcontext.STARTING_HASHID = rcontext.STARTING_HASHID
-    new_rcontext.HASHID_LOCK = rcontext.HASHID_LOCK
-    new_rcontext.RECURSIVE = True
+    new_rcontext.spoofed_startdir = spoofdir
+    new_rcontext.hashid = rcontext.hashid
+    new_rcontext.hashid_lock = rcontext.hashid_lock
+    new_rcontext.is_recursive = True
 
     uforia.config = new_config
     uforia.rcontext = new_rcontext

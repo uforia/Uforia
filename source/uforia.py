@@ -149,9 +149,9 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
         for root, dirs, files in os.walk(dir, topdown=True, followlinks=False):
             for name in files:
                 fullpath = os.path.join(root, name)
-                with rcontext.HASHID_LOCK:
-                    filelist.append((fullpath, rcontext.STARTING_HASHID.value))
-                    rcontext.STARTING_HASHID.value += 1
+                with rcontext.hashid_lock:
+                    filelist.append((fullpath, rcontext.hashid.value))
+                    rcontext.hashid.value += 1
 
         try:
             lock = multiprocessing.Lock()
@@ -244,8 +244,8 @@ def file_processor(item, dbqueue, monitorqueue, uforiamodules, config,
             if config.DEBUG:
                 print("Exporting basic hashes and metadata to database.")
             columns = ('fullpath', 'name', 'size', 'owner', 'group', 'perm', 'mtime', 'atime', 'ctime', 'md5', 'sha1', 'sha256', 'ftype', 'mtype', 'btype')
-            if rcontext.SPOOFSTARTDIR != None:
-                fullpath = rcontext.SPOOFSTARTDIR + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
+            if rcontext.spoofed_startdir != None:
+                fullpath = rcontext.spoofed_startdir + os.path.sep + os.path.relpath(file.fullpath, config.STARTDIR)
             else:
                 fullpath = file.fullpath
             fullpath = os.path.normpath(fullpath)
@@ -293,7 +293,7 @@ def run():
 
     # Create database tables
     db = database.Database(config)
-    if not rcontext.RECURSIVE:
+    if not rcontext.is_recursive:
         db.setup_main_table()
         db.setup_mimetypes_table()
 
@@ -305,7 +305,7 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db, rcontext)
-        if not rcontext.RECURSIVE:
+        if not rcontext.is_recursive:
             fill_mimetypes_table(dbqueue, uforiamodules)
     else:
         uforiamodules = ''
