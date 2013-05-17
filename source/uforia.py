@@ -117,8 +117,6 @@ def fileworker(filequeue, dbqueue, monitorqueue, uforiamodules, config,
         else:
             file_processor(item, dbqueue, monitorqueue, uforiamodules,
                            config, rcontext)
-            filequeue.task_done()
-    filequeue.task_done()
 
 
 def write_to_mimetypes_table(table, columns, values, db=None):
@@ -181,7 +179,9 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
                 filequeue.put(item)
 
             filequeue.put(None)
-            filequeue.join()
+
+            for consumer in consumers:
+                consumer.join()
         except KeyboardInterrupt:
             for consumer in consumers:
                 consumer.terminate()
