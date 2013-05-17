@@ -166,16 +166,20 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
                     rcontext.hashid.value += 1
 
         try:
-            lock = multiprocessing.Lock()
             filequeue = multiprocessing.JoinableQueue()
             if config.DEBUG:
                 print("Setting up " + str(config.CONSUMERS) + " consumer(s)...")
 
+            # Set up a fileworker, config.CONSUMERS x times
             consumers = [multiprocessing.Process(
                              target=fileworker,
                              args=(filequeue, dbqueue, monitorqueue,
                                    uforiamodules, config, rcontext))
                          for i in range(config.CONSUMERS)]
+
+            # Start the consumers and put all items from the filelist
+            # inside the queue. These will be distributed to all
+            # processes.
 
             for consumer in consumers:
                 consumer.start()
@@ -183,6 +187,8 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
             for item in filelist:
                 filequeue.put(item)
 
+            # Send sentinel value to each process, otherwise any but
+            # the first one will hang.
             for i in range(config.CONSUMERS):
                 filequeue.put(None)
 
