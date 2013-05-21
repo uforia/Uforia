@@ -36,7 +36,7 @@ After satisfying all prerequisites, we will still need to supply a configuration
 
 Running Uforia
 --------------
-There are two python programs provided in the source directory; `uforia.py` and `uforia_debug.py`. While the output of both programs should be the same, the former uses multiprocessing (for production, better performance), and the latter uses a single process (which is useful for debugging). You can execute them directly from the command line or double clicking (Windows). Depending on your configuration you should see a lot of text pass by, or you should simple see 'Uforia starting...' and 'Uforia completed...' when DEBUG mode is off.
+There are two python programs provided in the source directory; `uforia.py` and `uforia_debug.py`. While the output of both programs should be the same, the former uses multiprocessing (for production, better performance), and the latter uses a single process (which is useful for debugging). You can execute them directly from the command line or double clicking (Windows).
 
 Additional notes
 ----------------
