@@ -26,30 +26,32 @@ import recursive
 
 
 def _extractall(fullpath, tempdir, seven_zip_tool):
+    # Try extracting all 7zip data
     command = ""
 
-    #tool path
+    # Path that leads to the extraction tool
     if seven_zip_tool is not None:
         command += seven_zip_tool + " x "
     else:
         raise Exception("7zip tool not given")
 
-    # archive path
+    # Path that leads to the archive
     if fullpath is not None:
         command += fullpath + " "
     else:
         raise Exception("Archive path not given")
 
-    # destination path
+    # Path that leads to the destination
     if tempdir is None:
         raise Exception("Tempdir not given")
 
-    # call extract command
+    # Call extract command
     try:
+        # Run command in working directory
         p = subprocess.Popen(command, cwd=tempdir)
         output = p.communicate()[0]
 
-        # if error is given by command
+        # If error is given by command raise exception
         if output is not None:
             raise Exception(output)
 
