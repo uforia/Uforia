@@ -52,17 +52,18 @@ def _extractall(fullpath, tempdir, seven_zip_tool):
         # if error is given by command
         if output is not None:
             raise Exception(output)
-        
+
     except Exception as e:
-        raise Exception(str(e) + "    Command failed with following " + 
+        raise Exception(str(e) + "    Command failed with following " +
                         "arguments: " + fullpath + " " + tempdir + " " +
                         seven_zip_tool)
+
 
 def process(fullpath, config, rcontext, columns=None):
     # Try to parse 7z data
     try:
         seven_zip = py7zlib.Archive7z(open(fullpath, 'rb'))
-        assorted = [seven_zip.getnames(), seven_zip.numfiles, 
+        assorted = [seven_zip.getnames(), seven_zip.numfiles,
                  seven_zip.solid, seven_zip.version]
 
         # Get .7zip's content metadata and store it in an dictionary.
