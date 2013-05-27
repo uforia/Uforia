@@ -102,6 +102,7 @@ def process(fullpath, config, rcontext, columns=None):
         # Delete the temporary directory, proceed even if it causes
         # an error
         try:
+            pass
             shutil.rmtree(tmpdir)
         except:
             traceback.print_exc(file=sys.stderr)
