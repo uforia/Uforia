@@ -87,7 +87,7 @@ def process(fullpath, config, rcontext, columns=None):
         assorted.append(content_info)
         del content_info
 
-        # Try to extract the content of the rar file.
+        # Try to extract the content of the 7zip file.
         try:
             # Create a temporary directory
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
@@ -102,7 +102,6 @@ def process(fullpath, config, rcontext, columns=None):
         # Delete the temporary directory, proceed even if it causes
         # an error
         try:
-            pass
             shutil.rmtree(tmpdir)
         except:
             traceback.print_exc(file=sys.stderr)

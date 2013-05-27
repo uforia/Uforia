@@ -8,6 +8,18 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# Copyright (C) 2013 Hogeschool van Amsterdam
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 # GNU General Public License for more details.
 
 # Module for extracting .cab files 
@@ -19,31 +31,58 @@ import traceback
 import tempfile
 import shutil
 import os
+import subprocess
 import recursive
 from struct import *
-from compiler.ast import For
 
+#
+#def _uncompressed_filename(fullpath):
+#    lastpart = os.path.relpath(fullpath, os.path.dirname(fullpath))
+#    return lastpart + "~unzipped"
 
-def _uncompressed_filename(fullpath):
-    lastpart = os.path.relpath(fullpath, os.path.dirname(fullpath))
-    return lastpart + "~unzipped"
+def _extractall(fullpath, tempdir, cab_tool):
+    # Try extracting all cab data
+    command = ""
 
+    # Path that leads to the extraction tool
+    if cab_tool is not None:
+        command += cab_tool + " "
+    else:
+        raise Exception("cab tool not given")
+
+    # Path that leads to the archive
+    if fullpath is not None:
+        command += ' -f:* "' + fullpath + '" '
+    else:
+        raise Exception("Archive path not given")
+
+    # Path that leads to the destination
+    if tempdir is not None:
+        command += tempdir
+    else:
+        raise Exception("Tempdir not given")
+
+    # Call extract command
+    try:
+        # Run command in working directory
+        p = subprocess.Popen(command)
+        output = p.communicate()[0]
+
+        # If error is given by command raise exception
+        if output is not None:
+            raise Exception(output)
+
+    except Exception as e:
+        raise Exception(str(e) + "    Command failed with following " +
+                        "arguments: " + fullpath + " " + tempdir + " " +
+                        cab_tool)
 
 def process(fullpath, config, rcontext, columns=None):
     try:
-         # Create a temporary directory
-        tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
-
         # Open cab file for reading
         file = open(fullpath, 'rb')
         assorted = [file.read(4)]
-#        print "CAB Signature: %s\n" % file.read(4)
         cabhdr = unpack('iiiiibbhhhhh',file.read(32))
-         
-#        print "Offset of CFFILE entry: %d\n" % cabhdr[3]
-#        print "CAB Version: %d.%d\n" % (cabhdr[6],cabhdr[5])
-#        print "Total folders: %d\n" % cabhdr[7]
-#        print "Total files: %d\n" % cabhdr[8]
 
         assorted.append(cabhdr[3])
         version = "%d.%d" % (cabhdr[6], cabhdr[5])
@@ -56,8 +95,6 @@ def process(fullpath, config, rcontext, columns=None):
             resv = unpack('hbb',file.read(4))
         
         cabflr = unpack('ihh',file.read(8))
-#        print "Offset of first file: %d\n" % cabflr[0]
-#        print "Compression used: %d\n" % cabflr[2]
         assorted.append(cabflr[0])
         assorted.append(cabflr[2])
         if cabflr[2] >= 0:
@@ -74,24 +111,15 @@ def process(fullpath, config, rcontext, columns=None):
         else:
             file.seek(cabflr[0])
             cfdata = unpack('ibh',file.read(8))
-#            print "Checksum: %d\n" % cfdata[0]
-#            print "Size of compressed bytes: %d\n" % cfdata[1]
-#            print "Size of uncompressed bytes: %d\n" % cfdata[2]
-#            print "Exact position of first file: %d\n" % file.tell()
             assorted.append(cfdata[0])
             assorted.append(cfdata[1])
             assorted.append(cfdata[2])
             assorted.append(file.tell())
             
             assorted.append(file.read(4))
-            
-#            print "WinCE CAB Header: %s\n" % file.read(4)
+
             cehdr = unpack('iiiiiiiiiii',file.read(44))
-#            print "Target Arch: %d\n" % cehdr[4]
-#            print "Minimum Windows CE Version: %d.%d\n" % (cehdr[5],cehdr[6])
-#            print "Maximum Windows CE Version: %d.%d\n" % (cehdr[7],cehdr[8])
-#            print "Minimum Build number: %d.%d\n" % (cehdr[9],cehdr[10])
-            
+
             assorted.append(cehdr[4])
             minimum_ce_version = "%d.%d" % (cehdr[5],cehdr[6])
             maximum_ce_version = "%d.%d" % (cehdr[7],cehdr[8])
@@ -100,6 +128,25 @@ def process(fullpath, config, rcontext, columns=None):
             assorted.append(maximum_ce_version)
             assorted.append(minimum_build_number)
  
+         # Try to extract the content of the cab file.
+        try:
+            # Create a temporary directory
+            tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
+
+            # Extract the cab file
+            _extractall(fullpath, tmpdir, config.CAB_TOOL)
+
+            recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
+        except:
+            traceback.print_exc(file=sys.stderr)
+
+        # Delete the temporary directory, proceed even if it causes
+        # an error
+        try:
+            shutil.rmtree(tmpdir)
+        except:
+            traceback.print_exc(file=sys.stderr)
+            
         assert len(assorted) == len(columns)
         return assorted
     except:

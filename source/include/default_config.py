@@ -51,6 +51,11 @@ UNRAR_TOOL = "unrar"
 # Example: SEVENZIP_TOOL = "C:\Program Files\7-Zip\7zipg.exe"
 SEVENZIP_TOOL = None
 
+# Which tool should Uforia use to extract cab files?
+# Default: CAB_TOOL = None
+# Example: CAB_TOOL = "expand"
+CAB_TOOL = None
+
 # Database configuration. The name should match the handler providing
 # the appropriate Database class with setupMainTable() and setupTable()
 # and store() methods. See one of the provided database handlers for more
