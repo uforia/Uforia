@@ -23,6 +23,7 @@ import os
 import pysqlite2
 import pysqlite2.dbapi2
 
+
 def process(fullpath, config, rcontext, columns=None):
     try:
         # Check the name of our file, if cookies.sqlite assume
