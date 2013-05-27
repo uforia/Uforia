@@ -20,6 +20,7 @@ import sys
 import traceback
 import mailbox
 
+
 def process(fullpath, config, rcontext, columns=None):
     try:
         with open(fullpath, "rb") as file:
@@ -34,7 +35,7 @@ def process(fullpath, config, rcontext, columns=None):
             message = {}
             message['flags'] = mboxmessage.get_flags()
             # Stores each line such as To:, Subject:, etc. (if present)
-            for key,value in mboxmessage.items():
+            for key, value in mboxmessage.items():
                 message[key] = value
             messages.append(message)
 
