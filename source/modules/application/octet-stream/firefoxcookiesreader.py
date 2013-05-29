@@ -65,10 +65,12 @@ def process(fullpath, config, rcontext, columns=None):
         # Print some data that is stored in
         # the database if debug is true
         if config.DEBUG:
-            print "\nCookie file data:"
+            print "\nMozilla Firefox cookie file data:"
             print "%-18s %s" % (columns[0], cookies)
             print
 
         return [cookies]
     except:
         traceback.print_exc(file=sys.stderr)
+
+        return None
