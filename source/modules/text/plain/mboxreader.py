@@ -49,3 +49,5 @@ def process(fullpath, config, rcontext, columns=None):
         return [messages]
     except:
         traceback.print_exc(file=sys.stderr)
+
+        return None
