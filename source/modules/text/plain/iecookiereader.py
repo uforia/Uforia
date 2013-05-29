@@ -22,11 +22,6 @@ import os
 import re
 
 
-# Total number of LF separators after encountering the LF * LF ending
-# sequence
-NO_COLUMN_SEPARATORS = 9
-
-
 def _timestamp_from_cookie(low, high):
     """
     Convert time from the cookie (Win32 time format, in high and low
