@@ -21,6 +21,7 @@ import re
 import zipfile
 import sys
 import string
+import xlrd
 
 def process(fullpath, config, rcontext, columns=None):
 	appType = ""
@@ -39,6 +40,7 @@ def process(fullpath, config, rcontext, columns=None):
 	elif "Word" in filetype:
 		appType = "word"
 
+	print appType
 
 	if appType == "word":
 		try:
@@ -162,3 +164,79 @@ def process(fullpath, config, rcontext, columns=None):
 			correctorder.append(cleaned[5])
 			
 			return correctorder
+
+	
+	elif filetype == "powerpoint":			
+		print " KO " 
+
+
+
+	elif appType == "excel":
+		excelfile = xlrd.open_workbook(fullpath)
+		numsheets = 0
+		sheets = excelfile.sheet_names()
+
+		sheetdata = []
+
+		for sheet in sheets:
+			numsheets += 1
+			sheetname = excelfile.sheet_by_name(sheet)
+			
+			# Thanks to Joshua Burns for Cell calls tutorial
+			num_rows = sheetname.nrows - 1
+			num_cells = sheetname.ncols - 1
+			curr_row = -1
+			
+			sheetdata.append({"Sheet":numsheets, "Content":[]})
+
+			while curr_row < num_rows:
+				curr_row += 1
+				row = sheetname.row(curr_row)
+				curr_cell = -1
+				celldata = []
+
+				while curr_cell < num_cells:
+					curr_cell += 1
+					cell_type = sheetname.cell_type(curr_row, curr_cell)
+					cell_value = sheetname.cell_value(curr_row, curr_cell)
+					if not cell_type == 0 and not cell_type == 6:
+						coords = str(curr_row) + "." + str(curr_cell)
+						for val in sheetdata:
+							if val["Sheet"] == numsheets:
+								val["Content"].append({"Cell":coords, "Data":cell_value})
+
+
+
+
+
+		meta = filetype.split(",")
+		cleaned = []
+		for val in meta[2:]:
+			hax = val.split(": ")[-1]
+			cleaned.append(hax)
+
+		correctorder = []
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(cleaned[3])
+		correctorder.append(cleaned[4])
+		correctorder.append(None)
+		correctorder.append(cleaned[6])
+		correctorder.append(None)
+		correctorder.append(numsheets)
+		#Total Words... can be calculated however
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(5)
+		correctorder.append(cleaned[7])
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(None)
+		correctorder.append(sheetdata)
+		correctorder.append(None)
+
+		return correctorder
+
