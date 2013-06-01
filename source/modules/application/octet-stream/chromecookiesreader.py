@@ -12,7 +12,7 @@
 
 #!/usr/bin/env python
 
-# Read firefox cookies (cookies.sqlite)
+# Read chrome cookies (cookies.sqlite)
 
 # TABLE: cookies:LONGTEXT, version:INT, last_compatible_version:INT
 
@@ -35,7 +35,6 @@ def process(fullpath, config, rcontext, columns=None):
         cookies = []
 
         # Make db connection, cursor, and fetch all cookies.
-
         conn = pysqlite2.dbapi2.connect(fullpath)
         cursor = conn.cursor()
 
