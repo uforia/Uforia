@@ -18,50 +18,12 @@
 import sys
 import traceback
 import tempfile
+import imp
 import shutil
 import os
 import subprocess
 import recursive
 from struct import *
-
-
-def _extractall(fullpath, tempdir, cab_tool):
-    # Try extracting all cab data
-    command = ""
-
-    # Path that leads to the extraction tool
-    if cab_tool is not None:
-        command += cab_tool + " "
-    else:
-        raise Exception("cab tool not given")
-
-    # Path that leads to the archive
-    if fullpath is not None:
-        command += ' -f:* "' + fullpath + '" '
-    else:
-        raise Exception("Archive path not given")
-
-    # Path that leads to the destination
-    if tempdir is not None:
-        command += tempdir
-    else:
-        raise Exception("Tempdir not given")
-
-    # Call extract command
-    try:
-        # Run command in working directory
-        p = subprocess.Popen(command)
-        output = p.communicate()[0]
-
-        # If error is given by command raise exception
-        if output is not None:
-            raise Exception(output)
-
-    except Exception as e:
-        raise Exception(str(e) + "    Command failed with following " +
-                        "arguments: " + fullpath + " " + tempdir + " " +
-                        cab_tool)
-
 
 def process(fullpath, config, rcontext, columns=None):
     try:
@@ -115,11 +77,16 @@ def process(fullpath, config, rcontext, columns=None):
 
         # Try to extract the content of the cab file.
         try:
+            # Get instance of 7z module
+            zip_module = imp.load_source('7zfilerecursor',
+                                     'modules/application/' +
+                                     'x-7z-compressed/7zfilerecursor.py')
+            
             # Create a temporary directory
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the cab file
-            _extractall(fullpath, tmpdir, config.CAB_TOOL)
+            zip_module._extractall(fullpath, tmpdir, config.CAB_TOOL)
 
             recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
         except:
