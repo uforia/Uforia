@@ -4,7 +4,7 @@ The Uforia database consists out of a large amount of tables. The database has a
 
 Hashed table names
 -----
-The first thing you'll notice are the table names. Most of the tables, except the tables *supported_mimetypes* and *files*, have a hashed table which is hashed by MD5. The reason why the tablenames are hashed is because the length of the table names could exceed the allowed maximum length. How to know which table is belongs to which module will be explained in the next paragraph.
+The first thing you'll notice are the table names. Most of the tables, except the tables *supported_mimetypes* and *files*, have a hashed table which is hashed by MD5. The reason why the tablenames are hashed is because the length of the table names could exceed the allowed maximum length. How to know which table belongs to which module will be explained in the next paragraph.
 
 Database structure
 -----
