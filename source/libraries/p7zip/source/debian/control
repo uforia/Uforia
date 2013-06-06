@@ -1,0 +1,47 @@
+Source: p7zip
+Section: utils
+Priority: optional
+Maintainer: Mohammed Adnène Trojette <adn+deb@diwi.org>
+Build-Depends: debhelper (>= 7), quilt
+Standards-Version: 3.8.2
+Homepage: http://p7zip.sourceforge.net/
+
+Package: p7zip
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: p7zip-full
+Description: 7zr file archiver with high compression ratio
+ p7zip is the Unix port of 7-Zip, a file archiver that archives with
+ very high compression ratios.
+ .
+ p7zip provides:
+  - /usr/bin/7zr
+    a standalone minimal version of the 7-zip tool that only handles
+    7z archives. 7z compression is 30-50% better than ZIP compression.
+  - /usr/bin/p7zip
+    a gzip like wrapper around 7zr.
+ .
+ p7zip-full provides 7z and 7za which support more compression formats.
+
+Package: p7zip-full
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: p7zip (<< 4.39-1)
+Replaces: p7zip (<< 4.39-1)
+Suggests: p7zip-rar
+Description: 7z and 7za file archivers with high compression ratio
+ p7zip is the Unix port of 7-Zip, a file archiver that archives with
+ very high compression ratios.
+ .
+ p7zip-full provides:
+  - /usr/bin/7za
+     a standalone version of the 7-zip tool that handles 7z archives
+     (implementation of the LZMA compression algorithm) and some other
+     formats.
+  - /usr/bin/7z
+     not only does it handle 7z but also ZIP, Zip64, CAB, RAR, ARJ,
+     GZIP, BZIP2, TAR, CPIO, RPM, ISO and DEB archives. 7z compression
+     is 30-50% better than ZIP compression.
+ .
+ p7zip provides 7zr, a light version of 7za, and p7zip a gzip like
+ wrapper around 7zr.

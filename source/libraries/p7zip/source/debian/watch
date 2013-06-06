@@ -1,0 +1,6 @@
+# format version number, currently 3; this line is compulsory!
+version=3
+
+# Line continuations are performed with \
+opts=dversionmangle=s/\.dfsg\.\d+$// \
+ http://qa.debian.org/watch/sf.php/p7zip/p7zip_(.*)_src_all.tar.bz2 debian uupdate

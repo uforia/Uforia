@@ -1,0 +1,74 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+
+	# Add here commands to compile the package.
+	QUILT_PATCHES=debian/patches quilt push -a || test $$? = 2
+	cp makefile.machine makefile.machine.bak
+	cp makefile.linux_x86_ppc_alpha_gcc_4.X makefile.machine
+	$(MAKE) all3
+	cp makefile.machine.bak makefile.machine
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+
+	# Add here commands to clean up after the build process.
+	QUILT_PATCHES=debian/patches quilt pop -a -R || test $$? = 2
+	QUILT_PATCHES=debian/patches quilt push -a
+	[ ! -f makefile ] || $(MAKE) clean
+
+	QUILT_PATCHES=debian/patches quilt pop -a -R || test $$? = 2
+	rm -rf .pc bin/
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean
+	dh_installdirs
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	rm -f debian/p7zip-full/usr/share/doc/p7zip-full/DOCS/copying.txt
+	rm -f debian/p7zip/usr/share/doc/p7zip/DOCS/copying.txt
+	rm -f debian/p7zip-full/usr/share/doc/p7zip-full/DOCS/License.txt
+	rm -f debian/p7zip/usr/share/doc/p7zip/DOCS/License.txt
+	dh_install
+	dh_installman -pp7zip-full man1/7z.1 man1/7za.1
+	dh_installman -pp7zip man1/7zr.1 debian/p7zip.1
+	dh_strip
+	dh_compress
+	dh_link -pp7zip-full usr/share/doc/p7zip-full/ChangeLog.gz \
+                             usr/share/doc/p7zip-full/changelog.gz
+	dh_link -pp7zip usr/share/doc/p7zip/ChangeLog.gz \
+                        usr/share/doc/p7zip/changelog.gz
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install
