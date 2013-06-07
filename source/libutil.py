@@ -18,6 +18,12 @@ PLATFORM_SHARED_LIBRARY_EXTENSIONS = {
     'Linux': '.so',
     'Darwin': '.dylib'}
 
+def _get_arch():
+    if ctypes.sizeof(ctypes.c_voidp) == 8:
+        return 'x86_64'
+    else:
+        return 'x86'
+
 
 def load_library(foldername, filename, apiversion=None):
     """
@@ -30,10 +36,7 @@ def load_library(foldername, filename, apiversion=None):
     apiversion - Optionally adds an extension for the shared object api
     version on Linux (e.g. libfoo.so.5)
     """
-    if ctypes.sizeof(ctypes.c_voidp) == 8:
-        architecture = 'x86_64'
-    else:
-        architecture = 'x86'
+    architecture = _get_arch()
 
     os = platform.system()
     extension = PLATFORM_SHARED_LIBRARY_EXTENSIONS[os]
@@ -47,3 +50,22 @@ def load_library(foldername, filename, apiversion=None):
         filename=filename,
         ext=extension)
     return ctypes.cdll.LoadLibrary(path)
+
+
+def get_executable(foldername, filename):
+    """
+    Returns path to the correct version of a platform-specific
+    executable file.
+    foldername - The name of the folder where the binaries reside in
+    filename - The name of the executable
+    """
+    architecture = _get_arch()
+    os = platform.system()
+    extension = ".exe" if os == "Windows" else ""
+
+    return "./libraries/{foldername}/bin-{arch}-{os}/{filename}{ext}".format(
+        foldername=foldername,
+        arch=architecture,
+        os=os,
+        filename=filename,
+        ext=extension)
