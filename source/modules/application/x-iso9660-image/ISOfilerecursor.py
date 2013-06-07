@@ -39,7 +39,7 @@ def process(fullpath, config, rcontext, columns=None):
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the 7zip file
-            zip_module._extractall(fullpath, tmpdir, config.SEVENZIP_TOOL)
+            zip_module._extractall(fullpath, tmpdir)
 
             recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
         except:

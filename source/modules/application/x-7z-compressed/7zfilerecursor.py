@@ -21,13 +21,15 @@ import tempfile
 import shutil
 import os
 import subprocess
+import libutil
 from pylzmalib import py7zlib
 import recursive
 
 
-def _extractall(fullpath, tempdir, seven_zip_tool):
+def _extractall(fullpath, tempdir):
     # Try extracting all 7zip data
     command = ""
+    seven_zip_tool = libutil.get_executable("p7zip", "7z")
 
     # Path that leads to the extraction tool
     if seven_zip_tool is not None:
@@ -93,7 +95,7 @@ def process(fullpath, config, rcontext, columns=None):
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the 7zip file
-            _extractall(fullpath, tmpdir, config.SEVENZIP_TOOL)
+            _extractall(fullpath, tmpdir)
 
             recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
         except:
