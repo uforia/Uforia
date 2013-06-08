@@ -22,7 +22,7 @@ import shutil
 import os
 import subprocess
 import libutil
-from pylzmalib import py7zlib
+import py7zlib
 import recursive
 
 
