@@ -28,19 +28,14 @@ import recursive
 
 def _extractall(fullpath, tempdir):
     # Try extracting all 7zip data
-    command = ""
     seven_zip_tool = libutil.get_executable("p7zip", "7z")
 
     # Path that leads to the extraction tool
-    if seven_zip_tool is not None:
-        command += seven_zip_tool + " x "
-    else:
+    if seven_zip_tool is None:
         raise Exception("7zip tool not given")
 
     # Path that leads to the archive
-    if fullpath is not None:
-        command += fullpath + " "
-    else:
+    if fullpath is None:
         raise Exception("Archive path not given")
 
     # Path that leads to the destination
@@ -50,7 +45,7 @@ def _extractall(fullpath, tempdir):
     # Call extract command
     try:
         # Run command in working directory
-        p = subprocess.Popen(command, cwd=tempdir)
+        p = subprocess.Popen([seven_zip_tool, "x", fullpath], cwd=tempdir)
         output = p.communicate()[0]
 
         # If error is given by command raise exception
