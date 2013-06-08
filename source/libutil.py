@@ -12,6 +12,7 @@
 
 import ctypes
 import platform
+import os
 
 PLATFORM_SHARED_LIBRARY_EXTENSIONS = {
     'Windows': '.dll',
@@ -38,15 +39,15 @@ def load_library(foldername, filename, apiversion=None):
     """
     architecture = _get_arch()
 
-    os = platform.system()
-    extension = PLATFORM_SHARED_LIBRARY_EXTENSIONS[os]
-    if apiversion != None and os != 'Windows':
+    ops = platform.system()
+    extension = PLATFORM_SHARED_LIBRARY_EXTENSIONS[ops]
+    if apiversion != None and ops != 'Windows':
         extension += '.' + str(apiversion)
 
-    path = './libraries/{foldername}/bin-{arch}-{os}/{filename}{ext}'.format(
+    path = './libraries/{foldername}/bin-{arch}-{ops}/{filename}{ext}'.format(
         foldername=foldername,
         arch=architecture,
-        os=os,
+        ops=ops,
         filename=filename,
         ext=extension)
     return ctypes.cdll.LoadLibrary(path)
@@ -60,12 +61,13 @@ def get_executable(foldername, filename):
     filename - The name of the executable
     """
     architecture = _get_arch()
-    os = platform.system()
-    extension = ".exe" if os == "Windows" else ""
+    ops = platform.system()
+    extension = ".exe" if ops == "Windows" else ""
 
-    return "./libraries/{foldername}/bin-{arch}-{os}/{filename}{ext}".format(
+    return "{cwd}/libraries/{foldername}/bin-{arch}-{ops}/{filename}{ext}".format(
+        cwd=os.getcwd(),
         foldername=foldername,
         arch=architecture,
-        os=os,
+        ops=ops,
         filename=filename,
         ext=extension)
