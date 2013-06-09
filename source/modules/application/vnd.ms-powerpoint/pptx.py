@@ -12,10 +12,11 @@
 
 #!/usr/bin/env python
 
-# TABLE: title:LONGTEXT, createdBy:LONGTEXT, modBy:LONGTEXT, revision:INT, madeOn:LONGTEXT, changedOn:LONGTEXT, totalLength: FLOAT, totalWords:INT, application:LONGTEXT, ppFormat:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT 
+# TABLE: title:LONGTEXT, createdBy:LONGTEXT, modBy:LONGTEXT, revision:INT, madeOn:LONGTEXT, changedOn:LONGTEXT, totalLength: FLOAT, totalWords:INT, application:LONGTEXT, ppFormat:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT, content:LONGTEXT 
 
 import xml.etree.ElementTree as ET
 import re, zipfile, sys
+from pptx import Presentation
 
 def process(fullpath, config, rcontext, columns=None):
 	try:
@@ -62,11 +63,30 @@ def process(fullpath, config, rcontext, columns=None):
 	data_app.append(tree_app[8].text)
 	data_app.append(tree_app[12].text)
 	data_app.append(tree_app[14].text)
-	data_app.append(tree_app[16].text)
+	data_app.append(tree_app[15].text)
 
-	merged = data_tree + data_app
+
+	textlist = []
+	powerpoints = Presentation(fullpath)
+	slidenum = 1
+	for slide in powerpoints.slides:
+		for shape in slide.shapes:
+			if not shape.has_textframe:
+				continue
+			for paragraph in shape.textframe.paragraphs:
+				for run in paragraph.runs:
+					if not any(d.get('Slide', None) == slidenum for d in textlist):
+						textlist.append({"Slide":slidenum, "Content":[run.text]})
+					else:
+						for val in textlist:
+							if val["Slide"] == slidenum:
+								val["Content"].append(run.text)
+		slidenum += 1
+
+	merged = data_tree + data_app + textlist
 	return merged
 
+	
 # 	title = tree[0].text
 # 	created = tree[1].text
 # 	lastmod = tree[2].text
@@ -86,6 +106,3 @@ def process(fullpath, config, rcontext, columns=None):
 # 	company = tree_app[12].text
 # 	shared = tree_app[14].text
 # 	version = tree_app[16].text
-
-
-
