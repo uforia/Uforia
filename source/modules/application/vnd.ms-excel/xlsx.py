@@ -12,14 +12,14 @@
 
 #!/usr/bin/env python
 
-# TABLE: author:LONGTEXT, changedBy:LONGTEXT, createdOn:LONGTEXT, changedOn:LONGTEXT, appType:LONGTEXT, security:INT, company:LONGTEXT, shared:LONGTEXT, appVersion:FLOAT, totalSheets:INT
+# TABLE: author:LONGTEXT, changedBy:LONGTEXT, createdOn:LONGTEXT, changedOn:LONGTEXT, appType:LONGTEXT, security:INT, company:LONGTEXT, shared:LONGTEXT, appVersion:FLOAT, totalSheets:INT, content:LONGTEXT
 
 import xml.etree.ElementTree as ET
 import re
 import zipfile
 import sys
 import os
-
+import xlrd
 
 def process(fullpath, config, rcontext, columns=None):
 	try:
@@ -62,8 +62,44 @@ def process(fullpath, config, rcontext, columns=None):
 	data_app.append(tree_app[7].text)
 	data_app.append(tree_app[9].text)
 
+
+	excelfile = xlrd.open_workbook(fullpath)
+	numsheets = 0
+	sheets = excelfile.sheet_names()
+
+	sheetdata = []
+
+	for sheet in sheets:
+		numsheets += 1
+		sheetname = excelfile.sheet_by_name(sheet)
+		
+		# Thanks to Joshua Burns for Cell calls tutorial
+		num_rows = sheetname.nrows - 1
+		num_cells = sheetname.ncols - 1
+		curr_row = -1
+		
+		sheetdata.append({"Sheet":numsheets, "Content":[]})
+
+		while curr_row < num_rows:
+			curr_row += 1
+			row = sheetname.row(curr_row)
+			curr_cell = -1
+			celldata = []
+
+			while curr_cell < num_cells:
+				curr_cell += 1
+				cell_type = sheetname.cell_type(curr_row, curr_cell)
+				cell_value = sheetname.cell_value(curr_row, curr_cell)
+				if not cell_type == 0 and not cell_type == 6:
+					coords = str(curr_row) + "." + str(curr_cell)
+					for val in sheetdata:
+						if val["Sheet"] == numsheets:
+							val["Content"].append({"Cell":coords, "Data":cell_value})
+
+
 	merged = data_tree + data_app
 	merged.append(work_total)
+	merged.append(sheetdata)
 	return merged
 
 # 	author = tree[0].text
