@@ -10,11 +10,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import unittest, mock
-import Uforia, os
+import unittest
+import mock
+import Uforia
+import os
+
 
 @mock.patch('config.DEBUG', False)
 class TestDbworker(unittest.TestCase):
+
     def setUp(self):
         self.db = mock.Mock()
 
@@ -22,8 +26,7 @@ class TestDbworker(unittest.TestCase):
         self.testdata = [
             ('test1', 1, ('column1', 'column2'), ('abc', 'xyz')),
             ('test2', 2, ('column1', 'column2'), ('123', '456')),
-            self.sentinel
-        ]
+            self.sentinel]
 
     def testDbworkerStopsWithNoTasks(self):
         dbqueue = mock.Mock()
@@ -52,8 +55,7 @@ class TestDbworker(unittest.TestCase):
 
         expected = [
             mock.call(*self.testdata[0]),
-            mock.call(*self.testdata[1])
-        ]
+            mock.call(*self.testdata[1])]
 
         self.assertTrue(self.db.store.call_args_list == expected, "data was not written correctly or in the same order")
 
@@ -65,10 +67,12 @@ class TestDbworker(unittest.TestCase):
 
         self.assertTrue(self.db.connection.close.called, "database connection was not closed")
 
+
 @mock.patch('config.DEBUG', False)
 class TestFileScanner(unittest.TestCase):
+
     def setUp(self):
-        self.testDir = [ ('/TESTDATA', [], [ 'test.txt', 'loreen-euphoria.mp3' ]), ]
+        self.testDir = [('/TESTDATA', [], ['test.txt', 'loreen-euphoria.mp3']), ]
 
         self.osWalkPatcher = mock.patch('os.walk')
         self.MockOsWalk = self.osWalkPatcher.start()

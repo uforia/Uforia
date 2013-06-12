@@ -25,7 +25,7 @@ STARTDIR = '/home/TESTDATA/'
 
 # In which directory should Uforia extract all archive files?
 # If set to None, a temporary directory is created inside the users default
-# temporary direcotory. 
+# temporary direcotory.
 # Example: EXTRACTDIR = '/home/ARCHIVES/'
 EXTRACTDIR = None
 
@@ -45,11 +45,6 @@ ENABLEXMP = True
 # Default: UNRAR_TOOL = "unrar"
 # Example: UNRAR_TOOL = "C:\Program Files\WinRAR\WinRAR.exe"
 UNRAR_TOOL = "unrar"
-
-# Which tool should Uforia use to extract 7zip files?
-# Default: SEVENZIP_TOOL = None
-# Example: SEVENZIP_TOOL = "C:\Program Files\7-Zip\7zipg.exe"
-SEVENZIP_TOOL = None
 
 # Which tool should Uforia use to extract cab files?
 # Default: CAB_TOOL = None

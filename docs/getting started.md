@@ -32,7 +32,7 @@ If using **MariaDB**, you can create a new database using the included **HeidiSQ
 
 Configuration
 -------------
-After satisfying all prerequisites, we will still need to supply a configuration file to Uforia. It is recommended to copy the `config.py.example` file inside `source/include` and renaming it to `config.py`. See the descriptions in `config.py.example` for which settings need to be changed. It is probably necessary to change `STARTDIR, DBHOST, DBNAME, DBUSER` and `DBPASS`.
+After satisfying all prerequisites, we will still need to supply a configuration file to Uforia. It is recommended to copy the `config.py.example` file inside `source/include` and renaming it to `config.py`. Read the descriptions in `config.py.example` carefully, for which settings need to be changed. It is probably necessary to change `STARTDIR, EXTRACTDIR, DBHOST, DBNAME, DBUSER, DBPASS, DROPTABLE` and `TRUNCATE`.
 
 Running Uforia
 --------------

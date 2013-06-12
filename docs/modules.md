@@ -13,8 +13,8 @@ def process(fullpath, config, rcontext, columns=None):
 The arguments to the process function are, in order:
 
 * **fullpath**: Contains the path to the to-be-examined file
-* **config**: The uforia setting values
-* **rcontext**: Contains values needed to run uforia recursively, irrelevant for most use cases
+* **config**: The Uforia setting values
+* **rcontext**: Contains values needed to run Uforia recursively, irrelevant for most use cases
 * **columns**: A list with the names of the database columns (the same as defined in the comments)
 
 Take a look at other modules for common usage patterns.

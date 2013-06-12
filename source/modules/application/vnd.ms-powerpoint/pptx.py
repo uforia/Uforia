@@ -12,60 +12,83 @@
 
 #!/usr/bin/env python
 
-# TABLE: title:LONGTEXT, createdBy:LONGTEXT, modBy:LONGTEXT, revision:INT, madeOn:LONGTEXT, changedOn:LONGTEXT, totalLength: FLOAT, totalWords:INT, application:LONGTEXT, ppFormat:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT 
+# TABLE: title:LONGTEXT, createdBy:LONGTEXT, modBy:LONGTEXT, revision:INT, madeOn:LONGTEXT, changedOn:LONGTEXT, totalLength: FLOAT, totalWords:INT, application:LONGTEXT, ppFormat:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT, content:LONGTEXT
 
 import xml.etree.ElementTree as ET
-import re, zipfile, sys
+import re
+import zipfile
+import sys
+from pptx import Presentation
+
 
 def process(fullpath, config, rcontext, columns=None):
-	try:
-		document = zipfile.ZipFile(fullpath)
-	except:
-		exit()
+    try:
+        document = zipfile.ZipFile(fullpath)
+    except:
+        exit()
 
-	# document core, ie. keywords/title/subject and mod+creation dates
-	xmlprop = document.read("docProps/core.xml")
+    # document core, ie. keywords/title/subject and mod+creation dates
+    xmlprop = document.read("docProps/core.xml")
 
-	# data regarding ammount of pages/words. Also contains app version and OS.
-	xmlapp = document.read("docProps/app.xml")
+    # data regarding ammount of pages/words. Also contains app version and OS.
+    xmlapp = document.read("docProps/app.xml")
 
-	# Minidom alternative
-	tree = ET.fromstring(xmlprop)
-	tree_app = ET.fromstring(xmlapp)
+    # Minidom alternative
+    tree = ET.fromstring(xmlprop)
+    tree_app = ET.fromstring(xmlapp)
 
-	#### Just some data, might be usefull lat0r ####
-	data_tree = []
-	data_app = []
+    #### Just some data, might be usefull lat0r ####
+    data_tree = []
+    data_app = []
 
 # 	for basic in range(6):
 # 		data_tree.append(tree[basic].text)
-	
+
 # 	for app in range(17):
 # 		data_app.append(tree_app[app].text)
 
 
-	data_tree.append(tree[0].text)
-	data_tree.append(tree[1].text)
-	data_tree.append(tree[2].text)
-	data_tree.append(tree[3].text)
-	data_tree.append(tree[4].text)
-	data_tree.append(tree[5].text)
+    data_tree.append(tree[0].text)
+    data_tree.append(tree[1].text)
+    data_tree.append(tree[2].text)
+    data_tree.append(tree[3].text)
+    data_tree.append(tree[4].text)
+    data_tree.append(tree[5].text)
 
-	data_app.append(tree_app[0].text)
-	data_app.append(tree_app[1].text)
-	data_app.append(tree_app[2].text)
-	data_app.append(tree_app[3].text)
-	data_app.append(tree_app[4].text)
-	data_app.append(tree_app[5].text)
-	data_app.append(tree_app[6].text)
-	data_app.append(tree_app[7].text)
-	data_app.append(tree_app[8].text)
-	data_app.append(tree_app[12].text)
-	data_app.append(tree_app[14].text)
-	data_app.append(tree_app[16].text)
+    data_app.append(tree_app[0].text)
+    data_app.append(tree_app[1].text)
+    data_app.append(tree_app[2].text)
+    data_app.append(tree_app[3].text)
+    data_app.append(tree_app[4].text)
+    data_app.append(tree_app[5].text)
+    data_app.append(tree_app[6].text)
+    data_app.append(tree_app[7].text)
+    data_app.append(tree_app[8].text)
+    data_app.append(tree_app[12].text)
+    data_app.append(tree_app[14].text)
+    data_app.append(tree_app[15].text)
 
-	merged = data_tree + data_app
-	return merged
+
+    textlist = []
+    powerpoints = Presentation(fullpath)
+    slidenum = 1
+    for slide in powerpoints.slides:
+        for shape in slide.shapes:
+            if not shape.has_textframe:
+                continue
+            for paragraph in shape.textframe.paragraphs:
+                for run in paragraph.runs:
+                    if not any(d.get('Slide', None) == slidenum for d in textlist):
+                        textlist.append({"Slide": slidenum, "Content": [run.text]})
+                    else:
+                        for val in textlist:
+                            if val["Slide"] == slidenum:
+                                val["Content"].append(run.text)
+        slidenum += 1
+
+    merged = data_tree + data_app + textlist
+    return merged
+
 
 # 	title = tree[0].text
 # 	created = tree[1].text
@@ -86,6 +109,3 @@ def process(fullpath, config, rcontext, columns=None):
 # 	company = tree_app[12].text
 # 	shared = tree_app[14].text
 # 	version = tree_app[16].text
-
-
-

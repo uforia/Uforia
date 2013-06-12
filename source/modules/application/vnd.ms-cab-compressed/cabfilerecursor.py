@@ -25,6 +25,7 @@ import subprocess
 import recursive
 from struct import *
 
+
 def process(fullpath, config, rcontext, columns=None):
     try:
         # Get instance of 7z module
@@ -82,6 +83,11 @@ def process(fullpath, config, rcontext, columns=None):
 
         # Try to extract the content of the 7zip file.
         try:
+            # Get instance of 7z module
+            zip_module = imp.load_source('7zfilerecursor',
+                                     'modules/application/' +
+                                     'x-7z-compressed/7zfilerecursor.py')
+
             # Create a temporary directory
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 

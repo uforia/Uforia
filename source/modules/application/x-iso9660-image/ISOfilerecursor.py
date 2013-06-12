@@ -144,9 +144,9 @@ def process(fullpath, config, rcontext, columns=None):
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the 7zip file
-            #zip_module._extractall(fullpath, tmpdir)
+            zip_module._extractall(fullpath, tmpdir)
 
-            #recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
+            recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
         except:
             traceback.print_exc(file=sys.stderr)
 
