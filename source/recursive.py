@@ -15,17 +15,19 @@ import sys
 import copy
 import multiprocessing
 
+
 class RecursionContext:
     """
     A set of configuration attributes needed for running Uforia
-    recursively that should not be modifiable by the user. 
+    recursively that should not be modifiable by the user.
     """
+
     def __init__(self):
         # Can be used to fake the path of STARTDIR in the database
         # output.
         self.spoofed_startdir = None
 
-        # Used to change the starting value of the hash id if Uforia was 
+        # Used to change the starting value of the hash id if Uforia was
         # called recursively
         self.hashid = multiprocessing.Value('i', 1)
 
@@ -34,6 +36,7 @@ class RecursionContext:
 
         # Used to notify that Uforia was started recursively
         self.is_recursive = False
+
 
 def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     """

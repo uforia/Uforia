@@ -25,6 +25,7 @@ import subprocess
 import recursive
 from struct import *
 
+
 def process(fullpath, config, rcontext, columns=None):
     try:
         # Open cab file for reading
@@ -81,7 +82,7 @@ def process(fullpath, config, rcontext, columns=None):
             zip_module = imp.load_source('7zfilerecursor',
                                      'modules/application/' +
                                      'x-7z-compressed/7zfilerecursor.py')
-            
+
             # Create a temporary directory
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 

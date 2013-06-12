@@ -19,6 +19,7 @@ PLATFORM_SHARED_LIBRARY_EXTENSIONS = {
     'Linux': '.so',
     'Darwin': '.dylib'}
 
+
 def _get_arch():
     if ctypes.sizeof(ctypes.c_voidp) == 8:
         return 'x86_64'
