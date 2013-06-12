@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="0.6" />
+    <identifier value="spanish.es_ANY.dicts.from.rla-es" />
+    <display-name>
+        <name lang="en-US">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="af">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="am">Danish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ar">قاموس التدقيق الإملائي للُّغة الأسبانية، قواعد الوصل والمترادفات</name>
+        <name lang="as">স্পেনিচ বানান শব্দকোষ, হাইফেনেষণ নিয়মসমূহ, আৰু সমাৰ্থশব্দকোষ</name>
+        <name lang="ast">Diccionariu ortográficu, regles de separación y sinónimos pal castellanu</name>
+        <name lang="be">Іспанскі слоўнік, правілы пераносаў і тэзаўрус</name>
+        <name lang="bg">Испански речници за правопис, сричкопренасяне и синоними</name>
+        <name lang="bn">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="bn-IN">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="bo">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="br">Geriadur reizhskrivañ ha geriadur an heñvelsterioù, evit reolennoù an troc'hañ gerioù evit ar spagnoleg</name>
+        <name lang="brx">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="bs">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ca">Espanyol: corrector ortogràfic, partició de mots i tesaurus (sinònims i termes relacionats)</name>
+        <name lang="ca-XV">Espanyol: corrector ortogràfic, partició de mots i tesaurus (sinònims i termes relacionats)</name>
+        <name lang="cs">Slovník kontroly pravopisu, dělení slov a slovník synonym pro španělštinu</name>
+        <name lang="cy">Sbaeneg - gwirydd sillafu, rheolau cysylltnodi a thesawrws</name>
+        <name lang="da">Spansk stavekontrol, orddelingsregler og synonymordbog</name>
+        <name lang="de">Spanisches Rechtschreibwörterbuch, Silbentrennung und Thesaurus</name>
+        <name lang="dgo">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="dz">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="el">Ρώσικο λεξικό ορθογραφίας συλλαβισμού και θησαυρού</name>
+        <name lang="en-GB">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="en-ZA">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="eo">Literumada kaj vortdivida vortaroj kaj tezaŭro por la hispana</name>
+        <name lang="es">Diccionario ortográfico, de sinónimos y reglas de separación silábica para el español</name>
+        <name lang="et">Hispaania keele õigekirjakontrolli sõnastik, poolitusreeglid ja tesaurus</name>
+        <name lang="eu">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="fa">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="fi">Espanjan oikolukusanasto, tavutussäännöt ja synonyymisanasto</name>
+        <name lang="fr">Dictionnaires orthographique, des synonymes et règles de coupure des mots espagnol</name>
+        <name lang="ga">Foclóir litrithe, rialacha fleiscínithe agus teasáras don Spáinnis</name>
+        <name lang="gd">Faclair litreachaidh, riaghailtean tàthanachaidh is co-fhaclair na Spàinntise</name>
+        <name lang="gl">Corrector ortográfico, de sinónimos e guionizador do español</name>
+        <name lang="gu">સ્પેનિશ જોડણી ચકાસણી શબ્દકોષ, હાઇફનેશન નિયમો અને માહિતી ભંડાર</name>
+        <name lang="he">מילון בדיקת איות, כללי מיקוף ואגרון בספרדית</name>
+        <name lang="hi">स्पेनिश वर्तनी शब्दकोश, समासन नियम और थिसारस</name>
+        <name lang="hr">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="hu">Spanyol helyesírási szótár, elválasztási szabályok és szinonimaszótár</name>
+        <name lang="id">Kamus ejaan, aturan pemenggalan kata, dan tesaurus untuk bahasa Spanyol</name>
+        <name lang="is">Spænskt stafsetningarorðasafn, orðskiptireglur og samheitaorðasafn</name>
+        <name lang="it">Dizionario ortografico spagnolo, regole di sillabazione e dizionario di sinonimi</name>
+        <name lang="ja">スペイン語スペル辞書、ハイフネーション規則と類義語辞典</name>
+        <name lang="ka">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="kk">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="km">វចនានុក្រម​អក្ខរាវិរុទ្ធ​ភាសា​​អេស្ប៉ាញ​ ក្បួន​ដាក់​សហសញ្ញា និង​កម្រង​វេវចនសព្ទ</name>
+        <name lang="kn">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ko">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="kok">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ks">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ku">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="lb">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="lo">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="lt">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="lv">Spāņu pareizrakstības vārdnīca, zilbjdales kārtulas un tēzaurs</name>
+        <name lang="mai">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="mk">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ml">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="mn">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="mni">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="mr">स्पॅनिश शुध्दलेखन शब्दकोष, हायफेनेशन नियम, व थिसॉरस</name>
+        <name lang="my">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="nb">Spansk stavekontroll, orddeling, og synonymordbok</name>
+        <name lang="ne">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="nl">Spaanse woordenlijst voor spellingcontrole, regels voor afbrekingen en synoniemenlijst</name>
+        <name lang="nn">Spansk stavekontroll, orddeling, og synonymordbok</name>
+        <name lang="nr">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="nso">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="oc">Diccionaris ortografic, dels sinonims e règlas de copadura de mots espanhòls</name>
+        <name lang="om">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="or">ସ୍ପେନିସ ବନାନ ଅବିଧାନ, ସମାସ ଚିହ୍ନ ନିୟମାବଳୀ, ଏବଂ ଶବ୍ଦକୋଷଗୁଡ଼ିକ</name>
+        <name lang="pa-IN">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="pl">Hiszpański słownik ortograficzny, reguły dzielenia wyrazów i słownik wyrazów bliskoznacznych</name>
+        <name lang="pt">Dicionário ortográfico, sinónimos e regras de hifenização em espanhol</name>
+        <name lang="pt-BR">Dicionário ortográfico, sinônimos e regras de hifenização em espanhol</name>
+        <name lang="ro">Dicționar ortografic, despărțire în silabe și de sinonime spaniolă</name>
+        <name lang="ru">Испанский орфографический словарь, правила переноса и тезаурус</name>
+        <name lang="rw">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sa-IN">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sat">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sd">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sh">Španski: provera pisanja, prelom reči i rečnik sinonima</name>
+        <name lang="si">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sid">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sk">Španielsky slovník na kontrolu pravopisu, delenie slov a tezaurus</name>
+        <name lang="sl">Španski jezik - slovar za preverjanje črkovanja, vzorci za deljenje besed in slovar sopomenk</name>
+        <name lang="sq">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sr">Шпански: провера писања, прелом речи и речник синонима</name>
+        <name lang="ss">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="st">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="sv">Stavningsordlista, avstavningsregler och synonymordlista för spanska</name>
+        <name lang="sw-TZ">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ta">ஸ்பானிய எழுத்துக்கூட்டு அகராதி, நடுக்கோடு விதிகள், நிகண்டு ஆகியன</name>
+        <name lang="te">స్పానిష్  వుచ్ఛారణా నిఘంటువు, హైఫనేషన్ నియమాలు, మరియు పదకోశాలు</name>
+        <name lang="tg">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="th">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="tn">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="tr">İspanyolca yazım sözlüğü, heceleme kuralları ve eş anlamlılar</name>
+        <name lang="ts">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="tt">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ug">ئىسپانچە ئىملا لۇغىتى، ھەرپ ئۇلاش قائىدىسى ۋە مەنىداش سۆزلەر لۇغىتى</name>
+        <name lang="uk">Іспанський орфографічний словник, правила переносу та тезаурус</name>
+        <name lang="uz">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="ve">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="vi">Từ điển kiểm tra chính tả tiếng Tây Ban Nha, gạch nối và đồng nghĩa</name>
+        <name lang="xh">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="zh-CN">西班牙语拼写词典、断词规则及同义词库</name>
+        <name lang="zh-TW">西班牙文拼寫詞典、斷字與禁忌規則、同義詞庫</name>
+        <name lang="zu">Spanish spelling dictionary, hyphenation rules, and thesaurus</name>
+    </display-name>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    <publisher>
+        <name xlink:href="https://forja.rediris.es/projects/rla-es/" lang="es">rla-es</name>
+    </publisher>
+</description>

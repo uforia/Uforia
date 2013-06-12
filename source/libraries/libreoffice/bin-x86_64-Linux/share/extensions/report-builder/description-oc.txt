@@ -1,0 +1,1 @@
+Utilisatz lo Report Builder per crear de rapòrts de basa de donadas polits e d'aparència agradiva. L'editor pòt definir un pè de pagina, de grops e d'entèsta de pagina.  Amai, es possible de calcular los camps afin de realizar de rapòrts de basa de donadas complexes.

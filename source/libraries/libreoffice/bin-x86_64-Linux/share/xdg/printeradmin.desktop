@@ -1,0 +1,135 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=libreoffice4.0-printeradmin
+Type=Application
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;
+Exec=libreoffice4.0-printeradmin
+Name=LibreOffice 4.0 Printer Administration
+Name[sid]=LibreOffice 4.0 Printer Administration
+Name[ne]=LibreOffice 4.0 मुद्रक प्रशासन
+Name[tr]=LibreOffice 4.0 Yazıcı Yönetimi
+Name[da]=LibreOffice 4.0-printeradministration
+Name[ug]=LibreOffice 4.0 پرىنتېر باشقۇرۇش
+Name[ru]=LibreOffice 4.0 Управление принтером
+Name[my]=LibreOffice 4.0 ပရင်တာ စီမံခန့်ခွဲမှု
+Name[gl]=Administración da impresora de LibreOffice 4.0
+Name[nb]=LibreOffice 4.0-skriveradministrasjon
+Name[ro]=Administrare imprimantă LibreOffice 4.0
+Name[nso]=Taolo ya segatiši ya LibreOffice 4.0
+Name[ku]=LibreOffice 4.0 Rêvebiriya Çapgerê
+Name[vi]=Quản trị máy in LibreOffice 4.0
+Name[tn]=LibreOffice 4.0 Printer Administration
+Name[lo]=LibreOffice 4.0 ການຈັດການເຄື່ອງພີມ
+Name[ta]=LibreOffice 4.0 அச்சுப்பொறி நிர்வாகம்
+Name[lb]=LibreOffice 4.0 Printer Administration
+Name[rw]=Ubugenzuzi bwa Mucapyi LibreOffice 4.0
+Name[nr]=LibreOffice 4.0 Ukuphathwa Kwesigadangisi
+Name[sw_TZ]=LibreOffice 4.0 Utawala wa Printa
+Name[br]=Ardoadur moullerez LibreOffice 4.0
+Name[ts]=Vukongomisi bya Printa LibreOffice 4.0
+Name[ml]=LibreOffice 4.0 പ്രിന്റര്‍ അഡ്മിനിസ്ട്രേഷന്‍
+Name[bo]=LibreOffice 4.0པར་འཁོར་དོ་དམ།
+Name[cy]=Gweinyddu Argraffu LibreOffice 4.0
+Name[zh_CN]=LibreOffice 4.0 打印机管理
+Name[st]=Taolo ya Sehatisi ya LibreOffice 4.0
+Name[en_GB]=LibreOffice 4.0 Printer Administration
+Name[ko]=LibreOffice 4.0 프린터 관리
+Name[uz]=LibreOffice 4.0 printerni boshqarish
+Name[cs]=Administrace tiskáren LibreOffice 4.0
+Name[km]=ការ​គ្រប់គ្រង​ម៉ាស៊ីន​បោះពុម្ព​ LibreOffice 4.0
+Name[af]=LibreOffice 4.0-drukkeradministrasie
+Name[pa_IN]=LibreOffice 4.0 ਪਰਿੰਟਰ ਐਡਮਿਨਸਟੇਟਰ
+Name[is]=LibreOffice 4.0 prentarastjórnun
+Name[bs]=LibreOffice 4.0 administracija štampača
+Name[brx]=LibreOffice 4.0 साफायग्रा खुंथाय
+Name[ga]=Riarachán na bPrintéirí LibreOffice 4.0
+Name[ca_XV]=Administració d'impressió del LibreOffice 4.0
+Name[ka]=LibreOffice 4.0 პრინტერის ადმინისტრაცია
+Name[eu]=LibreOffice 4.0 inprimagailu-administrazioa
+Name[oc]=Gestion de las imprimentas de LibreOffice 4.0
+Name[mni]=LibreOffice 4.0 প্রিন্তরগী ৱায়েন থৌদা
+Name[gu]=LibreOffice 4.0  પ્રિન્ટર સંચાલન
+Name[bg]=Администриране на принтера за LibreOffice 4.0
+Name[sv]=LibreOffice 4.0 skrivaradministration
+Name[it]=LibreOffice 4.0 Gestione stampanti
+Name[hu]=LibreOffice 4.0 Nyomtatókezelés
+Name[sq]=LibreOffice 4.0 Administrim i shtypësit
+Name[pl]=LibreOffice 4.0 - Zarządzanie drukarką
+Name[ca]=Administració d'impressió del LibreOffice 4.0
+Name[fa]=مدیریت چاپگر LibreOffice 4.0
+Name[zh_TW]=LibreOffice 4.0 印表機管理
+Name[sa_IN]=LibreOffice 4.0 मुद्रकप्रशासनम्
+Name[sk]=Správa tlačiarní LibreOffice 4.0
+Name[ve]=Mulanguli wa Phirinthara wa LibreOffice 4.0
+Name[uk]=Налаштування принтера LibreOffice 4.0
+Name[pt]=Administração de impressoras do LibreOffice 4.0
+Name[hi]=LibreOffice 4.0 मुद्रक प्रशासन
+Name[ks]=LibreOffice 4.0 Printer Administration
+Name[es]=Gestión de impresoras de LibreOffice 4.0
+Name[tt]=LibreOffice 4.0 Printer Administration
+Name[ast]=Alministración de la imprentadora de LibreOffice 4.0
+Name[lv]=LibreOffice 4.0 printera administrēšana
+Name[fr]=Gestion des imprimantes de LibreOffice 4.0
+Name[ss]=LibreOffice 4.0 kuphatfwa kwephrinta
+Name[or]=LibreOffice 4.0 ପ୍ରିଣ୍ଟର ପ୍ରଶାସନ
+Name[sh]=LibreOffice 4.0 podešavanje štampača
+Name[id]=Administrasi Pencetak LibreOffice 4.0
+Name[xh]=Ulawulo Lwesishicileli lwe-LibreOffice 4.0
+Name[th]=ตัวบริหารจัดการเครื่องพิมพ์ LibreOffice 4.0
+Name[sr]=LibreOffice 4.0 подешавање штампача
+Name[si]=LibreOffice 4.0 මුද්‍රණ පරිපාලක
+Name[et]=LibreOffice 4.0 printerihaldus
+Name[kok]=LibreOffice 4.0 मुद्रक प्रशासन
+Name[bn_IN]=LibreOffice 4.0 মুদ্রণযন্ত্র পরিচালনা
+Name[dgo]=LibreOffice 4.0 छापक  प्रशासन
+Name[om]=Bulchiinsa Maxxansaa LibreOffice 4.0
+Name[mk]=Администрирање на печатачи во LibreOffice 4.0
+Name[en]=LibreOffice 4.0 Printer Administration
+Name[fi]=LibreOffice 4.0 - Tulostimen hallinta
+Name[lt]=„LibreOffice 4.0“ spausdintuvo tvarkymas
+Name[de]=LibreOffice 4.0 Druckerverwaltung
+Name[hr]=LibreOffice 4.0 Administracija pisača
+Name[mai]=LibreOffice 4.0 मुद्रक प्रशासन
+Name[be]=Кіраванне прынтэрам LibreOffice 4.0
+Name[zu]=LibreOffice 4.0 Ukuphathwa komshicileli
+Name[sd]=LibreOffice 4.0  پرنٽر جو انتظام
+Name[sl]=Nastavitve tiskalnika LibreOffice 4.0
+Name[nn]=LibreOffice 4.0-skrivaradministrasjon
+Name[bn]=LibreOffice 4.0 মুদ্রণযন্ত্র পরিচালনা
+Name[am]=LibreOffice 4.0 የማተሚያ አስተዳዳሪ
+Name[ja]=LibreOffice 4.0 プリンターの管理
+Name[tg]=Идоракунии чопкунаки LibreOffice 4.0
+Name[mr]=LibreOffice 4.0 मुद्रक प्रशासन
+Name[en_ZA]=LibreOffice 4.0 Printer Administration
+Name[dz]=LibreOffice 4.0 དཔར་འཕྲུལ་ བདག་སྐྱོང་།
+Name[te]=ముద్రణా యంత్రం `యొక్క LibreOffice 4.0 నిర్వహించు.
+Name[he]=ניהול מדפסות ‏‪LibreOffice 4.0‬‏‏
+Name[kn]=LibreOffice 4.0 ಮುದ್ರಕ ನಿರ್ವಹಣೆ
+Name[eo]=LibreOffice 4.0 presila administrado
+Name[nl]=LibreOffice 4.0-printerbeheer
+Name[ar]=إدارة طابعات LibreOffice 4.0
+Name[mn]=LibreOffice 4.0 Хэвлэгчийн удирдлага
+Name[gd]=Rianachd clò-bhualadairean LibreOffice 4.0
+Name[as]=LibreOffice 4.0 প্ৰিন্টাৰ প্ৰশাসন
+Name[sat]=LibreOffice 4.0 छापा सासोनिक्
+Name[el]=Διαχείριση εκτυπωτή LibreOffice 4.0
+Name[kk]=LibreOffice 4.0 Баспаны басқару
+Name[pt_BR]=Administrador de impressoras do LibreOffice 4.0

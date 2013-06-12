@@ -1,0 +1,136 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Exec=libreoffice4.0 --writer %U
+MimeType=application/x-aportisdoc;application/x-pocket-word;application/x-pocket-excel;
+Name=LibreOffice 4.0 Small Device Format Importer
+GenericName=Small Device Format Importer
+GenericName[sid]=Small Device Format Importer
+GenericName[ne]=सानो यन्त्र ढाँचा आयातकर्ता
+GenericName[tr]=Küçük Aygıt Biçim İçe Aktarıcısı
+GenericName[da]=Lille Enhed Format Importer
+GenericName[ug]=كىچىك ئۈسكۈنە پىچىم ئەكىرگۈچ
+GenericName[ru]=Импорт формата Small Device
+GenericName[my]=Small Device Format Importer
+GenericName[gl]=Pequeno dispositivo importador de formato
+GenericName[nb]=Formatimportering for små enheter
+GenericName[ro]=Mic dispozitiv de importare formate
+GenericName[nso]=Small Device Format Importer
+GenericName[ku]=Cîhaza Biçûk ya Teşe Anîna Hundir
+GenericName[vi]=Trình nhập định đạng Small Device
+GenericName[tn]=Small Device Format Importer
+GenericName[lo]=Small Device Format Importer
+GenericName[ta]=சிறிய சாதன வடிவ ஏற்றி
+GenericName[lb]=Small Device Format Importer
+GenericName[rw]=Small Device Format Importer
+GenericName[nr]=Small Device Format Importer
+GenericName[sw_TZ]=Small Device Format Importer
+GenericName[br]=Enporzhierez evit mentrezhoù trobarzhelloù bihan
+GenericName[ts]=Small Device Format Importer
+GenericName[ml]=സ്മോള്‍ ഡിവൈസ് ഫോര്‍മാറ്റ് ഇംപോര്‍ട്ടര്‍
+GenericName[bo]=Small Device Format Importer
+GenericName[cy]=Mewnforiwr Fformat Dyfais Bach
+GenericName[zh_CN]=小设备格式导入器
+GenericName[st]=Small Device Format Importer
+GenericName[en_GB]=Small Device Format Importer
+GenericName[ko]=Small Device 형식 불러오기
+GenericName[uz]=Small Device Format Importer
+GenericName[cs]=Import formátů pro malá zařízení
+GenericName[km]=កម្មវិធី​នាំចូល​ទ្រង់ទ្រាយ​ឧបករណ៍​តូច
+GenericName[af]=Small Device Format Importer
+GenericName[pa_IN]=ਛੋਟਾ ਜੰਤਰ ਫਾਰਮੈਟ ਇੰਪੋਰਟਰ
+GenericName[is]=Innflutningur sniða fyrir smátæki
+GenericName[bs]=Uvoz formata za male uređaje
+GenericName[brx]=Small Device Format Importer
+GenericName[ga]=Iompórtálaí Formáidí do Ghléasanna Beaga
+GenericName[ca_XV]=Importador de formats de dispositius petits
+GenericName[ka]=Small Device Format Importer
+GenericName[eu]=Gailu txikien formatuen inportatzailea
+GenericName[oc]=Importar format de periferic
+GenericName[mni]=Small Device Format Importer
+GenericName[gu]=નાનું ઉપકરણ બંધારણ આયાત કરનાર
+GenericName[bg]=Импорт от формати за малки устройства
+GenericName[sv]=Formatimportör för små enheter
+GenericName[it]=Importatore di formato per piccoli dispositivi
+GenericName[hu]=Small Device Format importáló
+GenericName[sq]=Small Device Format Importer
+GenericName[pl]=Importer formatów małych urządzeń
+GenericName[ca]=Importador de formats de dispositius petits
+GenericName[fa]=درون‌ریز قالب دستگاه‌های کوچک
+GenericName[zh_TW]=小型裝置格式匯入工具
+GenericName[sa_IN]=Small Device Format Importer
+GenericName[sk]=Importér formátu Small Device Format
+GenericName[ve]=Small Device Format Importer
+GenericName[uk]=Імпорт формату Small Device
+GenericName[pt]=Importação de formatos de pequenos dispositivos
+GenericName[hi]=लघु युक्ति प्रारूप आयातक
+GenericName[ks]=Small Device Format Importer
+GenericName[es]=Importador de formatos para dispositivos pequeños
+GenericName[tt]=Small Device Format Importer
+GenericName[ast]=Importador de formatos pa preseos pequeños
+GenericName[lv]=Mazo ierīču formātu importētājs
+GenericName[fr]=Importateur de format de petit périphérique
+GenericName[ss]=Small Device Format Importer
+GenericName[or]=କ୍ଷୁଦ୍ର ଉପକରଣ ସଜ୍ଜିକରଣ ଶୈଳୀ ଆମଦାନୀକାରୀ
+GenericName[sh]=Uvoz za Small Device Format
+GenericName[id]=Pengimpor Format Perangkat Kecil
+GenericName[xh]=Small Device Format Importer
+GenericName[th]=Small Device Format Importer
+GenericName[sr]=Увоз за Small Device Format
+GenericName[si]=Small Device Format Importer
+GenericName[et]=Väikeseadmevormingute importija
+GenericName[kok]=Small Device Format Importer
+GenericName[bn_IN]=ছোট ডিভাইসের ফরম্যাট ইম্পোর্টার
+GenericName[dgo]=Small Device Format Importer
+GenericName[om]=Sina Olerga Meeshaa Xiqqaa
+GenericName[mk]=Small Device Format Importer
+GenericName[en]=Small Device Format Importer
+GenericName[fi]=Tuontimuunnin kämmentietokoneissa käytettäville asiakirjatyypeille
+GenericName[lt]=Mažųjų įrenginių formato importas
+GenericName[de]=Importieren von Kleingeräte-Dateiformaten
+GenericName[hr]=Uvoznik oblika za male uređaje
+GenericName[mai]=Small Device Format Importer
+GenericName[be]=Імпарцёр з малых прыладаў
+GenericName[zu]=Small Device Format Importer
+GenericName[sd]=Small Device Format Importer
+GenericName[sl]=Uvoznik zapisov majhnih naprav
+GenericName[nn]=Formatimportering for små einingar
+GenericName[bn]=ছোট ডিভাইসের ফরম্যাট ইম্পোর্টার
+GenericName[am]=Small Device Format Importer
+GenericName[ja]=小型機器形式のインポート
+GenericName[tg]=Small Device Format Importer
+GenericName[mr]=स्मॉल डिव्हाइस रूपण आयातकर्ता
+GenericName[en_ZA]=Small Device Format Importer
+GenericName[dz]=Small Device Format Importer
+GenericName[te]=చిన్న పరికర ఆకృతీకరణదిగుమతికారి
+GenericName[he]=מייבא פורמט רכיבים קטנים
+GenericName[kn]=ಸಣ್ಣ ಸಾಧನ ವಿನ್ಯಾಸ ಆಮದುಗಾರ
+GenericName[eo]=Importilo por aparateta formato
+GenericName[nl]=Importeren van indeling klein apparaat
+GenericName[ar]=مستورد هيئة الجهاز الصغير
+GenericName[mn]=Small Device Format Importer
+GenericName[gd]=Ion-phortaichear fòrmat de dh'innealan beaga
+GenericName[as]=সৰু ডিভাইচ বিন্যাস ইমপোৰ্টাৰ
+GenericName[sat]=Small Device Format Importer
+GenericName[el]=Εισαγωγέας μορφής μικρών συσκευών
+GenericName[kk]=Small Device пішімін импорттаушы
+GenericName[pt_BR]=Importador de formatos de dispositivos pequenos
+NoDisplay=true
