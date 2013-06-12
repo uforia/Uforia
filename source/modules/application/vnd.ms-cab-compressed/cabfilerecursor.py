@@ -13,7 +13,7 @@
 # Stores the CAB file metadata and starts Uforia recursively on the
 # files inside the CAB folder.
 
-# TABLE: Signature:LONGTEXT, Offset:INT, Version:LONGTEXT, Folder:INT, Files:INT, OffsetFirstFile:INT, Compression:INT, Checksum:INT, SizeCompBytes:INT, SizeUnCompBytes:INT, PositionFirst:INT, WinCEHeader:INT, TargetArch:INT, MinWinCEVersion:INT, MaxWinCeVersion:INT, MinBuildNo:INT
+# TABLE: Signature:LONGTEXT, Offset:INT, cabversion:LONGTEXT, Folder:INT, Files:INT, OffsetFirstFile:INT, Compression:INT, Checksum:INT, SizeCompBytes:INT, SizeUnCompBytes:INT, PositionFirst:INT, WinCEHeader:INT, TargetArch:INT, MinWinCEVersion:INT, MaxWinCeVersion:INT, MinBuildNo:INT
 
 import sys
 import traceback
@@ -27,6 +27,11 @@ from struct import *
 
 def process(fullpath, config, rcontext, columns=None):
     try:
+        # Get instance of 7z module
+        zip_module = imp.load_source('7zfilerecursor',
+                                     'modules/application/' +
+                                     'x-7z-compressed/7zfilerecursor.py')
+        
         # Open cab file for reading
         file = open(fullpath, 'rb')
         assorted = [file.read(4)]
@@ -75,18 +80,13 @@ def process(fullpath, config, rcontext, columns=None):
             assorted.append(maximum_ce_version)
             assorted.append(minimum_build_number)
 
-        # Try to extract the content of the cab file.
+        # Try to extract the content of the 7zip file.
         try:
-            # Get instance of 7z module
-            zip_module = imp.load_source('7zfilerecursor',
-                                     'modules/application/' +
-                                     'x-7z-compressed/7zfilerecursor.py')
-            
             # Create a temporary directory
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
-            # Extract the cab file
-            zip_module._extractall(fullpath, tmpdir, config.CAB_TOOL)
+            # Extract the 7zip file
+            zip_module._extractall(fullpath, tmpdir, config.SEVENZIP_TOOL)
 
             recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
         except:
@@ -95,6 +95,7 @@ def process(fullpath, config, rcontext, columns=None):
         # Delete the temporary directory, proceed even if it causes
         # an error
         try:
+            pass
             shutil.rmtree(tmpdir)
         except:
             traceback.print_exc(file=sys.stderr)
