@@ -32,16 +32,24 @@ def process(fullpath, config, rcontext, columns=None):
         zip_module = imp.load_source('7zfilerecursor',
                                      'modules/application/' +
                                      'x-7z-compressed/7zfilerecursor.py')
-        
+
         # Open cab file for reading
         file = open(fullpath, 'rb')
+        # Add signature
         assorted = [file.read(4)]
         cabhdr = unpack('iiiiibbhhhhh', file.read(32))
 
+        # Add offset
         assorted.append(cabhdr[3])
+
+        # Add version
         version = "%d.%d" % (cabhdr[6], cabhdr[5])
         assorted.append(version)
+
+        # Add amount of folders
         assorted.append(cabhdr[7])
+
+        # Add amount of files
         assorted.append(cabhdr[8])
 
         if cabhdr[9] > 3:
@@ -49,8 +57,11 @@ def process(fullpath, config, rcontext, columns=None):
             resv = unpack('hbb', file.read(4))
 
         cabflr = unpack('ihh', file.read(8))
+        #Add OffsetFirstFile and Compression
         assorted.append(cabflr[0])
         assorted.append(cabflr[2])
+
+        # Add None values to the database if cabflr is not correct
         if cabflr[2] >= 0:
             assorted.append(None)
             assorted.append(None)
@@ -64,15 +75,18 @@ def process(fullpath, config, rcontext, columns=None):
         else:
             file.seek(cabflr[0])
             cfdata = unpack('ibh', file.read(8))
+            # Add Checksum, SizeCompBytes, SizeUnCompBytes and PositionFirst
             assorted.append(cfdata[0])
             assorted.append(cfdata[1])
             assorted.append(cfdata[2])
             assorted.append(file.tell())
 
+            # Add WinCEHeader
             assorted.append(file.read(4))
 
             cehdr = unpack('iiiiiiiiiii', file.read(44))
 
+            # Add TargetArch
             assorted.append(cehdr[4])
             minimum_ce_version = "%d.%d" % (cehdr[5], cehdr[6])
             maximum_ce_version = "%d.%d" % (cehdr[7], cehdr[8])
@@ -92,7 +106,7 @@ def process(fullpath, config, rcontext, columns=None):
             tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
 
             # Extract the 7zip file
-            zip_module._extractall(fullpath, tmpdir, config.SEVENZIP_TOOL)
+            zip_module._extractall(fullpath, tmpdir)
 
             recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
         except:
