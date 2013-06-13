@@ -28,7 +28,7 @@ def process(fullpath, config, rcontext, columns=None):
 
             # Get header of XML file
             for line in xml:
-                if line.startswith("<?xml"):
+                if "<?xml" in line:
                     header = line.split("?>")[0]
 
                     # Get version from header
@@ -68,9 +68,13 @@ def process(fullpath, config, rcontext, columns=None):
                     # Break for loop
                     break
 
+            # Print warning when there was no header
             if len(assorted) == 0:
-                raise Exception("XML header not found, All XML files should" +
-                                "have an header.")
+                assorted.append(None)
+                assorted.append(None)
+                assorted.append(None)
+                print Exception("XML header not found, All XML files should" +
+                                " have an header.")
 
             # Start reading from top
             xml.seek(0)
