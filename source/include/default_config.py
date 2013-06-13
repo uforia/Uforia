@@ -46,11 +46,6 @@ ENABLEXMP = True
 # Example: UNRAR_TOOL = "C:\Program Files\WinRAR\WinRAR.exe"
 UNRAR_TOOL = "unrar"
 
-# Which tool should Uforia use to extract cab files?
-# Default: CAB_TOOL = None
-# Example: CAB_TOOL = "expand"
-CAB_TOOL = None
-
 # Database configuration. The name should match the handler providing
 # the appropriate Database class with setupMainTable() and setupTable()
 # and store() methods. See one of the provided database handlers for more
