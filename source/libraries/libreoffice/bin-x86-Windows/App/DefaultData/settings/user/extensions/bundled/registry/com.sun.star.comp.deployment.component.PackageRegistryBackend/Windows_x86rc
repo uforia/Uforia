@@ -1,0 +1,2 @@
+ORIGIN=$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend
+UNO_SERVICES=?$ORIGIN/Windows_x86.rdb

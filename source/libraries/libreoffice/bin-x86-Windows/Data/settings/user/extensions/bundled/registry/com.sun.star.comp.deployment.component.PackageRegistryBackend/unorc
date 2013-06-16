@@ -1,0 +1,2 @@
+ORIGIN=$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend
+UNO_SERVICES=?$ORIGIN/common_.rdb ${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES} ?$BUNDLED_EXTENSIONS/wiki-publisher/components.rdb ?$BUNDLED_EXTENSIONS/nlpsolver/components.rdb ?$BUNDLED_EXTENSIONS/report-builder/components.rdb ?$BUNDLED_EXTENSIONS/presentation-minimizer/components.rdb

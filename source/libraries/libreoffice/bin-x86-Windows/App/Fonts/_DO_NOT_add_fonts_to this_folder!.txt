@@ -1,0 +1,5 @@
+DO NOT ADD FONTS TO THIS FOLDER
+
+Adding additional fonts to this directory can impact portability.
+
+It is recommended that you use the PortableApps.com Platform's ability to load fonts portably for all applications.  If you are not using the PortableApps.com Platform, you can add them within LibreOffice Portable directly by placing them within the LibreOfficePortable\Data\fonts directory.
