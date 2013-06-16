@@ -36,6 +36,7 @@ def _seek_until(file, startstring):
         elif bytes.startswith(startstring):
             return True
 
+
 def _get_boot_record(file):
     """
     Get the ISO boot record.
@@ -57,7 +58,8 @@ def _get_boot_record(file):
     bootrecid = file.read(32)
     bootsysuse = file.read(1977)
 
-    return [type,identifier,version,bootsysid,bootrecid,bootsysuse]
+    return [type, identifier, version, bootsysid, bootrecid, bootsysuse]
+
 
 def _get_descriptor(index, file):
     """
@@ -70,7 +72,7 @@ def _get_descriptor(index, file):
 
     descriptor = {}
     descriptor["typecode"] = 1
-    descriptor["ident"] =  "CD001"
+    descriptor["ident"] = "CD001"
     descriptor["version"] = file.read(1)
     descriptor["unused"] = file.read(1)
     descriptor["sysid"] = file.read(32)
@@ -108,6 +110,7 @@ def _get_descriptor(index, file):
     descriptor["reserved"] = file.read(653)
     return descriptor
 
+
 def _get_terminator(file):
     """
     Get the volume description set terminator.
@@ -119,7 +122,8 @@ def _get_terminator(file):
     tertype = file.read(1)
     teridentifier = "CD001"
     terversion = 1
-    return [tertype,teridentifier,terversion]
+    return [tertype, teridentifier, terversion]
+
 
 def _get_volume_descriptors(file):
     """
