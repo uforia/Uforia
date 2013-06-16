@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# TABLE: Bootrec_Type:INT, Bootrec_Identifier:TEXT, Bootrec_Version:INT, Bootrec_BootSysId:TEXT, Bootrec_Id:BLOB, Bootrec_BootSysUse:BLOB, typecode:INT, ident:TEXT, version:INT, unused:INT, sysid:INT, volid:TEXT, volspacesize:INT, unusedfield:INT,volsetsize:INT, volseqno:INT, logblocksize:INT, pathtablesize:INT, locpathtable:INT,locoptpathtable:INT, loctypeMath:INT, lcoopttypeMpath:INT, rootdirentry:TEXT,volsetid:TEXT, publid:TEXT, dataprepid:TEXT, applid:TEXT, copyfileid:TEXT, abstrfileid:TEXT,bibliofileid:TEXT, volumecraetedt:TEXT, volumemoddt:TEXT, volumeexpdt:TEXT,volumeeffdt:TEXT
+# TABLE: Bootrec_Type:INT, Bootrec_Identifier:TEXT, Bootrec_Version:INT, Bootrec_BootSysId:TEXT, Bootrec_Id:BLOB, Bootrec_BootSysUse:BLOB, typecode:INT, ident:TEXT, version:INT, unused:INT, sysid:INT, volid:TEXT, volspacesize:INT, unusedfield:INT,volsetsize:INT, volseqno:INT, logblocksize:INT, pathtablesize:INT, locpathtable:INT,locoptpathtable:INT, loctypeMath:INT, lcoopttypeMpath:INT, rootdirentry:TEXT,volsetid:TEXT, publid:TEXT, dataprepid:TEXT, applid:TEXT, copyfileid:TEXT, abstrfileid:TEXT,bibliofileid:TEXT, volumecraetedt:TEXT, volumemoddt:TEXT, volumeexpdt:TEXT,volumeeffdt:TEXT, tertype:INT, teridentifier:TEXT, terversion:INT
 
 import sys
 import traceback
@@ -107,7 +107,13 @@ def _get_descriptors(file):
             
 # \xFFCD001
 def _get_terminator(file):
-    return []
+    seek = _seek_until(file, b"\x00CD001")
+    if not seek:
+        return  [None for i in range(3)]
+    tertype = file.read(1)
+    teridentifier = "CD001"
+    terversion = 1
+    return [tertype,teridentifier,terversion]
 
 def _get_volume_descriptors(file):
     result = []
