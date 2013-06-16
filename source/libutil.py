@@ -65,10 +65,28 @@ def get_executable(foldername, filename):
     ops = platform.system()
     extension = ".exe" if ops == "Windows" else ""
 
-    return "{cwd}/libraries/{foldername}/bin-{arch}-{ops}/{filename}{ext}".format(
+    return "{cwd}/libraries/{foldername}/bin-{arch}-{ops}/{filename}{ext}" \
+      .format(
         cwd=os.getcwd(),
         foldername=foldername,
         arch=architecture,
         ops=ops,
         filename=filename,
         ext=extension)
+
+
+def get_libreoffice_executable():
+    """
+    Returns the path to the stand-alone libreoffice binary (soffice or
+    LibreOfficePortable.exe). Should be run --headless.
+    """
+    ops = platform.system()
+    startstr = "{cwd}/libraries/libreoffice/bin-{arch}-{ops}/"
+    if ops == "Linux":
+        str = startstr + "program/soffice"
+    else:
+        str = startstr + "LibreOfficePortable.exe"
+    return str.format(
+        cwd=os.getcwd(),
+        arch=_get_arch(),
+        ops=ops)
