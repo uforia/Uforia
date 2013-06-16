@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# TABLE: Bootrec_Type:INT, Bootrec_Identifier:TEXT, Bootrec_Version:INT, Bootrec_BootSysId:TEXT, Bootrec_Id:BLOB, Bootrec_BootSysUse:BLOB, typecode:INT, ident:TEXT, version:INT, unused:INT, sysid:INT, volid:TEXT, volspacesize:INT, unusedfield:INT,volsetsize:INT, volseqno:INT, logblocksize:INT, pathtablesize:INT, locpathtable:INT,locoptpathtable:INT, loctypeMath:INT, lcoopttypeMpath:INT, rootdirentry:TEXT,volsetid:TEXT, publid:TEXT, dataprepid:TEXT, applid:TEXT, copyfileid:TEXT, abstrfileid:TEXT,bibliofileid:TEXT, volumecraetedt:TEXT, volumemoddt:TEXT, volumeexpdt:TEXT,volumeeffdt:TEXT, tertype:INT, teridentifier:TEXT, terversion:INT
+# TABLE: Bootrec_Type:INT, Bootrec_Identifier:TEXT, Bootrec_Version:INT, Bootrec_BootSysId:TEXT, Bootrec_Id:BLOB, Bootrec_BootSysUse:BLOB, VolumeDescriptors:LONGTEXT, TermType:INT, TermIdentifier:TEXT, TermVersion:INT
 
 import sys
 import traceback
@@ -20,32 +20,30 @@ import os
 import imp
 import recursive
 import struct
-from pylzmalib import py7zlib
+import py7zlib
 
 
 def _seek_until(file, startstring):
+    """
+    Seek until startstring is found in file. Reads in single blocks of
+    16 bytes.
+    """
     startstring_pos = 0
     while True:
-        b = file.read(1)
-        if b == None:
+        bytes = file.read(16)
+        if bytes == "":
             return False
+        elif bytes.startswith(startstring):
+            return True
 
-        if startstring_pos == 0:
-            if b == startstring[0]:
-                startstring_pos = 1
-        else:
-            if b == startstring[startstring_pos]:
-                startstring_pos += 1
-                if startstring_pos >= len(startstring):
-                    return True
-            else:
-                startstring_pos = 0
-
-# \x00CD001
 def _get_boot_record(file):
+    """
+    Get the ISO boot record.
+    http://wiki.osdev.org/ISO_9660#The_Boot_Record
+    """
     seek = _seek_until(file, b"\x00CD001")
     if not seek:
-        return [None,None,None,None,None,None]
+        return [None for i in range(6)]
 
     type = 0
     identifier = "CD001"
@@ -61,52 +59,60 @@ def _get_boot_record(file):
 
     return [type,identifier,version,bootsysid,bootrecid,bootsysuse]
 
-# \x01CD001, \x02CD001, etc
-def _get_descriptors(file):
-    seek = _seek_until(file, b"\x00CD001")
+def _get_descriptor(index, file):
+    """
+    Get the volume descriptor with index.
+    http://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
+    """
+    seek = _seek_until(file, struct.pack('b', index) + b"CD001")
     if not seek:
-        return  [None for i in range(28)]
-    
-    typecode = 1
-    ident =  "CD001"
-    version = file.read(1)
-    unused = file.read(1)
-    sysid = file.read(32)
-    volid = file.read(32)
-    volspacesize = struct.unpack('i', file.read(4))
+        return None
+
+    descriptor = {}
+    descriptor["typecode"] = 1
+    descriptor["ident"] =  "CD001"
+    descriptor["version"] = file.read(1)
+    descriptor["unused"] = file.read(1)
+    descriptor["sysid"] = file.read(32)
+    descriptor["volid"] = file.read(32)
+    descriptor["volspacesize"] = struct.unpack('i', file.read(4))[0]
     file.read(4)
-    unusedfield = 0
-    volsetsize = struct.unpack('i', file.read(4))
-    volseqno = struct.unpack('i', file.read(4))
-    logblocksize = struct.unpack('i', file.read(4))
-    pathtablesize = struct.unpack('i', file.read(4))
+    descriptor["unusedfield"] = file.read(8)
+    descriptor["volsetsize"] = struct.unpack('h', file.read(2))[0]
+    file.read(2)
+    descriptor["volseqno"] = struct.unpack('h', file.read(2))[0]
+    file.read(2)
+    descriptor["logblocksize"] = struct.unpack('h', file.read(2))[0]
+    file.read(2)
+    descriptor["pathtablesize"] = struct.unpack('i', file.read(4))[0]
     file.read(4)
-    locpathtable = struct.unpack('i', file.read(4))
-    locoptpathtable = struct.unpack('i', file.read(4))
-    loctypeMpath = struct.unpack('>i', file.read(4))
-    locopttypeMpath = struct.unpack('>i', file.read(4))
-    rootdirentry = file.read(34)
-    volsetid = file.read(128)
-    publid = file.read(128)
-    dataprepid = file.read(128)
-    applid = file.read(128)
-    copyfileid = file.read(38)
-    abstrfileid = file.read(36)
-    bibliofileid = file.read(37)
-    volumecreatedt = file.read(17)
-    volumemoddt = file.read(17)
-    volumeexpdt = file.read(17)
-    volumeeffdt = file.read(17)
-    
-    return [typecode, ident, version, unused, sysid, volid,volspacesize, unusedfield,
-            volsetsize, volseqno, logblocksize, pathtablesize, locpathtable,
-            locoptpathtable, loctypeMpath, locopttypeMpath, rootdirentry,
-            volsetid, publid, dataprepid, applid, copyfileid, abstrfileid,
-            bibliofileid, volumecreatedt, volumemoddt, volumeexpdt,
-            volumeeffdt]
-            
-# \xFFCD001
+    descriptor["locpathtable"] = struct.unpack('i', file.read(4))[0]
+    descriptor["locoptpathtable"] = struct.unpack('i', file.read(4))[0]
+    descriptor["loctypeMpath"] = struct.unpack('>i', file.read(4))[0]
+    descriptor["locopttypeMpath"] = struct.unpack('>i', file.read(4))[0]
+    descriptor["rootdirentry"] = file.read(34)
+    descriptor["volsetid"] = file.read(128)
+    descriptor["publid"] = file.read(128)
+    descriptor["dataprepid"] = file.read(128)
+    descriptor["applid"] = file.read(128)
+    descriptor["copyfileid"] = file.read(38)
+    descriptor["abstrfileid"] = file.read(36)
+    descriptor["bibliofileid"] = file.read(37)
+    descriptor["volumecreatedt"] = file.read(17)
+    descriptor["volumemoddt"] = file.read(17)
+    descriptor["volumeexpdt"] = file.read(17)
+    descriptor["volumeeffdt"] = file.read(17)
+    descriptor["filestructver"] = struct.unpack('b', file.read(1))[0]
+    descriptor["unused2"] = struct.unpack('b', file.read(1))[0]
+    descriptor["appused"] = file.read(512)
+    descriptor["reserved"] = file.read(653)
+    return descriptor
+
 def _get_terminator(file):
+    """
+    Get the volume description set terminator.
+    http://wiki.osdev.org/ISO_9660#Volume_Descriptor_Set_Terminator
+    """
     seek = _seek_until(file, b"\x00CD001")
     if not seek:
         return  [None for i in range(3)]
@@ -116,16 +122,24 @@ def _get_terminator(file):
     return [tertype,teridentifier,terversion]
 
 def _get_volume_descriptors(file):
+    """
+    Get all volume descriptors from file (including boot and
+    termination).
+    """
     result = []
     result += _get_boot_record(file)
 
     file.seek(0)
+    i = 1
+    descriptors = []
     while True:
-        descriptor = _get_descriptors(file)
+        descriptor = _get_descriptor(i, file)
+        i += 1
         if descriptor == None:
             break
         else:
-            result += descriptor
+            descriptors.append(descriptor)
+    result.append(descriptors)
 
     file.seek(0)
     result += _get_terminator(file)
