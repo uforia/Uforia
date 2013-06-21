@@ -68,11 +68,12 @@ def convert_xls(fullpath, tempdir):
                         "arguments: " + fullpath + " " + tempdir + " " +
                         libreoffice)
 
+
 def process(fullpath, config, rcontext, columns=None):
         # Try to parse xls data
         try:
             assorted = ["Not_implemented"]
-            
+
             # Try to parse the xls file
             try:
                 # Create a temporary directory
@@ -81,7 +82,8 @@ def process(fullpath, config, rcontext, columns=None):
                 # Parse the xls file
                 convert_xls(fullpath, tmpdir)
 
-                recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath)
+                recursive.call_uforia_recursive(config, rcontext,
+                                                tmpdir, fullpath)
             except:
                 traceback.print_exc(file=sys.stderr)
 
