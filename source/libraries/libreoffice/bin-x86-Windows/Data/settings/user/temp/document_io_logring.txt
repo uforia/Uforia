@@ -1,0 +1,8 @@
+C:/master/package/source/xstor/xstorage.cxx:2630: 
+C:/master/package/source/xstor/xstorage.cxx:2716: Rethrow
+C:/master/package/source/xstor/xstorage.cxx:2630: 
+C:/master/package/source/xstor/xstorage.cxx:2716: Rethrow
+C:/master/sfx2/source/doc/sfxbasemodel.cxx:1730: storeToURL
+C:/master/sfx2/source/doc/objstor.cxx:2585: 
+C:/master/sfx2/source/doc/objmisc.cxx:257: Resetting Error.
+C:/master/sfx2/source/doc/sfxbasemodel.cxx:3104: Storing failed!

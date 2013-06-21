@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="AntiAliasing" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="MaximumPaperBottomMargin" oor:op="fuse"><value>9999</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="MaximumPaperHeight" oor:op="fuse"><value>300</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="MaximumPaperLeftMargin" oor:op="fuse"><value>9999</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="MaximumPaperRightMargin" oor:op="fuse"><value>9999</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="MaximumPaperTopMargin" oor:op="fuse"><value>9999</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="MaximumPaperWidth" oor:op="fuse"><value>300</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="OverlayBuffer" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="OverlayBuffer_Calc" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="OverlayBuffer_DrawImpress" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="OverlayBuffer_Writer" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="PaintBuffer" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="PaintBuffer_Calc" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="PaintBuffer_DrawImpress" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="PaintBuffer_Writer" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="Quadratic3DRenderLimit" oor:op="fuse"><value>1000000</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="QuadraticFormControlRenderLimit" oor:op="fuse"><value>45000</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="RenderDecoratedTextDirect" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="RenderSimpleTextDirect" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="SelectionMaximumLuminancePercent" oor:op="fuse"><value>70</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="SnapHorVerLinesToDiscrete" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="SolidDragCreate" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="StripeColorA" oor:op="fuse"><value>0</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="StripeColorB" oor:op="fuse"><value>16777215</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="StripeLength" oor:op="fuse"><value>4</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="TransparentSelection" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Drawinglayer"><prop oor:name="TransparentSelectionPercent" oor:op="fuse"><value>75</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Help"><prop oor:name="ExtendedTip" oor:op="fuse"><value>false</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Help/HelpAgent"><prop oor:name="Enabled" oor:op="fuse"><value>true</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Help/HelpAgent"><prop oor:name="RetryLimit" oor:op="fuse"><value>3</value></prop></item>
@@ -9,15 +36,72 @@
 <item oor:path="/org.openoffice.Office.Common/Help"><prop oor:name="System" oor:op="fuse"><value>WIN</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Help"><prop oor:name="Tip" oor:op="fuse"><value>false</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Internal"><prop oor:name="CurrentTempURL" oor:op="fuse"><value></value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="AlwaysAllowSave" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="DisableUICustomization" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="ExperimentalMode" oor:op="fuse"><value>false</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="FirstRun" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="MacroRecorderMode" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="PluginsEnabled" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="ShowLinkWarningDialog" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="SymbolSet" oor:op="fuse"><value>2</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="SymbolStyle" oor:op="fuse"><value>auto</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="ToolboxStyle" oor:op="fuse"><value>1</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="UseSystemFileDialog" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="UseSystemPrintDialog" oor:op="fuse"><value>false</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Path/Current"><prop oor:name="Temp" oor:op="fuse"><value xsi:nil="true"/></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Path/Current"><prop oor:name="Work" oor:op="fuse"><value xsi:nil="true"/></prop></item>
 <item oor:path="/org.openoffice.Office.Common/Path/Info"><prop oor:name="WorkPathChanged" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Histories/Histories/org.openoffice.Office.Histories:HistoryInfo['PickList']/ItemList"><node oor:name="file:///C:/Users/Jimmy/Documents/GitHub/TESTDATA/Doc1.doc" oor:op="replace"><prop oor:name="Filter" oor:op="fuse"><value>MS Word 97</value></prop><prop oor:name="Password" oor:op="fuse"><value></value></prop><prop oor:name="Title" oor:op="fuse"><value>Doc1</value></prop></node></item>
+<item oor:path="/org.openoffice.Office.Histories/Histories/org.openoffice.Office.Histories:HistoryInfo['PickList']/OrderList"><node oor:name="0" oor:op="replace"><prop oor:name="HistoryItemRef" oor:op="fuse"><value>file:///C:/Users/Jimmy/Documents/GitHub/TESTDATA/Doc1.doc</value></prop></node></item>
+<item oor:path="/org.openoffice.Office.Histories/Histories/org.openoffice.Office.Histories:HistoryInfo['URLHistory']/ItemList"><node oor:name="file:///C:/Users/Jimmy/Documents/GitHub/TESTDATA/Doc1.doc" oor:op="replace"><prop oor:name="Filter" oor:op="fuse"><value>MS Word 97</value></prop><prop oor:name="Password" oor:op="fuse"><value></value></prop><prop oor:name="Title" oor:op="fuse"><value>Doc1</value></prop></node></item>
+<item oor:path="/org.openoffice.Office.Histories/Histories/org.openoffice.Office.Histories:HistoryInfo['URLHistory']/OrderList"><node oor:name="0" oor:op="replace"><prop oor:name="HistoryItemRef" oor:op="fuse"><value>file:///C:/Users/Jimmy/Documents/GitHub/TESTDATA/Doc1.doc</value></prop></node></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"><prop oor:name="DrawView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"><prop oor:name="HandoutView" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"><prop oor:name="ImpressView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"><prop oor:name="NotesView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"><prop oor:name="OutlineView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"><prop oor:name="SlideSorterView" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/ToolPanel/Visible"><prop oor:name="HandoutView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/ToolPanel/Visible"><prop oor:name="ImpressView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/ToolPanel/Visible"><prop oor:name="NotesView" oor:op="fuse"><value>true</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/ToolPanel/Visible"><prop oor:name="OutlineView" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Impress/MultiPaneGUI/ToolPanel/Visible"><prop oor:name="SlideSorterView" oor:op="fuse"><value>true</value></prop></item>
 <item oor:path="/org.openoffice.Office.Linguistic/General"><prop oor:name="UILocale" oor:op="fuse"><value>en-GB</value></prop></item>
-<item oor:path="/org.openoffice.Office.Paths/Paths/org.openoffice.Office.Paths:NamedPath['Temp']"><prop oor:name="WritePath" oor:op="fuse"><value>file:///C:/Users/marcin/AppData/Local/Temp/LibreOfficePortableTemp/temp</value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-AU" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-BS" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-BZ" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-CA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-GB" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-GH" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-IE" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-IN" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-JM" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-NA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-NZ" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-PH" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-TT" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-US" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-ZA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-ZW" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-AU" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-BS" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-BZ" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-CA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-GB" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-GH" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-IE" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-IN" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-JM" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-NA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-NZ" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-PH" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-TT" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-US" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-ZA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/LastFoundGrammarCheckers"><prop oor:name="en-ZW" oor:op="fuse" oor:type="oor:string-list"><value><it>org.libreoffice.comp.pyuno.Lightproof.en</it></value></prop></item>
+<item oor:path="/org.openoffice.Office.Paths/Paths/org.openoffice.Office.Paths:NamedPath['Temp']"><prop oor:name="WritePath" oor:op="fuse"><value>file:///C:/Users/Jimmy/AppData/Local/Temp/LibreOfficePortableTemp/temp</value></prop></item>
 <item oor:path="/org.openoffice.Office.Paths/Paths/org.openoffice.Office.Paths:NamedPath['Work']"><prop oor:name="WritePath" oor:op="fuse"><value>file:///E:</value></prop></item>
 <item oor:path="/org.openoffice.Office.Recovery/RecoveryInfo"><prop oor:name="SessionData" oor:op="fuse"><value>false</value></prop></item>
-<item oor:path="/org.openoffice.Office.Recovery/RecoveryList"><node oor:name="recovery_item_1" oor:op="remove"/></item>
 <item oor:path="/org.openoffice.Office.UI.WriterWindowState/UIElements/States/org.openoffice.Office.UI.WindowState:WindowStateType['private:resource/toolbar/standardbar']"><prop oor:name="ContextActive" oor:op="fuse"><value>true</value></prop></item>
 <item oor:path="/org.openoffice.Office.UI.WriterWindowState/UIElements/States/org.openoffice.Office.UI.WindowState:WindowStateType['private:resource/toolbar/standardbar']"><prop oor:name="ContextSensitive" oor:op="fuse"><value>true</value></prop></item>
 <item oor:path="/org.openoffice.Office.UI.WriterWindowState/UIElements/States/org.openoffice.Office.UI.WindowState:WindowStateType['private:resource/toolbar/standardbar']"><prop oor:name="DockPos" oor:op="fuse"><value>0,0</value></prop></item>
@@ -73,6 +157,8 @@
 <item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooLocale" oor:op="fuse"><value>en-GB</value></prop></item>
 <item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooSetupSystemLocale" oor:op="fuse"><value>en-GB</value></prop></item>
 <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.frame.StartModule']"><prop oor:name="ooSetupFactoryWindowAttributes" oor:op="fuse"><value>83,105,1424,722;1;1;0,0,0,0;</value></prop></item>
+<item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.presentation.PresentationDocument']"><prop oor:name="ooSetupFactoryWindowAttributes" oor:op="fuse"><value>112,135,1184,585;1;0,0,0,0;</value></prop></item>
+<item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.sheet.SpreadsheetDocument']"><prop oor:name="ooSetupFactoryWindowAttributes" oor:op="fuse"><value>60,83,1184,585;1;0,0,0,0;</value></prop></item>
 <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.text.TextDocument']"><prop oor:name="ooSetupFactoryWindowAttributes" oor:op="fuse"><value>138,161,1424,810;1;0,0,0,0;</value></prop></item>
 <item oor:path="/org.openoffice.Setup/Office"><prop oor:name="LastCompatibilityCheckID" oor:op="fuse"><value>0eaa50a932c8f2199a615e1eb30f7ac74279539</value></prop></item>
 <item oor:path="/org.openoffice.Setup/Office"><prop oor:name="OfficeRestartInProgress" oor:op="fuse"><value>false</value></prop></item>
