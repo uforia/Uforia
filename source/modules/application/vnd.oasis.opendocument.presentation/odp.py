@@ -13,21 +13,23 @@
 
 #!/usr/bin/env python
 
-# TABLE: created:LONGTEXT, adjustedDate:LONGTEXT, adjustedCount:INT, content:LONGTEXT 
+# TABLE: created:LONGTEXT, adjustedDate:LONGTEXT, adjustedCount:INT, content:LONGTEXT
 
-import re, zipfile, sys
+import re
+import zipfile
+import sys
+
 
 def process(fullpath, config, rcontext, columns=None):
     try:
-    	document = zipfile.ZipFile(fullpath)
+        document = zipfile.ZipFile(fullpath)
     except:
-    	exit()
-
+        exit()
 
     # get content/text
     xml = document.read("content.xml")
 
-    # get metadata	
+    # get metadata
     xmlmeta = document.read("meta.xml")
 
     # Finding content (Text)
@@ -44,16 +46,16 @@ def process(fullpath, config, rcontext, columns=None):
         textcontent = ""
         for words in contenttotal:
             textcontent = textcontent + "%s " % (words[1].rstrip('\n'))
-        pages.append({"Sheet":pageno, "Content":textcontent})
+        pages.append({"Sheet": pageno, "Content": textcontent})
 
-    
     odtdict = []
     results = []
 
-    for i in ('<meta:creation-date>(.*?)</', '<dc:date>(.*?)</', '<meta:editing-cycles>(.*?)</'):
+    for i in ('<meta:creation-date>(.*?)</', '<dc:date>(.*?)</',
+    '<meta:editing-cycles>(.*?)</'):
         try:
             metainfo = re.compile(i)
-	    contentmeta = metainfo.findall(xmlmeta)
+            contentmeta = metainfo.findall(xmlmeta)
             results.append(contentmeta)
         except KeyError:
             results.append('')

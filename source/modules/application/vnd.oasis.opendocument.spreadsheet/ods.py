@@ -13,21 +13,23 @@
 
 #!/usr/bin/env python
 
-# TABLE: created:LONGTEXT, adjustedDate:LONGTEXT, adjustedCount:INT, content:LONGTEXT 
+# TABLE: created:LONGTEXT, adjustedDate:LONGTEXT, adjustedCount:INT, content:LONGTEXT
 
-import re, zipfile, sys
+import re
+import zipfile
+import sys
+
 
 def process(fullpath, config, rcontext, columns=None):
     try:
-    	document = zipfile.ZipFile(fullpath)
+        document = zipfile.ZipFile(fullpath)
     except:
-    	exit()
-
+        exit()
 
     # get content/text
     xml = document.read("content.xml")
 
-    # get metadata	
+    # get metadata
     xmlmeta = document.read("meta.xml")
 
     # Finding content (Text)
@@ -36,34 +38,32 @@ def process(fullpath, config, rcontext, columns=None):
     pages = []
     pageno = 0
 
-
-
     for test in maintotal:
         rownu = 0
-	colnu = 0
+        colnu = 0
         test = ''.join(test[1])
         maincontent = re.compile('<table:table-row table:style-name="ro1">(.*?)</table:table-row>')
         contenttotal = maincontent.findall(test)
         for rows in contenttotal:
-	    rownu += 1
-	    textcontent = re.compile('<text:p>(.*?)</text:p>')
-	    textfind = textcontent.findall(rows)
-	    for cols in textfind:
-	        colnu += 1
-	        cellnu = str(1) + "." + str(colnu)
-	        pages.append({"Cell":cellnu, "Content":cols})
-    
+            rownu += 1
+            textcontent = re.compile('<text:p>(.*?)</text:p>')
+            textfind = textcontent.findall(rows)
+        for cols in textfind:
+            colnu += 1
+            cellnu = str(1) + "." + str(colnu)
+            pages.append({"Cell": cellnu, "Content": cols})
+
     odtdict = []
     results = []
 
-    for i in ('<meta:creation-date>(.*?)</', '<dc:date>(.*?)</', '<meta:editing-cycles>(.*?)</'):
+    for i in ('<meta:creation-date>(.*?)</', '<dc:date>(.*?)</',
+    '<meta:editing-cycles>(.*?)</'):
         try:
             metainfo = re.compile(i)
-	    contentmeta = metainfo.findall(xmlmeta)
+            contentmeta = metainfo.findall(xmlmeta)
             results.append(contentmeta)
         except KeyError:
             results.append('')
     results.append(pages)
 
     return results
-
