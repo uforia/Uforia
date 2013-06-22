@@ -34,6 +34,7 @@ def process(fullpath, config, rcontext, columns=None):
         for mboxmessage in mbox:
             message = {}
             message['flags'] = mboxmessage.get_flags()
+            message['content'] = mboxmessage.get_payload()
             # Stores each line such as To:, Subject:, etc. (if present)
             for key, value in mboxmessage.items():
                 message[key] = value
