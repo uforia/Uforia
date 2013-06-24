@@ -16,12 +16,12 @@
 
 import Image
 
-##
+# #
 # Path wrapper.
 
 class Path:
 
-    ##
+    # #
     # Creates a path object.
     #
     # @param xy Sequence.  The sequence can contain 2-tuples [(x, y), ...]
@@ -30,26 +30,26 @@ class Path:
     def __init__(self, xy):
         pass
 
-    ##
+    # #
     # Compacts the path, by removing points that are close to each
     # other.  This method modifies the path in place.
 
     def compact(self, distance=2):
         pass
 
-    ##
+    # #
     # Gets the bounding box.
 
     def getbbox(self):
         pass
 
-    ##
+    # #
     # Maps the path through a function.
 
     def map(self, function):
         pass
 
-    ##
+    # #
     # Converts the path to Python list.
     #
     # @param flat By default, this function returns a list of 2-tuples
@@ -60,7 +60,7 @@ class Path:
     def tolist(self, flat=0):
         pass
 
-    ##
+    # #
     # Transforms the path.
 
     def transform(self, matrix):

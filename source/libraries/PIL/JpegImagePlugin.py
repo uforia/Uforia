@@ -38,17 +38,17 @@ import array, struct
 import string
 import Image, ImageFile
 
-def i16(c,o=0):
-    return ord(c[o+1]) + (ord(c[o])<<8)
+def i16(c, o=0):
+    return ord(c[o + 1]) + (ord(c[o]) << 8)
 
-def i32(c,o=0):
-    return ord(c[o+3]) + (ord(c[o+2])<<8) + (ord(c[o+1])<<16) + (ord(c[o])<<24)
+def i32(c, o=0):
+    return ord(c[o + 3]) + (ord(c[o + 2]) << 8) + (ord(c[o + 1]) << 16) + (ord(c[o]) << 24)
 
 #
 # Parser
 
 def Skip(self, marker):
-    n = i16(self.fp.read(2))-2
+    n = i16(self.fp.read(2)) - 2
     ImageFile._safe_read(self.fp, n)
 
 def APP(self, marker):
@@ -56,17 +56,17 @@ def APP(self, marker):
     # Application marker.  Store these in the APP dictionary.
     # Also look for well-known application markers.
 
-    n = i16(self.fp.read(2))-2
+    n = i16(self.fp.read(2)) - 2
     s = ImageFile._safe_read(self.fp, n)
 
-    app = "APP%d" % (marker&15)
+    app = "APP%d" % (marker & 15)
 
-    self.app[app] = s # compatibility
+    self.app[app] = s  # compatibility
     self.applist.append((app, s))
 
     if marker == 0xFFE0 and s[:4] == "JFIF":
         # extract JFIF information
-        self.info["jfif"] = version = i16(s, 5) # version
+        self.info["jfif"] = version = i16(s, 5)  # version
         self.info["jfif_version"] = divmod(version, 256)
         # extract JFIF properties
         try:
@@ -81,10 +81,10 @@ def APP(self, marker):
             self.info["jfif_density"] = jfif_density
     elif marker == 0xFFE1 and s[:5] == "Exif\0":
         # extract Exif information (incomplete)
-        self.info["exif"] = s # FIXME: value will change
+        self.info["exif"] = s  # FIXME: value will change
     elif marker == 0xFFE2 and s[:5] == "FPXR\0":
         # extract FlashPix information (incomplete)
-        self.info["flashpix"] = s # FIXME: value will change
+        self.info["flashpix"] = s  # FIXME: value will change
     elif marker == 0xFFE2 and s[:12] == "ICC_PROFILE\0":
         # Since an ICC profile can be larger than the maximum size of
         # a JPEG marker (64K), we need provisions to split it into
@@ -112,10 +112,10 @@ def COM(self, marker):
     #
     # Comment marker.  Store these in the APP dictionary.
 
-    n = i16(self.fp.read(2))-2
+    n = i16(self.fp.read(2)) - 2
     s = ImageFile._safe_read(self.fp, n)
 
-    self.app["COM"] = s # compatibility
+    self.app["COM"] = s  # compatibility
     self.applist.append(("COM", s))
 
 def SOF(self, marker):
@@ -126,7 +126,7 @@ def SOF(self, marker):
     # mode.  Note that this could be made a bit brighter, by
     # looking for JFIF and Adobe APP markers.
 
-    n = i16(self.fp.read(2))-2
+    n = i16(self.fp.read(2)) - 2
     s = ImageFile._safe_read(self.fp, n)
     self.size = i16(s[3:]), i16(s[1:])
 
@@ -149,21 +149,21 @@ def SOF(self, marker):
 
     if self.icclist:
         # fixup icc profile
-        self.icclist.sort() # sort by sequence number
+        self.icclist.sort()  # sort by sequence number
         if ord(self.icclist[0][13]) == len(self.icclist):
             profile = []
             for p in self.icclist:
                 profile.append(p[14:])
             icc_profile = string.join(profile, "")
         else:
-            icc_profile = None # wrong number of fragments
+            icc_profile = None  # wrong number of fragments
         self.info["icc_profile"] = icc_profile
         self.icclist = None
 
     for i in range(6, len(s), 3):
-        t = s[i:i+3]
+        t = s[i:i + 3]
         # 4-tuples: id, vsamp, hsamp, qtable
-        self.layer.append((t[0], ord(t[1])/16, ord(t[1])&15, ord(t[2])))
+        self.layer.append((t[0], ord(t[1]) / 16, ord(t[1]) & 15, ord(t[2])))
 
 def DQT(self, marker):
     #
@@ -174,17 +174,17 @@ def DQT(self, marker):
     # FIXME: The quantization tables can be used to estimate the
     # compression quality.
 
-    n = i16(self.fp.read(2))-2
+    n = i16(self.fp.read(2)) - 2
     s = ImageFile._safe_read(self.fp, n)
     while len(s):
         if len(s) < 65:
             raise SyntaxError("bad quantization table marker")
         v = ord(s[0])
-        if v/16 == 0:
-            self.quantization[v&15] = array.array("b", s[1:65])
+        if v / 16 == 0:
+            self.quantization[v & 15] = array.array("b", s[1:65])
             s = s[65:]
         else:
-            return # FIXME: add code to read 16-bit tables!
+            return  # FIXME: add code to read 16-bit tables!
             # raise SyntaxError, "bad quantization table element size"
 
 
@@ -261,7 +261,7 @@ MARKER = {
 def _accept(prefix):
     return prefix[0] == "\377"
 
-##
+# #
 # Image plugin for JPEG and JFIF images.
 
 class JpegImageFile(ImageFile.ImageFile):
@@ -284,7 +284,7 @@ class JpegImageFile(ImageFile.ImageFile):
         self.huffman_dc = {}
         self.huffman_ac = {}
         self.quantization = {}
-        self.app = {} # compatibility
+        self.app = {}  # compatibility
         self.applist = []
         self.icclist = []
 
@@ -299,11 +299,11 @@ class JpegImageFile(ImageFile.ImageFile):
                 # print hex(i), name, description
                 if handler is not None:
                     handler(self, i)
-                if i == 0xFFDA: # start of scan
+                if i == 0xFFDA:  # start of scan
                     rawmode = self.mode
                     if self.mode == "CMYK":
-                        rawmode = "CMYK;I" # assume adobe conventions
-                    self.tile = [("jpeg", (0,0) + self.size, 0, (rawmode, ""))]
+                        rawmode = "CMYK;I"  # assume adobe conventions
+                    self.tile = [("jpeg", (0, 0) + self.size, 0, (rawmode, ""))]
                     # self.__offset = self.fp.tell()
                     break
                 s = self.fp.read(1)
@@ -330,8 +330,8 @@ class JpegImageFile(ImageFile.ImageFile):
             for s in [8, 4, 2, 1]:
                 if scale >= s:
                     break
-            e = e[0], e[1], (e[2]-e[0]+s-1)/s+e[0], (e[3]-e[1]+s-1)/s+e[1]
-            self.size = ((self.size[0]+s-1)/s, (self.size[1]+s-1)/s)
+            e = e[0], e[1], (e[2] - e[0] + s - 1) / s + e[0], (e[3] - e[1] + s - 1) / s + e[1]
+            self.size = ((self.size[0] + s - 1) / s, (self.size[1] + s - 1) / s)
             scale = s
 
         self.tile = [(d, e, o, a)]
@@ -413,7 +413,7 @@ RAWMODE = {
     "RGB": "RGB",
     "RGBA": "RGB",
     "RGBX": "RGB",
-    "CMYK": "CMYK;I", # assume adobe conventions
+    "CMYK": "CMYK;I",  # assume adobe conventions
     "YCbCr": "YCbCr",
 }
 
@@ -468,7 +468,7 @@ def _save(im, fp, filename):
         extra,
         )
 
-    ImageFile._save(im, fp, [("jpeg", (0,0)+im.size, 0, rawmode)])
+    ImageFile._save(im, fp, [("jpeg", (0, 0) + im.size, 0, rawmode)])
 
 def _save_cjpeg(im, fp, filename):
     # ALTERNATIVE: handle JPEGs via the IJG command line utilities.

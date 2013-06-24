@@ -116,7 +116,7 @@ class TagHeader(object):
         tag_size_bytes = f.read(4)
         if len(tag_size_bytes) != 4:
             return False
-        log.debug("TagHeader [size string]: 0x%02x%02x%02x%02x" %
+        log.debug("TagHeader [size string]: 0x%02x%02x%02x%02x" % 
                   (ord(tag_size_bytes[0]), ord(tag_size_bytes[1]),
                    ord(tag_size_bytes[2]), ord(tag_size_bytes[3])))
         self.tag_size = bin2dec(bytes2bin(tag_size_bytes, 7))
@@ -148,24 +148,24 @@ class TagHeader(object):
 
 class ExtendedTagHeader(object):
     RESTRICT_TAG_SZ_LARGE = 0x00
-    RESTRICT_TAG_SZ_MED   = 0x01
+    RESTRICT_TAG_SZ_MED = 0x01
     RESTRICT_TAG_SZ_SMALL = 0x02
-    RESTRICT_TAG_SZ_TINY  = 0x03
+    RESTRICT_TAG_SZ_TINY = 0x03
 
     RESTRICT_TEXT_ENC_NONE = 0x00
     RESTRICT_TEXT_ENC_UTF8 = 0x01
 
     RESTRICT_TEXT_LEN_NONE = 0x00
     RESTRICT_TEXT_LEN_1024 = 0x01
-    RESTRICT_TEXT_LEN_128  = 0x02
-    RESTRICT_TEXT_LEN_30   = 0x03
+    RESTRICT_TEXT_LEN_128 = 0x02
+    RESTRICT_TEXT_LEN_30 = 0x03
 
-    RESTRICT_IMG_ENC_NONE    = 0x00
+    RESTRICT_IMG_ENC_NONE = 0x00
     RESTRICT_IMG_ENC_PNG_JPG = 0x01
 
-    RESTRICT_IMG_SZ_NONE     = 0x00
-    RESTRICT_IMG_SZ_256      = 0x01
-    RESTRICT_IMG_SZ_64       = 0x02
+    RESTRICT_IMG_SZ_NONE = 0x00
+    RESTRICT_IMG_SZ_256 = 0x01
+    RESTRICT_IMG_SZ_64 = 0x02
     RESTRICT_IMG_SZ_64_EXACT = 0x03
 
     def __init__(self):
@@ -313,8 +313,8 @@ class ExtendedTagHeader(object):
         bites += chr((self.crc >> 28) & 0x7f)
         bites += chr((self.crc >> 21) & 0x7f)
         bites += chr((self.crc >> 14) & 0x7f)
-        bites += chr((self.crc >>  7) & 0x7f)
-        bites += chr((self.crc >>  0) & 0x7f)
+        bites += chr((self.crc >> 7) & 0x7f)
+        bites += chr((self.crc >> 0) & 0x7f)
         return bites
 
     def render(self, version, frame_data, padding=0):
@@ -331,7 +331,7 @@ class ExtendedTagHeader(object):
                 data += "\x05"
                 # XXX: Using the absolute value of the CRC. The spec is unclear
                 # about the type of this data.
-                self.crc = int(math.fabs(binascii.crc32(frame_data +
+                self.crc = int(math.fabs(binascii.crc32(frame_data + 
                                                         ("\x00" * padding))))
                 crc_data = self._syncsafeCRC()
                 if len(crc_data) < 5:
@@ -360,7 +360,7 @@ class ExtendedTagHeader(object):
                 f[0] = 1
                 # XXX: Using the absolute value of the CRC.  The spec is unclear
                 # about the type of this value.
-                self.crc = int(math.fabs(binascii.crc32(frame_data +
+                self.crc = int(math.fabs(binascii.crc32(frame_data + 
                                                         ("\x00" * padding))))
                 crc = bin2bytes(dec2bin(self.crc))
                 assert(len(crc) == 4)
@@ -398,7 +398,7 @@ class ExtendedTagHeader(object):
             # sync-safe
             sz = bin2dec(bytes2bin(data, 7))
             self.size = sz
-            log.debug("Extended header size (includes the 4 size bytes): %d" %
+            log.debug("Extended header size (includes the 4 size bytes): %d" % 
                       sz)
             data = fp.read(sz - 4)
 
@@ -435,12 +435,12 @@ class ExtendedTagHeader(object):
             # v2.3 is totally different... *sigh*
             sz = bin2dec(bytes2bin(data))
             self.size = sz
-            log.debug("Extended header size (not including 4 size bytes): %d" %
+            log.debug("Extended header size (not including 4 size bytes): %d" % 
                       sz)
             tmpFlags = fp.read(2)
             # Read the padding size, but it'll be computed during the parse.
             ps = fp.read(4)
-            log.debug("Extended header says there is %d bytes of padding" %
+            log.debug("Extended header says there is %d bytes of padding" % 
                       bin2dec(bytes2bin(ps)))
             # Make this look like a v2.4 mask.
             self._flags = ord(tmpFlags[0]) >> 2
@@ -456,14 +456,14 @@ class FrameHeader(object):
     # 2.4 not only added flag bits, but also reordered the previously defined
     # flags. So these are mapped once the ID3 version is known. Access through
     # 'self', always
-    TAG_ALTER   = None
-    FILE_ALTER  = None
-    READ_ONLY   = None
-    COMPRESSED  = None
-    ENCRYPTED   = None
-    GROUPED     = None
-    UNSYNC      = None
-    DATA_LEN    = None
+    TAG_ALTER = None
+    FILE_ALTER = None
+    READ_ONLY = None
+    COMPRESSED = None
+    ENCRYPTED = None
+    GROUPED = None
+    UNSYNC = None
+    DATA_LEN = None
 
     # Constructor.
     def __init__(self, fid, version):
@@ -475,9 +475,9 @@ class FrameHeader(object):
         self.size = 10 if self.minor_version != 2 else 6
 
         # The frame header itself...
-        self.id = fid           # First 4 bytes, frame ID
+        self.id = fid  # First 4 bytes, frame ID
         self._flags = [0] * 16  # 16 bits, represented here as a list
-        self.data_size = 0      # 4 bytes, size of frame data
+        self.data_size = 0  # 4 bytes, size of frame data
 
     def copyFlags(self, rhs):
         self.tag_alter = rhs._flags[rhs.TAG_ALTER]
@@ -565,27 +565,27 @@ class FrameHeader(object):
         if (major == 2 and minor in (3, 2)):
             # v2.2 does not contain flags, but set anyway, as long as the
             # values remain 0 all is good
-            self.TAG_ALTER  = 0
+            self.TAG_ALTER = 0
             self.FILE_ALTER = 1
-            self.READ_ONLY  = 2
+            self.READ_ONLY = 2
             self.COMPRESSED = 8
-            self.ENCRYPTED  = 9
-            self.GROUPED    = 10
+            self.ENCRYPTED = 9
+            self.GROUPED = 10
             # This is not in 2.3 frame header flags, map to unused
-            self.UNSYNC      = 14
+            self.UNSYNC = 14
             # This is not in 2.3 frame header flags, map to unused
-            self.DATA_LEN    = 4
+            self.DATA_LEN = 4
         elif ((major == 2 and minor == 4) or (major == 1 and minor in (0, 1))):
-            self.TAG_ALTER  = 1
+            self.TAG_ALTER = 1
             self.FILE_ALTER = 2
-            self.READ_ONLY  = 3
+            self.READ_ONLY = 3
             self.COMPRESSED = 12
-            self.ENCRYPTED  = 13
-            self.GROUPED    = 9
-            self.UNSYNC     = 14
-            self.DATA_LEN   = 15
+            self.ENCRYPTED = 13
+            self.GROUPED = 9
+            self.UNSYNC = 14
+            self.DATA_LEN = 15
         else:
-            raise ValueError("ID3 v" + str(major) + "." + str(minor) +\
+            raise ValueError("ID3 v" + str(major) + "." + str(minor) + \
                              " is not supported.")
 
     def render(self, data_size):
@@ -620,13 +620,13 @@ class FrameHeader(object):
             # encryption, compression, and unsynchronization.
             sz = f.read(3)
             frame_header.data_size = bin2dec(bytes2bin(sz, 8))
-            log.debug("FrameHeader [data size]: %d (0x%X)" %
+            log.debug("FrameHeader [data size]: %d (0x%X)" % 
                       (frame_header.data_size, frame_header.data_size))
             return frame_header
         elif frame_id == '\x00\x00\x00':
             log.debug("FrameHeader: Null frame id found at byte %d" % f.tell())
         else:
-            core.parseError(FrameException("FrameHeader: Illegal Frame ID: %s" %
+            core.parseError(FrameException("FrameHeader: Illegal Frame ID: %s" % 
                                            frame_id))
 
         return None
@@ -657,7 +657,7 @@ class FrameHeader(object):
                 frame_header.data_size = bin2dec(bytes2bin(sz, 8))
             else:
                 frame_header.data_size = bin2dec(bytes2bin(sz, 7))
-            log.debug("FrameHeader [data size]: %d (0x%X)" %
+            log.debug("FrameHeader [data size]: %d (0x%X)" % 
                       (frame_header.data_size, frame_header.data_size))
 
             # Frame flags.
@@ -665,7 +665,7 @@ class FrameHeader(object):
             frame_header._flags = bytes2bin(flags)
             if log.getEffectiveLevel() <= logging.DEBUG:
                 log.debug("FrameHeader [flags]: ta(%d) fa(%d) ro(%d) co(%d) "
-                          "en(%d) gr(%d) un(%d) dl(%d)" %
+                          "en(%d) gr(%d) un(%d) dl(%d)" % 
                           (frame_header.tag_alter,
                            frame_header.file_alter, frame_header.read_only,
                            frame_header.compressed, frame_header.encrypted,
@@ -680,7 +680,7 @@ class FrameHeader(object):
         elif frame_id == '\x00\x00\x00\x00':
             log.debug("FrameHeader: Null frame id found at byte %d" % f.tell())
         else:
-            core.parseError(FrameException("FrameHeader: Illegal Frame ID: %s" %
+            core.parseError(FrameException("FrameHeader: Illegal Frame ID: %s" % 
                                            frame_id))
 
         return None

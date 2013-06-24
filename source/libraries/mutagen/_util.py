@@ -159,7 +159,7 @@ class cdata(object):
     to_longlong_be = staticmethod(lambda data: struct.pack('>q', data))
     to_ulonglong_be = staticmethod(lambda data: struct.pack('>Q', data))
 
-    bitswap = ''.join([chr(sum([((val >> i) & 1) << (7-i) for i in range(8)]))
+    bitswap = ''.join([chr(sum([((val >> i) & 1) << (7 - i) for i in range(8)]))
                        for val in range(256)])
     del(i)
     del(val)
@@ -201,7 +201,7 @@ def unlock(fileobj):
     import fcntl
     fcntl.lockf(fileobj, fcntl.LOCK_UN)
 
-def insert_bytes(fobj, size, offset, BUFFER_SIZE=2**16):
+def insert_bytes(fobj, size, offset, BUFFER_SIZE=2 ** 16):
     """Insert size bytes of empty space starting at offset.
 
     fobj must be an open file object, open rb+ or
@@ -259,7 +259,7 @@ def insert_bytes(fobj, size, offset, BUFFER_SIZE=2**16):
         if locked:
             unlock(fobj)
 
-def delete_bytes(fobj, size, offset, BUFFER_SIZE=2**16):
+def delete_bytes(fobj, size, offset, BUFFER_SIZE=2 ** 16):
     """Delete size bytes of empty space starting at offset.
 
     fobj must be an open file object, open rb+ or

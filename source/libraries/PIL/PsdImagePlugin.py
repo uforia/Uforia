@@ -28,8 +28,8 @@ MODES = {
     (2, 8): ("P", 1),
     (3, 8): ("RGB", 3),
     (4, 8): ("CMYK", 4),
-    (7, 8): ("L", 1), # FIXME: multilayer
-    (8, 8): ("L", 1), # duotone
+    (7, 8): ("L", 1),  # FIXME: multilayer
+    (8, 8): ("L", 1),  # duotone
     (9, 8): ("LAB", 3)
 }
 
@@ -37,10 +37,10 @@ MODES = {
 # helpers
 
 def i16(c):
-    return ord(c[1]) + (ord(c[0])<<8)
+    return ord(c[1]) + (ord(c[0]) << 8)
 
 def i32(c):
-    return ord(c[3]) + (ord(c[2])<<8) + (ord(c[1])<<16) + (ord(c[0])<<24)
+    return ord(c[3]) + (ord(c[2]) << 8) + (ord(c[1]) << 16) + (ord(c[0]) << 24)
 
 # --------------------------------------------------------------------.
 # read PSD images
@@ -48,7 +48,7 @@ def i32(c):
 def _accept(prefix):
     return prefix[:4] == "8BPS"
 
-##
+# #
 # Image plugin for Photoshop images.
 
 class PsdImageFile(ImageFile.ImageFile):
@@ -102,12 +102,12 @@ class PsdImageFile(ImageFile.ImageFile):
                 id = i16(read(2))
                 name = read(ord(read(1)))
                 if not (len(name) & 1):
-                    read(1) # padding
+                    read(1)  # padding
                 data = read(i32(read(4)))
                 if (len(data) & 1):
-                    read(1) # padding
+                    read(1)  # padding
                 self.resources.append((id, name, data))
-                if id == 1039: # ICC profile
+                if id == 1039:  # ICC profile
                     self.info["icc_profile"] = data
 
         #
@@ -139,7 +139,7 @@ class PsdImageFile(ImageFile.ImageFile):
         try:
             if layer <= 0:
                 raise IndexError
-            name, mode, bbox, tile = self.layers[layer-1]
+            name, mode, bbox, tile = self.layers[layer - 1]
             self.mode = mode
             self.tile = tile
             self.frame = layer
@@ -200,7 +200,7 @@ def _layerinfo(file):
         elif mode == ["A", "B", "G", "R"]:
             mode = "RGBA"
         else:
-            mode = None # unknown
+            mode = None  # unknown
 
         # skip over blend flags and extra information
         filler = read(12)
@@ -262,7 +262,7 @@ def _maketile(file, mode, bbox, channels):
             if mode == "CMYK":
                 layer = layer + ";I"
             tile.append(("raw", bbox, offset, layer))
-            offset = offset + xsize*ysize
+            offset = offset + xsize * ysize
 
     elif compression == 1:
         #
@@ -279,13 +279,13 @@ def _maketile(file, mode, bbox, channels):
                 ("packbits", bbox, offset, layer)
                 )
             for y in range(ysize):
-                offset = offset + i16(bytecount[i:i+2])
+                offset = offset + i16(bytecount[i:i + 2])
                 i = i + 2
 
     file.seek(offset)
 
     if offset & 1:
-        read(1) # padding
+        read(1)  # padding
 
     return tile
 

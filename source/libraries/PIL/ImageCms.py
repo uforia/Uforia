@@ -102,22 +102,22 @@ DIRECTION_PROOF = 2
 FLAGS = {
     "MATRIXINPUT": 1,
     "MATRIXOUTPUT": 2,
-    "MATRIXONLY": (1|2),
-    "NOWHITEONWHITEFIXUP": 4, # Don't hot fix scum dot
-    "NOPRELINEARIZATION": 16, # Don't create prelinearization tables on precalculated transforms (internal use)
-    "GUESSDEVICECLASS": 32, # Guess device class (for transform2devicelink)
-    "NOTCACHE": 64, # Inhibit 1-pixel cache
+    "MATRIXONLY": (1 | 2),
+    "NOWHITEONWHITEFIXUP": 4,  # Don't hot fix scum dot
+    "NOPRELINEARIZATION": 16,  # Don't create prelinearization tables on precalculated transforms (internal use)
+    "GUESSDEVICECLASS": 32,  # Guess device class (for transform2devicelink)
+    "NOTCACHE": 64,  # Inhibit 1-pixel cache
     "NOTPRECALC": 256,
-    "NULLTRANSFORM": 512, # Don't transform anyway
-    "HIGHRESPRECALC": 1024, # Use more memory to give better accurancy
-    "LOWRESPRECALC": 2048, # Use less memory to minimize resouces
+    "NULLTRANSFORM": 512,  # Don't transform anyway
+    "HIGHRESPRECALC": 1024,  # Use more memory to give better accurancy
+    "LOWRESPRECALC": 2048,  # Use less memory to minimize resouces
     "WHITEBLACKCOMPENSATION": 8192,
     "BLACKPOINTCOMPENSATION": 8192,
-    "GAMUTCHECK": 4096, # Out of Gamut alarm
-    "SOFTPROOFING": 16384, # Do softproofing
-    "PRESERVEBLACK": 32768, # Black preservation
-    "NODEFAULTRESOURCEDEF": 16777216, # CRD special
-    "GRIDPOINTS": lambda n: ((n) & 0xFF) << 16 # Gridpoints
+    "GAMUTCHECK": 4096,  # Out of Gamut alarm
+    "SOFTPROOFING": 16384,  # Do softproofing
+    "PRESERVEBLACK": 32768,  # Black preservation
+    "NODEFAULTRESOURCEDEF": 16777216,  # CRD special
+    "GRIDPOINTS": lambda n: ((n) & 0xFF) << 16  # Gridpoints
 }
 
 _MAX_FLAG = 0
@@ -129,7 +129,7 @@ for flag in FLAGS.values():
 # Experimental PIL-level API
 # --------------------------------------------------------------------.
 
-##
+# #
 # Profile.
 
 class ImageCmsProfile:
@@ -142,7 +142,7 @@ class ImageCmsProfile:
         elif hasattr(profile, "read"):
             self._set(core.profile_fromstring(profile.read()))
         else:
-            self._set(profile) # assume it's already a profile
+            self._set(profile)  # assume it's already a profile
 
     def _set(self, profile, filename=None):
         self.profile = profile
@@ -154,7 +154,7 @@ class ImageCmsProfile:
             self.product_name = None
             self.product_info = None
 
-##
+# #
 # Transform.  This can be used with the procedural API, or with the
 # standard {@link Image.point} method.
 
@@ -194,11 +194,11 @@ class ImageCmsTransform(Image.ImagePointHandler):
     def apply_in_place(self, im):
         im.load()
         if im.mode != self.output_mode:
-            raise ValueError("mode mismatch") # wrong output mode
+            raise ValueError("mode mismatch")  # wrong output mode
         result = self.transform.apply(im.im.id, im.im.id)
         return im
 
-##
+# #
 # (experimental) Fetches the profile for the current display device.
 # Returns None if the profile is not known.
 
@@ -223,13 +223,13 @@ def get_display_profile(handle=None):
 # pyCMS compatible layer
 # --------------------------------------------------------------------.
 
-##
+# #
 # (pyCMS) Exception class.  This is used for all errors in the pyCMS API.
 
 class PyCMSError(Exception):
     pass
 
-##
+# #
 # (pyCMS) Applies an ICC transformation to a given image, mapping from
 # inputProfile to outputProfile.
 
@@ -288,7 +288,7 @@ def profileToProfile(im, inputProfile, outputProfile, renderingIntent=INTENT_PER
     if outputMode is None:
         outputMode = im.mode
 
-    if type(renderingIntent) != type(1) or not (0 <= renderingIntent <=3):
+    if type(renderingIntent) != type(1) or not (0 <= renderingIntent <= 3):
         raise PyCMSError("renderingIntent must be an integer between 0 and 3")
 
     if type(flags) != type(1) or not (0 <= flags <= _MAX_FLAG):
@@ -312,7 +312,7 @@ def profileToProfile(im, inputProfile, outputProfile, renderingIntent=INTENT_PER
 
     return imOut
 
-##
+# #
 # (pyCMS) Opens an ICC profile file.
 
 def getOpenProfile(profileFilename):
@@ -337,7 +337,7 @@ def getOpenProfile(profileFilename):
     except (IOError, TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Builds an ICC transform mapping from the inputProfile to the
 # outputProfile.  Use applyTransform to apply the transform to a given
 # image.
@@ -396,7 +396,7 @@ def buildTransform(inputProfile, outputProfile, inMode, outMode, renderingIntent
 
     """
 
-    if type(renderingIntent) != type(1) or not (0 <= renderingIntent <=3):
+    if type(renderingIntent) != type(1) or not (0 <= renderingIntent <= 3):
         raise PyCMSError("renderingIntent must be an integer between 0 and 3")
 
     if type(flags) != type(1) or not (0 <= flags <= _MAX_FLAG):
@@ -411,7 +411,7 @@ def buildTransform(inputProfile, outputProfile, inMode, outMode, renderingIntent
     except (IOError, TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Builds an ICC transform mapping from the inputProfile to the
 # outputProfile, but tries to simulate the result that would be
 # obtained on the proofProfile device.
@@ -487,7 +487,7 @@ def buildProofTransform(inputProfile, outputProfile, proofProfile, inMode, outMo
 
     """
 
-    if type(renderingIntent) != type(1) or not (0 <= renderingIntent <=3):
+    if type(renderingIntent) != type(1) or not (0 <= renderingIntent <= 3):
         raise PyCMSError("renderingIntent must be an integer between 0 and 3")
 
     if type(flags) != type(1) or not (0 <= flags <= _MAX_FLAG):
@@ -507,7 +507,7 @@ def buildProofTransform(inputProfile, outputProfile, proofProfile, inMode, outMo
 buildTransformFromOpenProfiles = buildTransform
 buildProofTransformFromOpenProfiles = buildProofTransform
 
-##
+# #
 # (pyCMS) Applies a transform to a given image.
 
 def applyTransform(im, transform, inPlace=0):
@@ -562,10 +562,10 @@ def applyTransform(im, transform, inPlace=0):
 
     return imOut
 
-##
+# #
 # (pyCMS) Creates a profile.
 
-def createProfile(colorSpace, colorTemp=-1):
+def createProfile(colorSpace, colorTemp= -1):
     """
     ImageCms.createProfile(colorSpace, [colorTemp])
 
@@ -605,7 +605,7 @@ def createProfile(colorSpace, colorTemp=-1):
     except (TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Gets the internal product name for the given profile.
 
 def getProfileName(profile):
@@ -636,7 +636,7 @@ def getProfileName(profile):
     except (AttributeError, IOError, TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Gets the internal product information for the given profile.
 
 def getProfileInfo(profile):
@@ -668,7 +668,7 @@ def getProfileInfo(profile):
     except (AttributeError, IOError, TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Gets the default intent name for the given profile.
 
 def getDefaultIntent(profile):
@@ -706,7 +706,7 @@ def getDefaultIntent(profile):
     except (AttributeError, IOError, TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Checks if a given intent is supported.
 
 def isIntentSupported(profile, intent, direction):
@@ -755,7 +755,7 @@ def isIntentSupported(profile, intent, direction):
     except (AttributeError, IOError, TypeError, ValueError), v:
         raise PyCMSError(v)
 
-##
+# #
 # (pyCMS) Fetches versions.
 
 def versions():
@@ -775,10 +775,10 @@ if __name__ == "__main__":
 
     for f in dir(pyCMS):
         print "="*80
-        print "%s" %f
+        print "%s" % f
 
         try:
-            exec ("doc = ImageCms.%s.__doc__" %(f))
+            exec ("doc = ImageCms.%s.__doc__" % (f))
             if string.find(doc, "pyCMS") >= 0:
                 # so we don't get the __doc__ string for imported modules
                 print doc

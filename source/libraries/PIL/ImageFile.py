@@ -32,14 +32,14 @@ import traceback, string, os
 
 MAXBLOCK = 65536
 
-SAFEBLOCK = 1024*1024
+SAFEBLOCK = 1024 * 1024
 
 ERRORS = {
-    -1: "image buffer overrun error",
-    -2: "decoding error",
-    -3: "unknown error",
-    -8: "bad configuration",
-    -9: "out of memory error"
+    - 1: "image buffer overrun error",
+    - 2: "decoding error",
+    - 3: "unknown error",
+    - 8: "bad configuration",
+    - 9: "out of memory error"
 }
 
 def raise_ioerror(error):
@@ -63,7 +63,7 @@ def _tilesort(t1, t2):
 # --------------------------------------------------------------------
 # ImageFile base class
 
-##
+# #
 # Base class for image file handlers.
 
 class ImageFile(Image.Image):
@@ -73,7 +73,7 @@ class ImageFile(Image.Image):
         Image.Image.__init__(self)
 
         self.tile = None
-        self.readonly = 1 # until we know better
+        self.readonly = 1  # until we know better
 
         self.decoderconfig = ()
         self.decodermaxblock = MAXBLOCK
@@ -89,19 +89,19 @@ class ImageFile(Image.Image):
 
         try:
             self._open()
-        except IndexError, v: # end of data
+        except IndexError, v:  # end of data
             if Image.DEBUG > 1:
                 traceback.print_exc()
             raise SyntaxError, v
-        except TypeError, v: # end of data (ord)
+        except TypeError, v:  # end of data (ord)
             if Image.DEBUG > 1:
                 traceback.print_exc()
             raise SyntaxError, v
-        except KeyError, v: # unsupported mode
+        except KeyError, v:  # unsupported mode
             if Image.DEBUG > 1:
                 traceback.print_exc()
             raise SyntaxError, v
-        except EOFError, v: # got header but not the first frame
+        except EOFError, v:  # got header but not the first frame
             if Image.DEBUG > 1:
                 traceback.print_exc()
             raise SyntaxError, v
@@ -209,7 +209,7 @@ class ImageFile(Image.Image):
         self.tile = []
         self.readonly = readonly
 
-        self.fp = None # might be shared
+        self.fp = None  # might be shared
 
         if not self.map and e < 0:
             raise_ioerror(e)
@@ -245,7 +245,7 @@ class ImageFile(Image.Image):
     # def load_read(self, bytes):
     #     pass
 
-##
+# #
 # Base class for stub image loaders.
 # <p>
 # A stub loader is an image loader that can identify files of a
@@ -269,7 +269,7 @@ class StubImageFile(ImageFile):
         self.__class__ = image.__class__
         self.__dict__ = image.__dict__
 
-    ##
+    # #
     # (Hook) Find actual image loader.
 
     def _load(self):
@@ -277,7 +277,7 @@ class StubImageFile(ImageFile):
             "StubImageFile subclass must implement _load"
             )
 
-##
+# #
 # (Internal) Support class for the <b>Parser</b> file.
 
 class _ParserFile:
@@ -305,7 +305,7 @@ class _ParserFile:
     def read(self, bytes=0):
         pos = self.offset
         if bytes:
-            data = self.data[pos:pos+bytes]
+            data = self.data[pos:pos + bytes]
         else:
             data = self.data[pos:]
         self.offset = pos + len(data)
@@ -323,7 +323,7 @@ class _ParserFile:
                 break
         return s
 
-##
+# #
 # Incremental image parser.  This class implements the standard
 # feed/close consumer interface.
 
@@ -335,7 +335,7 @@ class Parser:
     decoder = None
     finished = 0
 
-    ##
+    # #
     # (Consumer) Reset the parser.  Note that you can only call this
     # method immediately after you've created a parser; parser
     # instances cannot be reused.
@@ -343,7 +343,7 @@ class Parser:
     def reset(self):
         assert self.data is None, "cannot reuse parsers"
 
-    ##
+    # #
     # (Consumer) Feed data to the parser.
     #
     # @param data A string buffer.
@@ -401,9 +401,9 @@ class Parser:
                     fp = _ParserFile(self.data)
                     im = Image.open(fp)
                 finally:
-                    fp.close() # explicitly close the virtual file
+                    fp.close()  # explicitly close the virtual file
             except IOError:
-                pass # not enough data
+                pass  # not enough data
             else:
                 flag = hasattr(im, "load_seek") or hasattr(im, "load_read")
                 if flag or len(im.tile) != 1:
@@ -427,7 +427,7 @@ class Parser:
 
                 self.image = im
 
-    ##
+    # #
     # (Consumer) Close the stream.
     #
     # @return An image object.
@@ -451,12 +451,12 @@ class Parser:
                 self.image = Image.open(fp)
             finally:
                 self.image.load()
-                fp.close() # explicitly close the virtual file
+                fp.close()  # explicitly close the virtual file
         return self.image
 
 # --------------------------------------------------------------------
 
-##
+# #
 # (Helper) Save image body to file.
 #
 # @param im Image object.
@@ -471,7 +471,7 @@ def _save(im, fp, tile):
         im.encoderconfig = ()
     tile.sort(_tilesort)
     # FIXME: make MAXBLOCK a configuration parameter
-    bufsize = max(MAXBLOCK, im.size[0] * 4) # see RawEncode.c
+    bufsize = max(MAXBLOCK, im.size[0] * 4)  # see RawEncode.c
     try:
         fh = fp.fileno()
         fp.flush()
@@ -504,7 +504,7 @@ def _save(im, fp, tile):
     except: pass
 
 
-##
+# #
 # Reads large blocks in a safe way.  Unlike fp.read(n), this function
 # doesn't trust the user.  If the requested size is larger than
 # SAFEBLOCK, the file is read block by block.

@@ -39,9 +39,9 @@ import Image, ImageFile, ImagePalette, zlib
 
 
 def i16(c):
-    return ord(c[1]) + (ord(c[0])<<8)
+    return ord(c[1]) + (ord(c[0]) << 8)
 def i32(c):
-    return ord(c[3]) + (ord(c[2])<<8) + (ord(c[1])<<16) + (ord(c[0])<<24)
+    return ord(c[3]) + (ord(c[2]) << 8) + (ord(c[1]) << 16) + (ord(c[0]) << 24)
 
 is_cid = re.compile("\w\w\w\w").match
 
@@ -55,17 +55,17 @@ _MODES = {
     (2, 0): ("L", "L;2"),
     (4, 0): ("L", "L;4"),
     (8, 0): ("L", "L"),
-    (16,0): ("I", "I;16B"),
+    (16, 0): ("I", "I;16B"),
     (8, 2): ("RGB", "RGB"),
-    (16,2): ("RGB", "RGB;16B"),
+    (16, 2): ("RGB", "RGB;16B"),
     (1, 3): ("P", "P;1"),
     (2, 3): ("P", "P;2"),
     (4, 3): ("P", "P;4"),
     (8, 3): ("P", "P"),
     (8, 4): ("LA", "LA"),
-    (16,4): ("RGBA", "LA;16B"), # LA;16B->LA not yet available
+    (16, 4): ("RGBA", "LA;16B"),  # LA;16B->LA not yet available
     (8, 6): ("RGBA", "RGBA"),
-    (16,6): ("RGBA", "RGBA;16B"),
+    (16, 6): ("RGBA", "RGBA;16B"),
 }
 
 
@@ -128,7 +128,7 @@ class ChunkStream:
 
         self.fp.read(4)
 
-    def verify(self, endchunk = "IEND"):
+    def verify(self, endchunk="IEND"):
 
         # Simple approach; just calculate checksum for all remaining
         # blocks.  Must be called directly after open.
@@ -175,7 +175,7 @@ class PngStream(ChunkStream):
         # local copies of Image attributes
         self.im_info = {}
         self.im_text = {}
-        self.im_size = (0,0)
+        self.im_size = (0, 0)
         self.im_mode = None
         self.im_tile = None
         self.im_palette = None
@@ -197,9 +197,9 @@ class PngStream(ChunkStream):
         if comp_method != 0:
             raise SyntaxError("Unknown compression method %s in iCCP chunk" % comp_method)
         try:
-            icc_profile = zlib.decompress(s[i+2:])
+            icc_profile = zlib.decompress(s[i + 2:])
         except zlib.error:
-            icc_profile = None # FIXME
+            icc_profile = None  # FIXME
         self.im_info["icc_profile"] = icc_profile
         return s
 
@@ -221,7 +221,7 @@ class PngStream(ChunkStream):
     def chunk_IDAT(self, pos, len):
 
         # image data
-        self.im_tile = [("zip", (0,0)+self.im_size, pos, self.im_rawmode)]
+        self.im_tile = [("zip", (0, 0) + self.im_size, pos, self.im_rawmode)]
         self.im_idat = len
         raise EOFError
 
@@ -265,7 +265,7 @@ class PngStream(ChunkStream):
         s = ImageFile._safe_read(self.fp, len)
         px, py = i32(s), i32(s[4:])
         unit = ord(s[8])
-        if unit == 1: # meter
+        if unit == 1:  # meter
             dpi = int(px * 0.0254 + 0.5), int(py * 0.0254 + 0.5)
             self.im_info["dpi"] = dpi
         elif unit == 0:
@@ -279,7 +279,7 @@ class PngStream(ChunkStream):
         try:
             k, v = string.split(s, "\0", 1)
         except ValueError:
-            k = s; v = "" # fallback for broken tEXt tags
+            k = s; v = ""  # fallback for broken tEXt tags
         if k:
             self.im_info[k] = self.im_text[k] = v
         return s
@@ -302,7 +302,7 @@ class PngStream(ChunkStream):
 def _accept(prefix):
     return prefix[:8] == _MAGIC
 
-##
+# #
 # Image plugin for PNG images.
 
 class PngImageFile(ImageFile.ImageFile):
@@ -348,14 +348,14 @@ class PngImageFile(ImageFile.ImageFile):
         self.mode = self.png.im_mode
         self.size = self.png.im_size
         self.info = self.png.im_info
-        self.text = self.png.im_text # experimental
+        self.text = self.png.im_text  # experimental
         self.tile = self.png.im_tile
 
         if self.png.im_palette:
             rawmode, data = self.png.im_palette
             self.palette = ImagePalette.raw(rawmode, data)
 
-        self.__idat = len # used by load_read()
+        self.__idat = len  # used by load_read()
 
 
     def verify(self):
@@ -386,7 +386,7 @@ class PngImageFile(ImageFile.ImageFile):
         while self.__idat == 0:
             # end of chunk, skip forward to next one
 
-            self.fp.read(4) # CRC
+            self.fp.read(4)  # CRC
 
             cid, pos, len = self.png.read()
 
@@ -394,7 +394,7 @@ class PngImageFile(ImageFile.ImageFile):
                 self.png.push(cid, pos, len)
                 return ""
 
-            self.__idat = len # empty chunks are allowed
+            self.__idat = len  # empty chunks are allowed
 
         # read more data from this chunk
         if bytes <= 0:
@@ -418,26 +418,26 @@ class PngImageFile(ImageFile.ImageFile):
 # PNG writer
 
 def o16(i):
-    return chr(i>>8&255) + chr(i&255)
+    return chr(i >> 8 & 255) + chr(i & 255)
 
 def o32(i):
-    return chr(i>>24&255) + chr(i>>16&255) + chr(i>>8&255) + chr(i&255)
+    return chr(i >> 24 & 255) + chr(i >> 16 & 255) + chr(i >> 8 & 255) + chr(i & 255)
 
 _OUTMODES = {
     # supported PIL modes, and corresponding rawmodes/bits/color combinations
-    "1":   ("1", chr(1)+chr(0)),
-    "L;1": ("L;1", chr(1)+chr(0)),
-    "L;2": ("L;2", chr(2)+chr(0)),
-    "L;4": ("L;4", chr(4)+chr(0)),
-    "L":   ("L", chr(8)+chr(0)),
-    "LA":  ("LA", chr(8)+chr(4)),
-    "I":   ("I;16B", chr(16)+chr(0)),
-    "P;1": ("P;1", chr(1)+chr(3)),
-    "P;2": ("P;2", chr(2)+chr(3)),
-    "P;4": ("P;4", chr(4)+chr(3)),
-    "P":   ("P", chr(8)+chr(3)),
-    "RGB": ("RGB", chr(8)+chr(2)),
-    "RGBA":("RGBA", chr(8)+chr(6)),
+    "1":   ("1", chr(1) + chr(0)),
+    "L;1": ("L;1", chr(1) + chr(0)),
+    "L;2": ("L;2", chr(2) + chr(0)),
+    "L;4": ("L;4", chr(4) + chr(0)),
+    "L":   ("L", chr(8) + chr(0)),
+    "LA":  ("LA", chr(8) + chr(4)),
+    "I":   ("I;16B", chr(16) + chr(0)),
+    "P;1": ("P;1", chr(1) + chr(3)),
+    "P;2": ("P;2", chr(2) + chr(3)),
+    "P;4": ("P;4", chr(4) + chr(3)),
+    "P":   ("P", chr(8) + chr(3)),
+    "RGB": ("RGB", chr(8) + chr(2)),
+    "RGBA":("RGBA", chr(8) + chr(6)),
 }
 
 def putchunk(fp, cid, *data):
@@ -477,7 +477,7 @@ def _save(im, fp, filename, chunk=putchunk, check=0):
         else:
 
             # check palette contents
-            n = 256 # FIXME
+            n = 256  # FIXME
 
         if n <= 2:
             bits = 1
@@ -514,11 +514,11 @@ def _save(im, fp, filename, chunk=putchunk, check=0):
     fp.write(_MAGIC)
 
     chunk(fp, "IHDR",
-          o32(im.size[0]), o32(im.size[1]),     #  0: size
-          mode,                                 #  8: depth/type
-          chr(0),                               # 10: compression
-          chr(0),                               # 11: filter category
-          chr(0))                               # 12: interlace flag
+          o32(im.size[0]), o32(im.size[1]),  #  0: size
+          mode,  #  8: depth/type
+          chr(0),  # 10: compression
+          chr(0),  # 11: filter category
+          chr(0))  # 12: interlace flag
 
     if im.mode == "P":
         chunk(fp, "PLTE", im.im.getpalette("RGB"))
@@ -569,7 +569,7 @@ def _save(im, fp, filename, chunk=putchunk, check=0):
         data = name + "\0\0" + zlib.compress(im.info["icc_profile"])
         chunk(fp, "iCCP", data)
 
-    ImageFile._save(im, _idat(fp, chunk), [("zip", (0,0)+im.size, 0, rawmode)])
+    ImageFile._save(im, _idat(fp, chunk), [("zip", (0, 0) + im.size, 0, rawmode)])
 
     chunk(fp, "IEND", "")
 

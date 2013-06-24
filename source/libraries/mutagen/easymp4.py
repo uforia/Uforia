@@ -81,7 +81,7 @@ class EasyMP4Tags(DictMixin, Metadata):
         cls.RegisterKey(key, getter, setter, deleter)
     RegisterTextKey = classmethod(RegisterTextKey)
 
-    def RegisterIntKey(cls, key, atomid, min_value=0, max_value=2**16-1):
+    def RegisterIntKey(cls, key, atomid, min_value=0, max_value=2 ** 16 - 1):
         """Register a scalar integer key.
         """
 
@@ -98,7 +98,7 @@ class EasyMP4Tags(DictMixin, Metadata):
         cls.RegisterKey(key, getter, setter, deleter)
     RegisterIntKey = classmethod(RegisterIntKey)
 
-    def RegisterIntPairKey(cls, key, atomid, min_value=0, max_value=2**16-1):
+    def RegisterIntPairKey(cls, key, atomid, min_value=0, max_value=2 ** 16 - 1):
         def getter(tags, key):
             ret = []
             for (track, total) in tags[atomid]:

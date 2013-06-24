@@ -18,7 +18,7 @@
 import EpsImagePlugin
 import string
 
-##
+# #
 # Simple Postscript graphics interface.
 
 class PSDraw:
@@ -29,7 +29,7 @@ class PSDraw:
             fp = sys.stdout
         self.fp = fp
 
-    def begin_document(self, id = None):
+    def begin_document(self, id=None):
         "Write Postscript DSC header"
         # FIXME: incomplete
         self.fp.write("%!PS-Adobe-3.0\n"
@@ -37,7 +37,7 @@ class PSDraw:
                       "/showpage { } def\n"
                       "%%EndComments\n"
                       "%%BeginDocument\n")
-        #self.fp.write(ERROR_PS) # debugging!
+        # self.fp.write(ERROR_PS) # debugging!
         self.fp.write(EDROFF_PS)
         self.fp.write(VDI_PS)
         self.fp.write("%%EndProlog\n")
@@ -54,7 +54,7 @@ class PSDraw:
     def setfont(self, font, size):
         if not self.isofont.has_key(font):
             # reencode font
-            self.fp.write("/PSDraw-%s ISOLatin1Encoding /%s E\n" %\
+            self.fp.write("/PSDraw-%s ISOLatin1Encoding /%s E\n" % \
                           (font, font))
             self.isofont[font] = 1
         # rough
@@ -76,14 +76,14 @@ class PSDraw:
         xy = xy + (text,)
         self.fp.write("%d %d M (%s) S\n" % xy)
 
-    def image(self, box, im, dpi = None):
+    def image(self, box, im, dpi=None):
         "Write an PIL image"
         # default resolution depends on mode
         if not dpi:
             if im.mode == "1":
-                dpi = 200 # fax
+                dpi = 200  # fax
             else:
-                dpi = 100 # greyscale
+                dpi = 100  # greyscale
         # image size (on paper)
         x = float(im.size[0] * 72) / dpi
         y = float(im.size[1] * 72) / dpi

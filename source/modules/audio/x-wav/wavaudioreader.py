@@ -1,29 +1,38 @@
-'''
-Created on 21 feb. 2013
+# Copyright (C) 2013 Hogeschool van Amsterdam
 
-@author: Jimmy van den Berg
-'''
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 # This is the audio module for wav files
 
-#TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:BLOB
+# TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
 import wave
 
-def process(fullpath, config, columns=None):
-    try:
-        #open the wave file
-        waveFile = wave.open(fullpath, "rb")
 
-        #fill variables from the wave file, (nchannels, sampwidth, framerate, nframes, comptype, compname)
-        assorted = list(waveFile.getparams())
+def process(fullpath, config, rcontext, columns=None):
+    try:
+        # open the wave file
+        wave_file = wave.open(fullpath, "rb")
+
+        # fill variables from the wave file, (nchannels, sampwidth,
+        # framerate, nframes, comptype, compname)
+        assorted = list(wave_file.getparams())
 
         # duration of the wave file is amount of frames divided by framerate
-        assorted.append(waveFile.getnframes() / float(waveFile.getframerate()))
+        assorted.append(wave_file.getnframes() / float(wave_file.getframerate()))
 
         # close the wavefile first before opening using the XMP toolkit
-        waveFile.close()
+        wave_file.close()
 
         # Store the embedded XMP metadata
         if config.ENABLEXMP:
@@ -48,6 +57,6 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
         return None

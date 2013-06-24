@@ -46,7 +46,7 @@ class OptimFROGInfo(object):
         total_samples += total_samples_high << 32
         self.channels += 1
         if self.sample_rate:
-            self.length = float(total_samples) / (self.channels *
+            self.length = float(total_samples) / (self.channels * 
                                                   self.sample_rate)
         else:
             self.length = 0.0
@@ -60,6 +60,6 @@ class OptimFROG(APEv2File):
 
     def score(filename, fileobj, header):
         filename = filename.lower()
-        return (header.startswith("OFR") + filename.endswith(".ofr") +
+        return (header.startswith("OFR") + filename.endswith(".ofr") + 
                 filename.endswith(".ofs"))
     score = staticmethod(score)

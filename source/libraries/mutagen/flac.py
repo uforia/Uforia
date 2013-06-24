@@ -50,10 +50,10 @@ class StrictFileObject(object):
             if hasattr(fileobj, m):
                 setattr(self, m, getattr(fileobj, m))
 
-    def read(self, size=-1):
+    def read(self, size= -1):
         data = self._fileobj.read(size)
         if size >= 0 and len(data) != size:
-            raise error("file said %d bytes, read %d bytes" %(
+            raise error("file said %d bytes, read %d bytes" % (
                         size, len(data)))
         return data
 
@@ -95,7 +95,7 @@ class MetadataBlock(object):
         codes[-1][0] |= 128
         for code, datum in codes:
             byte = chr(code)
-            if len(datum) > 2**24:
+            if len(datum) > 2 ** 24:
                 raise error("block is too long to write")
             length = struct.pack(">I", len(datum))[-3:]
             data.append(byte + length + datum)
@@ -188,7 +188,7 @@ class StreamInfo(MetadataBlock):
         byte += ((self.bits_per_sample - 1) >> 4) & 1
         f.write(chr(byte))
         # 4 bits of bps, 4 of sample count
-        byte = ((self.bits_per_sample - 1) & 0xF)  << 4
+        byte = ((self.bits_per_sample - 1) & 0xF) << 4
         byte += (self.total_samples >> 32) & 0xF
         f.write(chr(byte))
         # last 32 of sample count
@@ -555,7 +555,7 @@ class FLAC(FileType):
     """Known metadata block types, indexed by ID."""
 
     def score(filename, fileobj, header):
-        return (header.startswith("fLaC") +
+        return (header.startswith("fLaC") + 
                 filename.lower().endswith(".flac") * 3)
     score = staticmethod(score)
 
@@ -679,7 +679,7 @@ class FLAC(FileType):
             MetadataBlock.group_padding(self.metadata_blocks)
 
             header = self.__check_header(f)
-            available = self.__find_audio_offset(f) - header # "fLaC" and maybe ID3
+            available = self.__find_audio_offset(f) - header  # "fLaC" and maybe ID3
             data = MetadataBlock.writeblocks(self.metadata_blocks)
 
             # Delete ID3v2

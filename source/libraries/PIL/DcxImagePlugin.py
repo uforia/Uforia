@@ -27,15 +27,15 @@ import Image
 
 from PcxImagePlugin import PcxImageFile
 
-MAGIC = 0x3ADE68B1 # QUIZ: what's this value, then?
+MAGIC = 0x3ADE68B1  # QUIZ: what's this value, then?
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
 def _accept(prefix):
     return i32(prefix) == MAGIC
 
-##
+# #
 # Image plugin for the Intel DCX format.
 
 class DcxImageFile(PcxImageFile):

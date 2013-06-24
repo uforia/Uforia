@@ -20,13 +20,13 @@
 import Image
 import operator
 
-##
+# #
 # (New in 1.1.3) The <b>ImageOps</b> module contains a number of
 # 'ready-made' image processing operations.  This module is somewhat
 # experimental, and most operators only work on L and RGB images.
 #
 # @since 1.1.3
-##
+# #
 
 #
 # helpers
@@ -61,7 +61,7 @@ def _lut(image, lut):
 #
 # actions
 
-##
+# #
 # Maximize (normalize) image contrast.  This function calculates a
 # histogram of the input image, removes <i>cutoff</i> percent of the
 # lightest and darkest pixels from the histogram, and remaps the image
@@ -78,7 +78,7 @@ def autocontrast(image, cutoff=0, ignore=None):
     histogram = image.histogram()
     lut = []
     for layer in range(0, len(histogram), 256):
-        h = histogram[layer:layer+256]
+        h = histogram[layer:layer + 256]
         if ignore is not None:
             # get rid of outliers
             try:
@@ -137,7 +137,7 @@ def autocontrast(image, cutoff=0, ignore=None):
                 lut.append(ix)
     return _lut(image, lut)
 
-##
+# #
 # Colorize grayscale image.  The <i>black</i> and <i>white</i>
 # arguments should be RGB tuples; this function calculates a colour
 # wedge mapping all black pixels in the source image to the first
@@ -155,13 +155,13 @@ def colorize(image, black, white):
     white = _color(white, "RGB")
     red = []; green = []; blue = []
     for i in range(256):
-        red.append(black[0]+i*(white[0]-black[0])/255)
-        green.append(black[1]+i*(white[1]-black[1])/255)
-        blue.append(black[2]+i*(white[2]-black[2])/255)
+        red.append(black[0] + i * (white[0] - black[0]) / 255)
+        green.append(black[1] + i * (white[1] - black[1]) / 255)
+        blue.append(black[2] + i * (white[2] - black[2]) / 255)
     image = image.convert("RGB")
     return _lut(image, red + green + blue)
 
-##
+# #
 # Remove border from image.  The same amount of pixels are removed
 # from all four sides.  This function works on all image modes.
 #
@@ -174,10 +174,10 @@ def crop(image, border=0):
     "Crop border off image"
     left, top, right, bottom = _border(border)
     return image.crop(
-        (left, top, image.size[0]-right, image.size[1]-bottom)
+        (left, top, image.size[0] - right, image.size[1] - bottom)
         )
 
-##
+# #
 # Deform the image.
 #
 # @param image The image to deform.
@@ -192,7 +192,7 @@ def deform(image, deformer, resample=Image.BILINEAR):
         image.size, Image.MESH, deformer.getmesh(image), resample
         )
 
-##
+# #
 # Equalize the image histogram.  This function applies a non-linear
 # mapping to the input image, in order to create a uniform
 # distribution of grayscale values in the output image.
@@ -209,7 +209,7 @@ def equalize(image, mask=None):
     h = image.histogram(mask)
     lut = []
     for b in range(0, len(h), 256):
-        histo = filter(None, h[b:b+256])
+        histo = filter(None, h[b:b + 256])
         if len(histo) <= 1:
             lut.extend(range(256))
         else:
@@ -220,10 +220,10 @@ def equalize(image, mask=None):
                 n = step / 2
                 for i in range(256):
                     lut.append(n / step)
-                    n = n + h[i+b]
+                    n = n + h[i + b]
     return _lut(image, lut)
 
-##
+# #
 # Add border to the image
 #
 # @param image The image to expand.
@@ -240,7 +240,7 @@ def expand(image, border=0, fill=0):
     out.paste(image, (left, top))
     return out
 
-##
+# #
 # Returns a sized and cropped version of the image, cropped to the
 # requested aspect ratio and size.
 # <p>
@@ -302,7 +302,7 @@ def fit(image, size, method=Image.NEAREST, bleed=0.0, centering=(0.5, 0.5)):
     liveSize = (liveArea[2] - liveArea[0], liveArea[3] - liveArea[1])
 
     # calculate the aspect ratio of the liveArea
-    liveAreaAspectRatio = float(liveSize[0])/float(liveSize[1])
+    liveAreaAspectRatio = float(liveSize[0]) / float(liveSize[1])
 
     # calculate the aspect ratio of the output image
     aspectRatio = float(size[0]) / float(size[1])
@@ -315,13 +315,13 @@ def fit(image, size, method=Image.NEAREST, bleed=0.0, centering=(0.5, 0.5)):
     else:
         # liveArea is taller than what's needed, crop the top and bottom
         cropWidth = liveSize[0]
-        cropHeight = int((float(liveSize[0])/aspectRatio) + 0.5)
+        cropHeight = int((float(liveSize[0]) / aspectRatio) + 0.5)
 
     # make the crop
-    leftSide = int(liveArea[0] + (float(liveSize[0]-cropWidth) * centering[0]))
+    leftSide = int(liveArea[0] + (float(liveSize[0] - cropWidth) * centering[0]))
     if leftSide < 0:
         leftSide = 0
-    topSide = int(liveArea[1] + (float(liveSize[1]-cropHeight) * centering[1]))
+    topSide = int(liveArea[1] + (float(liveSize[1] - cropHeight) * centering[1]))
     if topSide < 0:
         topSide = 0
 
@@ -332,7 +332,7 @@ def fit(image, size, method=Image.NEAREST, bleed=0.0, centering=(0.5, 0.5)):
     # resize the image and return it
     return out.resize(size, method)
 
-##
+# #
 # Flip the image vertically (top to bottom).
 #
 # @param image The image to flip.
@@ -342,7 +342,7 @@ def flip(image):
     "Flip image vertically"
     return image.transpose(Image.FLIP_TOP_BOTTOM)
 
-##
+# #
 # Convert the image to grayscale.
 #
 # @param image The image to convert.
@@ -352,7 +352,7 @@ def grayscale(image):
     "Convert to grayscale"
     return image.convert("L")
 
-##
+# #
 # Invert (negate) the image.
 #
 # @param image The image to invert.
@@ -362,10 +362,10 @@ def invert(image):
     "Invert image (negate)"
     lut = []
     for i in range(256):
-        lut.append(255-i)
+        lut.append(255 - i)
     return _lut(image, lut)
 
-##
+# #
 # Flip image horizontally (left to right).
 #
 # @param image The image to mirror.
@@ -375,7 +375,7 @@ def mirror(image):
     "Flip image horizontally"
     return image.transpose(Image.FLIP_LEFT_RIGHT)
 
-##
+# #
 # Reduce the number of bits for each colour channel.
 #
 # @param image The image to posterize.
@@ -385,12 +385,12 @@ def mirror(image):
 def posterize(image, bits):
     "Reduce the number of bits per color channel"
     lut = []
-    mask = ~(2**(8-bits)-1)
+    mask = ~(2 ** (8 - bits) - 1)
     for i in range(256):
         lut.append(i & mask)
     return _lut(image, lut)
 
-##
+# #
 # Invert all pixel values above a threshold.
 #
 # @param image The image to posterize.
@@ -404,7 +404,7 @@ def solarize(image, threshold=128):
         if i < threshold:
             lut.append(i)
         else:
-            lut.append(255-i)
+            lut.append(255 - i)
     return _lut(image, lut)
 
 # --------------------------------------------------------------------

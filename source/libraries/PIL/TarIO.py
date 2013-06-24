@@ -17,13 +17,13 @@
 import ContainerIO
 import string
 
-##
+# #
 # A file object that provides read access to a given member of a TAR
 # file.
 
 class TarIO(ContainerIO.ContainerIO):
 
-    ##
+    # #
     # Create file object.
     #
     # @param tarfile Name of TAR file.

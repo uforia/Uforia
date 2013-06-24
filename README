@@ -2,6 +2,9 @@ Before running the Uforia program, you need to change some settings.
 
 Edit the settings for the main program (like multithreading, starting directory and database) in:
     ./Uforia/source/include/config.py
+    
+Before developing for/on Uforia, please read the documents and tutorials in:
+    ./Uforia/docs/
 
 The current branches are heavily in flux, as we are in the process of developing and pushing the first set of modules at the moment.
 

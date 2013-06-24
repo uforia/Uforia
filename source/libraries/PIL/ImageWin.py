@@ -19,7 +19,7 @@
 
 import Image
 
-##
+# #
 # The <b>ImageWin</b> module contains support to create and display
 # images under Windows 95/98, NT, 2000 and later.
 
@@ -35,7 +35,7 @@ class HWND:
     def __int__(self):
         return self.wnd
 
-##
+# #
 # Create a Windows bitmap with the given mode and size.  The mode can
 # be one of "1", "L", "P", or "RGB".
 #
@@ -49,7 +49,7 @@ class HWND:
 
 class Dib:
 
-    ##
+    # #
     # Create Windows bitmap.
     #
     # @param image Either a PIL image, or a mode string.  If a
@@ -73,7 +73,7 @@ class Dib:
         if image:
             self.paste(image)
 
-    ##
+    # #
     # Copy the bitmap contents to a device context.
     #
     # @param handle Device context (HDC), cast to a Python integer,
@@ -94,7 +94,7 @@ class Dib:
 
     def draw(self, handle, dst, src=None):
         if not src:
-            src = (0,0) + self.size
+            src = (0, 0) + self.size
         if isinstance(handle, HWND):
             dc = self.image.getdc(handle)
             try:
@@ -105,7 +105,7 @@ class Dib:
             result = self.image.draw(handle, dst, src)
         return result
 
-    ##
+    # #
     # Installs the palette associated with the image in the
     # given device context.
     # <p>
@@ -131,7 +131,7 @@ class Dib:
             result = self.image.query_palette(handle)
         return result
 
-    ##
+    # #
     # Paste a PIL image into the bitmap image.
     #
     # @param im A PIL image.  The size must match the target region.
@@ -150,7 +150,7 @@ class Dib:
         else:
             self.image.paste(im.im)
 
-    ##
+    # #
     # Load display memory contents from string buffer.
     #
     # @param buffer A string buffer containing display data (usually
@@ -159,7 +159,7 @@ class Dib:
     def fromstring(self, buffer):
         return self.image.fromstring(buffer)
 
-    ##
+    # #
     # Copy display memory contents to string buffer.
     #
     # @return A string buffer containing display data.
@@ -168,7 +168,7 @@ class Dib:
         return self.image.tostring()
 
 
-##
+# #
 # Create a Window with the given title size.
 
 class Window:
@@ -199,7 +199,7 @@ class Window:
     def mainloop(self):
         Image.core.eventloop()
 
-##
+# #
 # Create an image window which displays the given image.
 
 class ImageWindow(Window):

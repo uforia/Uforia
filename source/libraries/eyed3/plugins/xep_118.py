@@ -37,14 +37,14 @@ class Xep118Plugin(LoaderPlugin):
     def getXML(self, audio_file):
         tag = audio_file.tag
 
-        xml =  u"<tune xmlns='http://jabber.org/protocol/tune'>\n"
+        xml = u"<tune xmlns='http://jabber.org/protocol/tune'>\n"
         if tag.artist:
             xml += "  <artist>%s</artist>\n" % tag.artist
         if tag.title:
             xml += "  <title>%s</title>\n" % tag.title
         if tag.album:
             xml += "  <source>%s</source>\n" % tag.album
-        xml += ("  <track>file://%s</track>\n" %
+        xml += ("  <track>file://%s</track>\n" % 
                 unicode(os.path.abspath(audio_file.path)))
         if audio_file.info:
             xml += "  <length>%s</length>\n" % \

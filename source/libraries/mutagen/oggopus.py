@@ -81,7 +81,7 @@ class OggOpusVComment(VCommentDict):
 
     def __init__(self, fileobj, info):
         pages = self.__get_comment_pages(fileobj, info)
-        data = OggPage.to_packets(pages)[0][8:] # Strip OpusTags
+        data = OggPage.to_packets(pages)[0][8:]  # Strip OpusTags
         super(OggOpusVComment, self).__init__(data, framing=False)
 
     def _inject(self, fileobj):

@@ -1,17 +1,25 @@
-'''
-Created on 11 mrt. 2013
+# Copyright (C) 2013 Hogeschool van Amsterdam
 
-@author: Jimmy van den Berg
-'''
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 # This is the image module for PNG
 
-#TABLE: Tile:BLOB, Text:LONGTEXT, ICC_Profile:BLOB, Interlace:INT, Transparency:LONGTEXT, Gamma:INT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:BLOB, XMPtag:BLOB
+# TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:BLOB, Interlace:INT, Transparency:LONGTEXT, Gamma:INT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:BLOB, XMPtag:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
 from PIL import Image
 
-def process(fullpath, config, columns=None):
+
+def process(fullpath, config, rcontext, columns=None):
 
         # Try to parse PNG data
         try:
@@ -20,21 +28,24 @@ def process(fullpath, config, columns=None):
             assorted = [image.tile, image.text]
             info_dictionary = image.info
 
-            # Check if ICC profile is in info dictionary, if so put it in our list
+            # Check if ICC profile is in info dictionary
+            # if so put it in our list
             if "icc_profile" in info_dictionary:
                 assorted.append(info_dictionary["icc_profile"])
                 info_dictionary.pop("icc_profile")
             else:
                 assorted.append(None)
 
-            # Check if interlace is in info dictionary, if so put it in our list
+            # Check if interlace is in info dictionary
+            # if so put it in our list
             if "interlace" in info_dictionary:
                 assorted.append(info_dictionary["interlace"])
                 info_dictionary.pop("interlace")
             else:
                 assorted.append(None)
 
-            # Check if transparency is in info dictionary, if so put it in our list
+            # Check if transparency is in info dictionary
+            # if so put it in our list
             if "transparency" in info_dictionary:
                 assorted.append(info_dictionary["transparency"])
                 info_dictionary.pop("transparency")
@@ -64,7 +75,8 @@ def process(fullpath, config, columns=None):
             else:
                 assorted.append(None)
 
-            # If there are still other values in the dict then put those in column
+            # If there are still other values in the dict
+            # then put those in column
             assorted.append(info_dictionary)
 
             # Delete variable
@@ -93,7 +105,7 @@ def process(fullpath, config, columns=None):
             return assorted
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

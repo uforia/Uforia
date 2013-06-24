@@ -52,7 +52,7 @@ def _listPlugins(config):
     print("")
     def header(name):
         is_default = name == DEFAULT_PLUGIN
-        return (boldText("* ", c=GREEN if is_default else None) +
+        return (boldText("* ", c=GREEN if is_default else None) + 
                 boldText(name, c=None))
 
     all_plugins = eyed3.plugins.load(reload=True, paths=_getPluginPath(config))
@@ -154,12 +154,12 @@ def parseCommandLine(cmd_line_args=None):
                        dest="list_plugins", help="List all available plugins")
         p.add_argument("-P", "--plugin", action="store", dest="plugin",
                        default=None, metavar="NAME",
-                       help="Specify which plugin to use. The default is '%s'" %
+                       help="Specify which plugin to use. The default is '%s'" % 
                             DEFAULT_PLUGIN)
         p.add_argument("-C", "--config", action="store", dest="config",
                        default=None, metavar="FILE",
                        help="Supply a configuration file. The default is "
-                            "'%s', although even that is optional." %
+                            "'%s', although even that is optional." % 
                             DEFAULT_CONFIG)
         p.add_argument("--backup", action="store_true", dest="backup",
                        help="Plugins should honor this option such that "
@@ -174,7 +174,7 @@ def parseCommandLine(cmd_line_args=None):
                        help="Use the specified file system encoding for "
                             "filenames.  Default as it was detected is '%s' "
                             "but this option is still useful when reading "
-                            "from mounted file systems." %
+                            "from mounted file systems." % 
                             eyed3.LOCAL_FS_ENCODING)
         p.add_argument("--no-config", action="store_true", dest="no_config",
                        help="Do not load the default user config '%s'. "

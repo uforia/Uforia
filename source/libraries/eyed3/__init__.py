@@ -77,12 +77,12 @@ def require(version_spec):
     # than either of these the 'require' will fail.
     for i in 0, 1:
         if CURRENT_VERSION[i] > req_version[i]:
-            raise Exception("eyeD3 v%s not compatible with v%s (required)" %
+            raise Exception("eyeD3 v%s not compatible with v%s (required)" % 
                             (t2s(CURRENT_VERSION), t2s(req_version)))
 
     # Is the required version greater than us
     if req_version > CURRENT_VERSION:
-        raise Exception("eyed3 v%s < v%s (required)" %
+        raise Exception("eyed3 v%s < v%s (required)" % 
                         (t2s(CURRENT_VERSION), t2s(req_version)))
 
 

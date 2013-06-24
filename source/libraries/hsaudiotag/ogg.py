@@ -23,12 +23,12 @@ class VorbisPage(object):
         self.start_offset = fp.tell()
         data = fp.read(self.MAX_SIZE)
         page_id, version, type, pos1, pos2, serial, page_number, checksum, segment_count = \
-            unpack('<4s2B5IB',data[:self.BASE_SIZE])
+            unpack('<4s2B5IB', data[:self.BASE_SIZE])
         position = (pos2 << 32) + pos1
         self.valid = page_id == self.OGG_PAGE_ID
         self.page_number = page_number
         self.position = position
-        segments = data[self.BASE_SIZE:self.BASE_SIZE+segment_count]
+        segments = data[self.BASE_SIZE:self.BASE_SIZE + segment_count]
         page_size = sum(ord(segment) for segment in segments)
         self.size = page_size
         self.header_size = self.BASE_SIZE + segment_count
@@ -50,12 +50,12 @@ class VorbisComment(object):
 
         [vendor_string_length] = unpack('<I', data[:4])
         meta_data_offset = vendor_string_length + 4
-        [meta_count] = unpack('<I', data[meta_data_offset:meta_data_offset+4])
+        [meta_count] = unpack('<I', data[meta_data_offset:meta_data_offset + 4])
         meta_data = {}
         offset = meta_data_offset + 4
         for _ in xrange(meta_count):
-            [length] = unpack('<I',data[offset:offset+4])
-            value = data[offset+4:offset+length+4]
+            [length] = unpack('<I', data[offset:offset + 4])
+            value = data[offset + 4:offset + length + 4]
             splitted = value.split('=')
             meta_data[splitted[0]] = splitted[1]
             offset += length + 4
@@ -70,7 +70,7 @@ class VorbisComment(object):
             description = get_field('DESCRIPTION')
             if u'YEAR: ' in description:
                 index = description.find(u'YEAR: ')
-                self.year = description[index+6:index+10]
+                self.year = description[index + 6:index + 10]
 
 
 class Vorbis(object):
@@ -78,7 +78,7 @@ class Vorbis(object):
         with FileOrPath(infile, u'rb') as fp:
             try:
                 self._read(fp)
-            except Exception: #The unpack error doesn't seem to have a class. I have to catch all here
+            except Exception:  # The unpack error doesn't seem to have a class. I have to catch all here
                 self._empty()
 
     def _empty(self):
@@ -101,7 +101,7 @@ class Vorbis(object):
         fp.seek(0, 2)
         self.size = fp.tell()
         fp.seek(0, 0)
-        #Read 1st page
+        # Read 1st page
         page = VorbisPage(fp)
         if not page.valid:
             raise InvalidFileError()
@@ -114,7 +114,7 @@ class Vorbis(object):
         self.sample_rate = sample_rate
         self.bitrate = bitrate_nominal // 1000
 
-        #Read 2nd page
+        # Read 2nd page
         page = page.next()
         if not page.valid:
             raise InvalidFileError()
@@ -130,15 +130,15 @@ class Vorbis(object):
         self.genre = comment.genre
         self.comment = comment.comment
 
-        #Get third page for audio_offset
+        # Get third page for audio_offset
         page = page.next()
         if not page.valid:
             raise InvalidFileError()
         self.audio_offset = page.start_offset
         self.audio_size = self.size - self.audio_offset
 
-        #Seek last page to get sample count. It's impossible to not have at least one page in
-        #the last 64kb.
+        # Seek last page to get sample count. It's impossible to not have at least one page in
+        # the last 64kb.
         fp.seek(-0x10000, 2)
         last_data = fp.read()
         last_offset = last_data.rfind(VorbisPage.OGG_PAGE_ID)

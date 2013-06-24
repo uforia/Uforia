@@ -1,0 +1,1 @@
+/usr/share/pyshared/pysqlite2/dbapi2.py

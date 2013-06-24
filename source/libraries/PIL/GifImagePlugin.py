@@ -35,10 +35,10 @@ import Image, ImageFile, ImagePalette
 # Helpers
 
 def i16(c):
-    return ord(c[0]) + (ord(c[1])<<8)
+    return ord(c[0]) + (ord(c[1]) << 8)
 
 def o16(i):
-    return chr(i&255) + chr(i>>8&255)
+    return chr(i & 255) + chr(i >> 8 & 255)
 
 
 # --------------------------------------------------------------------
@@ -47,7 +47,7 @@ def o16(i):
 def _accept(prefix):
     return prefix[:6] in ["GIF87a", "GIF89a"]
 
-##
+# #
 # Image plugin for GIF images.  This plugin supports both GIF87 and
 # GIF89 images.
 
@@ -85,16 +85,16 @@ class GifImageFile(ImageFile.ImageFile):
             # get global palette
             self.info["background"] = ord(s[11])
             # check if palette contains colour indices
-            p = self.fp.read(3<<bits)
+            p = self.fp.read(3 << bits)
             for i in range(0, len(p), 3):
-                if not (chr(i/3) == p[i] == p[i+1] == p[i+2]):
+                if not (chr(i / 3) == p[i] == p[i + 1] == p[i + 2]):
                     p = ImagePalette.raw("RGB", p)
                     self.global_palette = self.palette = p
                     break
 
-        self.__fp = self.fp # FIXME: hack
+        self.__fp = self.fp  # FIXME: hack
         self.__rewind = self.fp.tell()
-        self.seek(0) # get ready to read first frame
+        self.seek(0)  # get ready to read first frame
 
     def seek(self, frame):
 
@@ -183,8 +183,8 @@ class GifImageFile(ImageFile.ImageFile):
 
                 if flags & 128:
                     bits = (flags & 7) + 1
-                    self.palette =\
-                        ImagePalette.raw("RGB", self.fp.read(3<<bits))
+                    self.palette = \
+                        ImagePalette.raw("RGB", self.fp.read(3 << bits))
 
                 # image data
                 bits = ord(self.fp.read(1))
@@ -233,7 +233,7 @@ def _save(im, fp, filename):
             _imaging_gif.save(im, fp, filename)
             return
         except IOError:
-            pass # write uncompressed file
+            pass  # write uncompressed file
 
     try:
         rawmode = RAWMODE[im.mode]
@@ -272,29 +272,29 @@ def _save(im, fp, filename):
         pass
     else:
         # transparency extension block
-        fp.write("!" +
-                 chr(249) +             # extension intro
-                 chr(4) +               # length
-                 chr(1) +               # transparency info present
-                 o16(0) +               # duration
-                 chr(int(transparency)) # transparency index
+        fp.write("!" + 
+                 chr(249) +  # extension intro
+                 chr(4) +  # length
+                 chr(1) +  # transparency info present
+                 o16(0) +  # duration
+                 chr(int(transparency))  # transparency index
                  + chr(0))
 
     # local image header
-    fp.write("," +
-             o16(0) + o16(0) +          # bounding box
-             o16(im.size[0]) +          # size
-             o16(im.size[1]) +
-             chr(flags) +               # flags
-             chr(8))                    # bits
+    fp.write("," + 
+             o16(0) + o16(0) +  # bounding box
+             o16(im.size[0]) +  # size
+             o16(im.size[1]) + 
+             chr(flags) +  # flags
+             chr(8))  # bits
 
     imOut.encoderconfig = (8, interlace)
 
-    ImageFile._save(imOut, fp, [("gif", (0,0)+im.size, 0, rawmode)])
+    ImageFile._save(imOut, fp, [("gif", (0, 0) + im.size, 0, rawmode)])
 
-    fp.write("\0") # end of image data
+    fp.write("\0")  # end of image data
 
-    fp.write(";") # end of file
+    fp.write(";")  # end of file
 
     try:
         fp.flush()
@@ -326,12 +326,12 @@ def getheader(im, info=None):
     optimize = info and info.get("optimize", 0)
 
     s = [
-        "GIF87a" +              # magic
-        o16(im.size[0]) +       # size
-        o16(im.size[1]) +
-        chr(7 + 128) +          # flags: bits + palette
-        chr(0) +                # background
-        chr(0)                  # reserved/aspect
+        "GIF87a" +  # magic
+        o16(im.size[0]) +  # size
+        o16(im.size[1]) + 
+        chr(7 + 128) +  # flags: bits + palette
+        chr(0) +  # background
+        chr(0)  # reserved/aspect
     ]
 
     if optimize:
@@ -348,7 +348,7 @@ def getheader(im, info=None):
     # global palette
     if im.mode == "P":
         # colour palette
-        s.append(im.im.getpalette("RGB")[:maxcolor*3])
+        s.append(im.im.getpalette("RGB")[:maxcolor * 3])
     else:
         # greyscale
         for i in range(maxcolor):
@@ -356,7 +356,7 @@ def getheader(im, info=None):
 
     return s
 
-def getdata(im, offset = (0, 0), **params):
+def getdata(im, offset=(0, 0), **params):
     """Return a list of strings representing this image.
        The first string is a local image header, the rest contains
        encoded image data."""
@@ -366,7 +366,7 @@ def getdata(im, offset = (0, 0), **params):
         def write(self, data):
             self.data.append(data)
 
-    im.load() # make sure raster data is available
+    im.load()  # make sure raster data is available
 
     fp = collector()
 
@@ -374,17 +374,17 @@ def getdata(im, offset = (0, 0), **params):
         im.encoderinfo = params
 
         # local image header
-        fp.write("," +
-                 o16(offset[0]) +       # offset
-                 o16(offset[1]) +
-                 o16(im.size[0]) +      # size
-                 o16(im.size[1]) +
-                 chr(0) +               # flags
-                 chr(8))                # bits
+        fp.write("," + 
+                 o16(offset[0]) +  # offset
+                 o16(offset[1]) + 
+                 o16(im.size[0]) +  # size
+                 o16(im.size[1]) + 
+                 chr(0) +  # flags
+                 chr(8))  # bits
 
-        ImageFile._save(im, fp, [("gif", (0,0)+im.size, 0, RAWMODE[im.mode])])
+        ImageFile._save(im, fp, [("gif", (0, 0) + im.size, 0, RAWMODE[im.mode])])
 
-        fp.write("\0") # end of image data
+        fp.write("\0")  # end of image data
 
     finally:
         del im.encoderinfo

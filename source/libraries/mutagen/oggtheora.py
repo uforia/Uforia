@@ -109,7 +109,7 @@ class OggTheora(OggFileType):
     _mimes = ["video/x-theora"]
 
     def score(filename, fileobj, header):
-        return (header.startswith("OggS") *
+        return (header.startswith("OggS") * 
                 (("\x80theora" in header) + ("\x81theora" in header)))
     score = staticmethod(score)
 

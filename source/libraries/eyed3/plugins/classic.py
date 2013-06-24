@@ -176,7 +176,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
             if not path:
                 raise ValueError("path required")
             elif True in [path.startswith(prefix) for prefix in ["http://",
-                                                                 "https://",]]:
+                                                                 "https://", ]]:
                 mt = ImageFrame.URL_MIME_TYPE
             else:
                 if not os.path.isfile(path):
@@ -213,7 +213,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
             owner_id, id = KeyValueArg(arg)
             if not owner_id:
                 raise ValueError("owner_id required")
-            id = str(id) # don't want to pass unicocode
+            id = str(id)  # don't want to pass unicocode
             if len(id) > 64:
                 raise ValueError("id must be <= 64 bytes")
             return (owner_id, id)
@@ -404,7 +404,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
             self.printAudioInfo(self.audio_file.info)
 
             if not save_tag and new_tag:
-                printError("No ID3 %s tag found!" %
+                printError("No ID3 %s tag found!" % 
                            id3.versionToString(self.args.tag_version))
                 return
 
@@ -414,7 +414,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
                 # Use current tag version unless a convert was supplied
                 version = (self.args.convert_version or
                            self.audio_file.tag.version)
-                printWarning("Writing ID3 version %s" %
+                printWarning("Writing ID3 version %s" % 
                              id3.versionToString(version))
 
                 self.audio_file.tag.save(version=version,
@@ -441,14 +441,14 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
         from stat import ST_SIZE
         file_size = os.stat(file_path)[ST_SIZE]
         size_str = utils.formatSize(file_size)
-        printMsg("%s\t%s[ %s ]%s" %
+        printMsg("%s\t%s[ %s ]%s" % 
                  (boldText(os.path.basename(file_path), c=HEADER_COLOR),
                   getColor(HEADER_COLOR), size_str, getColor(RESET)))
 
     def printAudioInfo(self, info):
         if isinstance(info, mp3.Mp3AudioInfo):
-            printMsg(boldText("Time: ") +
-                     "%s\tMPEG%d, Layer %s\t[ %s @ %s Hz - %s ]" %
+            printMsg(boldText("Time: ") + 
+                     "%s\tMPEG%d, Layer %s\t[ %s @ %s Hz - %s ]" % 
                      (utils.formatTime(info.time_secs),
                       info.mp3_header.version,
                       "I" * info.mp3_header.layer,
@@ -476,7 +476,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
     def printTag(self, tag):
         if isinstance(tag, id3.Tag):
             if self.args.quiet:
-                printMsg("ID3 %s: %d frames" %
+                printMsg("ID3 %s: %d frames" % 
                          (id3.versionToString(tag.version),
                           len(tag.frame_set)))
                 return
@@ -519,7 +519,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
 
             # POPM
             for popm in tag.popularities:
-                printMsg("%s [email: %s] [rating: %d] [play count: %d]" %
+                printMsg("%s [email: %s] [rating: %d] [play count: %d]" % 
                          (boldText("Popularity:"), popm.email, popm.rating,
                           popm.count))
 
@@ -541,23 +541,23 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
 
             # COMM
             for c in tag.comments:
-                printMsg("%s: [Description: %s] [Lang: %s]\n%s" %
+                printMsg("%s: [Description: %s] [Lang: %s]\n%s" % 
                          (boldText("Comment"), c.description or "",
                           c.lang or "", c.text or ""))
 
             # USLT
             for l in tag.lyrics:
-                printMsg("%s: [Description: %s] [Lang: %s]\n%s" %
+                printMsg("%s: [Description: %s] [Lang: %s]\n%s" % 
                          (boldText("Lyrics"), l.description or u"",
                           l.lang or "", l.text))
 
             # TXXX
             for f in tag.user_text_frames:
-                printMsg("%s: [Description: %s]\n%s" %
+                printMsg("%s: [Description: %s]\n%s" % 
                          (boldText("UserTextFrame"), f.description, f.text))
 
             # URL frames
-            for desc, url in ( ("Artist URL", tag.artist_url),
+            for desc, url in (("Artist URL", tag.artist_url),
                                ("Audio source URL", tag.audio_source_url),
                                ("Audio file URL", tag.audio_file_url),
                                ("Internet radio URL", tag.internet_radio_url),
@@ -578,8 +578,8 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
             # APIC
             for img in tag.images:
                 if img.mime_type != ImageFrame.URL_MIME_TYPE:
-                    printMsg("%s: [Size: %d bytes] [Type: %s]" %
-                        (boldText(img.picTypeToString(img.picture_type) +
+                    printMsg("%s: [Size: %d bytes] [Type: %s]" % 
+                        (boldText(img.picTypeToString(img.picture_type) + 
                                   " Image"),
                         len(img.image_data),
                         img.mime_type))
@@ -588,7 +588,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
                     if self.args.write_images_dir:
                         img_path = "%s%s" % (self.args.write_images_dir, os.sep)
                         if not os.path.isdir(img_path):
-                            raise IOError("Directory does not exist: %s" %
+                            raise IOError("Directory does not exist: %s" % 
                                           img_path)
                         img_file = self._getDefaultNameForImage(img)
                         count = 1
@@ -601,8 +601,8 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
                         with open(os.path.join(img_path, img_file), "wb") as fp:
                             fp.write(img.image_data)
                 else:
-                    printMsg("%s: [Type: %s] [URL: %s]" %
-                        (boldText(img.picTypeToString(img.picture_type) +
+                    printMsg("%s: [Type: %s] [URL: %s]" % 
+                        (boldText(img.picTypeToString(img.picture_type) + 
                                   " Image"),
                         img.mime_type, img.image_url))
                     printMsg("Description: %s" % img.description)
@@ -610,7 +610,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
 
             # GOBJ
             for obj in tag.objects:
-                printMsg("%s: [Size: %d bytes] [Type: %s]" %
+                printMsg("%s: [Size: %d bytes] [Type: %s]" % 
                          (boldText("GEOB"), len(obj.object_data),
                           obj.mime_type))
                 printMsg("Description: %s" % obj.description)
@@ -673,7 +673,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
 
         if remove_version:
             status = id3.Tag.remove(tag.file_info.name, remove_version)
-            printWarning("Removing ID3 %s tag: %s" %
+            printWarning("Removing ID3 %s tag: %s" % 
                          (rm_str, "SUCCESS" if status else "FAIL"))
 
         return status
@@ -761,7 +761,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
                     printWarning("Removed %s %s" % (what, str(vals)))
                     retval = True
                 else:
-                    printError("Removing %s failed, %s not found" %
+                    printError("Removing %s failed, %s not found" % 
                                  (what, str(vals)))
 
         # --add-comment, --add-lyrics
@@ -856,7 +856,7 @@ optional. For example, 2012-03 is valid, 2012--12 is not.
                     printWarning("Unique file ID '%s' not found" % owner_id)
             else:
                 tag.unique_file_ids.set(id, owner_id)
-                printWarning("Setting unique file ID '%s' to %s" %
+                printWarning("Setting unique file ID '%s' to %s" % 
                               (owner_id, id))
                 retval = True
 
@@ -915,10 +915,10 @@ ARGS_HELP = {
         "--add-comment":
           "Add or replace a comment. There may be more than one comment in a "
           "tag, as long as the DESCRIPTION and LANG values are unique. The "
-          "default DESCRIPTION is '' and the default language code is '%s'." %
+          "default DESCRIPTION is '' and the default language code is '%s'." % 
           id3.DEFAULT_LANG,
         "--remove-comment": "Remove comment matching DESCRIPTION and LANG. "
-                            "The default language code is '%s'." %
+                            "The default language code is '%s'." % 
                             id3.DEFAULT_LANG,
         "--remove-all-comments": "Remove all comments from the tag.",
 
@@ -928,7 +928,7 @@ ARGS_HELP = {
           "The default DESCRIPTION is '' and the default language code is "
           "'%s'." % id3.DEFAULT_LANG,
         "--remove-lyrics": "Remove lyrics matching DESCRIPTION and LANG. "
-                            "The default language code is '%s'." %
+                            "The default language code is '%s'." % 
                             id3.DEFAULT_LANG,
         "--remove-all-lyrics": "Remove all lyrics from the tag.",
 

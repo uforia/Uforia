@@ -1,0 +1,21 @@
+# Don't need the executables
+--disable-avconv
+--disable-avplay
+--disable-avprobe
+--disable-avserver
+--disable-avplay
+
+# Keep size down
+--disable-debug
+--disable-encoders
+--disable-muxers
+--disable-protocols
+--enable-protocol=file
+--disable-devices
+
+# These are usually disabled, but make sure
+--disable-network
+
+# We want these on!
+--enable-bzlib
+--enable-zlib

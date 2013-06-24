@@ -39,11 +39,11 @@
 import string, StringIO
 
 
-def i16(c, o = 0):
-    return ord(c[o])+(ord(c[o+1])<<8)
+def i16(c, o=0):
+    return ord(c[o]) + (ord(c[o + 1]) << 8)
 
-def i32(c, o = 0):
-    return ord(c[o])+(ord(c[o+1])<<8)+(ord(c[o+2])<<16)+(ord(c[o+3])<<24)
+def i32(c, o=0):
+    return ord(c[o]) + (ord(c[o + 1]) << 8) + (ord(c[o + 2]) << 16) + (ord(c[o + 3]) << 24)
 
 
 MAGIC = '\320\317\021\340\241\261\032\341'
@@ -52,15 +52,15 @@ MAGIC = '\320\317\021\340\241\261\032\341'
 # --------------------------------------------------------------------
 # property types
 
-VT_EMPTY=0; VT_NULL=1; VT_I2=2; VT_I4=3; VT_R4=4; VT_R8=5; VT_CY=6;
-VT_DATE=7; VT_BSTR=8; VT_DISPATCH=9; VT_ERROR=10; VT_BOOL=11;
-VT_VARIANT=12; VT_UNKNOWN=13; VT_DECIMAL=14; VT_I1=16; VT_UI1=17;
-VT_UI2=18; VT_UI4=19; VT_I8=20; VT_UI8=21; VT_INT=22; VT_UINT=23;
-VT_VOID=24; VT_HRESULT=25; VT_PTR=26; VT_SAFEARRAY=27; VT_CARRAY=28;
-VT_USERDEFINED=29; VT_LPSTR=30; VT_LPWSTR=31; VT_FILETIME=64;
-VT_BLOB=65; VT_STREAM=66; VT_STORAGE=67; VT_STREAMED_OBJECT=68;
-VT_STORED_OBJECT=69; VT_BLOB_OBJECT=70; VT_CF=71; VT_CLSID=72;
-VT_VECTOR=0x1000;
+VT_EMPTY = 0; VT_NULL = 1; VT_I2 = 2; VT_I4 = 3; VT_R4 = 4; VT_R8 = 5; VT_CY = 6;
+VT_DATE = 7; VT_BSTR = 8; VT_DISPATCH = 9; VT_ERROR = 10; VT_BOOL = 11;
+VT_VARIANT = 12; VT_UNKNOWN = 13; VT_DECIMAL = 14; VT_I1 = 16; VT_UI1 = 17;
+VT_UI2 = 18; VT_UI4 = 19; VT_I8 = 20; VT_UI8 = 21; VT_INT = 22; VT_UINT = 23;
+VT_VOID = 24; VT_HRESULT = 25; VT_PTR = 26; VT_SAFEARRAY = 27; VT_CARRAY = 28;
+VT_USERDEFINED = 29; VT_LPSTR = 30; VT_LPWSTR = 31; VT_FILETIME = 64;
+VT_BLOB = 65; VT_STREAM = 66; VT_STORAGE = 67; VT_STREAMED_OBJECT = 68;
+VT_STORED_OBJECT = 69; VT_BLOB_OBJECT = 70; VT_CF = 71; VT_CLSID = 72;
+VT_VECTOR = 0x1000;
 
 # map property id to name (for debugging purposes)
 
@@ -100,7 +100,7 @@ class _OleStream(StringIO.StringIO):
 
         data = []
 
-        while sect != -2: # 0xFFFFFFFEL:
+        while sect != -2:  # 0xFFFFFFFEL:
             fp.seek(offset + sectorsize * sect)
             data.append(fp.read(sectorsize))
             sect = fat[sect]
@@ -134,9 +134,9 @@ class _OleDirectoryEntry:
 
         name, type, sect, size, sids, clsid = sidlist[sid]
 
-        self.sid  = sid
+        self.sid = sid
         self.name = name
-        self.type = type # 1=storage 2=stream
+        self.type = type  # 1=storage 2=stream
         self.sect = sect
         self.size = size
         self.clsid = clsid
@@ -159,7 +159,7 @@ class _OleDirectoryEntry:
 
             left, right, child = sidlist[sid][4]
 
-            while left != -1: # 0xFFFFFFFFL:
+            while left != -1:  # 0xFFFFFFFFL:
                 stack.append(sid)
                 sid = left
                 left, right, child = sidlist[sid][4]
@@ -170,12 +170,12 @@ class _OleDirectoryEntry:
 
                 # try to move right
                 left, right, child = sidlist[sid][4]
-                if right != -1: # 0xFFFFFFFFL:
+                if right != -1:  # 0xFFFFFFFFL:
                     # and then back to the left
                     sid = right
                     while 1:
                         left, right, child = sidlist[sid][4]
-                        if left == -1: # 0xFFFFFFFFL:
+                        if left == -1:  # 0xFFFFFFFFL:
                             break
                         stack.append(sid)
                         sid = left
@@ -202,7 +202,7 @@ class _OleDirectoryEntry:
 
         return cmp(self.name, other.name)
 
-    def dump(self, tab = 0):
+    def dump(self, tab=0):
         "Dump this entry, and all its subentries (for debug purposes only)"
 
         TYPES = ["(invalid)", "(storage)", "(stream)", "(lockbytes)",
@@ -221,7 +221,7 @@ class _OleDirectoryEntry:
 #
 # --------------------------------------------------------------------
 
-##
+# #
 # This class encapsulates the interface to an OLE 2 structured
 # storage file.  Use the {@link listdir} and {@link openstream}
 # methods to access the contents of this file.
@@ -254,12 +254,12 @@ class OleFileIO:
     TIFF files).
     """
 
-    def __init__(self, filename = None):
+    def __init__(self, filename=None):
 
         if filename:
             self.open(filename)
 
-    ##
+    # #
     # Open an OLE2 file.
 
     def open(self, filename):
@@ -304,7 +304,7 @@ class OleFileIO:
         fat = []
         for i in range(0, len(sect), 4):
             ix = i32(sect, i)
-            if ix == -2 or ix == -1: # ix == 0xFFFFFFFEL or ix == 0xFFFFFFFFL:
+            if ix == -2 or ix == -1:  # ix == 0xFFFFFFFEL or ix == 0xFFFFFFFFL:
                 break
             s = self.getsect(ix)
             fat = fat + map(lambda i, s=s: i32(s, i), range(0, len(s), 4))
@@ -345,7 +345,7 @@ class OleFileIO:
             if not entry:
                 break
             type = ord(entry[66])
-            name = self._unicode(entry[0:0+i16(entry, 64)])
+            name = self._unicode(entry[0:0 + i16(entry, 64)])
             ptrs = i32(entry, 68), i32(entry, 72), i32(entry, 76)
             sect, size = i32(entry, 116), i32(entry, 120)
             clsid = self._clsid(entry[80:96])
@@ -362,8 +362,8 @@ class OleFileIO:
     def _clsid(self, clsid):
         if clsid == "\0" * len(clsid):
             return ""
-        return (("%08X-%04X-%04X-%02X%02X-" + "%02X" * 6) %
-                ((i32(clsid, 0), i16(clsid, 4), i16(clsid, 6)) +
+        return (("%08X-%04X-%04X-%02X%02X-" + "%02X" * 6) % 
+                ((i32(clsid, 0), i16(clsid, 4), i16(clsid, 6)) + 
                 tuple(map(ord, clsid[8:16]))))
 
     def _list(self, files, prefix, node):
@@ -389,7 +389,7 @@ class OleFileIO:
             node = kid
         return node.sid
 
-    def _open(self, start, size = 0x7FFFFFFF):
+    def _open(self, start, size=0x7FFFFFFF):
         # openstream helper.
 
         if size < self.minisectorcutoff:
@@ -404,7 +404,7 @@ class OleFileIO:
         return _OleStream(self.fp, start, size, 512,
                           self.sectorsize, self.fat)
 
-    ##
+    # #
     # Returns a list of streams stored in this file.
 
     def listdir(self):
@@ -414,7 +414,7 @@ class OleFileIO:
         self._list(files, [], self.root)
         return files
 
-    ##
+    # #
     # Opens a stream as a read-only file object.
 
     def openstream(self, filename):
@@ -426,7 +426,7 @@ class OleFileIO:
             raise IOError, "this file is not a stream"
         return self._open(sect, size)
 
-    ##
+    # #
     # Gets a list of properties described in substream.
 
     def getproperties(self, filename):
@@ -446,55 +446,55 @@ class OleFileIO:
         fp.seek(i32(s, 16))
 
         # get section
-        s = "****" + fp.read(i32(fp.read(4))-4)
+        s = "****" + fp.read(i32(fp.read(4)) - 4)
 
         for i in range(i32(s, 4)):
 
-            id = i32(s, 8+i*8)
-            offset = i32(s, 12+i*8)
+            id = i32(s, 8 + i * 8)
+            offset = i32(s, 12 + i * 8)
             type = i32(s, offset)
 
             # test for common types first (should perhaps use
             # a dictionary instead?)
 
             if type == VT_I2:
-                value = i16(s, offset+4)
+                value = i16(s, offset + 4)
                 if value >= 32768:
                     value = value - 65536
             elif type == VT_UI2:
-                value = i16(s, offset+4)
+                value = i16(s, offset + 4)
             elif type in (VT_I4, VT_ERROR):
-                value = i32(s, offset+4)
+                value = i32(s, offset + 4)
             elif type == VT_UI4:
-                value = i32(s, offset+4) # FIXME
+                value = i32(s, offset + 4)  # FIXME
             elif type in (VT_BSTR, VT_LPSTR):
-                count = i32(s, offset+4)
-                value = s[offset+8:offset+8+count-1]
+                count = i32(s, offset + 4)
+                value = s[offset + 8:offset + 8 + count - 1]
             elif type == VT_BLOB:
-                count = i32(s, offset+4)
-                value = s[offset+8:offset+8+count]
+                count = i32(s, offset + 4)
+                value = s[offset + 8:offset + 8 + count]
             elif type == VT_LPWSTR:
-                count = i32(s, offset+4)
-                value = self._unicode(s[offset+8:offset+8+count*2])
+                count = i32(s, offset + 4)
+                value = self._unicode(s[offset + 8:offset + 8 + count * 2])
             elif type == VT_FILETIME:
-                value = long(i32(s, offset+4)) + (long(i32(s, offset+8))<<32)
+                value = long(i32(s, offset + 4)) + (long(i32(s, offset + 8)) << 32)
                 # FIXME: this is a 64-bit int: "number of 100ns periods
                 # since Jan 1,1601".  Should map this to Python time
-                value = value / 10000000L # seconds
+                value = value / 10000000L  # seconds
             elif type == VT_UI1:
-                value = ord(s[offset+4])
+                value = ord(s[offset + 4])
             elif type == VT_CLSID:
-                value = self._clsid(s[offset+4:offset+20])
+                value = self._clsid(s[offset + 4:offset + 20])
             elif type == VT_CF:
-                count = i32(s, offset+4)
-                value = s[offset+8:offset+8+count]
+                count = i32(s, offset + 4)
+                value = s[offset + 8:offset + 8 + count]
             else:
-                value = None # everything else yields "None"
+                value = None  # everything else yields "None"
 
             # FIXME: add support for VT_VECTOR
 
-            #print "%08x" % id, repr(value),
-            #print "(%s)" % VT[i32(s, offset) & 0xFFF]
+            # print "%08x" % id, repr(value),
+            # print "(%s)" % VT[i32(s, offset) & 0xFFF]
 
             data[id] = value
 

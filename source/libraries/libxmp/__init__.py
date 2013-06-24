@@ -36,52 +36,53 @@ import sys
 import os
 import traceback
 import platform
+import libutil
 
-__all__ = ['XMPMeta','XMPFiles','XMPError','ExempiLoadError','files','core']
+__all__ = ['XMPMeta', 'XMPFiles', 'XMPError', 'ExempiLoadError', 'files', 'core']
 
 _XMP_ERROR_CODES = {
 	# More or less generic error codes.
 	0 : 'XMPErr_Unknown',
-	-1 : 'XMPErr_TBD',
-	-2 : 'XMPErr_Unavailable',
-	-3 : 'XMPErr_BadObject',
-	-4 : 'XMPErr_BadParam',
-	-5 : 'XMPErr_BadValue',
-	-6 : 'XMPErr_AssertFailure',
-	-7 : 'XMPErr_EnforceFailure',
-	-8 : 'XMPErr_Unimplemented',
-	-9 : 'XMPErr_InternalFailure',
-	-10 : 'XMPErr_Deprecated',
-	-11 : 'XMPErr_ExternalFailure',
-	-12 : 'XMPErr_UserAbort',
-	-13 : 'XMPErr_StdException',
-	-14 : 'XMPErr_UnknownException',
-	-15 : 'XMPErr_NoMemory',
+	- 1 : 'XMPErr_TBD',
+	- 2 : 'XMPErr_Unavailable',
+	- 3 : 'XMPErr_BadObject',
+	- 4 : 'XMPErr_BadParam',
+	- 5 : 'XMPErr_BadValue',
+	- 6 : 'XMPErr_AssertFailure',
+	- 7 : 'XMPErr_EnforceFailure',
+	- 8 : 'XMPErr_Unimplemented',
+	- 9 : 'XMPErr_InternalFailure',
+	- 10 : 'XMPErr_Deprecated',
+	- 11 : 'XMPErr_ExternalFailure',
+	- 12 : 'XMPErr_UserAbort',
+	- 13 : 'XMPErr_StdException',
+	- 14 : 'XMPErr_UnknownException',
+	- 15 : 'XMPErr_NoMemory',
 
 	# More specific parameter error codes.
-	-101 : 'XMPErr_BadSchema',
-	-102 : 'XMPErr_BadXPath',
-	-103 : 'XMPErr_BadOptions',
-	-104 : 'XMPErr_BadIndex',
-	-105 : 'XMPErr_BadIterPosition',
-	-106 : 'XMPErr_BadParse',
-	-107 : 'XMPErr_BadSerialize',
-	-108 : 'XMPErr_BadFileFormat',
-	-109 : 'XMPErr_NoFileHandler',
-	-110 : 'XMPErr_TooLargeForJPEG',
+	- 101 : 'XMPErr_BadSchema',
+	- 102 : 'XMPErr_BadXPath',
+	- 103 : 'XMPErr_BadOptions',
+	- 104 : 'XMPErr_BadIndex',
+	- 105 : 'XMPErr_BadIterPosition',
+	- 106 : 'XMPErr_BadParse',
+	- 107 : 'XMPErr_BadSerialize',
+	- 108 : 'XMPErr_BadFileFormat',
+	- 109 : 'XMPErr_NoFileHandler',
+	- 110 : 'XMPErr_TooLargeForJPEG',
 
 	# File format and internal structure error codes.
-	-201 : 'XMPErr_BadXML',
-	-202 : 'XMPErr_BadRDF',
-	-203 : 'XMPErr_BadXMP',
-	-204 : 'XMPErr_EmptyIterator',
-	-205 : 'XMPErr_BadUnicode',
-	-206 : 'XMPErr_BadTIFF',
-	-207 : 'XMPErr_BadJPEG',
-	-208 : 'XMPErr_BadPSD',
-	-209 : 'XMPErr_BadPSIR',
-	-210 : 'XMPErr_BadIPTC',
-	-211 : 'XMPErr_BadMPEG'
+	- 201 : 'XMPErr_BadXML',
+	- 202 : 'XMPErr_BadRDF',
+	- 203 : 'XMPErr_BadXMP',
+	- 204 : 'XMPErr_EmptyIterator',
+	- 205 : 'XMPErr_BadUnicode',
+	- 206 : 'XMPErr_BadTIFF',
+	- 207 : 'XMPErr_BadJPEG',
+	- 208 : 'XMPErr_BadPSD',
+	- 209 : 'XMPErr_BadPSIR',
+	- 210 : 'XMPErr_BadIPTC',
+	- 211 : 'XMPErr_BadMPEG'
 }
 
 #
@@ -105,29 +106,21 @@ def _check_for_error():
 	"""
 	err = _exempi.xmp_get_error()
 	if err != 0:
-		raise XMPError( _XMP_ERROR_CODES[err] )
+		raise XMPError(_XMP_ERROR_CODES[err])
 
 #
 #  Load C library - Exempi must be installed on the system
 #
 try:
-	architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp)==8 else 'x86'
-	operatingSystem = platform.system()
-
-	path_to_lib = {
-		'Windows' : './libraries/libxmp/bin-{0}-Windows/libexempi.dll'.format(architecture),
-		'Linux' : './libraries/libxmp/bin-{0}-Linux/libexempi.so'.format(architecture)
-	}
-	if platform.system() in path_to_lib:
-		_exempi = ctypes.cdll.LoadLibrary(path_to_lib[platform.system()])
-	else:
+	try:
+		_exempi = libutil.load_library('libxmp', 'libexempi')
+	except:
 		# Unsupported platform (Mac?), try loading system-wide installed exempi
 		lib = ctypes.util.find_library('exempi')
 		if lib:
 			_exempi = ctypes.CDLL(lib)
 		else:
 			raise Exception('Unsupported platform %s. Cannot load shared library exempi.' % platform.system())
-
 	if not _exempi.xmp_init():
 		_check_for_error()
 except OSError, e:
@@ -138,7 +131,7 @@ except OSError, e:
 # Define arg/return types for exempi functions.
 #
 from libxmp.types import define_function_types
-define_function_types( _exempi )
+define_function_types(_exempi)
 
 # Import classes into global namespace
 from core import *

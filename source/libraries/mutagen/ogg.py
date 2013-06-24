@@ -158,7 +158,7 @@ class OggPage(object):
         return data
 
     def __size(self):
-        size = 27 # Initial header size
+        size = 27  # Initial header size
         for datum in self.packets:
             quot, rem = divmod(len(datum), 255)
             size += quot + 1
@@ -390,7 +390,7 @@ class OggPage(object):
         """
 
         # For non-muxed streams, look at the last page.
-        try: fileobj.seek(-256*256, 2)
+        try: fileobj.seek(-256 * 256, 2)
         except IOError:
             # The file is less than 64k in length.
             fileobj.seek(0)

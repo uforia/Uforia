@@ -15,14 +15,14 @@ from .genres import genre_by_index
 TAG_VERSION_1_0 = 1
 TAG_VERSION_1_1 = 2
 
-#id3v1 specs
-#0-2:"TAG"
-#3-32:Title
-#33-62:Artist
-#63-92:Album
-#93-96:Year
-#97-126:Comment
-#127:Genre
+# id3v1 specs
+# 0-2:"TAG"
+# 3-32:Title
+# 33-62:Artist
+# 63-92:Album
+# 93-96:Year
+# 97-126:Comment
+# 127:Genre
 
 def _arrange_id3_field(raw_field):
     """Format the read field properly
@@ -62,9 +62,9 @@ class Id3v1(object):
     def _read_tag(self, data):
         if data[0:3] != 'TAG':
             return
-        #check if the comment field contains track info
+        # check if the comment field contains track info
         if ((data[125] == '\0') and (data[126] != '\0')) or ((data[125] == '\x20') and (data[126] != '\x20')):
-            #We have a v1.1
+            # We have a v1.1
             self.version = TAG_VERSION_1_1
             self.track = min(ord(data[126]), 99)
             self.comment = _arrange_id3_field(data[97:125])

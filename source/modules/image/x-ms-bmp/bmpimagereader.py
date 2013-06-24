@@ -1,12 +1,27 @@
+# Copyright (C) 2013 Hogeschool van Amsterdam
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 # This is the image module for BMP
 
-#TABLE: Tile:BLOB, Compression:LONGTEXT, Remaining:LONGTEXT
+# TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Remaining:LONGTEXT
 
-import sys, imp, traceback
+import sys
+import imp
+import traceback
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-def process(fullpath, config, columns=None):
+
+def process(fullpath, config, rcontext, columns=None):
     # Try to parse BMP data
     try:
         image = Image.open(fullpath, "r")
@@ -41,7 +56,7 @@ def process(fullpath, config, columns=None):
         return assorted
 
     except:
-        traceback.print_exc(file = sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
         # Store values in database so not the whole application crashes
         return None

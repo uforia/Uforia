@@ -1,17 +1,25 @@
-'''
-Created on 14 mrt. 2013
+# Copyright (C) 2013 Hogeschool van Amsterdam
 
-@author: Jimmy van den Berg
-'''
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 # This is the image module for TIFF
 
-#TABLE: Tile:BLOB, ICC_Profile:BLOB, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:BLOB, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:BLOB, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:BLOB, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:BLOB
+# TABLE: Tile:LONGTEXT, ICC_Profile:BLOB, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:BLOB, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:BLOB, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:BLOB, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
 
-import sys, traceback
+import sys
+import traceback
 from PIL import Image, TiffImagePlugin
 
-def process(fullpath, config, columns=None):
+
+def process(fullpath, config, rcontext, columns=None):
 
         # Try to parse TIFF data
         try:
@@ -20,14 +28,16 @@ def process(fullpath, config, columns=None):
             assorted = [image.tile]
             info_dictionary = image.info
 
-            # Check if ICC profile is in info dictionary, if so put it in our list
+            # Check if ICC profile is in info dictionary,
+            # if so put it in our list
             if "icc_profile" in info_dictionary:
                 assorted.append(info_dictionary["icc_profile"])
                 info_dictionary.pop("icc_profile")
             else:
                 assorted.append(None)
 
-            # Check if compression is in info dictionary, if so put it in our list
+            # Check if compression is in info dictionary,
+            # if so put it in our list
             if "compression" in info_dictionary:
                 assorted.append(info_dictionary["compression"])
                 info_dictionary.pop("compression")
@@ -43,7 +53,8 @@ def process(fullpath, config, columns=None):
                 assorted.append(None)
                 assorted.append(None)
 
-            # Check if resolution is in info dictionary, if so put it in our list
+            # Check if resolution is in info dictionary,
+            # if so put it in our list
             if "resolution" in info_dictionary:
                 assorted.append(info_dictionary["resolution"][0])
                 assorted.append(info_dictionary["resolution"][1])
@@ -52,12 +63,14 @@ def process(fullpath, config, columns=None):
                 assorted.append(None)
                 assorted.append(None)
 
-            # If there are still other values in the dict then put those in column
+            # If there are still other values in the
+            # dict then put those in column
             assorted.append(info_dictionary)
 
             # Get all values from tag atribute, EXIF Tags
             assorted.append(image.tag.get(TiffImagePlugin.BITSPERSAMPLE))
-            assorted.append(image.tag.get(TiffImagePlugin.PHOTOMETRIC_INTERPRETATION))
+            assorted.append(image.tag.get
+                            (TiffImagePlugin.PHOTOMETRIC_INTERPRETATION))
             assorted.append(image.tag.get(TiffImagePlugin.FILLORDER))
             assorted.append(image.tag.get(TiffImagePlugin.IMAGEDESCRIPTION))
             assorted.append(image.tag.get(TiffImagePlugin.STRIPOFFSETS))
@@ -66,7 +79,8 @@ def process(fullpath, config, columns=None):
             assorted.append(image.tag.get(TiffImagePlugin.STRIPBYTECOUNTS))
             assorted.append(image.tag.get(TiffImagePlugin.X_RESOLUTION))
             assorted.append(image.tag.get(TiffImagePlugin.Y_RESOLUTION))
-            assorted.append(image.tag.get(TiffImagePlugin.PLANAR_CONFIGURATION))
+            assorted.append(image.tag.get
+                            (TiffImagePlugin.PLANAR_CONFIGURATION))
             assorted.append(image.tag.get(TiffImagePlugin.RESOLUTION_UNIT))
             assorted.append(image.tag.get(TiffImagePlugin.SOFTWARE))
             assorted.append(image.tag.get(TiffImagePlugin.DATE_TIME))
@@ -108,7 +122,7 @@ def process(fullpath, config, columns=None):
             return assorted
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

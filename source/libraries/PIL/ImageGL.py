@@ -12,17 +12,17 @@
 # See the README file for information on usage and redistribution.
 #
 
-##
+# #
 # OpenGL pixmap/texture interface (requires imToolkit OpenGL
 # extensions.)
-##
+# #
 
 import _imaginggl
 
-##
+# #
 # Texture factory.
 
 class TextureFactory:
-    pass # overwritten by the _imaginggl module
+    pass  # overwritten by the _imaginggl module
 
 from _imaginggl import *

@@ -22,7 +22,7 @@ import Image, ImageFilter, ImageStat
 
 class _Enhance:
 
-    ##
+    # #
     # Returns an enhanced image. The enhancement factor is a floating
     # point value controlling the enhancement. Factor 1.0 always
     # returns a copy of the original image, lower factors mean less
@@ -35,7 +35,7 @@ class _Enhance:
     def enhance(self, factor):
         return Image.blend(self.degenerate, self.image, factor)
 
-##
+# #
 # Color enhancement object.
 # <p>
 # This class can be used to adjust the colour balance of an image, in
@@ -49,7 +49,7 @@ class Color(_Enhance):
         self.image = image
         self.degenerate = image.convert("L").convert(image.mode)
 
-##
+# #
 # Contrast enhancement object.
 # <p>
 # This class can be used to control the contrast of an image, similar
@@ -63,7 +63,7 @@ class Contrast(_Enhance):
         mean = int(ImageStat.Stat(image.convert("L")).mean[0] + 0.5)
         self.degenerate = Image.new("L", image.size, mean).convert(image.mode)
 
-##
+# #
 # Brightness enhancement object.
 # <p>
 # This class can be used to control the brighntess of an image.  An
@@ -76,7 +76,7 @@ class Brightness(_Enhance):
         self.image = image
         self.degenerate = Image.new(image.mode, image.size, 0)
 
-##
+# #
 # Sharpness enhancement object.
 # <p>
 # This class can be used to adjust the sharpness of an image.  The

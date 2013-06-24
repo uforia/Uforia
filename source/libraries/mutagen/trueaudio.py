@@ -50,7 +50,7 @@ class TrueAudio(ID3FileType):
     _mimes = ["audio/x-tta"]
 
     def score(filename, fileobj, header):
-        return (header.startswith("ID3") + header.startswith("TTA") +
+        return (header.startswith("ID3") + header.startswith("TTA") + 
                 filename.lower().endswith(".tta") * 2)
     score = staticmethod(score)
 

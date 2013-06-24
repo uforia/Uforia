@@ -65,26 +65,26 @@ class XMPFiles:
 	.. todo::
 		Documentation
     """
-	def __init__(self, **kwargs ):
+	def __init__(self, **kwargs):
 		self._file_path = None
 		self.xmpfileptr = _exempi.xmp_files_new()
 
-		if kwargs.has_key( 'file_path' ):
+		if kwargs.has_key('file_path'):
 			file_path = kwargs['file_path']
 			del kwargs['file_path']
 
-			self.open_file( file_path, **kwargs )
+			self.open_file(file_path, **kwargs)
 
 
 	def __del__(self):
 		"""
 		Free up the memory associated with the XMP file instance.
 		"""
-		if not _exempi.xmp_files_free( self.xmpfileptr ):
-			raise XMPError( 'Could not free memory for XMPFiles.' )
+		if not _exempi.xmp_files_free(self.xmpfileptr):
+			raise XMPError('Could not free memory for XMPFiles.')
 
 
-	def open_file(self, file_path, **kwargs ):
+	def open_file(self, file_path, **kwargs):
 		"""
 		Open a given file and read XMP from file. File must be closed again with
 		:func:`close_file`
@@ -95,7 +95,7 @@ class XMPFiles:
 		.. todo::
 			Change signature into using kwargs to set option flag
 		"""
-		open_flags = options_mask( XMP_OPEN_OPTIONS, **kwargs ) if kwargs else XMP_OPEN_NOOPTION
+		open_flags = options_mask(XMP_OPEN_OPTIONS, **kwargs) if kwargs else XMP_OPEN_NOOPTION
 
 		if self._file_path != None:
 			raise XMPError('A file is already open - close it first.')
@@ -106,12 +106,12 @@ class XMPFiles:
 		if not os.path.exists(file_path):
 			raise XMPError('File does not exists.')
 
-		if _exempi.xmp_files_open( self.xmpfileptr, file_path, open_flags ):
+		if _exempi.xmp_files_open(self.xmpfileptr, file_path, open_flags):
 			self._file_path = file_path
 		else:
 			_check_for_error()
 
-	def close_file( self, close_flags = XMP_CLOSE_NOOPTION ):
+	def close_file(self, close_flags=XMP_CLOSE_NOOPTION):
 		"""
 		Close file after use. XMP will not be written to file until
 		this method has been called.
@@ -122,27 +122,27 @@ class XMPFiles:
 		.. todo::
 			Change signature into using kwargs to set option flag
 		"""
-		if not _exempi.xmp_files_close( self.xmpfileptr, close_flags ):
+		if not _exempi.xmp_files_close(self.xmpfileptr, close_flags):
 			_check_for_error()
 		else:
 			self._file_path = None
 
-	def get_xmp( self ):
+	def get_xmp(self):
 		"""
 		Get XMP from file.
 
 		:return: A new :class:`libxmp.core.XMPMeta` instance.
 		:raises XMPError: in case of errors.
 		"""
-		xmpptr = _exempi.xmp_files_get_new_xmp( self.xmpfileptr )
+		xmpptr = _exempi.xmp_files_get_new_xmp(self.xmpfileptr)
 		_check_for_error()
 
 		if xmpptr:
-			return XMPMeta( _xmp_internal_ref = xmpptr )
+			return XMPMeta(_xmp_internal_ref=xmpptr)
 		else:
 			return None
 
-	def put_xmp( self, xmp_obj ):
+	def put_xmp(self, xmp_obj):
 		"""
 		Write XMPMeta object to file. See also :func:`can_put_xmp`.
 
@@ -151,10 +151,10 @@ class XMPFiles:
 		xmpptr = xmp_obj.xmpptr
 
 		if xmpptr != None:
-			if not _exempi.xmp_files_put_xmp( self.xmpfileptr, xmpptr ):
+			if not _exempi.xmp_files_put_xmp(self.xmpfileptr, xmpptr):
 				_check_for_error()
 
-	def can_put_xmp( self, xmp_obj ):
+	def can_put_xmp(self, xmp_obj):
 		"""
 		Determines if a given :class:`libxmp.core.XMPMeta` objet can be written in the file.
 
@@ -162,12 +162,12 @@ class XMPFiles:
 		:return:  true if :class:`libxmp.core.XMPMeta` object can be written in file.
 		:rtype: bool
 		"""
-		if not isinstance( xmp_obj, XMPMeta ):
+		if not isinstance(xmp_obj, XMPMeta):
 			raise XMPError('Not a XMPMeta object')
 
 		xmpptr = xmp_obj.xmpptr
 
 		if xmpptr != None:
-			return _exempi.xmp_files_can_put_xmp(self.xmpfileptr, xmpptr )
+			return _exempi.xmp_files_can_put_xmp(self.xmpfileptr, xmpptr)
 		else:
 			return False

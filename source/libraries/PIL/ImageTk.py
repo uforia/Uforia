@@ -27,13 +27,13 @@
 
 import Tkinter, Image
 
-##
+# #
 # The <b>ImageTk</b> module contains support to create and modify
 # Tkinter <b>BitmapImage</b> and <b>PhotoImage</b> objects.
 # <p>
 # For examples, see the demo programs in the <i>Scripts</i>
 # directory.
-##
+# #
 
 # --------------------------------------------------------------------
 # Check for Tkinter interface hooks
@@ -44,7 +44,7 @@ def _pilbitmap_check():
     global _pilbitmap_ok
     if _pilbitmap_ok is None:
         try:
-            im = Image.new("1", (1,1))
+            im = Image.new("1", (1, 1))
             Tkinter.BitmapImage(data="PIL:%d" % im.im.id)
             _pilbitmap_ok = 1
         except Tkinter.TclError:
@@ -54,14 +54,14 @@ def _pilbitmap_check():
 # --------------------------------------------------------------------
 # PhotoImage
 
-##
+# #
 # Creates a Tkinter-compatible photo image.  This can be used
 # everywhere Tkinter expects an image object.  If the image is an RGBA
 # image, pixels having alpha 0 are treated as transparent.
 
 class PhotoImage:
 
-    ##
+    # #
     # Create a photo image object. The constructor takes either
     # a PIL image, or a mode and a size.  Alternatively, you can
     # use the <b>file</b> or <b>data</b> options to initialize
@@ -98,7 +98,7 @@ class PhotoImage:
                 try:
                     mode = image.palette.mode
                 except AttributeError:
-                    mode = "RGB" # default
+                    mode = "RGB"  # default
             size = image.size
             kw["width"], kw["height"] = size
         else:
@@ -121,9 +121,9 @@ class PhotoImage:
         try:
             self.__photo.tk.call("image", "delete", name)
         except:
-            pass # ignore internal errors
+            pass  # ignore internal errors
 
-    ##
+    # #
     # Get the Tkinter photo image identifier.  This method is
     # automatically called by Tkinter whenever a PhotoImage object is
     # passed to a Tkinter method.
@@ -133,7 +133,7 @@ class PhotoImage:
     def __str__(self):
         return str(self.__photo)
 
-    ##
+    # #
     # Get the width of the image.
     #
     # @return The width, in pixels.
@@ -141,7 +141,7 @@ class PhotoImage:
     def width(self):
         return self.__size[0]
 
-    ##
+    # #
     # Get the height of the image.
     #
     # @return The height, in pixels.
@@ -149,7 +149,7 @@ class PhotoImage:
     def height(self):
         return self.__size[1]
 
-    ##
+    # #
     # Paste a PIL image into the photo image.  Note that this can
     # be very slow if the photo image is displayed.
     #
@@ -169,7 +169,7 @@ class PhotoImage:
             block = image
         else:
             block = image.new_block(self.__mode, im.size)
-            image.convert2(block, image) # convert directly between buffers
+            image.convert2(block, image)  # convert directly between buffers
 
         tk = self.__photo.tk
 
@@ -185,18 +185,18 @@ class PhotoImage:
                     _imagingtk.tkinit(id(tk), 0)
                 tk.call("PyImagingPhoto", self.__photo, block.id)
             except (ImportError, AttributeError, Tkinter.TclError):
-                raise # configuration problem; cannot attach to Tkinter
+                raise  # configuration problem; cannot attach to Tkinter
 
 # --------------------------------------------------------------------
 # BitmapImage
 
-##
+# #
 # Create a Tkinter-compatible bitmap image.  This can be used
 # everywhere Tkinter expects an image object.
 
 class BitmapImage:
 
-    ##
+    # #
     # Create a Tkinter-compatible bitmap image.
     # <p>
     # The given image must have mode "1".  Pixels having value 0 are
@@ -228,7 +228,7 @@ class BitmapImage:
             # fast way (requires the pilbitmap booster patch)
             image.load()
             kw["data"] = "PIL:%d" % image.im.id
-            self.__im = image # must keep a reference
+            self.__im = image  # must keep a reference
         else:
             # slow but safe way
             kw["data"] = image.tobitmap()
@@ -240,9 +240,9 @@ class BitmapImage:
         try:
             self.__photo.tk.call("image", "delete", name)
         except:
-            pass # ignore internal errors
+            pass  # ignore internal errors
 
-    ##
+    # #
     # Get the width of the image.
     #
     # @return The width, in pixels.
@@ -250,7 +250,7 @@ class BitmapImage:
     def width(self):
         return self.__size[0]
 
-    ##
+    # #
     # Get the height of the image.
     #
     # @return The height, in pixels.
@@ -258,7 +258,7 @@ class BitmapImage:
     def height(self):
         return self.__size[1]
 
-    ##
+    # #
     # Get the Tkinter bitmap image identifier.  This method is
     # automatically called by Tkinter whenever a BitmapImage object
     # is passed to a Tkinter method.
@@ -268,7 +268,7 @@ class BitmapImage:
     def __str__(self):
         return str(self.__photo)
 
-##
+# #
 # Copies the contents of a PhotoImage to a PIL image memory.
 
 def getimage(photo):

@@ -23,10 +23,10 @@ import string
 
 
 def i16(c):
-    return ord(c[0]) + (ord(c[1])<<8)
+    return ord(c[0]) + (ord(c[1]) << 8)
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
 #
 # decoder
@@ -34,7 +34,7 @@ def i32(c):
 def _accept(prefix):
     return i16(prefix[4:6]) in [0xAF11, 0xAF12]
 
-##
+# #
 # Image plugin for the FLI/FLC animation format.  Use the <b>seek</b>
 # method to load individual frames.
 
@@ -64,7 +64,7 @@ class FliImageFile(ImageFile.ImageFile):
         self.info["duration"] = duration
 
         # look for palette
-        palette = map(lambda a: (a,a,a), range(256))
+        palette = map(lambda a: (a, a, a), range(256))
 
         s = self.fp.read(16)
 
@@ -83,7 +83,7 @@ class FliImageFile(ImageFile.ImageFile):
             elif i16(s[4:6]) == 4:
                 self._palette(palette, 0)
 
-        palette = map(lambda (r,g,b): chr(r)+chr(g)+chr(b), palette)
+        palette = map(lambda (r, g, b): chr(r) + chr(g) + chr(b), palette)
         self.palette = ImagePalette.raw("RGB", string.join(palette, ""))
 
         # set things up to decode first frame
@@ -105,8 +105,8 @@ class FliImageFile(ImageFile.ImageFile):
             s = self.fp.read(n * 3)
             for n in range(0, len(s), 3):
                 r = ord(s[n]) << shift
-                g = ord(s[n+1]) << shift
-                b = ord(s[n+2]) << shift
+                g = ord(s[n + 1]) << shift
+                b = ord(s[n + 2]) << shift
                 palette[i] = (r, g, b)
                 i = i + 1
 
@@ -127,7 +127,7 @@ class FliImageFile(ImageFile.ImageFile):
         framesize = i32(s)
 
         self.decodermaxblock = framesize
-        self.tile = [("fli", (0,0)+self.size, self.__offset, None)]
+        self.tile = [("fli", (0, 0) + self.size, self.__offset, None)]
 
         self.__offset = self.__offset + framesize
 

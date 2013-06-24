@@ -1,0 +1,6 @@
+include ez_setup.py *.txt
+recursive-include doc *.*
+recursive-include src *.c *.h *.txt
+prune src/sdk.orig
+include RELEASE-VERSION
+include version.py

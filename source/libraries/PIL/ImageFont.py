@@ -55,7 +55,7 @@ except ImportError:
 # position according to dx, dy.
 # --------------------------------------------------------------------
 
-##
+# #
 # The <b>ImageFont</b> module defines a class with the same name.
 # Instances of this class store bitmap fonts, and are used with the
 # <b>text</b> method of the <b>ImageDraw</b> class.
@@ -100,7 +100,7 @@ class ImageFont:
         if file.readline() != "PILfont\n":
             raise SyntaxError("Not a PILfont file")
         d = string.split(file.readline(), ";")
-        self.info = [] # FIXME: should be a dictionary
+        self.info = []  # FIXME: should be a dictionary
         while True:
             s = file.readline()
             if not s or s == "DATA\n":
@@ -108,7 +108,7 @@ class ImageFont:
             self.info.append(s)
 
         # read PILfont metrics
-        data = file.read(256*20)
+        data = file.read(256 * 20)
 
         # check image
         if image.mode not in ("1", "L"):
@@ -122,7 +122,7 @@ class ImageFont:
         self.getsize = self.font.getsize
         self.getmask = self.font.getmask
 
-##
+# #
 # Wrapper for FreeType fonts.  Application code should use the
 # <b>truetype</b> factory function to create font objects.
 
@@ -148,10 +148,10 @@ class FreeTypeFont:
     def getmask2(self, text, mode="", fill=Image.core.fill):
         size, offset = self.font.getsize(text)
         im = fill("L", size, 0)
-        self.font.render(text, im.id, mode=="1")
+        self.font.render(text, im.id, mode == "1")
         return im, offset
 
-##
+# #
 # Wrapper that creates a transposed font from any existing font
 # object.
 #
@@ -165,7 +165,7 @@ class TransposedFont:
 
     def __init__(self, font, orientation=None):
         self.font = font
-        self.orientation = orientation # any 'transpose' argument, or None
+        self.orientation = orientation  # any 'transpose' argument, or None
 
     def getsize(self, text):
         w, h = self.font.getsize(text)
@@ -179,7 +179,7 @@ class TransposedFont:
             return im.transpose(self.orientation)
         return im
 
-##
+# #
 # Load font file.  This function loads a font object from the given
 # bitmap font file, and returns the corresponding font object.
 #
@@ -193,7 +193,7 @@ def load(filename):
     f._load_pilfont(filename)
     return f
 
-##
+# #
 # Load a TrueType or OpenType font file, and create a font object.
 # This function loads a font object from the given file, and creates
 # a font object for a font of the given size.
@@ -227,7 +227,7 @@ def truetype(filename, size, index=0, encoding=""):
                 return FreeTypeFont(filename, size, index, encoding)
         raise
 
-##
+# #
 # Load font file.  Same as load, but searches for a bitmap font along
 # the Python path.
 #
@@ -246,7 +246,7 @@ def load_path(filename):
                 pass
     raise IOError("cannot find font file")
 
-##
+# #
 # Load a (probably rather ugly) default font.
 #
 # @return A font object.

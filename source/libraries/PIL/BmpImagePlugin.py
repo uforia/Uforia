@@ -36,10 +36,10 @@ import Image, ImageFile, ImagePalette
 # Read BMP file
 
 def i16(c):
-    return ord(c[0]) + (ord(c[1])<<8)
+    return ord(c[0]) + (ord(c[1]) << 8)
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
 
 BIT2MODE = {
@@ -55,7 +55,7 @@ BIT2MODE = {
 def _accept(prefix):
     return prefix[:2] == "BM"
 
-##
+# #
 # Image plugin for the Windows BMP format.
 
 class BmpImageFile(ImageFile.ImageFile):
@@ -63,7 +63,7 @@ class BmpImageFile(ImageFile.ImageFile):
     format = "BMP"
     format_description = "Windows Bitmap"
 
-    def _bitmap(self, header = 0, offset = 0):
+    def _bitmap(self, header=0, offset=0):
 
         if header:
             self.fp.seek(header)
@@ -72,7 +72,7 @@ class BmpImageFile(ImageFile.ImageFile):
 
         # CORE/INFO
         s = read(4)
-        s = s + ImageFile._safe_read(self.fp, i32(s)-4)
+        s = s + ImageFile._safe_read(self.fp, i32(s) - 4)
 
         if len(s) == 12:
 
@@ -95,7 +95,7 @@ class BmpImageFile(ImageFile.ImageFile):
             direction = -1
             if s[11] == '\xff':
                 # upside-down storage
-                self.size = self.size[0], 2**32 - self.size[1]
+                self.size = self.size[0], 2 ** 32 - self.size[1]
                 direction = 0
 
         else:
@@ -135,7 +135,7 @@ class BmpImageFile(ImageFile.ImageFile):
                 indices = range(colors)
             for i in indices:
                 rgb = read(lutsize)[:3]
-                if rgb != chr(i)*3:
+                if rgb != chr(i) * 3:
                     greyscale = 0
                 palette.append(rgb)
             if greyscale:
@@ -155,7 +155,7 @@ class BmpImageFile(ImageFile.ImageFile):
         self.tile = [("raw",
                      (0, 0) + self.size,
                      offset,
-                     (rawmode, ((self.size[0]*bits+31)>>3)&(~3), direction))]
+                     (rawmode, ((self.size[0] * bits + 31) >> 3) & (~3), direction))]
 
         self.info["compression"] = compression
 
@@ -183,10 +183,10 @@ class DibImageFile(BmpImageFile):
 # Write BMP file
 
 def o16(i):
-    return chr(i&255) + chr(i>>8&255)
+    return chr(i & 255) + chr(i >> 8 & 255)
 
 def o32(i):
-    return chr(i&255) + chr(i>>8&255) + chr(i>>16&255) + chr(i>>24&255)
+    return chr(i & 255) + chr(i >> 8 & 255) + chr(i >> 16 & 255) + chr(i >> 24 & 255)
 
 SAVE = {
     "1": ("1", 1, 2),
@@ -205,30 +205,30 @@ def _save(im, fp, filename, check=0):
     if check:
         return check
 
-    stride = ((im.size[0]*bits+7)/8+3)&(~3)
-    header = 40 # or 64 for OS/2 version 2
+    stride = ((im.size[0] * bits + 7) / 8 + 3) & (~3)
+    header = 40  # or 64 for OS/2 version 2
     offset = 14 + header + colors * 4
-    image  = stride * im.size[1]
+    image = stride * im.size[1]
 
     # bitmap header
-    fp.write("BM" +                     # file type (magic)
-             o32(offset+image) +        # file size
-             o32(0) +                   # reserved
-             o32(offset))               # image data offset
+    fp.write("BM" +  # file type (magic)
+             o32(offset + image) +  # file size
+             o32(0) +  # reserved
+             o32(offset))  # image data offset
 
     # bitmap info header
-    fp.write(o32(header) +              # info header size
-             o32(im.size[0]) +          # width
-             o32(im.size[1]) +          # height
-             o16(1) +                   # planes
-             o16(bits) +                # depth
-             o32(0) +                   # compression (0=uncompressed)
-             o32(image) +               # size of bitmap
-             o32(1) + o32(1) +          # resolution
-             o32(colors) +              # colors used
-             o32(colors))               # colors important
+    fp.write(o32(header) +  # info header size
+             o32(im.size[0]) +  # width
+             o32(im.size[1]) +  # height
+             o16(1) +  # planes
+             o16(bits) +  # depth
+             o32(0) +  # compression (0=uncompressed)
+             o32(image) +  # size of bitmap
+             o32(1) + o32(1) +  # resolution
+             o32(colors) +  # colors used
+             o32(colors))  # colors important
 
-    fp.write("\000" * (header - 40))    # padding (for OS/2 format)
+    fp.write("\000" * (header - 40))  # padding (for OS/2 format)
 
     if im.mode == "1":
         for i in (0, 255):
@@ -239,7 +239,7 @@ def _save(im, fp, filename, check=0):
     elif im.mode == "P":
         fp.write(im.im.getpalette("RGB", "BGRX"))
 
-    ImageFile._save(im, fp, [("raw", (0,0)+im.size, 0, (rawmode, stride, -1))])
+    ImageFile._save(im, fp, [("raw", (0, 0) + im.size, 0, (rawmode, stride, -1))])
 
 #
 # --------------------------------------------------------------------

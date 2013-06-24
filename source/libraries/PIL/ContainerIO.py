@@ -14,13 +14,13 @@
 # See the README file for information on usage and redistribution.
 #
 
-##
+# #
 # A file object that provides read access to a part of an existing
 # file (for example a TAR file).
 
 class ContainerIO:
 
-    ##
+    # #
     # Create file object.
     #
     # @param file Existing file.
@@ -34,13 +34,13 @@ class ContainerIO:
         self.length = length
         self.fh.seek(offset)
 
-    ##
+    # #
     # Always false.
 
     def isatty(self):
         return 0
 
-    ##
+    # #
     # Move file pointer.
     #
     # @param offset Offset in bytes.
@@ -48,7 +48,7 @@ class ContainerIO:
     #    for current offset, and 2 for end of region.  You cannot move
     #    the pointer outside the defined region.
 
-    def seek(self, offset, mode = 0):
+    def seek(self, offset, mode=0):
         if mode == 1:
             self.pos = self.pos + offset
         elif mode == 2:
@@ -59,7 +59,7 @@ class ContainerIO:
         self.pos = max(0, min(self.pos, self.length))
         self.fh.seek(self.offset + self.pos)
 
-    ##
+    # #
     # Get current file pointer.
     #
     # @return Offset from start of region, in bytes.
@@ -67,7 +67,7 @@ class ContainerIO:
     def tell(self):
         return self.pos
 
-    ##
+    # #
     # Read data.
     #
     # @def read(bytes=0)
@@ -75,17 +75,17 @@ class ContainerIO:
     #     read until end of region.
     # @return An 8-bit string.
 
-    def read(self, n = 0):
+    def read(self, n=0):
         if n:
             n = min(n, self.length - self.pos)
         else:
             n = self.length - self.pos
-        if not n: # EOF
+        if not n:  # EOF
             return ""
         self.pos = self.pos + n
         return self.fh.read(n)
 
-    ##
+    # #
     # Read a line of text.
     #
     # @return An 8-bit string.
@@ -101,7 +101,7 @@ class ContainerIO:
                 break
         return s
 
-    ##
+    # #
     # Read multiple lines of text.
     #
     # @return A list of 8-bit strings.

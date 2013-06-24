@@ -16,14 +16,14 @@ from .genres import genre_by_index
 
 ID_ID3 = 'ID3'
 ID_3DI = '3DI'
-#The id3 flags are backwards
+# The id3 flags are backwards
 FLAG_UNSYNCH = 1 << 7
 FLAG_EXT_HEADER = 1 << 6
 FLAG_EXPERIMENTAL = 1 << 5
 FLAG_FOOTER = 1 << 4
 
 POS_BEGIN = 0
-POS_END   = 1
+POS_END = 1
 
 re_numeric_genre = re.compile(ur'^\(?(\d{1,3})')
 re_frame_type = re.compile(ur'[A-Z0-9]{3,4}')
@@ -68,8 +68,8 @@ SIZE_FOOTER = 10
 
 class Header(object):
     def __init__(self, fp, header_id=ID_ID3):
-        self.datasize = 0 #size of the data only (extheader + frames)
-        self.tagsize = 0 # size of the whole tag (datasize + header + footer)
+        self.datasize = 0  # size of the data only (extheader + frames)
+        self.tagsize = 0  # size of the whole tag (datasize + header + footer)
         self.vmajor = 0
         self.vminor = 0
         self.hflags = 0
@@ -91,8 +91,8 @@ class Header(object):
 
 class ExtHeader(object):
     def __init__(self, fp, tagversion):
-        #There's no use for the extheader at the moment, so for now, the sole purpose of this class
-        #is to skip the size of this header and advance the file descriptor for the rest of the read
+        # There's no use for the extheader at the moment, so for now, the sole purpose of this class
+        # is to skip the size of this header and advance the file descriptor for the rest of the read
         self.size = _read_id3_size(fp.read(4), tagversion > 3)
         self.data = fp.read(self.size - 4)
 
@@ -211,8 +211,8 @@ class Id3v2(object):
 
     #---Private
     def _decode_track(self, track):
-        #The track field can either contain a track number or a string in the
-        #format <trackno>/<trackcount> (Example: 3/14)
+        # The track field can either contain a track number or a string in the
+        # format <trackno>/<trackcount> (Example: 3/14)
         try:
             return int(track)
         except ValueError:
@@ -239,8 +239,8 @@ class Id3v2(object):
             frame = self._get_frame(fp)
         if (self._last_read_frame is not None) and (self._last_read_frame.size > 0x7f) and \
             (not self._had_large_frame) and (self.version == 4):
-            #probably needs a itunes hack, in any case, this is the first large frame,
-            #re-reading can't hurt.
+            # probably needs a itunes hack, in any case, this is the first large frame,
+            # re-reading can't hurt.
             self._header.vmajor = 3
             fp.seek(offset)
             self._read_frames(fp)

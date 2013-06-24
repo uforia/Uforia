@@ -23,13 +23,13 @@ def register(viewer, order=1):
         if issubclass(viewer, Viewer):
             viewer = viewer()
     except TypeError:
-        pass # raised if viewer wasn't a class
+        pass  # raised if viewer wasn't a class
     if order > 0:
         _viewers.append(viewer)
     elif order < 0:
         _viewers.insert(0, viewer)
 
-##
+# #
 # Displays a given image.
 #
 # @param image An image object.
@@ -43,7 +43,7 @@ def show(image, title=None, **options):
             return 1
     return 0
 
-##
+# #
 # Base class for viewers.
 
 class Viewer:

@@ -1,17 +1,25 @@
-'''
-Created on 2 mrt. 2013
+# Copyright (C) 2013 Hogeschool van Amsterdam
 
-@author: Jimmy van den Berg
-'''
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 # This is the audio module for MP4
 
-#TABLE: Length:REAL, Bitrate:INT, NumberOfChannels:INT, SampleRate:BIGINT, BitsPerSample:INT, Title:LONGTEXT, Album:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Composer:LONGTEXT, Year:INT, Comment:LONGTEXT, Description:LONGTEXT, PurschaseDate:DATE, Grouping:LONGTEXT, Genre:LONGTEXT, Lyrics:LONGTEXT, PodcastURL:LONGTEXT, PodcastEpisode:LONGTEXT, PodcastCategory:LONGTEXT, PodcastKeywords:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, AlbumSortOrder:LONGTEXT, AlbumArtistSortOrder:LONGTEXT, ArtistSortOrder:LONGTEXT, TitleSortOrder:LONGTEXT, ComposerSortOrder:LONGTEXT, ShowSortOrder:LONGTEXT, ShowName:LONGTEXT, PartOfCompilation:BOOLEAN, PartOfAlbum:BOOLEAN,Podcast:BOOLEAN, Tempo:BIGINT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CoversFormat:LONGTEXT
+# TABLE: Length:REAL, Bitrate:INT, NumberOfChannels:INT, SampleRate:BIGINT, BitsPerSample:INT, Title:LONGTEXT, Album:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Composer:LONGTEXT, Year:INT, Comment:LONGTEXT, Description:LONGTEXT, PurschaseDate:DATE, Grouping:LONGTEXT, Genre:LONGTEXT, Lyrics:LONGTEXT, PodcastURL:LONGTEXT, PodcastEpisode:LONGTEXT, PodcastCategory:LONGTEXT, PodcastKeywords:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, AlbumSortOrder:LONGTEXT, AlbumArtistSortOrder:LONGTEXT, ArtistSortOrder:LONGTEXT, TitleSortOrder:LONGTEXT, ComposerSortOrder:LONGTEXT, ShowSortOrder:LONGTEXT, ShowName:LONGTEXT, PartOfCompilation:BOOLEAN, PartOfAlbum:BOOLEAN,Podcast:BOOLEAN, Tempo:BIGINT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CoversFormat:LONGTEXT
 
-import sys,traceback
+import sys
+import traceback
 import mutagen.mp4
 
-def process(fullpath, config, columns=None):
+
+def process(fullpath, config, rcontext, columns=None):
         # Try to parse mp4 data
         try:
             audio = mutagen.mp4.MP4(fullpath)
@@ -22,12 +30,15 @@ def process(fullpath, config, columns=None):
                 audio.info.bitrate,
                 audio.info.channels,
                 audio.info.sample_rate,
-                audio.info.bits_per_sample
-            ]
+                audio.info.bits_per_sample]
 
             # Source of these properties: mp4.py from mutagen (MP4Tags class)
-            tag_names = ['\xa9nam', '\xa9alb', '\xa9ART', 'aART', '\xa9wrt', '\xa9day', '\xa9cmt', 'desc', 'purd', '\xa9grp', '\xa9gen', '\xa9lyr', 'purl',
-                          'egid', 'catg', 'keyw', '\xa9too', 'cprt', 'soal', 'soaa', 'soar', 'sonm', 'soco', 'sosn', 'tvsh', 'cpil', 'pgap', 'pcst', 'tmpo']
+            tag_names = ['\xa9nam', '\xa9alb', '\xa9ART', 'aART', '\xa9wrt',
+                         '\xa9day', '\xa9cmt', 'desc', 'purd', '\xa9grp',
+                         '\xa9gen', '\xa9lyr', 'purl', 'egid', 'catg', 'keyw',
+                         '\xa9too', 'cprt', 'soal', 'soaa', 'soar', 'sonm',
+                         'soco', 'sosn', 'tvsh', 'cpil', 'pgap', 'pcst',
+                         'tmpo']
 
             for tag_name in tag_names:
                 if audio.tags.get(tag_name):
@@ -68,7 +79,7 @@ def process(fullpath, config, columns=None):
                 assorted.append(covers)
                 del covers
 
-            #Close connection with file
+            # Close connection with file
             del audio
 
             # Make sure we stored exactly the same amount of columns as
@@ -85,7 +96,7 @@ def process(fullpath, config, columns=None):
             return assorted
 
         except:
-            traceback.print_exc(file = sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
             # Store values in database so not the whole application crashes
             return None

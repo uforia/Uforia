@@ -61,7 +61,7 @@ class MonkeysAudioInfo(object):
         self.version /= 1000.0
         self.length = 0.0
         if self.sample_rate != 0 and total_frames > 0:
-            total_blocks = ((total_frames - 1) * blocks_per_frame +
+            total_blocks = ((total_frames - 1) * blocks_per_frame + 
                             final_frame_blocks)
             self.length = float(total_blocks) / self.sample_rate
 

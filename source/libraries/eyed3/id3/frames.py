@@ -37,43 +37,43 @@ class FrameException(BaseException):
     pass
 
 
-TITLE_FID          = "TIT2"
-SUBTITLE_FID       = "TIT3"
-ARTIST_FID         = "TPE1"
-ALBUM_FID          = "TALB"
-TRACKNUM_FID       = "TRCK"
-GENRE_FID          = "TCON"
-COMMENT_FID        = "COMM"
-USERTEXT_FID       = "TXXX"
-OBJECT_FID         = "GEOB"
+TITLE_FID = "TIT2"
+SUBTITLE_FID = "TIT3"
+ARTIST_FID = "TPE1"
+ALBUM_FID = "TALB"
+TRACKNUM_FID = "TRCK"
+GENRE_FID = "TCON"
+COMMENT_FID = "COMM"
+USERTEXT_FID = "TXXX"
+OBJECT_FID = "GEOB"
 UNIQUE_FILE_ID_FID = "UFID"
-LYRICS_FID         = "USLT"
-DISCNUM_FID        = "TPOS"
-IMAGE_FID          = "APIC"
-USERURL_FID        = "WXXX"
-PLAYCOUNT_FID      = "PCNT"
-BPM_FID            = "TBPM"
-PUBLISHER_FID      = "TPUB"
-CDID_FID           = "MCDI"
-PRIVATE_FID        = "PRIV"
-TOS_FID            = "USER"
-POPULARITY_FID     = "POPM"
+LYRICS_FID = "USLT"
+DISCNUM_FID = "TPOS"
+IMAGE_FID = "APIC"
+USERURL_FID = "WXXX"
+PLAYCOUNT_FID = "PCNT"
+BPM_FID = "TBPM"
+PUBLISHER_FID = "TPUB"
+CDID_FID = "MCDI"
+PRIVATE_FID = "PRIV"
+TOS_FID = "USER"
+POPULARITY_FID = "POPM"
 
 URL_COMMERCIAL_FID = "WCOM"
-URL_COPYRIGHT_FID  = "WCOP"
-URL_AUDIOFILE_FID  = "WOAF"
-URL_ARTIST_FID     = "WOAR"
-URL_AUDIOSRC_FID   = "WOAS"
+URL_COPYRIGHT_FID = "WCOP"
+URL_AUDIOFILE_FID = "WOAF"
+URL_ARTIST_FID = "WOAR"
+URL_AUDIOSRC_FID = "WOAS"
 URL_INET_RADIO_FID = "WORS"
-URL_PAYMENT_FID    = "WPAY"
-URL_PUBLISHER_FID  = "WPUB"
-URL_FIDS           = [URL_COMMERCIAL_FID, URL_COPYRIGHT_FID,
+URL_PAYMENT_FID = "WPAY"
+URL_PUBLISHER_FID = "WPUB"
+URL_FIDS = [URL_COMMERCIAL_FID, URL_COPYRIGHT_FID,
                       URL_AUDIOFILE_FID, URL_ARTIST_FID, URL_AUDIOSRC_FID,
                       URL_INET_RADIO_FID, URL_PAYMENT_FID,
                       URL_PUBLISHER_FID]
 
-TOC_FID            = "CTOC"
-CHAPTER_FID        = "CHAP"
+TOC_FID = "CTOC"
+CHAPTER_FID = "CHAP"
 
 DEPRECATED_DATE_FIDS = ["TDAT", "TYER", "TIME", "TORY", "TRDA",
                         # Nonstandard v2.3 only
@@ -205,7 +205,7 @@ class Frame(object):
         self.data = format_data + data
         return header.render(len(self.data)) + self.data
 
-    ##
+    # #
     # Process a 3 byte language code (ISO 639-2).
     # This code must match the [A-Z][A-Z][A-Z]
     # (although case is ignored) and be ascii to be considered valid. When
@@ -326,9 +326,9 @@ class UserTextFrame(TextFrame):
 
     def render(self):
         self._initEncoding()
-        data = (self.encoding +
-                self.description.encode(id3EncodingToString(self.encoding)) +
-                self.text_delim +
+        data = (self.encoding + 
+                self.description.encode(id3EncodingToString(self.encoding)) + 
+                self.text_delim + 
                 self.text.encode(id3EncodingToString(self.encoding)))
         self.data = data
         # Calling Frame, not the base
@@ -336,7 +336,7 @@ class UserTextFrame(TextFrame):
 
 
 class DateFrame(TextFrame):
-    ## \a date Either an ISO 8601 date string or a eyed3.core.Date object.
+    # # \a date Either an ISO 8601 date string or a eyed3.core.Date object.
     def __init__(self, id, date=""):
         assert(id in DATE_FIDS or id in DEPRECATED_DATE_FIDS)
         super(DateFrame, self).__init__(id, text=unicode(date))
@@ -348,7 +348,7 @@ class DateFrame(TextFrame):
         return core.Date.parse(self.text.encode("latin1")) if self.text \
                                                            else None
 
-    ## \a date Either an ISO 8601 date string or a eyed3.core.Date object.
+    # # \a date Either an ISO 8601 date string or a eyed3.core.Date object.
     @date.setter
     def date(self, date):
         if not date:
@@ -400,7 +400,7 @@ class UrlFrame(Frame):
         self.data = self.url
         return super(UrlFrame, self).render()
 
-##
+# #
 # Data string format:
 # encoding (one byte) + description + "\x00" + url (ascii)
 class UserUrlFrame(UrlFrame):
@@ -434,15 +434,15 @@ class UserUrlFrame(UrlFrame):
 
     def render(self):
         self._initEncoding()
-        data = (self.encoding +
-                self.description.encode(id3EncodingToString(self.encoding)) +
+        data = (self.encoding + 
+                self.description.encode(id3EncodingToString(self.encoding)) + 
                 self.text_delim + self.url)
         self.data = data
         # Calling Frame, not the base.
         return Frame.render(self)
 
 
-##
+# #
 # Data string format:
 # <Header for 'Attached picture', ID: "APIC">
 #  Text encoding      $xx
@@ -451,31 +451,31 @@ class UserUrlFrame(UrlFrame):
 #  Description        <text string according to encoding> $00 (00)
 #  Picture data       <binary data>
 class ImageFrame(Frame):
-    OTHER               = 0x00
-    ICON                = 0x01 # 32x32 png only.
-    OTHER_ICON          = 0x02
-    FRONT_COVER         = 0x03
-    BACK_COVER          = 0x04
-    LEAFLET             = 0x05
-    MEDIA               = 0x06 # label side of cd, picture disc vinyl, etc.
-    LEAD_ARTIST         = 0x07
-    ARTIST              = 0x08
-    CONDUCTOR           = 0x09
-    BAND                = 0x0A
-    COMPOSER            = 0x0B
-    LYRICIST            = 0x0C
-    RECORDING_LOCATION  = 0x0D
-    DURING_RECORDING    = 0x0E
-    DURING_PERFORMANCE  = 0x0F
-    VIDEO               = 0x10
-    BRIGHT_COLORED_FISH = 0x11 # There's always room for porno.
-    ILLUSTRATION        = 0x12
-    BAND_LOGO           = 0x13
-    PUBLISHER_LOGO      = 0x14
-    MIN_TYPE            = OTHER
-    MAX_TYPE            = PUBLISHER_LOGO
+    OTHER = 0x00
+    ICON = 0x01  # 32x32 png only.
+    OTHER_ICON = 0x02
+    FRONT_COVER = 0x03
+    BACK_COVER = 0x04
+    LEAFLET = 0x05
+    MEDIA = 0x06  # label side of cd, picture disc vinyl, etc.
+    LEAD_ARTIST = 0x07
+    ARTIST = 0x08
+    CONDUCTOR = 0x09
+    BAND = 0x0A
+    COMPOSER = 0x0B
+    LYRICIST = 0x0C
+    RECORDING_LOCATION = 0x0D
+    DURING_RECORDING = 0x0E
+    DURING_PERFORMANCE = 0x0F
+    VIDEO = 0x10
+    BRIGHT_COLORED_FISH = 0x11  # There's always room for porno.
+    ILLUSTRATION = 0x12
+    BAND_LOGO = 0x13
+    PUBLISHER_LOGO = 0x14
+    MIN_TYPE = OTHER
+    MAX_TYPE = PUBLISHER_LOGO
 
-    URL_MIME_TYPE       = "-->"
+    URL_MIME_TYPE = "-->"
 
     @requireUnicode("description")
     def __init__(self, id=IMAGE_FID, description=u"",
@@ -538,7 +538,7 @@ class ImageFrame(Frame):
         pt = ord(input.read(1))
         log.debug("Initial APIC picture type: %d" % pt)
         if pt < self.MIN_TYPE or pt > self.MAX_TYPE:
-            core.parseError(FrameException("Invalid APIC picture type: %d" %
+            core.parseError(FrameException("Invalid APIC picture type: %d" % 
                                            pt))
             # Rather than force this to UNKNOWN, let's assume that they put a
             # character literal instead of it's byte value.
@@ -580,9 +580,9 @@ class ImageFrame(Frame):
         if not self.image_data and self.image_url:
             self.mime_type = self.URL_MIME_TYPE
 
-        data = (self.encoding + self.mime_type + "\x00" +
-                bin2bytes(dec2bin(self.picture_type, 8)) +
-                self.description.encode(id3EncodingToString(self.encoding)) +
+        data = (self.encoding + self.mime_type + "\x00" + 
+                bin2bytes(dec2bin(self.picture_type, 8)) + 
+                self.description.encode(id3EncodingToString(self.encoding)) + 
                 self.text_delim)
         if self.image_data:
             data += self.image_data
@@ -776,11 +776,11 @@ class ObjectFrame(Frame):
 
     def render(self):
         self._initEncoding()
-        data = (self.encoding + self.mime_type + "\x00" +
-                self.filename.encode(id3EncodingToString(self.encoding)) +
-                self.text_delim +
-                self.description.encode(id3EncodingToString(self.encoding)) +
-                self.text_delim +
+        data = (self.encoding + self.mime_type + "\x00" + 
+                self.filename.encode(id3EncodingToString(self.encoding)) + 
+                self.text_delim + 
+                self.description.encode(id3EncodingToString(self.encoding)) + 
+                self.text_delim + 
                 self.object_data)
         self.data = data
         return super(ObjectFrame, self).render()
@@ -1006,9 +1006,9 @@ class DescriptionLangTextFrame(Frame):
             lang = lang + ('\x00' * (3 - len(lang)))
 
         self._initEncoding()
-        data = (self.encoding + lang +
-                self.description.encode(id3EncodingToString(self.encoding)) +
-                self.text_delim +
+        data = (self.encoding + lang + 
+                self.description.encode(id3EncodingToString(self.encoding)) + 
+                self.text_delim + 
                 self.text.encode(id3EncodingToString(self.encoding)))
         self.data = data
         return super(DescriptionLangTextFrame, self).render()
@@ -1059,7 +1059,7 @@ class TermsOfUseFrame(Frame):
             lang = lang + ('\x00' * (3 - len(lang)))
 
         self._initEncoding()
-        self.data = (self.encoding + lang +
+        self.data = (self.encoding + lang + 
                      self.text.encode(id3EncodingToString(self.encoding)))
         return super(TermsOfUseFrame, self).render()
 
@@ -1075,7 +1075,7 @@ class TocFrame(Frame):
     Description: TIT2 frame (optional)
     '''
     TOP_LEVEL_FLAG_BIT = 6
-    ORDERED_FLAG_BIT   = 7
+    ORDERED_FLAG_BIT = 7
 
     def __init__(self, id=TOC_FID, element_id=None, toplevel=True, ordered=True,
                  child_ids=None, description=None):
@@ -1124,7 +1124,7 @@ class TocFrame(Frame):
         if self.ordered:
             flags[ORDERED_FLAG_BIT] = 1
 
-        data = (self.element_id.encode('ascii') + '\x00' +
+        data = (self.element_id.encode('ascii') + '\x00' + 
                 bin2bytes(flags) + dec2bytes(len(self.child_ids)))
 
         for id in self.child_ids:
@@ -1252,12 +1252,12 @@ class FrameSet(dict):
         # frame data is deunsync'd at once, otherwise it will happen on a per
         # frame basis.
         if tag_header.unsync and tag_header.version <= ID3_V2_3:
-            log.debug("De-unsynching %d bytes at once (<= 2.3 tag)" %
+            log.debug("De-unsynching %d bytes at once (<= 2.3 tag)" % 
                       len(tag_data))
             og_size = len(tag_data)
             tag_data = deunsyncData(tag_data)
             size_left = len(tag_data)
-            log.debug("De-unsynch'd %d bytes at once (<= 2.3 tag) to %d bytes" %
+            log.debug("De-unsynch'd %d bytes at once (<= 2.3 tag) to %d bytes" % 
                       (og_size, size_left))
 
         # Adding bytes to simulate the tag header(s) in the buffer.  This keeps
@@ -1269,7 +1269,7 @@ class FrameSet(dict):
 
         while size_left > 0:
             log.debug("size_left: " + str(size_left))
-            if size_left < (10 + 1): # The size of the smallest frame.
+            if size_left < (10 + 1):  # The size of the smallest frame.
                 log.debug("FrameSet: Implied padding (size_left<minFrameSize)")
                 padding_size = size_left
                 break
@@ -1278,7 +1278,7 @@ class FrameSet(dict):
             log.debug("FrameSet: Reading Frame #" + str(len(self) + 1))
             frame_header = FrameHeader.parse(tag_buffer, tag_header.version)
             if not frame_header:
-                log.debug("No frame found, implied padding of %d bytes" %
+                log.debug("No frame found, implied padding of %d bytes" % 
                           size_left)
                 padding_size = size_left
                 break
@@ -1294,13 +1294,13 @@ class FrameSet(dict):
 
                 log.debug("FrameSet: %d bytes of data read" % len(data))
 
-                consumed_size += (frame_header.size +
+                consumed_size += (frame_header.size + 
                                   frame_header.data_size)
                 frame = createFrame(tag_header, frame_header, data)
                 self[frame.id] = frame
 
             # Each frame contains data_size + headerSize bytes.
-            size_left -= (frame_header.size +
+            size_left -= (frame_header.size + 
                           frame_header.data_size)
 
         return padding_size
@@ -1568,73 +1568,73 @@ def map2_2FrameId(orig_id):
 
 # mapping of 2.2 frames to 2.3/2.4
 TAGS2_2_TO_TAGS_2_3_AND_4 = {
-    "TT1" : "TIT1", # CONTENTGROUP content group description
-    "TT2" : "TIT2", # TITLE title/songname/content description
-    "TT3" : "TIT3", # SUBTITLE subtitle/description refinement
-    "TP1" : "TPE1", # ARTIST lead performer(s)/soloist(s)
-    "TP2" : "TPE2", # BAND band/orchestra/accompaniment
-    "TP3" : "TPE3", # CONDUCTOR conductor/performer refinement
-    "TP4" : "TPE4", # MIXARTIST interpreted, remixed, modified by
-    "TCM" : "TCOM", # COMPOSER composer
-    "TXT" : "TEXT", # LYRICIST lyricist/text writer
-    "TLA" : "TLAN", # LANGUAGE language(s)
-    "TCO" : "TCON", # CONTENTTYPE content type
-    "TAL" : "TALB", # ALBUM album/movie/show title
-    "TRK" : "TRCK", # TRACKNUM track number/position in set
-    "TPA" : "TPOS", # PARTINSET part of set
-    "TRC" : "TSRC", # ISRC international standard recording code
-    "TDA" : "TDAT", # DATE date
-    "TYE" : "TYER", # YEAR year
-    "TIM" : "TIME", # TIME time
-    "TRD" : "TRDA", # RECORDINGDATES recording dates
-    "TOR" : "TORY", # ORIGYEAR original release year
-    "TBP" : "TBPM", # BPM beats per minute
-    "TMT" : "TMED", # MEDIATYPE media type
-    "TFT" : "TFLT", # FILETYPE file type
-    "TCR" : "TCOP", # COPYRIGHT copyright message
-    "TPB" : "TPUB", # PUBLISHER publisher
-    "TEN" : "TENC", # ENCODEDBY encoded by
-    "TSS" : "TSSE", # ENCODERSETTINGS software/hardware + settings for encoding
-    "TLE" : "TLEN", # SONGLEN length (ms)
-    "TSI" : "TSIZ", # SIZE size (bytes)
-    "TDY" : "TDLY", # PLAYLISTDELAY playlist delay
-    "TKE" : "TKEY", # INITIALKEY initial key
-    "TOT" : "TOAL", # ORIGALBUM original album/movie/show title
-    "TOF" : "TOFN", # ORIGFILENAME original filename
-    "TOA" : "TOPE", # ORIGARTIST original artist(s)/performer(s)
-    "TOL" : "TOLY", # ORIGLYRICIST original lyricist(s)/text writer(s)
-    "TXX" : "TXXX", # USERTEXT user defined text information frame
-    "WAF" : "WOAF", # WWWAUDIOFILE official audio file webpage
-    "WAR" : "WOAR", # WWWARTIST official artist/performer webpage
-    "WAS" : "WOAS", # WWWAUDIOSOURCE official audion source webpage
-    "WCM" : "WCOM", # WWWCOMMERCIALINFO commercial information
-    "WCP" : "WCOP", # WWWCOPYRIGHT copyright/legal information
-    "WPB" : "WPUB", # WWWPUBLISHER publishers official webpage
-    "WXX" : "WXXX", # WWWUSER user defined URL link frame
-    "IPL" : "IPLS", # INVOLVEDPEOPLE involved people list
-    "ULT" : "USLT", # UNSYNCEDLYRICS unsynchronised lyrics/text transcription
-    "COM" : "COMM", # COMMENT comments
-    "UFI" : "UFID", # UNIQUEFILEID unique file identifier
-    "MCI" : "MCDI", # CDID music CD identifier
-    "ETC" : "ETCO", # EVENTTIMING event timing codes
-    "MLL" : "MLLT", # MPEGLOOKUP MPEG location lookup table
-    "STC" : "SYTC", # SYNCEDTEMPO synchronised tempo codes
-    "SLT" : "SYLT", # SYNCEDLYRICS synchronised lyrics/text
-    "RVA" : "RVAD", # VOLUMEADJ relative volume adjustment
-    "EQU" : "EQUA", # EQUALIZATION equalization
-    "REV" : "RVRB", # REVERB reverb
-    "PIC" : "APIC", # PICTURE attached picture
-    "GEO" : "GEOB", # GENERALOBJECT general encapsulated object
-    "CNT" : "PCNT", # PLAYCOUNTER play counter
-    "POP" : "POPM", # POPULARIMETER popularimeter
-    "BUF" : "RBUF", # BUFFERSIZE recommended buffer size
-    "CRA" : "AENC", # AUDIOCRYPTO audio encryption
-    "LNK" : "LINK", # LINKEDINFO linked information
+    "TT1" : "TIT1",  # CONTENTGROUP content group description
+    "TT2" : "TIT2",  # TITLE title/songname/content description
+    "TT3" : "TIT3",  # SUBTITLE subtitle/description refinement
+    "TP1" : "TPE1",  # ARTIST lead performer(s)/soloist(s)
+    "TP2" : "TPE2",  # BAND band/orchestra/accompaniment
+    "TP3" : "TPE3",  # CONDUCTOR conductor/performer refinement
+    "TP4" : "TPE4",  # MIXARTIST interpreted, remixed, modified by
+    "TCM" : "TCOM",  # COMPOSER composer
+    "TXT" : "TEXT",  # LYRICIST lyricist/text writer
+    "TLA" : "TLAN",  # LANGUAGE language(s)
+    "TCO" : "TCON",  # CONTENTTYPE content type
+    "TAL" : "TALB",  # ALBUM album/movie/show title
+    "TRK" : "TRCK",  # TRACKNUM track number/position in set
+    "TPA" : "TPOS",  # PARTINSET part of set
+    "TRC" : "TSRC",  # ISRC international standard recording code
+    "TDA" : "TDAT",  # DATE date
+    "TYE" : "TYER",  # YEAR year
+    "TIM" : "TIME",  # TIME time
+    "TRD" : "TRDA",  # RECORDINGDATES recording dates
+    "TOR" : "TORY",  # ORIGYEAR original release year
+    "TBP" : "TBPM",  # BPM beats per minute
+    "TMT" : "TMED",  # MEDIATYPE media type
+    "TFT" : "TFLT",  # FILETYPE file type
+    "TCR" : "TCOP",  # COPYRIGHT copyright message
+    "TPB" : "TPUB",  # PUBLISHER publisher
+    "TEN" : "TENC",  # ENCODEDBY encoded by
+    "TSS" : "TSSE",  # ENCODERSETTINGS software/hardware + settings for encoding
+    "TLE" : "TLEN",  # SONGLEN length (ms)
+    "TSI" : "TSIZ",  # SIZE size (bytes)
+    "TDY" : "TDLY",  # PLAYLISTDELAY playlist delay
+    "TKE" : "TKEY",  # INITIALKEY initial key
+    "TOT" : "TOAL",  # ORIGALBUM original album/movie/show title
+    "TOF" : "TOFN",  # ORIGFILENAME original filename
+    "TOA" : "TOPE",  # ORIGARTIST original artist(s)/performer(s)
+    "TOL" : "TOLY",  # ORIGLYRICIST original lyricist(s)/text writer(s)
+    "TXX" : "TXXX",  # USERTEXT user defined text information frame
+    "WAF" : "WOAF",  # WWWAUDIOFILE official audio file webpage
+    "WAR" : "WOAR",  # WWWARTIST official artist/performer webpage
+    "WAS" : "WOAS",  # WWWAUDIOSOURCE official audion source webpage
+    "WCM" : "WCOM",  # WWWCOMMERCIALINFO commercial information
+    "WCP" : "WCOP",  # WWWCOPYRIGHT copyright/legal information
+    "WPB" : "WPUB",  # WWWPUBLISHER publishers official webpage
+    "WXX" : "WXXX",  # WWWUSER user defined URL link frame
+    "IPL" : "IPLS",  # INVOLVEDPEOPLE involved people list
+    "ULT" : "USLT",  # UNSYNCEDLYRICS unsynchronised lyrics/text transcription
+    "COM" : "COMM",  # COMMENT comments
+    "UFI" : "UFID",  # UNIQUEFILEID unique file identifier
+    "MCI" : "MCDI",  # CDID music CD identifier
+    "ETC" : "ETCO",  # EVENTTIMING event timing codes
+    "MLL" : "MLLT",  # MPEGLOOKUP MPEG location lookup table
+    "STC" : "SYTC",  # SYNCEDTEMPO synchronised tempo codes
+    "SLT" : "SYLT",  # SYNCEDLYRICS synchronised lyrics/text
+    "RVA" : "RVAD",  # VOLUMEADJ relative volume adjustment
+    "EQU" : "EQUA",  # EQUALIZATION equalization
+    "REV" : "RVRB",  # REVERB reverb
+    "PIC" : "APIC",  # PICTURE attached picture
+    "GEO" : "GEOB",  # GENERALOBJECT general encapsulated object
+    "CNT" : "PCNT",  # PLAYCOUNTER play counter
+    "POP" : "POPM",  # POPULARIMETER popularimeter
+    "BUF" : "RBUF",  # BUFFERSIZE recommended buffer size
+    "CRA" : "AENC",  # AUDIOCRYPTO audio encryption
+    "LNK" : "LINK",  # LINKEDINFO linked information
     # Extension workarounds i.e., ignore them
-    "TCP" : "TCP ", # iTunes "extension" for compilation marking
-    "CM1" : "CM1 ", # Seems to be some script kiddie tagging the tag.
+    "TCP" : "TCP ",  # iTunes "extension" for compilation marking
+    "CM1" : "CM1 ",  # Seems to be some script kiddie tagging the tag.
                     # For example, [rH] join #rH on efnet [rH]
-    "PCS" : "PCST", # iTunes extension for podcast marking.
+    "PCS" : "PCST",  # iTunes extension for podcast marking.
 }
 
 import apple

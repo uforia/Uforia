@@ -27,10 +27,10 @@ import Image, ImageFile, ImagePalette
 # Read RGA file
 
 def i16(c):
-    return ord(c[0]) + (ord(c[1])<<8)
+    return ord(c[0]) + (ord(c[1]) << 8)
 
 def i32(c):
-    return ord(c[0]) + (ord(c[1])<<8) + (ord(c[2])<<16) + (ord(c[3])<<24)
+    return ord(c[0]) + (ord(c[1]) << 8) + (ord(c[2]) << 16) + (ord(c[3]) << 24)
 
 
 MODES = {
@@ -47,7 +47,7 @@ MODES = {
 def _accept(prefix):
     return prefix[0] == "\0"
 
-##
+# #
 # Image plugin for Targa files.
 
 class TgaImageFile(ImageFile.ImageFile):
@@ -81,7 +81,7 @@ class TgaImageFile(ImageFile.ImageFile):
         if imagetype in (3, 11):
             self.mode = "L"
             if depth == 1:
-                self.mode = "1" # ???
+                self.mode = "1"  # ???
         elif imagetype in (1, 9):
             self.mode = "P"
         elif imagetype in (2, 10):
@@ -110,36 +110,36 @@ class TgaImageFile(ImageFile.ImageFile):
             start, size, mapdepth = i16(s[3:]), i16(s[5:]), i16(s[7:])
             if mapdepth == 16:
                 self.palette = ImagePalette.raw("BGR;16",
-                    "\0"*2*start + self.fp.read(2*size))
+                    "\0"*2 * start + self.fp.read(2 * size))
             elif mapdepth == 24:
                 self.palette = ImagePalette.raw("BGR",
-                    "\0"*3*start + self.fp.read(3*size))
+                    "\0"*3 * start + self.fp.read(3 * size))
             elif mapdepth == 32:
                 self.palette = ImagePalette.raw("BGRA",
-                    "\0"*4*start + self.fp.read(4*size))
+                    "\0"*4 * start + self.fp.read(4 * size))
 
         # setup tile descriptor
         try:
-            rawmode = MODES[(imagetype&7, depth)]
+            rawmode = MODES[(imagetype & 7, depth)]
             if imagetype & 8:
                 # compressed
-                self.tile = [("tga_rle", (0, 0)+self.size,
+                self.tile = [("tga_rle", (0, 0) + self.size,
                               self.fp.tell(), (rawmode, orientation, depth))]
             else:
-                self.tile = [("raw", (0, 0)+self.size,
+                self.tile = [("raw", (0, 0) + self.size,
                               self.fp.tell(), (rawmode, 0, orientation))]
         except KeyError:
-            pass # cannot decode
+            pass  # cannot decode
 
 #
 # --------------------------------------------------------------------
 # Write TGA file
 
 def o16(i):
-    return chr(i&255) + chr(i>>8&255)
+    return chr(i & 255) + chr(i >> 8 & 255)
 
 def o32(i):
-    return chr(i&255) + chr(i>>8&255) + chr(i>>16&255) + chr(i>>24&255)
+    return chr(i & 255) + chr(i >> 8 & 255) + chr(i >> 16 & 255) + chr(i >> 24 & 255)
 
 SAVE = {
     "1": ("1", 1, 0, 3),
@@ -173,23 +173,23 @@ def _save(im, fp, filename, check=0):
     if orientation > 0:
         flags = flags | 0x20
 
-    fp.write("\000" +
-             chr(colormaptype) +
-             chr(imagetype) +
-             o16(colormapfirst) +
-             o16(colormaplength) +
-             chr(colormapentry) +
-             o16(0) +
-             o16(0) +
-             o16(im.size[0]) +
-             o16(im.size[1]) +
-             chr(bits) +
+    fp.write("\000" + 
+             chr(colormaptype) + 
+             chr(imagetype) + 
+             o16(colormapfirst) + 
+             o16(colormaplength) + 
+             chr(colormapentry) + 
+             o16(0) + 
+             o16(0) + 
+             o16(im.size[0]) + 
+             o16(im.size[1]) + 
+             chr(bits) + 
              chr(flags))
 
     if colormaptype:
         fp.write(im.im.getpalette("RGB", "BGR"))
 
-    ImageFile._save(im, fp, [("raw", (0,0)+im.size, 0, (rawmode, 0, orientation))])
+    ImageFile._save(im, fp, [("raw", (0, 0) + im.size, 0, (rawmode, 0, orientation))])
 
 #
 # --------------------------------------------------------------------

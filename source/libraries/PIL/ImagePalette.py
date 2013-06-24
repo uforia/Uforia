@@ -19,19 +19,19 @@
 import array
 import Image, ImageColor
 
-##
+# #
 # Colour palette wrapper for palette mapped images.
 
 class ImagePalette:
     "Colour palette for palette mapped images"
 
-    def __init__(self, mode = "RGB", palette = None):
+    def __init__(self, mode="RGB", palette=None):
         self.mode = mode
-        self.rawmode = None # if set, palette contains raw data
-        self.palette = palette or range(256)*len(self.mode)
+        self.rawmode = None  # if set, palette contains raw data
+        self.palette = palette or range(256) * len(self.mode)
         self.colors = {}
         self.dirty = None
-        if len(self.mode)*256 != len(self.palette):
+        if len(self.mode) * 256 != len(self.palette):
             raise ValueError, "wrong palette size"
 
     def getdata(self):
@@ -65,8 +65,8 @@ class ImagePalette:
                     raise ValueError("cannot allocate more than 256 colors")
                 self.colors[color] = index
                 self.palette[index] = color[0]
-                self.palette[index+256] = color[1]
-                self.palette[index+512] = color[2]
+                self.palette[index + 256] = color[1]
+                self.palette[index + 512] = color[2]
                 self.dirty = 1
                 return index
         else:
@@ -104,9 +104,9 @@ def _make_linear_lut(black, white):
     lut = []
     if black == 0:
         for i in range(256):
-            lut.append(white*i/255)
+            lut.append(white * i / 255)
     else:
-        raise NotImplementedError # FIXME
+        raise NotImplementedError  # FIXME
     return lut
 
 def _make_gamma_lut(exp, mode="RGB"):
@@ -126,7 +126,7 @@ def negative(mode="RGB"):
 def random(mode="RGB"):
     from random import randint
     palette = []
-    for i in range(256*len(mode)):
+    for i in range(256 * len(mode)):
         palette.append(randint(0, 255))
     return ImagePalette(mode, palette)
 
@@ -178,7 +178,7 @@ def load(filename):
     if not lut:
         raise IOError, "cannot load palette"
 
-    return lut # data, rawmode
+    return lut  # data, rawmode
 
 
 # add some psuedocolour palettes as well
