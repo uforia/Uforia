@@ -9,7 +9,7 @@
 
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 
 # Load basic Python modules
@@ -36,15 +36,15 @@ database = None
 
 def dbworker(dbqueue, db=None):
     """
-    Receives new argument lists from the database queue and writes them
-    to the database. The worker will continue until it receives a table
-    with the name "No more tasks" (the sentinel) in the argument list. Upon
-    receiving the sentinel, it will send a commit to write out all
-    outstanding I/O to the database.
+Receives new argument lists from the database queue and writes them
+to the database. The worker will continue until it receives a table
+with the name "No more tasks" (the sentinel) in the argument list. Upon
+receiving the sentinel, it will send a commit to write out all
+outstanding I/O to the database.
 
-    dbqueue - The database queue, a multiprocessing.JoinableQueue
-    db - Optionally use another database object
-    """
+dbqueue - The database queue, a multiprocessing.JoinableQueue
+db - Optionally use another database object
+"""
     if db == None:
         db = database.Database(config)
 
@@ -63,11 +63,11 @@ def dbworker(dbqueue, db=None):
 
 def monitorworker(monitorqueue):
     """
-    Starts the monitor display for the curses console.
+Starts the monitor display for the curses console.
 
-    monitorqueue - The multiprocessing.JoinableQueue that emits the
-        currently examined file
-    """
+monitorqueue - The multiprocessing.JoinableQueue that emits the
+currently examined file
+"""
     stdscr = curses.initscr()
     curses.noecho()
     curses.cbreak()
@@ -98,17 +98,17 @@ def monitorworker(monitorqueue):
 def fileworker(filequeue, dbqueue, monitorqueue, uforiamodules, config,
                rcontext):
     """
-    Receives a file item from file_scanner inside the filequeue and
-    executes the file_processor for that file.
+Receives a file item from file_scanner inside the filequeue and
+executes the file_processor for that file.
 
-    filequeue - The file queue
-    dbqueue - The database queue
-    monitorqueue - The monitoring queue to show information about the
-        current file
-    uforiamodules - The uforia module objects from modulescanner
-    config - The uforia configuration file
-    rcontext - The recursion context
-    """
+filequeue - The file queue
+dbqueue - The database queue
+monitorqueue - The monitoring queue to show information about the
+current file
+uforiamodules - The uforia module objects from modulescanner
+config - The uforia configuration file
+rcontext - The recursion context
+"""
     while True:
         item = filequeue.get()
         if item == None:
@@ -123,13 +123,13 @@ def fileworker(filequeue, dbqueue, monitorqueue, uforiamodules, config,
 
 def write_to_mimetypes_table(table, columns, values, db=None):
     """
-    Method that writes to database
+Method that writes to database
 
-    table - the database table
-    columns - the database columns
-    values - the values for in the columns
-    db - Optionally use another database object
-    """
+table - the database table
+columns - the database columns
+values - the values for in the columns
+db - Optionally use another database object
+"""
     if db == None:
         db = database.Database(config)
 
@@ -142,16 +142,16 @@ def write_to_mimetypes_table(table, columns, values, db=None):
 def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
                  rcontext):
     """
-    Walks through the specified directory tree to find all files. Each
-    file is passed through file_processor, which is called asynchronously
-    through the multiprocessing pool (consumers).
+Walks through the specified directory tree to find all files. Each
+file is passed through file_processor, which is called asynchronously
+through the multiprocessing pool (consumers).
 
-    dir - The path to search
-    consumers - The multiprocessing.Pool which will carry out the
-        file processing task
-    dbqueue - The database queue, passed to file_processor
-    uforiamodules - Loaded uforia modules, passed to file_processor
-    """
+dir - The path to search
+consumers - The multiprocessing.Pool which will carry out the
+file processing task
+dbqueue - The database queue, passed to file_processor
+uforiamodules - Loaded uforia modules, passed to file_processor
+"""
     try:
         if config.DEBUG:
             print("Starting in directory " + dir + "...")
@@ -203,16 +203,16 @@ def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
 
 def invoke_modules(dbqueue, uforiamodules, hashid, file, config, rcontext):
     """
-    Loads all Uforia modules in the current process and invokes them.
-    Only modules that apply to the current MIME-type are loaded.
-    The result of the module's process method will be put to the
-    database queue.
+Loads all Uforia modules in the current process and invokes them.
+Only modules that apply to the current MIME-type are loaded.
+The result of the module's process method will be put to the
+database queue.
 
-    dbqueue - The database queue, a multiprocessing.JoinableQueue
-    uforiamodules - The uforia module objects from modulescanner
-    hashid - The hash id of the currently processed file
-    file - The file currently being processed
-    """
+dbqueue - The database queue, a multiprocessing.JoinableQueue
+uforiamodules - The uforia module objects from modulescanner
+hashid - The hash id of the currently processed file
+file - The file currently being processed
+"""
     modules = uforiamodules.get_modules_for_mimetype(file.mtype)
     nr_handlers = 0
     for module in modules:
@@ -247,16 +247,16 @@ def invoke_modules(dbqueue, uforiamodules, hashid, file, config, rcontext):
 def file_processor(item, dbqueue, monitorqueue, uforiamodules, config,
                     rcontext):
     """
-    Process a file item and export its information to the database
-    queue. Also calls invoke_modules() if modules are enabled in the
-    configuration.
+Process a file item and export its information to the database
+queue. Also calls invoke_modules() if modules are enabled in the
+configuration.
 
-    item - Tuple containing the fullpath and hashid of the file
-    dbqueue - The database queue, a multiprocessing.JoinableQueue
-    monitorqueue - The monitoring queue to show information about the
-        current file
-    uforiamodules - The uforia module objects from modulescanner
-    """
+item - Tuple containing the fullpath and hashid of the file
+dbqueue - The database queue, a multiprocessing.JoinableQueue
+monitorqueue - The monitoring queue to show information about the
+current file
+uforiamodules - The uforia module objects from modulescanner
+"""
     try:
         multiprocessing.current_process().daemon = False
         fullpath, hashid = item
@@ -289,8 +289,8 @@ def file_processor(item, dbqueue, monitorqueue, uforiamodules, config,
 
 def fill_mimetypes_table(dbqueue, uforiamodules):
     """
-    Fills the supported_mimetypes table with all available mime-types
-    """
+Fills the supported_mimetypes table with all available mime-types
+"""
     if config.DEBUG:
         print "Getting available mimetypes..."
     mime_types = uforiamodules.get_all_supported_mimetypes_with_modules()
@@ -300,11 +300,11 @@ def fill_mimetypes_table(dbqueue, uforiamodules):
 
 def run():
     """
-    Starts Uforia.
+Starts Uforia.
 
-    Sets up the database, modules, all background processes and then
-    invokes the file_scanner.
-    """
+Sets up the database, modules, all background processes and then
+invokes the file_scanner.
+"""
     print("Uforia starting...")
 
     if config.DEBUG:
@@ -361,8 +361,8 @@ class _Dummy(object):
 
 def config_as_pickleable(config):
     """
-    Converts config (which has the `module' type) to a pickleable object.
-    """
+Converts config (which has the `module' type) to a pickleable object.
+"""
     values = config.__dict__
     newConfig = _Dummy()
     for key, value in values.items():
@@ -373,10 +373,10 @@ def config_as_pickleable(config):
 
 def setup_library_paths():
     """
-    Setup the PATH environmental variable so that python libraries, .pyd, .so and
-    .dll files can be loaded without intervention. This does not work for Linux
-    shared object files loaded with ctypes.
-    """
+Setup the PATH environmental variable so that python libraries, .pyd, .so and
+.dll files can be loaded without intervention. This does not work for Linux
+shared object files loaded with ctypes.
+"""
     architecture = 'x86_64' if ctypes.sizeof(ctypes.c_voidp) == 8 else 'x86'
     operatingSystem = platform.system()
 
