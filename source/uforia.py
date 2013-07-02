@@ -13,6 +13,7 @@
 # GNU General Public License for more details.
 
 # Load basic Python modules
+import re
 import os
 import multiprocessing
 import imp
@@ -305,6 +306,7 @@ Starts Uforia.
 Sets up the database, modules, all background processes and then
 invokes the file_scanner.
 """
+    for dirs in os.listdir(config.JVMLOC):        absolutepath = config.JVMLOC + dirs        if dirs.endswith("amd64"):            if re.match("(.*?)-[0-9]-", dirs):                symlink = config.JVMLOC + "java-6-openjdk-amd64"                if not os.path.lexists(symlink):                    if not os.getuid() == 0:                        sys.exit("Executing Uforia during first start requires root (creating symlink to replace outdated JVM)")                    else:                        os.symlink(absolutepath, symlink)
     print("Uforia starting...")
 
     if config.DEBUG:
