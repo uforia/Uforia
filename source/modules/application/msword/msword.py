@@ -13,7 +13,7 @@
 
 #!/usr/bin/env python
 
-# TABLE: lastPrint:TEXT, creatDate:TEXT, revNum:INT, lastAuth:TEXT, orAuth:TEXT, lastSaved:TEXT, content:LONGTEXT
+# TABLE: revNum:INT, lastPrint:TEXT, creatDate:TEXT, orAuth:TEXT, lastSaved:TEXT, content:LONGTEXT
 
 import tika
 def process(fullpath, config, rcontext, columns=None):
@@ -36,12 +36,16 @@ def process(fullpath, config, rcontext, columns=None):
 
 	for n in metadata.names():
 		meta.append(metadata.get(n))
+	
 
 	val = 0
+	allowedMeta = [0, 1, 4, 5, 7]
 
 	for x in meta:
-		results.append(x)
-		
+		if val in allowedMeta:
+			results.append(x)
+		val += 1
+	
 	results.append(content)
 
 	return results
