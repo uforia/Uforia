@@ -35,7 +35,6 @@ def process(fullpath, config, rcontext, columns=None):
 	content = content.toString()
 
 	for n in metadata.names():
-		print n
 		meta.append(metadata.get(n))
 
 	val = 0
