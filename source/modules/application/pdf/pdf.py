@@ -45,7 +45,7 @@ def process(fullpath, config, rcontext, columns=None):
 
 	for x in meta:
 		if val in parse:
-			x = filter(lambda, y: y in string.printable, x)
+			x = filter(lambda y: y in string.printable, x)
 			results.append(x)
 		val += 1
 		
