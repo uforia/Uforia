@@ -46,6 +46,3 @@ def process(fullpath, config, rcontext, columns=None):
 	results.append(content)
 
 	return results
-
-
-print process("/home/joey/testdata/test2.doc", "", "")
