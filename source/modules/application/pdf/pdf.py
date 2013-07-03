@@ -15,7 +15,9 @@
 
 # TABLE: pages:INT, creationData:TEXT, author:TEXT, framework:TEXT, tool:TEXT, content:LONGTEXT
 
+import string
 import tika
+
 def process(fullpath, config, rcontext, columns=None):
 
 	results = []
@@ -33,6 +35,7 @@ def process(fullpath, config, rcontext, columns=None):
 
 	parser.parse(input,content,metadata,context)
 	content = content.toString()
+	content = filter(lambda y: y in string.printable, content)
 
 	for n in metadata.names():
 		meta.append(metadata.get(n))
@@ -42,6 +45,7 @@ def process(fullpath, config, rcontext, columns=None):
 
 	for x in meta:
 		if val in parse:
+			x = filter(lambda, y: y in string.printable, x)
 			results.append(x)
 		val += 1
 		
