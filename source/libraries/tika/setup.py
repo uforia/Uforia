@@ -5,7 +5,7 @@ import os.path
 from distutils import errors
 from jcc import cpp
 
-TIKA_VERSION = 1.3
+TIKA_VERSION = "1.3"
 TIKA_APP = "tika-app-%s.jar" %(TIKA_VERSION)
 TIKA_CORE = "tika-core-%s.jar" %(TIKA_VERSION)
 TIKA_PARSERS = "tika-parsers-%s.jar" %(TIKA_VERSION)
