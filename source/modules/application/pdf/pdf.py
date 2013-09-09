@@ -23,8 +23,6 @@ def process(fullpath, config, rcontext, columns=None):
 	results = []
 	meta = []
 
-	tika.initVM()
-
 	parser = tika.AutoDetectParser()
 
 	input = tika.FileInputStream(tika.File(fullpath))

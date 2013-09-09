@@ -18,8 +18,6 @@
 import tika
 
 def process(fullpath, config, rcontext, columns=None):
-	tika.initVM()
-
 	results = []
 	meta = []
 

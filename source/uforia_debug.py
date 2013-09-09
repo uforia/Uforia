@@ -22,6 +22,7 @@ import site
 import ctypes
 import recursive
 import hashlib
+import tika
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -206,6 +207,10 @@ def run():
             fill_mimetypes_table(uforiamodules)
     else:
         uforiamodules = ''
+
+    # Start the JCC JVM runtime for Tika
+    tika.initVM()
+
     if config.DEBUG:
         print("Starting producer...")
     if os.path.exists(config.STARTDIR):

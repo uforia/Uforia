@@ -26,6 +26,7 @@ import subprocess
 import ctypes
 import recursive
 import hashlib
+import tika
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -102,7 +103,9 @@ def fileworker(filequeue, dbqueue, monitorqueue, uforiamodules, config,
                rcontext):
     """
 Receives a file item from file_scanner inside the filequeue and
-executes the file_processor for that file.
+executes the file_processor for that file. The fileworker operates
+as the entry point for each process, and is therefore also responsible
+for the execution of any expensive library initialization code.
 
 filequeue - The file queue
 dbqueue - The database queue
@@ -112,6 +115,9 @@ uforiamodules - The uforia module objects from modulescanner
 config - The uforia configuration file
 rcontext - The recursion context
 """
+    # Start the JCC JVM runtime for Tika
+    tika.initVM()
+
     while True:
         item = filequeue.get()
         if item == None:
