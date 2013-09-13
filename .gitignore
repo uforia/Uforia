@@ -88,6 +88,7 @@ pip-log.txt
 .mr.developer.cfg
 .DS_Store
 *~
+apache-tika.log
 
 # Uforia config
 source/include/config.py
