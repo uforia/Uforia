@@ -19,7 +19,6 @@ PLATFORM_SHARED_LIBRARY_EXTENSIONS = {
     'Linux': '.so',
     'Darwin': '.dylib'}
 
-
 def _get_arch():
     if ctypes.sizeof(ctypes.c_voidp) == 8:
         return 'x86_64'
@@ -27,14 +26,12 @@ def _get_arch():
         return 'x86'
 
 
-def load_library(foldername, filename, apiversion=None):
+def get_library_path(foldername, filename, apiversion=None):
     """
-    Returns the correct version of the shared library/DLL with ctypes
-    based on the OS version or architecture.
-    foldername - The name of the library folder where the shared library
-    should be loaded
-    filename - The name of the actual shared library file, without an
-    extension
+    Returns the correct path to theshared library/DLL based on the OS
+    version or architecture.
+    foldername - The name of the library folder
+    filename - The name of the actual shared library file
     apiversion - Optionally adds an extension for the shared object api
     version on Linux (e.g. libfoo.so.5)
     """
@@ -51,7 +48,20 @@ def load_library(foldername, filename, apiversion=None):
         ops=ops,
         filename=filename,
         ext=extension)
-    return ctypes.cdll.LoadLibrary(path)
+    return path
+
+def load_library(foldername, filename, apiversion=None):
+    """
+    Returns the correct version of the shared library/DLL with ctypes
+    based on the OS version or architecture.
+    foldername - The name of the library folder where the shared library
+    should be loaded
+    filename - The name of the actual shared library file, without an
+    extension
+    apiversion - Optionally adds an extension for the shared object api
+    version on Linux (e.g. libfoo.so.5)
+    """
+    return ctypes.cdll.LoadLibrary(get_library_path(foldername, filename, apiversion))
 
 
 def get_executable(foldername, filename):
