@@ -26,7 +26,6 @@ import subprocess
 import ctypes
 import recursive
 import hashlib
-import tika
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -116,6 +115,7 @@ config - The uforia configuration file
 rcontext - The recursion context
 """
     # Start the JCC JVM runtime for Tika
+    import tika
     tika.initVM()
 
     while True:
