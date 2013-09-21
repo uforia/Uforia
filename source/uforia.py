@@ -26,6 +26,7 @@ import subprocess
 import ctypes
 import recursive
 import hashlib
+import deferrer
 
 # Loading of Uforia modules is deferred until run() is called
 config = None
@@ -431,4 +432,4 @@ config.UFORIA_RUNNING_VERSION = 'Uforia'
 rcontext = recursive.RecursionContext()
 
 if __name__ == "__main__":
-    run()
+    deferrer.run_uforia_deferred(run)
