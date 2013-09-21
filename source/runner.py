@@ -16,7 +16,6 @@ import platform
 import subprocess
 import platform
 import ctypes
-import _winreg
 
 def _get_arch_linux():
     if ctypes.sizeof(ctypes.c_voidp) == 8:
@@ -46,6 +45,8 @@ def _do_linux_setup():
 
 
 def _do_win32_setup():
+    import _winreg
+
     # Find Java path in registry
     KEYPATH = 'SOFTWARE\\JavaSoft\\Java Runtime Environment'
 
