@@ -18,17 +18,21 @@ import xml.etree.ElementTree as ET
 import re
 import zipfile
 import sys
-from pptx import Presentation
+import pptx
 
 
 def process(fullpath, config, rcontext, columns=None):
     try:
         document = zipfile.ZipFile(fullpath)
     except:
-        exit()
+        return None
 
     # document core, ie. keywords/title/subject and mod+creation dates
-    xmlprop = document.read("docProps/core.xml")
+    try:
+        xmlprop = document.read("docProps/core.xml")
+    except:
+        # Not a valid pptx file
+        return None
 
     # data regarding ammount of pages/words. Also contains app version and OS.
     xmlapp = document.read("docProps/app.xml")
@@ -70,7 +74,7 @@ def process(fullpath, config, rcontext, columns=None):
 
 
     textlist = []
-    powerpoints = Presentation(fullpath)
+    powerpoints = pptx.Presentation(fullpath)
     slidenum = 1
     for slide in powerpoints.slides:
         for shape in slide.shapes:
