@@ -12,7 +12,7 @@
 
 #!/usr/bin/env python
 
-# TABLE: title:LONGTEXT, createdBy:LONGTEXT, modBy:LONGTEXT, revision:INT, madeOn:LONGTEXT, changedOn:LONGTEXT, totalLength: FLOAT, totalWords:INT, application:LONGTEXT, ppFormat:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hiddenSlides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT, content:LONGTEXT
+# TABLE: title:LONGTEXT, created_by:LONGTEXT, modified_by:LONGTEXT, revision:INT, creation_date:LONGTEXT, modified_date:LONGTEXT, total_length: FLOAT, total_words:INT, application:LONGTEXT, pp_format:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hidden_slides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT, content:LONGTEXT
 
 import xml.etree.ElementTree as ET
 import re

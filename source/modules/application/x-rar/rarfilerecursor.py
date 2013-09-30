@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 # This is the module for .RAR extension
 
-# TABLE: file_names:LONGTEXT, total_files:INT, needs_password:LONGTEXT, comment:LONGTEXT, contentInfo:LONGTEXT
+# TABLE: file_names:LONGTEXT, total_files:INT, needs_password:LONGTEXT, comment:LONGTEXT, content_info:LONGTEXT
 
 import sys
 import traceback

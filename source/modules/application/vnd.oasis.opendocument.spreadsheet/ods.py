@@ -13,7 +13,7 @@
 
 #!/usr/bin/env python
 
-# TABLE: created:LONGTEXT, adjustedDate:LONGTEXT, adjustedCount:INT, content:LONGTEXT
+# TABLE: created:LONGTEXT, modify_date:LONGTEXT, modified_count:INT, content:LONGTEXT
 
 import re
 import zipfile

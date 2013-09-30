@@ -13,7 +13,7 @@
 
 #!/usr/bin/env python
 
-# TABLE: pages:INT, creationData:TEXT, author:TEXT, framework:TEXT, tool:TEXT, content:LONGTEXT
+# TABLE: pages:INT, creation_date:TEXT, author:TEXT, framework:TEXT, tool:TEXT, content:LONGTEXT
 
 import tika
 

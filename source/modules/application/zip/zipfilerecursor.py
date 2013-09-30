@@ -13,7 +13,7 @@
 # Stores the zip file metadata and starts Uforia recursively on the
 # files inside the zip folder.
 
-# TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT, contentInfo:LONGTEXT
+# TABLE: file_names:LONGTEXT, total_files:INT, zip_stored:INT, zip_deflated:INT, debug:LONGTEXT, comment:LONGTEXT, content_info:LONGTEXT
 
 import sys
 import traceback

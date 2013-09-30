@@ -13,7 +13,7 @@
 # Stores the 7z file metadata and starts Uforia recursively on the
 # files inside the 7z folder.
 
-# TABLE: file_names:LONGTEXT, total_files:INT, solid:INT, version:LONGTEXT, contentInfo:LONGTEXT
+# TABLE: file_names:LONGTEXT, total_files:INT, solid:INT, version:LONGTEXT, content_info:LONGTEXT
 
 import sys
 import traceback

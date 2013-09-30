@@ -13,7 +13,7 @@
 # Stores the CAB file metadata and starts Uforia recursively on the
 # files inside the CAB folder.
 
-# TABLE: Signature:LONGTEXT, Offset:INT, cabversion:LONGTEXT, Folder:INT, Files:INT, OffsetFirstFile:INT, Compression:INT, Checksum:INT, SizeCompBytes:INT, SizeUnCompBytes:INT, PositionFirst:INT, WinCEHeader:INT, TargetArch:INT, MinWinCEVersion:INT, MaxWinCeVersion:INT, MinBuildNo:INT
+# TABLE: signature:LONGTEXT, offset:INT, cab_version:LONGTEXT, folder:INT, files:INT, offset_first_file:INT, compression:INT, checksum:INT, size_comp_bytes:INT, size_uncomp_bytes:INT, position_first:INT, wince_header:INT, target_arch:INT, min_wince_version:INT, max_wince_version:INT, min_build_no:INT
 
 import sys
 import traceback

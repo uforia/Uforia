@@ -12,7 +12,7 @@
 
 #!/usr/bin/env python
 
-# TABLE: wordCount:INT, imageCount:INT, objectCount:INT, pageCount:INT, charCount: INT, parCount: INT, tableCount: INT, content:TEXT
+# TABLE: word_count:INT, image_count:INT, object_count:INT, page_count:INT, character_count: INT, paragraph_count: INT, table_count: INT, content:TEXT
 
 import re
 import zipfile

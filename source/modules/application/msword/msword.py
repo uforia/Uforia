@@ -13,7 +13,7 @@
 
 #!/usr/bin/env python
 
-# TABLE: revNum:INT, lastPrint:TEXT, creatDate:TEXT, orAuth:TEXT, lastSaved:TEXT, content:LONGTEXT
+# TABLE: revision_number:INT, last_print_date:TEXT, create_date:TEXT, author:TEXT, last_saved_date:TEXT, content:LONGTEXT
 import string
 import tika
 
