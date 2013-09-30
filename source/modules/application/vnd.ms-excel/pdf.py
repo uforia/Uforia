@@ -47,5 +47,4 @@ def process(fullpath, config, rcontext, columns=None):
 
 	return results
 
-process("/home/joey/testdata/xls.xls", "", "")
 
