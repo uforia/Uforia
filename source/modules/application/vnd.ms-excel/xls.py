@@ -36,13 +36,13 @@ def process(fullpath, config, rcontext, columns=None):
 		meta.append(metadata.get(n))
 
 	val = 0
-#	parse = [0,3,4,7,9]
-#
-#	for x in meta:
-#		if val in parse:
-#			results.append(x)
-#		val += 1
-#		
+	parse = [0,3,4,7,9]
+
+	for x in meta:
+		if val in parse:
+			results.append(x)
+		val += 1
+		
 	results.append(content)
 
 	return results
