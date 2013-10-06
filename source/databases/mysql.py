@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-#!/usr/bin/env python
-
 import warnings
 import time
 import sys
@@ -53,7 +51,9 @@ class Database(object):
                 self.connection = MySQLdb.connect(host=hostname,
                                                   user=username,
                                                   passwd=password,
-                                                  db=database)
+                                                  db=database,
+                                                  charset='utf8',
+                                                  use_unicode=True)
             except MySQLdb.OperationalError, e:
                 print("Could not connect to the MySQL server: " + str(e))
                 print("Sleeping for 3 seconds...")
@@ -73,7 +73,7 @@ class Database(object):
         except:
             traceback.print_exc(file=sys.stderr)
 
-    def execute_query(self, query):
+    def execute_query(self, query, params=None):
         """
         Executes a query (which should have no data to return).
 
@@ -81,7 +81,7 @@ class Database(object):
         """
         try:
             warnings.filterwarnings('ignore', category=self.connection.Warning)
-            self.cursor.execute(query)
+            self.cursor.execute(query, params)
             warnings.resetwarnings()
         except:
             traceback.print_exc(file=sys.stderr)
@@ -193,16 +193,19 @@ class Database(object):
         query += """) VALUES (""" + str(hashid)
         values = self._replace_values(values)
         for item in values:
-            query += ", '%s'"
+            query += ", %s"
         query += """);"""
-        escaped = []
+        params = []
         for i in values:
-            escaped.append(MySQLdb.escape_string(str(i)))
-        escaped = tuple(escaped)
-        escapedQuery = query % escaped
-        escapedQuery = escapedQuery.replace(""" (, """, """ (""")
-        escapedQuery = escapedQuery.replace("""'NULL'""", """NULL""")
-        self.execute_query(escapedQuery)
+            # To prevent unicode strings being converted to ascii 
+            if isinstance(i, unicode):
+                string = i
+            else:
+                string = str(i) 
+            params.append(string)
+        query = query.replace(""" (, """, """ (""")
+        query = query.replace("""'NULL'""", """NULL""")
+        self.execute_query(query, params)
 
     def store_mimetype_values(self, table, columns, values):
         """

@@ -28,7 +28,6 @@ def process(fullpath, config, rcontext, columns=None):
 
 	parser.parse(input,content,metadata,context)
 	content = content.toString()
-	content = filter(lambda y: y in string.printable, content)
 
 	return [
 		metadata.get("Creation-Date"),

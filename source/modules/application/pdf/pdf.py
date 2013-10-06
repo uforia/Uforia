@@ -13,16 +13,14 @@
 
 #!/usr/bin/env python
 
-# TABLE: pages:INT, creation_date:TEXT, author:TEXT, framework:TEXT, tool:TEXT, content:LONGTEXT
+# TABLE: creation_date:TEXT, modified_date:TEXT, save_date:TEXT, author:TEXT, producer:TEXT, page_count:INT, content:LONGTEXT
+
 
 import string
 import tika
 
+
 def process(fullpath, config, rcontext, columns=None):
-
-	results = []
-	meta = []
-
 	parser = tika.AutoDetectParser()
 
 	input = tika.FileInputStream(tika.File(fullpath))
@@ -33,21 +31,13 @@ def process(fullpath, config, rcontext, columns=None):
 
 	parser.parse(input,content,metadata,context)
 	content = content.toString()
-	content = filter(lambda y: y in string.printable, content)
 
-	for n in metadata.names():
-		meta.append(metadata.get(n))
-
-	val = 0
-	parse = [0,3,4,7,9]
-
-	for x in meta:
-		if val in parse:
-			x = filter(lambda y: y in string.printable, x)
-			results.append(x)
-		val += 1
-		
-	results.append(content)
-
-	return results
-
+	return [
+		metadata.get("Creation-Date"),
+		metadata.get("Last-Modified"),
+		metadata.get("Last-Save-Date"),
+		metadata.get("Author"),
+		metadata.get("producer"),
+		metadata.get("xmpTPg:NPages"),
+		content
+	]
