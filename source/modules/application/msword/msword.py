@@ -47,21 +47,3 @@ def process(fullpath, config, rcontext, columns=None):
 		metadata.get("Character Count"),
 		content
 	]
-"""
-	print "----------"
-	for n in metadata.names():
-		print n + " ==> " + metadata.get(n)
-		meta.append(metadata.get(n))
-	
-
-	val = 0
-	allowedMeta = [0, 1, 4, 5, 7]
-
-	for x in meta:
-		if val in allowedMeta:
-			x = filter(lambda y: y in string.printable, x)
-			results.append(x)
-		val += 1
-	
-	results.append(content)
-"""
