@@ -13,15 +13,11 @@
 
 #!/usr/bin/env python
 
-# TABLE: revision_number:INT, last_print_date:TEXT, create_date:TEXT, author:TEXT, last_saved_date:TEXT, content:LONGTEXT
+# TABLE: creation_date:TEXT, modified_date:TEXT, save_date:TEXT, revision_number:INT, author:TEXT, last_author:TEXT, template:TEXT, word_count:INT, title:TEXT, subject:TEXT, company:TEXT, keywords:TEXT, page_count:INT, character_count:INT, content:LONGTEXT
 import string
 import tika
 
 def process(fullpath, config, rcontext, columns=None):
-
-	results = []
-	meta = []
-
 	parser = tika.AutoDetectParser()
 
 	input = tika.FileInputStream(tika.File(fullpath))
@@ -34,7 +30,27 @@ def process(fullpath, config, rcontext, columns=None):
 	content = content.toString()
 	content = filter(lambda y: y in string.printable, content)
 
+	return [
+		metadata.get("Creation-Date"),
+		metadata.get("Last-Modified"),
+		metadata.get("Last-Save-Date"),
+		metadata.get("Revision-Number"),
+		metadata.get("Author"),
+		metadata.get("Last-Author"),
+		metadata.get("Template"),
+		metadata.get("Word-Count"),
+		metadata.get("title"),
+		metadata.get("subject"),
+		metadata.get("Company"),
+		metadata.get("Keywords"),
+		metadata.get("Page-Count"),
+		metadata.get("Character Count"),
+		content
+	]
+"""
+	print "----------"
 	for n in metadata.names():
+		print n + " ==> " + metadata.get(n)
 		meta.append(metadata.get(n))
 	
 
@@ -48,5 +64,4 @@ def process(fullpath, config, rcontext, columns=None):
 		val += 1
 	
 	results.append(content)
-
-	return results
+"""
