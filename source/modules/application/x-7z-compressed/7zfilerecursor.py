@@ -44,8 +44,10 @@ def _extractall(fullpath, tempdir):
 
     # Call extract command
     try:
-        # Run command in working directory
-        p = subprocess.Popen([seven_zip_tool, "x", fullpath], cwd=tempdir)
+        # Run command in working directory, and pipe output to null device.
+        # 7z has no standard option to allow silencing output.
+        devnull = open(os.devnull, "w")  # Works on Windows too
+        p = subprocess.Popen([seven_zip_tool, "x", fullpath], cwd=tempdir, stdout=devnull)
         output = p.communicate()[0]
 
         # If error is given by command raise exception
