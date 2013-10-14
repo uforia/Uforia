@@ -20,8 +20,7 @@ import sys
 import traceback
 import mailbox
 import os
-import pysqlite2
-import pysqlite2.dbapi2
+import sqlite3
 
 
 def process(fullpath, config, rcontext, columns=None):
@@ -35,7 +34,7 @@ def process(fullpath, config, rcontext, columns=None):
 
         # Make db connection, cursor, and fetch all cookies.
 
-        conn = pysqlite2.dbapi2.connect(fullpath)
+        conn = sqlite3.connect(fullpath)
         cursor = conn.cursor()
 
         # Get the name of the columns of moz_cookies and put them in

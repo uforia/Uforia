@@ -396,7 +396,6 @@ shared object files loaded with ctypes.
     # Needs to be loaded first, otherwise system-wide libraries are preferred
     sys.path.insert(0, "./libraries")
     sys.path.append("./libraries/PIL/bin-{0}-{1}".format(architecture, operatingSystem))
-    sys.path.append("./libraries/pysqlite/bin-{0}-{1}".format(architecture, operatingSystem))
     sys.path.append("./libraries/pylzmalib/bin-{0}-{1}".format(architecture, operatingSystem))
     if platform.system() == 'Windows':
         # sys.path.append is not reliable for this thing
