@@ -12,7 +12,7 @@
 
 # This is the audio module for MP4
 
-# TABLE: Length:REAL, Bitrate:INT, NumberOfChannels:INT, SampleRate:BIGINT, BitsPerSample:INT, Title:LONGTEXT, Album:LONGTEXT, Artist:LONGTEXT, AlbumArtist:LONGTEXT, Composer:LONGTEXT, Year:INT, Comment:LONGTEXT, Description:LONGTEXT, PurschaseDate:DATE, Grouping:LONGTEXT, Genre:LONGTEXT, Lyrics:LONGTEXT, PodcastURL:LONGTEXT, PodcastEpisode:LONGTEXT, PodcastCategory:LONGTEXT, PodcastKeywords:LONGTEXT, EncodedBy:LONGTEXT, Copyright:LONGTEXT, AlbumSortOrder:LONGTEXT, AlbumArtistSortOrder:LONGTEXT, ArtistSortOrder:LONGTEXT, TitleSortOrder:LONGTEXT, ComposerSortOrder:LONGTEXT, ShowSortOrder:LONGTEXT, ShowName:LONGTEXT, PartOfCompilation:BOOLEAN, PartOfAlbum:BOOLEAN,Podcast:BOOLEAN, Tempo:BIGINT, TrackNumber:INT, TotalTracks:INT, DiscNumber:INT, TotalDiscs:INT, CoversFormat:LONGTEXT
+# TABLE: length:REAL, bitrate:INT, number_of_channels:INT, sample_rate:BIGINT, bits_per_sample:INT, title:LONGTEXT, album:LONGTEXT, artist:LONGTEXT, album_artist:LONGTEXT, composer:LONGTEXT, year:INT, comment:LONGTEXT, description:LONGTEXT, purchase_date:DATE, grouping:LONGTEXT, genre:LONGTEXT, lyrics:LONGTEXT, podcast_url:LONGTEXT, podcast_episode:LONGTEXT, podcast_category:LONGTEXT, podcast_keywords:LONGTEXT, encoded_by:LONGTEXT, copyright:LONGTEXT, album_sort_order:LONGTEXT, album_artist_sort_order:LONGTEXT, artist_sort_order:LONGTEXT, title_sort_order:LONGTEXT, composer_sort_order:LONGTEXT, show_sort_order:LONGTEXT, show_name:LONGTEXT, part_of_compilation:BOOLEAN, part_of_album:BOOLEAN, is_podcast:BOOLEAN, tempo:BIGINT, track_number:INT, total_tracks:INT, disc_number:INT, total_discs:INT, covers_format:LONGTEXT
 
 import sys
 import traceback
