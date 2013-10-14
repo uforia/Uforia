@@ -192,7 +192,8 @@ def run():
     invokes the file_scanner.
     """
 
-    print("Uforia starting...")
+    if not rcontext.is_recursive:
+        print("Uforia starting...")
 
     db = database.Database(config)
     if not rcontext.is_recursive:
@@ -218,7 +219,9 @@ def run():
         file_scanner(config.STARTDIR, uforiamodules, rcontext)
     else:
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
-    print("\nUforia completed...\n")
+
+    if not rcontext.is_recursive:
+        print("\nUforia completed...\n")
 
 
 class _Dummy(object):

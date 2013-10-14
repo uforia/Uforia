@@ -315,7 +315,8 @@ Starts Uforia.
 Sets up the database, modules, all background processes and then
 invokes the file_scanner.
 """
-    print("Uforia starting...")
+    if not rcontext.is_recursive: 
+        print("Uforia starting...")
 
     if config.DEBUG:
         print("Initializing " + str(config.DBCONN) + " " + config.DBTYPE + " database worker thread(s)...")
@@ -361,7 +362,9 @@ invokes the file_scanner.
     if config.OUTPUT:
         monitorqueue.put(None)
         monitorqueue.join()
-    print("\nUforia completed...\n")
+
+    if not rcontext.is_recursive: 
+        print("\nUforia completed...\n")
     sys.stdout.flush()
 
 
