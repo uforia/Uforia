@@ -16,35 +16,38 @@
 # TABLE: pages:INT, creation_date:TEXT, author:TEXT, framework:TEXT, tool:TEXT, content:LONGTEXT
 
 import tika
+import extract
 
 def process(fullpath, config, rcontext, columns=None):
-	results = []
-	meta = []
+    results = []
+    meta = []
 
-	parser = tika.AutoDetectParser()
+    parser = tika.AutoDetectParser()
 
-	input = tika.FileInputStream(tika.File(fullpath))
+    input = tika.FileInputStream(tika.File(fullpath))
 
-	content = tika.BodyContentHandler()
-	metadata = tika.Metadata()
-	context = tika.ParseContext()
+    content = tika.BodyContentHandler()
+    metadata = tika.Metadata()
+    context = tika.ParseContext()
 
-	parser.parse(input,content,metadata,context)
-	content = content.toString()
+    parser.parse(input,content,metadata,context)
+    content = content.toString()
 
-	for n in metadata.names():
-		meta.append(metadata.get(n))
+    for n in metadata.names():
+        meta.append(metadata.get(n))
 
-	val = 0
-	parse = [0,3,4,7,9]
+    val = 0
+    parse = [0,3,4,7,9]
 
-	for x in meta:
-		if val in parse:
-			results.append(x)
-		val += 1
-		
-	results.append(content)
+    for x in meta:
+        if val in parse:
+            results.append(x)
+        val += 1
 
-	return results
+    results.append(content)
+
+    extract.tika_extract(fullpath, input, config, rcontext);
+
+    return results
 
 

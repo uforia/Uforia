@@ -14,35 +14,40 @@
 #!/usr/bin/env python
 
 # TABLE: creation_date:TEXT, modified_date:TEXT, save_date:TEXT, revision_number:INT, author:TEXT, last_author:TEXT, template:TEXT, word_count:INT, title:TEXT, subject:TEXT, company:TEXT, keywords:TEXT, page_count:INT, character_count:INT, content:LONGTEXT
-import string
+
 import tika
+import extract
 
 def process(fullpath, config, rcontext, columns=None):
-	parser = tika.AutoDetectParser()
+    parser = tika.AutoDetectParser()
 
-	input = tika.FileInputStream(tika.File(fullpath))
+    input = tika.FileInputStream(tika.File(fullpath))
 
-	content = tika.BodyContentHandler()
-	metadata = tika.Metadata()
-	context = tika.ParseContext()
+    content = tika.BodyContentHandler()
+    metadata = tika.Metadata()
+    context = tika.ParseContext()
 
-	parser.parse(input,content,metadata,context)
-	content = content.toString()
+    parser.parse(input,content,metadata,context)
+    content = content.toString()
 
-	return [
-		metadata.get("Creation-Date"),
-		metadata.get("Last-Modified"),
-		metadata.get("Last-Save-Date"),
-		metadata.get("Revision-Number"),
-		metadata.get("Author"),
-		metadata.get("Last-Author"),
-		metadata.get("Template"),
-		metadata.get("Word-Count"),
-		metadata.get("title"),
-		metadata.get("subject"),
-		metadata.get("Company"),
-		metadata.get("Keywords"),
-		metadata.get("Page-Count"),
-		metadata.get("Character Count"),
-		content
-	]
+    processed = [
+        metadata.get("Creation-Date"),
+        metadata.get("Last-Modified"),
+        metadata.get("Last-Save-Date"),
+        metadata.get("Revision-Number"),
+        metadata.get("Author"),
+        metadata.get("Last-Author"),
+        metadata.get("Template"),
+        metadata.get("Word-Count"),
+        metadata.get("title"),
+        metadata.get("subject"),
+        metadata.get("Company"),
+        metadata.get("Keywords"),
+        metadata.get("Page-Count"),
+        metadata.get("Character Count"),
+        content
+    ]
+
+    extract.tika_extract(fullpath, input, config, rcontext)
+
+    return processed

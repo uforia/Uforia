@@ -16,16 +16,10 @@
 # TABLE: creation_date:TEXT, modified_date:TEXT, save_date:TEXT, author:TEXT, producer:TEXT, page_count:INT, content:LONGTEXT
 
 
-import string
 import tika
-import recursive
-import traceback
-import tempfile
-import shutil
 import os
-import sys
 import subprocess
-
+import extract
 
 def _extractall(fullpath, tempdir):
     # Path that leads to the archive
@@ -74,27 +68,6 @@ def process(fullpath, config, rcontext, columns=None):
         content
     ]
 
-    # To skip recursive call if there are no files to extract
-    extractor = tika.ParserContainerExtractor()
-    needs_extraction = extractor.isSupported(tika.TikaInputStream.get(input))
-
-    if needs_extraction:
-        # Call Uforia recursively on embedded files
-        tempdir = None
-        try:
-            # Perform extraction
-            tmpdir = tempfile.mkdtemp(dir=config.EXTRACTDIR)
-            _extractall(fullpath, tmpdir)
-
-            # Call Uforia again
-            recursive.call_uforia_recursive(config, rcontext, tmpdir, fullpath) 
-        except:
-            traceback.print_exc(file=sys.stderr)
-        finally:    
-            try:
-                if tempdir:
-                    shutil.rmtree(tmpdir)  # delete directory
-            except OSError as exc:
-                traceback.print_exc(file=sys.stderr)
+    extract.tika_extract(fullpath, input, config, rcontext)
 
     return processed
