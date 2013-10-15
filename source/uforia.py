@@ -315,7 +315,8 @@ Starts Uforia.
 Sets up the database, modules, all background processes and then
 invokes the file_scanner.
 """
-    if not rcontext.is_recursive: 
+    recursive = rcontext.is_recursive
+    if not recursive: 
         print("Uforia starting...")
 
     if config.DEBUG:
@@ -327,7 +328,7 @@ invokes the file_scanner.
 
     # Create database tables
     db = database.Database(config)
-    if not rcontext.is_recursive:
+    if not recursive:
         db.setup_main_table()
         db.setup_mimetypes_table()
 
@@ -339,7 +340,7 @@ invokes the file_scanner.
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db, rcontext)
-        if not rcontext.is_recursive:
+        if not recursive:
             fill_mimetypes_table(dbqueue, uforiamodules)
     else:
         uforiamodules = ''
@@ -363,7 +364,7 @@ invokes the file_scanner.
         monitorqueue.put(None)
         monitorqueue.join()
 
-    if not rcontext.is_recursive: 
+    if not recursive: 
         print("\nUforia completed...\n")
     sys.stdout.flush()
 

@@ -192,11 +192,12 @@ def run():
     invokes the file_scanner.
     """
 
-    if not rcontext.is_recursive:
+    recursive = rcontext.is_recursive
+    if not recursive:
         print("Uforia starting...")
 
     db = database.Database(config)
-    if not rcontext.is_recursive:
+    if not recursive:
         db.setup_main_table()
         db.setup_mimetypes_table()
 
@@ -204,7 +205,7 @@ def run():
         if config.DEBUG:
             print("Detecting available modules...")
         uforiamodules = modules.Modules(config, db, rcontext)
-        if not rcontext.is_recursive:
+        if not recursive:
             fill_mimetypes_table(uforiamodules)
     else:
         uforiamodules = ''
@@ -220,7 +221,7 @@ def run():
     else:
         print("The pathname " + config.STARTDIR + " does not exist, stopping...")
 
-    if not rcontext.is_recursive:
+    if not recursive:
         print("\nUforia completed...\n")
 
 
