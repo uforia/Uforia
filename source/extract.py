@@ -47,18 +47,19 @@ def _do_tika_extract(fullpath, tempdir):
         raise Exception("tika extract command failed")
 
 
-def tika_extract(fullpath, input, config, rcontext,):
+def tika_extract(fullpath, context, metadata, config, rcontext):
     """
     Use the Tika input stream and extract all embedded files (if possible). Invokes Uforia
     recursively over the extracted files.
     fullpath - Path of the file to extract
-    input - The Tika input stream
+    context - The Tika parse context
+    metadat - Tika metadata object
     oonfig - The Uforia configuration file
     rcontext - The Uforia recursion context variables
     """
     # To skip recursive call if there are no files to extract
-    extractor = tika.ParserContainerExtractor()
-    needs_extraction = extractor.isSupported(tika.TikaInputStream.get(input))
+    extractor = tika.ParsingEmbeddedDocumentExtractor(context)
+    needs_extraction = extractor.shouldParseEmbedded(metadata)
 
     if needs_extraction:
         # Call Uforia recursively on embedded files

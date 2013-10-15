@@ -46,7 +46,7 @@ def process(fullpath, config, rcontext, columns=None):
 
     results.append(content)
 
-    extract.tika_extract(fullpath, input, config, rcontext);
+    extract.tika_extract(fullpath, context, metadata, config, rcontext);
 
     return results
 

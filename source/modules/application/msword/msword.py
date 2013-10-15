@@ -48,6 +48,6 @@ def process(fullpath, config, rcontext, columns=None):
         content
     ]
 
-    extract.tika_extract(fullpath, input, config, rcontext)
+    extract.tika_extract(fullpath, context, metadata, config, rcontext)
 
     return processed
