@@ -203,7 +203,7 @@ uforiamodules - Loaded uforia modules, passed to file_processor
                 filequeue.put(None)
 
             filequeue.join()
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, SystemExit):
             for consumer in consumers:
                 consumer.terminate()
     except:
@@ -249,8 +249,10 @@ file - The file currently being processed
                         dbqueue.put((module.md5_tablename, hashid, module.columnnames, processresult))
                 except:
                     traceback.print_exc(file=sys.stderr)
+                    raise
         except:
             traceback.print_exc(file=sys.stderr)
+            raise
             raise
 
 
