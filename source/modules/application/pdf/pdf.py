@@ -21,30 +21,6 @@ import os
 import subprocess
 import extract
 
-def _extractall(fullpath, tempdir):
-    # Path that leads to the archive
-    if fullpath is None:
-        raise Exception("Archive path not given")
-
-    # Path that leads to the destination
-    if tempdir is None:
-        raise Exception("Tempdir not given")
-
-    # Set tika location
-    tika_jar_path = os.path.abspath("./libraries/tika/tika-app-1.3.jar")
-    if not os.path.exists(tika_jar_path):
-        raise Exception("Tika not found at " + tika_jar_path)
-    
-    p = subprocess.Popen(["java",
-                          "-jar",
-                          tika_jar_path,
-                          "--extract",
-                          fullpath],
-                         cwd=tempdir)
-    output = p.communicate()[0]
-
-    if output is not None:
-        raise Exception("tika extract command failed") 
 
 def process(fullpath, config, rcontext, columns=None):
     parser = tika.AutoDetectParser()
@@ -67,7 +43,5 @@ def process(fullpath, config, rcontext, columns=None):
         metadata.get("xmpTPg:NPages"),
         content
     ]
-
-    extract.tika_extract(fullpath, context, metadata, config, rcontext)
 
     return processed
