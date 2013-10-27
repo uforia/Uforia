@@ -162,11 +162,6 @@ def errorcheck(result, func, args):
         return result
 
 
-def coerce_filename(filename):
-    if filename is None:
-        return None
-    return filename.encode(sys.getfilesystemencoding())
-
 magic_open = libmagic.magic_open
 magic_open.restype = magic_t
 magic_open.argtypes = [c_int]
@@ -190,7 +185,7 @@ _magic_file.errcheck = errorcheck
 
 
 def magic_file(cookie, filename):
-    return _magic_file(cookie, coerce_filename(filename))
+    return _magic_file(cookie, filename)
 
 _magic_buffer = libmagic.magic_buffer
 _magic_buffer.restype = c_char_p
@@ -209,7 +204,7 @@ _magic_load.errcheck = errorcheck
 
 
 def magic_load(cookie, filename):
-    return _magic_load(cookie, coerce_filename(filename))
+    return _magic_load(cookie, filename)
 
 magic_setflags = libmagic.magic_setflags
 magic_setflags.restype = c_int
