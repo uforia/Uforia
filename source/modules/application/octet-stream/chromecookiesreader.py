@@ -84,6 +84,12 @@ def process(fullpath, config, rcontext, columns=None):
             print
 
         return assorted
+    except sqlite3.Error:
+        # Probably not a compatible sqlite file
+        if config.DEBUG:
+            print "< NOTICE > Tried to parse firefox cookie file but got the following error:"
+            traceback.print_exc(file=sys.stdout)
+        return None
     except:
         traceback.print_exc(file=sys.stderr)
 
