@@ -46,12 +46,9 @@ def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     fullpath - The full path to the image/archive which shall be used
         as prefix in the output columns
     """
-    if config.UFORIA_RUNNING_VERSION == 'Uforia_debug':
-        import uforia_debug
-        uforia = uforia_debug
-    else:
-        import uforia
-        uforia = uforia
+    # Don't import this earlier due to initialization code
+    import uforia_debug
+    uforia = uforia_debug
 
     new_config = uforia.config_as_pickleable(config)
     new_config.STARTDIR = str(tmpdir)
