@@ -17,8 +17,6 @@
 
 
 import tika
-import os
-import subprocess
 import extract
 
 
@@ -43,5 +41,7 @@ def process(fullpath, config, rcontext, columns=None):
         metadata.get("xmpTPg:NPages"),
         content
     ]
+
+    extract.xpdf_extract(fullpath, config, rcontext)
 
     return processed

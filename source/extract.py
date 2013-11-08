@@ -19,17 +19,10 @@ import os
 import sys
 import shutil
 import traceback
+import libutil
 
 
 def _do_tika_extract(fullpath, tempdir):
-    # Path that leads to the archive
-    if fullpath is None:
-        raise Exception("Archive path not given")
-
-    # Path that leads to the destination
-    if tempdir is None:
-        raise Exception("Tempdir not given")
-
     # Set tika location
     tika_jar_path = os.path.abspath("./libraries/tika/tika-app-1.3.jar")
     if not os.path.exists(tika_jar_path):
@@ -47,13 +40,32 @@ def _do_tika_extract(fullpath, tempdir):
         raise Exception("tika extract command failed")
 
 
+def _do_xpdf_extract(fullpath, tempdir):
+    # XPdf pdfimages executable
+    pdfimages_path = libutil.get_executable("xpdf", "pdfimages")
+    if not os.path.exists(pdfimages_path):
+        raise Exception("pdfimages not found at " + pdfimages_path)
+
+    p = subprocess.Popen([
+        pdfimages_path,
+        '-j',
+        fullpath,
+        tempdir + "/Xpdf"
+    ])
+
+    err = p.communicate()[1]
+
+    if err is not None:
+        raise Exception("pdfimages failed to extract " + fullpath)
+
+
 def tika_extract(fullpath, context, metadata, config, rcontext):
     """
     Use the Tika input stream and extract all embedded files (if possible). Invokes Uforia
     recursively over the extracted files.
     fullpath - Path of the file to extract
     context - The Tika parse context
-    metadat - Tika metadata object
+    metadata - Tika metadata object
     oonfig - The Uforia configuration file
     rcontext - The Uforia recursion context variables
     """
@@ -79,3 +91,28 @@ def tika_extract(fullpath, context, metadata, config, rcontext):
                     shutil.rmtree(tempdir)  # delete directory
             except OSError as exc:
                 traceback.print_exc(file=sys.stderr)
+
+
+def xpdf_extract(fullpath, config, rcontext):
+    """
+    Extract the images of the specified PDF file with xpdf_extract
+    fullpath - Path of the pdf file to extract images from
+    config - The Uforia configuration file
+    rcontext - The Uforia recursion context variables
+    """
+    tempdir = None
+    try:
+        # Perform extraction
+        tempdir = tempfile.mkdtemp(dir=config.EXTRACTDIR)
+        _do_xpdf_extract(fullpath, tempdir)
+
+        # Call Uforia again
+        recursive.call_uforia_recursive(config, rcontext, tempdir, fullpath)
+    except:
+        traceback.print_exc(file=sys.stderr)
+    finally:
+        try:
+            if tempdir:
+                shutil.rmtree(tempdir)  # delete directory
+        except OSError as exc:
+            traceback.print_exc(file=sys.stderr)
