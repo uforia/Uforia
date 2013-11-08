@@ -12,7 +12,7 @@
 
 # This is the audio module for .ogg
 
-# TABLE: Artist:LONGTEXT, Album:LONGTEXT, Title:LONGTEXT, Genre:LONGTEXT, Year:INT(4), Track:INT, Comment:LONGTEXT, DurationInSeconds:DOUBLE, BitRate:INT, SampleRate:INT, AudioFileSize:INT, AudioOffset:INT
+# TABLE: artist:LONGTEXT, album:LONGTEXT, title:LONGTEXT, genre:LONGTEXT, year:INT(4), track:INT, comment:LONGTEXT, duration_in_seconds:DOUBLE, bitrate:INT, samplerate:INT, audio_filesize:INT, audio_offset:INT
 
 import sys
 import traceback

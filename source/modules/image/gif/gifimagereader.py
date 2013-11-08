@@ -12,7 +12,7 @@
 
 # This is the image module for GIF
 
-# TABLE: Version:LONGTEXT, Duration:BIGINT, TransparancyColour:SMALLINT, BackgroundColour:SMALLINT, Frames:INT, Loop:SMALLINT, ApplicationExtension:LONGTEXT, XMP:LONGTEXT
+# TABLE: version:LONGTEXT, duration:BIGINT, transparancy_color:SMALLINT, background_color:SMALLINT, frames:INT, loop:SMALLINT, application_extension:LONGTEXT, XMP:LONGTEXT
 import sys
 import traceback
 from PIL import Image

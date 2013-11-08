@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# TABLE: Signature:LONGTEXT, Version:INT, TypeFlags:INT, DataOffSet:INT, ExtraDataLen:INT, ExtraData:INT
+# TABLE: signature:LONGTEXT, version:INT, type_flags:INT, data_offSet:INT, extra_data_len:INT, extra_data:BLOB
 
 import sys
 import imp

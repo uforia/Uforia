@@ -12,7 +12,7 @@
 
 # Module for FLAC audio file parsing
 #
-# TABLE: Length:REAL, SampleRate:BIGINT, TotalSamples:BIGINT, Channels:INT, BPS:INT, Md5Sig:LONGTEXT, MinBlocksize:BIGINT, MaxBlocksize:BIGINT, MinFramesize:BIGINT, MaxFrameSize:BIGINT, Title:LONGTEXT, Version:LONGTEXT, Album:LONGTEXT, TrackNumber:INT, Artist:LONGTEXT, Performer:LONGTEXT, Copyright:LONGTEXT, License:LONGTEXT, Organization:LONGTEXT, Description:LONGTEXT, Genre:LONGTEXT, Date:Date, Location:LONGTEXT, Contact:LONGTEXT, ISRC: LONGTEXT, Unknown:LONGTEXT, Pictures:LONGTEXT, SeekTable:LONGTEXT, CueSheets:LONGTEXT
+# TABLE: length:REAL, sample_rate:BIGINT, total_samples:BIGINT, channels:INT, bps:INT, md5_sig:LONGTEXT, min_blocksize:BIGINT, max_blocksize:BIGINT, min_framesize:BIGINT, max_frameSize:BIGINT, title:LONGTEXT, version:LONGTEXT, album:LONGTEXT, track_number:INT, artist:LONGTEXT, performer:LONGTEXT, copyright:LONGTEXT, license:LONGTEXT, organization:LONGTEXT, description:LONGTEXT, genre:LONGTEXT, date:Date, location:LONGTEXT, contact:LONGTEXT, isrc:LONGTEXT, unknown:LONGTEXT, pictures:LONGTEXT, seek_table:LONGTEXT, cue_sheets:LONGTEXT
 
 import sys
 import traceback

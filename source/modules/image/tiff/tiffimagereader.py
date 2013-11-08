@@ -12,7 +12,7 @@
 
 # This is the image module for TIFF
 
-# TABLE: Tile:LONGTEXT, ICC_Profile:BLOB, Compression:LONGTEXT, DPIx:INT, DPIy:INT, Resolutionx:INT, Resolutiony:INT, OtherInfo:LONGTEXT, BitsPerSample:LONGTEXT, PhotoMetric:LONGTEXT, FileOrder:LONGTEXT, ImageDescription:LONGTEXT, StripOffsets:BLOB, SamplesPerPixel:LONGTEXT, RowsPerStrip:LONGTEXT, StripByteCounts:BLOB, XResolution:INT, YResolution:INT, PlanarConfig:LONGTEXT, ResolutionUnit:LONGTEXT, Software:LONGTEXT, DateTime:DATE, Artist:LONGTEXT, Predictor:LONGTEXT, Colormap:LONGTEXT, TileOffsets:BLOB, ExtraSamples:LONGTEXT, SampleFormat:LONGTEXT, JPEGTables:LONGTEXT, Copyright:LONGTEXT, IPTCNaaChunk:LONGTEXT, PhotoshopChunck:LONGTEXT, EXIFIFD:LONGTEXT, XMPTag:LONGTEXT
+# TABLE: tile:LONGTEXT, icc_profile:BLOB, compression:LONGTEXT, dpi_x:INT, dpi_y:INT, resolution_x:INT, resolution_y:INT, other_info:LONGTEXT, bits_per_sample:LONGTEXT, photo_metric:LONGTEXT, file_order:LONGTEXT, image_description:LONGTEXT, strip_offsets:BLOB, samples_per_pixel:LONGTEXT, rows_per_strip:LONGTEXT, strip_byte_counts:BLOB, x_resolution:INT, y_resolution:INT, planar_config:LONGTEXT, resolution_unit:LONGTEXT, software:LONGTEXT, datetime:DATE, artist:LONGTEXT, predictor:LONGTEXT, colormap:LONGTEXT, tileoffsets:BLOB, extrasamples:LONGTEXT, sampleformat:LONGTEXT, jpeg_tables:LONGTEXT, copyright:LONGTEXT, iptcnaa_chunk:LONGTEXT, photoshop_chunck:LONGTEXT, exif_ifd:LONGTEXT, XMP:LONGTEXT
 
 import sys
 import traceback

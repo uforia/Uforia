@@ -12,7 +12,7 @@
 
 # This is the image module for BMP
 
-# TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Remaining:LONGTEXT
+# TABLE: tile:LONGTEXT, compression:LONGTEXT, remaining:LONGTEXT
 
 import sys
 import imp

@@ -14,7 +14,7 @@
 
 # This is the audio module for WMA
 
-# TABLE: ARTIST:LONGTEXT, TITLE:LONGTEXT, CHANNELS:LONGTEXT, COMMENT:INT, DURATION:INT, GENRE:LONGTEXT, SAMPLERATE:INT, SIZE:INT, TRACK:INT(3), YEAR:INT(4), ALBUM:LONGTEXT, AUDIO_SIZE:INT
+# TABLE: artist:LONGTEXT, title:LONGTEXT, channels:LONGTEXT, comment:INT, duration:INT, genre:LONGTEXT, sample_rate:INT, size:INT, track:INT(3), year:INT(4), album:LONGTEXT, audio_size:INT
 
 # import for external lib hsaudiotag
 from hsaudiotag import wma

@@ -14,7 +14,7 @@
 
 # This is the plain text module for .txt
 
-# TABLE: Contents:LONGTEXT
+# TABLE: contents:LONGTEXT
 
 import sys
 import traceback

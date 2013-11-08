@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# TABLE: Bootrec_Type:INT, Bootrec_Identifier:TEXT, Bootrec_Version:INT, Bootrec_BootSysId:TEXT, Bootrec_Id:BLOB, Bootrec_BootSysUse:BLOB, VolumeDescriptors:LONGTEXT, TermType:INT, TermIdentifier:TEXT, TermVersion:INT
+# TABLE: bootrec_type:INT, bootrec_identifier:TEXT, bootrec_version:INT, bootrec_bootsysid:TEXT, bootrec_id:BLOB, bootrec_bootsysuse:BLOB, volumedescriptors:LONGTEXT, termtype:INT, termidentifier:TEXT, termversion:INT
 
 import sys
 import traceback

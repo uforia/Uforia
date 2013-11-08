@@ -12,7 +12,7 @@
 
 # This is the image module for TGA
 
-# TABLE: Tile:LONGTEXT, Compression:LONGTEXT, Orientation:INT, OtherInfo:BLOB, XMPTag:LONGTEXT
+# TABLE: tile:LONGTEXT, compression:LONGTEXT, orientation:INT, other_info:BLOB, XMP:LONGTEXT
 
 import sys
 import traceback

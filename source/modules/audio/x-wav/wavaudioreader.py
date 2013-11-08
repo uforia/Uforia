@@ -12,7 +12,7 @@
 
 # This is the audio module for wav files
 
-# TABLE: NumberOfChannels:INT, SampleWidth:INT, FrameRate:INT, NumberOfFrames:INT, CompressionType:LONGTEXT, CompressionName:LONGTEXT, DurationInSeconds:DOUBLE, XMP:LONGTEXT
+# TABLE: number_of_channels:INT, sample_width:INT, framerate:INT, number_of_frames:INT, compression_type:LONGTEXT, compression_name:LONGTEXT, duration_in_seconds:DOUBLE, XMP:LONGTEXT
 
 import sys
 import traceback

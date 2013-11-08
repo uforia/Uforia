@@ -12,7 +12,7 @@
 
 # This is the image module for PNG
 
-# TABLE: Tile:LONGTEXT, Text:LONGTEXT, ICC_Profile:BLOB, Interlace:INT, Transparency:LONGTEXT, Gamma:INT, DPIx:INT, DPIy:INT, Aspect:LONGTEXT, OtherInfo:BLOB, XMPtag:LONGTEXT
+# TABLE: tile:LONGTEXT, text:LONGTEXT, icc_profile:BLOB, interlace:INT, transparency:LONGTEXT, gamma:INT, dpi_x:INT, dpi_y:INT, aspect:LONGTEXT, other_info:LONGTEXT, XMP:LONGTEXT
 
 import sys
 import traceback

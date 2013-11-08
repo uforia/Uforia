@@ -12,7 +12,7 @@
 
 # This is the image module reading all images
 
-# TABLE: Format:LONGTEXT, Mode:LONGTEXT, Width:INT, Height:INT, Colors:LONGTEXT, Extrema:LONGTEXT, Histogram:LONGTEXT, Palette:LONGTEXT, LeftBoundingbox:INT, UpperBoundingbox:INT, RightBoundingbox:INT, LowerBoundingbox:INT
+# TABLE: format:LONGTEXT, mode:LONGTEXT, width:INT, height:INT, colors:LONGTEXT, extrema:LONGTEXT, histogram:LONGTEXT, palette:LONGTEXT, leftboundingbox:INT, upperboundingbox:INT, rightboundingbox:INT, lowerboundingbox:INT
 
 import sys
 import traceback
