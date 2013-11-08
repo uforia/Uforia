@@ -17,6 +17,8 @@
 import sys
 import traceback
 import mutagen.mp4
+import dateutil
+import dateutil.parser
 
 
 def process(fullpath, config, rcontext, columns=None):
@@ -85,6 +87,11 @@ def process(fullpath, config, rcontext, columns=None):
             # Make sure we stored exactly the same amount of columns as
             # specified!!
             assert len(assorted) == len(columns)
+
+            # Fix date format
+            index = columns.index('purchase_date')
+            if assorted[index] is not None:
+                assorted[index] = dateutil.parser.parse(assorted[index]).isoformat()
 
             # Print some data that is stored in the database if debug is true
             if config.DEBUG:

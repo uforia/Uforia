@@ -12,10 +12,12 @@
 
 # This is the image module for TIFF
 
-# TABLE: tile:LONGTEXT, icc_profile:BLOB, compression:LONGTEXT, dpi_x:INT, dpi_y:INT, resolution_x:INT, resolution_y:INT, other_info:LONGTEXT, bits_per_sample:LONGTEXT, photo_metric:LONGTEXT, file_order:LONGTEXT, image_description:LONGTEXT, strip_offsets:BLOB, samples_per_pixel:LONGTEXT, rows_per_strip:LONGTEXT, strip_byte_counts:BLOB, x_resolution:INT, y_resolution:INT, planar_config:LONGTEXT, resolution_unit:LONGTEXT, software:LONGTEXT, datetime:DATE, artist:LONGTEXT, predictor:LONGTEXT, colormap:LONGTEXT, tileoffsets:BLOB, extrasamples:LONGTEXT, sampleformat:LONGTEXT, jpeg_tables:LONGTEXT, copyright:LONGTEXT, iptcnaa_chunk:LONGTEXT, photoshop_chunck:LONGTEXT, exif_ifd:LONGTEXT, XMP:LONGTEXT
+# TABLE: tile:LONGTEXT, icc_profile:BLOB, compression:LONGTEXT, dpi_x:INT, dpi_y:INT, resolution_x:INT, resolution_y:INT, other_info:LONGTEXT, bits_per_sample:LONGTEXT, photo_metric:LONGTEXT, file_order:LONGTEXT, image_description:LONGTEXT, strip_offsets:BLOB, samples_per_pixel:LONGTEXT, rows_per_strip:LONGTEXT, strip_byte_counts:BLOB, x_resolution:INT, y_resolution:INT, planar_config:LONGTEXT, resolution_unit:LONGTEXT, software:LONGTEXT, datetime:TEXT, artist:LONGTEXT, predictor:LONGTEXT, colormap:LONGTEXT, tileoffsets:BLOB, extrasamples:LONGTEXT, sampleformat:LONGTEXT, jpeg_tables:LONGTEXT, copyright:LONGTEXT, iptcnaa_chunk:LONGTEXT, photoshop_chunck:LONGTEXT, exif_ifd:LONGTEXT, XMP:LONGTEXT
 
 import sys
 import traceback
+import dateutil
+import dateutil.parser
 from PIL import Image, TiffImagePlugin
 
 
@@ -112,6 +114,11 @@ def process(fullpath, config, rcontext, columns=None):
             # Make sure we stored exactly the same amount of columns as
             # specified!!
             assert len(assorted) == len(columns)
+
+            # Fix date format
+            index = columns.index('datetime')
+            if assorted[index] is not None:
+                assorted[index] = dateutil.parser.parse(assorted[index]).isoformat()
 
             # Print some data that is stored in the database if debug is true
             if config.DEBUG:

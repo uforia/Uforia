@@ -20,7 +20,7 @@ import sys
 import traceback
 import os
 import re
-
+import datetime
 
 def _timestamp_from_cookie(low, high):
     """
@@ -94,10 +94,10 @@ def _parse_cookies(filename):
                 cookie["value"] = buf[VALUE_STATE]
                 cookie["domain"] = buf[DOMAIN_STATE]
                 cookie["flags"] = int(buf[FLAGS_STATE])
-                cookie["expire"] = _timestamp_from_cookie( \
-                    int(buf[EXPIRE_LO_STATE]), int(buf[EXPIRE_HI_STATE]))
-                cookie["creation"] = _timestamp_from_cookie( \
-                    int(buf[CREATION_LO_STATE]), int(buf[CREATION_HI_STATE]))
+                cookie["expire"] = datetime.fromtimestamp(_timestamp_from_cookie( \
+                    int(buf[EXPIRE_LO_STATE]), int(buf[EXPIRE_HI_STATE]))).isoformat()
+                cookie["creation"] = datetime.fromtimestamp(_timestamp_from_cookie( \
+                    int(buf[CREATION_LO_STATE]), int(buf[CREATION_HI_STATE]))).isoformat()
                 cookies.append(cookie)
 
                 # Reset everything

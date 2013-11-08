@@ -19,6 +19,8 @@ import traceback
 import json
 import mutagen
 import mutagen.flac
+import dateutil
+import dateutil.parser
 from PIL import Image
 
 
@@ -159,6 +161,11 @@ def process(fullpath, config, rcontext, columns=None):
             print "\nFLAC file data:"
             for i in range(0, len(assorted)):
                 print "%-18s %s" % (columns[i], assorted[i])
+
+        # Fix date format
+        index = columns.index('date')
+        if assorted[index] is not None:
+            assorted[index] = dateutil.parser.parse(assorted[index]).isoformat()
 
         return assorted
     except:
