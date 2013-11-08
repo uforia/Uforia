@@ -37,6 +37,9 @@ class RecursionContext:
         # Used to notify that Uforia was started recursively
         self.is_recursive = False
 
+        # Whether per-process jvm initialization is done
+	self.jvm_initialized = False
+
 
 def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     """
@@ -65,6 +68,7 @@ def call_uforia_recursive(config, rcontext, tmpdir, fullpath):
     new_rcontext.hashid = rcontext.hashid
     new_rcontext.hashid_lock = rcontext.hashid_lock
     new_rcontext.is_recursive = True
+    new_rcontext.jvm_initialized = rcontext.jvm_initialized
 
     uforia.config = new_config
     uforia.rcontext = new_rcontext

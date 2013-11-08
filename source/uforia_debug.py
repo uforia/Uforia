@@ -211,8 +211,10 @@ def run():
         uforiamodules = ''
 
     # Start the JCC JVM runtime for Tika
-    import tika
-    tika.initVM()
+    if not rcontext.jvm_initialized:
+        import tika
+        tika.initVM()
+	rcontext.jvm_initialized = True
 
     if config.DEBUG:
         print("Starting producer...")
