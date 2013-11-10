@@ -17,9 +17,7 @@
 import sys
 import traceback
 import mutagen.mp4
-import dateutil
-import dateutil.parser
-
+import python_dateutil as dateutil
 
 def process(fullpath, config, rcontext, columns=None):
         # Try to parse mp4 data

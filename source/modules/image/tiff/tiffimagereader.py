@@ -16,8 +16,7 @@
 
 import sys
 import traceback
-import dateutil
-import dateutil.parser
+import python_dateutil as dateutil
 from PIL import Image, TiffImagePlugin
 
 
