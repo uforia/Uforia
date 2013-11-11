@@ -4,8 +4,10 @@
 # Note: Debug output is very noisy and should not be used in production.
 DEBUG = False
 
-# Should Uforia show a progress indicator? (Might slow down things...!)
-OUTPUT = False
+# Should Uforia show a progress indicator? In theory, this might slow down
+# things, but at least you will get an indication of what Uforia is doing.
+# This is particularly useful if you're processing large amounts of data.
+OUTPUT = True
 
 # From which directory should Uforia start to scan?
 # Example: STARTDIR = '/home/user/'
