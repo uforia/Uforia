@@ -18,6 +18,7 @@ import os
 import sys
 import hashlib
 import traceback
+import datetime
 
 
 class File(object):
@@ -56,21 +57,24 @@ class File(object):
                     print("""Cannot read permissions.
                             File system might not support permissions.""")
             try:
-                self.mtime = repr(os.path.getmtime(fullpath))
+                timestamp = os.path.getmtime(fullpath)
+                self.mtime = datetime.datetime.fromtimestamp(timestamp).isoformat()
             except:
-                self.mtime = -1
+                self.mtime = Null
                 if config.DEBUG:
                     print('File system might not support MACtimes.')
             try:
-                self.atime = repr(os.path.getatime(fullpath))
+                timestamp = os.path.getatime(fullpath)
+                self.atime = datetime.datetime.fromtimestamp(timestamp).isoformat()
             except:
-                self.atime = -1
+                self.atime = Null
                 if config.DEBUG:
                     print('File system might not support MACtimes.')
             try:
-                self.ctime = repr(os.path.getctime(fullpath))
+                timestamp = os.path.getctime(fullpath)
+                self.ctime = datetime.datetime.fromtimestamp(timestamp).isoformat()
             except:
-                self.ctime = -1
+                self.ctime = Null
                 if config.DEBUG:
                     print('File system might not support MACtimes.')
             try:
