@@ -42,7 +42,7 @@ def _do_linux_setup():
             os.environ['LD_LIBRARY_PATH'] = ""
 
         os.environ['LD_LIBRARY_PATH'] += ":" + javalibpath + ":" + javaserverpath
-
+        os.environ['LD_LIBRARY_PATH'] += ":./libraries/PIL/bin-x86_64-Linux:./libraries/PIL/bin-x86-Linux"
 
 def _do_win32_setup():
     import _winreg
