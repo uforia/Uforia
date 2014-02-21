@@ -91,20 +91,18 @@ class File(object):
                 self.sha256 = str(self.sha256.hexdigest())
             except:
                 traceback.print_exc(file=sys.stderr)
-#                raise IOError('Error calculating digests,
-#                                possible filesystem error.')
             try:
                 magic_default = magic.Magic(magic_file=config.MAGICFILE)
                 magic_mime = magic.Magic(mime=True,
                                          magic_file=config.MAGICFILE)
-                self.ftype = str(magic_default.from_file(fullpath))
-                self.mtype = str(magic_mime.from_file(fullpath))
-                self.btype = str(magic_default.from_buffer(open(fullpath)
-                                                           .read(65536)))
             except:
                 traceback.print_exc(file=sys.stderr)
-#                raise IOError('Error reading file magic,
-#                                possible library or filesystem error.')
+            try:            
+                self.ftype = str(magic_default.from_file(fullpath))
+                self.mtype = str(magic_mime.from_file(fullpath))
+                self.btype = str(magic_default.from_buffer(open(fullpath).read(65536)))
+            except:
+                traceback.print_exc(file=sys.stderr)
             if config.DEBUG:
                 print "Filename:\t", self.name
                 print "UID/GID:\t", self.owner + ":" + self.group
