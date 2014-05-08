@@ -19,7 +19,7 @@ import sys
 import traceback
 from email.parser import Parser
 import python_dateutil.dateutil.parser as date_parser
-
+import re
 
 def process(fullpath, config, rcontext, columns=None):
         # Try to parse rfc822 data
@@ -29,6 +29,18 @@ def process(fullpath, config, rcontext, columns=None):
             headers = Parser().parse(email)
 
             # Get most common headers
+            try:
+                ReplyTo = re.sub(r'\s+',' ',headers["Reply-To"]).lstrip()
+            except:
+                ReplyTo = None
+            try:
+                To = re.sub(r'\s+',' ',headers["To"]).lstrip()
+            except:
+                To = None
+            try:
+                From = re.sub(r'\s+',' ',headers["From"]).lstrip()
+            except:
+                From = None
             assorted = [headers["Delivered-To"], headers["Original-Recipient"],
                         headers["Received"], headers["Return-Path"],
                         headers["Received-SPF"],
@@ -44,11 +56,10 @@ def process(fullpath, config, rcontext, columns=None):
                         headers["X-Sender-ID"],
                         headers["X-Notification-Category"],
                         headers["X-Notification-Type"], headers["X-UB"],
-                        headers["Precedence"], headers["Reply-To"],
+                        headers["Precedence"], ReplyTo,
                         headers["Auto-Submitted"], headers["Message-ID"],
                         date_parser.parse(headers["Date"]),
-                        headers["Subject"], headers["From"],
-                        headers["To"], headers["Content-Type"]]
+                        headers["Subject"], From, To, headers["Content-Type"]]
 
             # Start at the beginning of the file
             email.seek(0)
@@ -67,7 +78,9 @@ def process(fullpath, config, rcontext, columns=None):
                     print "%-18s %s" % (columns[i] + ':', assorted[i])
 
             return assorted
-
+        except TypeError:
+            print('TypeError')
+            pass
         except:
             traceback.print_exc(file=sys.stderr)
 
