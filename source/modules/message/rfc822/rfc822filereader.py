@@ -13,7 +13,7 @@
 # This is the module for handling rfc822 email types
 
 # Do not change from CamelCase because these are the official header names
-# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:LONGTEXT, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, Email_Content:LONGTEXT
+# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:LONGTEXT, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, XTo:LONGTEXT, Xcc:LONGTEXT, Xbcc:LONGTEXT, Cc:LONGTEXT, Bcc:LONGTEXT, Email_Content:LONGTEXT
 
 import sys
 import traceback
@@ -41,6 +41,26 @@ def process(fullpath, config, rcontext, columns=None):
                 From = re.sub(r'\s+',' ',headers["From"]).lstrip()
             except:
                 From = None
+            try:
+                XTo = re.sub(r'\s+',' ',headers["X-To"]).lstrip()
+            except:
+                XTo = None
+            try:
+                Xcc = re.sub(r'\s+',' ',headers["X-Cc"]).lstrip()
+            except:
+                Xcc = None
+            try:
+                Xbcc = re.sub(r'\s+',' ',headers["X-Bcc"]).lstrip()
+            except:
+                Xbcc = None
+            try:
+                Cc = re.sub(r'\s+',' ',headers["Cc"]).lstrip()
+            except:
+                Cc = None
+            try:
+                Bcc = re.sub(r'\s+',' ',headers["Bcc"]).lstrip()
+            except:
+                Bcc = None
             assorted = [headers["Delivered-To"], headers["Original-Recipient"],
                         headers["Received"], headers["Return-Path"],
                         headers["Received-SPF"],
@@ -59,7 +79,8 @@ def process(fullpath, config, rcontext, columns=None):
                         headers["Precedence"], ReplyTo,
                         headers["Auto-Submitted"], headers["Message-ID"],
                         date_parser.parse(headers["Date"]),
-                        headers["Subject"], From, To, headers["Content-Type"]]
+                        headers["Subject"], From, To, headers["Content-Type"],
+                        XTo, Xcc, Xbcc, Cc, Bcc]
 
             # Start at the beginning of the file
             email.seek(0)
