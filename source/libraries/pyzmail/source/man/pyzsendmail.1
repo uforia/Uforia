@@ -1,0 +1,234 @@
+.TH "PYZSENDMAIL" "1" "May 30, 2014" "1.0" "Python easy mail library"
+.SH NAME
+pyzsendmail \- command line tools to compose and send mail
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.\" Man page generated from reStructeredText.
+.
+.SH SYNOPSIS
+.sp
+\fBpyzsendmail\fP [\fIoptions\fP]
+.SH DESCRIPTION
+.sp
+\fBpyzsendmail\fP compose and send mails.
+.sp
+Compose an email including \fItext\fP and/or \fIHTML\fP content, add \fIattachments\fP
+of any kind, or \fIembed\fP images in the HTML content. Depending the need,
+\fBpyzsendmail\fP adapts the MIME structure of the email.
+.sp
+\fBpyzsendmail\fP handle SSL, TLS and authentication.
+.sp
+\fBpyzsendmail\fP can send to one or multiple recipients, but also support \fICC\fP
+and \fIBCC\fP recipients.
+.SH OPTIONS
+.INDENT 0.0
+.TP
+.B \-h, \-\-help
+show this help message and exit
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-H name_or_ip, \-\-smtp\-host=name_or_ip
+SMTP host relay
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-p port, \-\-smtp\-port=port
+SMTP port (default=25)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-L login, \-\-smtp\-login=login
+SMTP login (if authentication is required)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-P password, \-\-smtp\-password=password
+SMTP password (if authentication is required)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-m mode, \-\-smtp\-mode=mode
+smtp mode in \(aqnormal\(aq, \(aqssl\(aq, \(aqtls\(aq. (default=\(aqnormal\(aq)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-A charset, \-\-arg\-charset=charset
+command line arguments charset (default=<depend of the host locals>)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-C charset, \-\-mail\-charset=charset
+mail default charset (default=<depend of the host local>)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-f sender, \-\-from=sender
+sender address
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-t recipient, \-\-to=recipient
+add one recipient address
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-c recipient, \-\-cc=recipient
+add one CC address
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-b recipient, \-\-bcc=recipient
+add one BCC address
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-s subject, \-\-subject=subject
+message subject
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-T text, \-\-text=text
+.INDENT 7.0
+.TP
+.B text content in the form
+[text_charset]:@filename
+.TP
+.B or
+[text_charset]:"litteral content"
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-M html, \-\-html=html
+.INDENT 7.0
+.TP
+.B html content in the form
+[text_charset]:@filename
+.TP
+.B or
+[text_charset]:"literal content"
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-a file, \-\-attach=file
+.INDENT 7.0
+.TP
+.B add an attachment in the form:
+maintype/subtype:filename:target_file[:text_charset]
+.TP
+.B for example
+image/jpg:picture.jpg:C:\ethepicture.png
+.TP
+.B or
+text/plain:file.txt:C:\ereport.txt:[windows\-1252]
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-e file, \-\-embed=file
+.INDENT 7.0
+.TP
+.B add embedded data in the form:
+maintype/subtype:content\-id:target_file[:text_charset]
+.TP
+.B for example
+image/jpg:picture:C:\ethepicture.png
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-E, \-\-eicar
+include eicar virus in attachments, for testing Anti\-virus
+.UNINDENT
+.SH ARGUMENTS
+.INDENT 0.0
+.TP
+.B \fBlogin\fP and \fBpassword\fP must be \fIutf\-8\fP encoded if they contains non \fIus\-ascii\fP
+characters.
+.TP
+.B \fBaddress\fP can be of the form:
+"Foo Bar <foo.bar@example.com>"
+.sp
+\fBor\fP
+.sp
+"foo.bar@example.com"
+.sp
+Name can contain non us\-ascii characters. They are supposed to use the
+command line charset encoding.
+.TP
+.B \fBtext\fP and \fBHTML\fP content can be in the \fIliteral\fP form:
+.INDENT 7.0
+.IP \(bu 2
+:"The text content"
+.IP \(bu 2
+utf8:"The text content"
+.UNINDENT
+.sp
+In both samples, the content is encoded using the \fIencoding\fP of the
+command line argument. In first sample, notice the \fB:\fP at beginning,
+the content will be encoded using the mail default charset,
+in the second sample, the text will be re\-encoded into utf8.
+.sp
+\fBor\fP using content of a \fIfile\fP:
+.INDENT 7.0
+.IP \(bu 2
+:@"C:\efile.txt"
+.IP \(bu 2
+windows\-1252:@"C:\efile.txt"
+.UNINDENT
+.sp
+In first sample, notice the \fB:\fP at beginning, the file is supposed to be
+encoded using mail default charset and will be encoded this way in the
+email. In second sample, the file is supposed to be encoded using
+\fIwindows\-1252\fP charset and will be encoded this way in the email.
+.TP
+.B \fBattachment\fP and \fBembedded\fP files
+In attachment and embedded content, the \fItext_charset\fP is used only if the
+\fImaintype\fP is \(aqtext\(aq. The file is supposed to be encoded using
+\fItext_charset\fP and will be encoded using this charset in the email.
+.UNINDENT
+.SH SAMPLES
+.sp
+.nf
+.ft C
+pyzsendmail \-H localhost \-p 25 \-f "Me <me\e@example.com>" \-t "foo\e@example.com" \-t "Bar <bar\e@example.com" \-s "The subject" \-T :"Hello" \-a image/jpg:holiday.png:C:\e\eHoliday.png
+.ft P
+.fi
+.SH SEE ALSO
+.sp
+\fIpyzmailinfo(1)\fP.
+.SH AUTHOR
+.sp
+Alain Spineux <\fI\%alain.spineux@gmail.com\fP>
+.SH COPYRIGHT
+2011, Alain Spineux
+.\" Generated by docutils manpage writer.
+.\" 
+.

@@ -1,0 +1,511 @@
+.TH "PYZMAIL" "1" "May 30, 2014" "1.0" "Python easy mail library"
+.SH NAME
+pyzmail \- Python easy mail library Documentation
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.\" Man page generated from reStructeredText.
+.
+.sp
+\fBpyzmail\fP is a \fBhigh level\fP mail library for Python. It provides functions and
+classes that help for \fBreading\fP, \fBcomposing\fP and \fBsending\fP emails. \fBpyzmail\fP
+exists because their is no reasons that handling mails with Python would be more
+difficult than with popular mail clients like Outlook or Thunderbird.
+\fBpyzmail\fP hides the complexity of the MIME structure and MIME
+encoding/decoding. It also make the problems of the internationalization
+encoding/decoding simpler.
+.SH DOWNLOAD AND INSTALL
+.sp
+\fBpyzmail\fP is available for Python \fB2.6+\fP and \fB3.2+\fP
+from \fI\%pypi\fP and can
+be easily installed using the \fI\%easy_install\fP
+successor named \fI\%distribute\fP
+and \fI\%pip\fP using
+.sp
+.nf
+.ft C
+$ pip install pyzmail
+.ft P
+.fi
+.sp
+to quickly install \fBdistribute\fP and \fBpip\fP, use
+.sp
+.nf
+.ft C
+curl \-O http://python\-distribute.org/distribute_setup.py
+python distribute_setup.py
+easy_install pip
+.ft P
+.fi
+.sp
+\fBpyzmail\fP can be installed the old way from sources. Download the archive from
+\fI\%pypi\fP and extract its content
+into a directory. \fIcd\fP into this directory and run:
+.sp
+.nf
+.ft C
+> cd pyzmail\-X.X.X
+> python setup.py install
+.ft P
+.fi
+.sp
+Binary version of the scripts for \fBWindows\fP pyzmail\-1.0.3\-win32.zip can
+be downloaded from \fI\%here\fP.
+.sp
+\fBpyzmail\fP sources are also available on \fBgithub\fP
+\fI\%https://github.com/aspineux/pyzmail\fP
+.SH SUPPORT FOR PYTHON 3.X
+.SS Python 3.2+ supported
+[image]
+.sp
+Python \fB3.2\fP is supported and has been tested. Python 3.0 and 3.1 are not supported
+because none of them provide functions to handle 8bits encoded emails like in \fB3.2\fP
+( \fBemail.message_from_bytes()\fP & \fBemail.message_from_binary_file()\fP )
+.sp
+At installation time, \fBpyzmail\fP sources are automatically converted by
+\fI\%distribute\fP using \fB2to3\fP.
+.sp
+Unfortunately, \fBscripts\fP are not converted in the process. You can convert them
+using \fB2to3\fP yourself \fI(adapt\fP \fBpaths\fP \fIto fit you configuration)\fP:
+.sp
+.nf
+.ft C
+/opt/python\-3.2.2/bin/2to3 \-\-no\-diffs \-\-write \-\-nobackups /opt/python\-3.2.2/bin/pyzinfomail
+/opt/python\-3.2.2/bin/2to3 \-\-no\-diffs \-\-write \-\-nobackups /opt/python\-3.2.2/bin/pyzsendmail
+.ft P
+.fi
+.SH USE PYZMAIL
+.sp
+The package is split into 3 modules:
+.INDENT 0.0
+.IP \(bu 2
+\fI\%generate\fP: Useful functions to compose and send mail   s
+.IP \(bu 2
+\fI\%parse\fP: Useful functions to parse emails
+.IP \(bu 2
+\fI\%utils\fP: Various functions used by other modules
+.UNINDENT
+.sp
+Most important functions are available from the top of the \fI\%pyzmail\fP package.
+.sp
+usage sample:
+.sp
+.nf
+.ft C
+import pyzmail
+
+#access function from top of pyzmail
+ret=pyzmail.compose_mail(\(aqme@foo.com\(aq, [ \(aqhim@bar.com\(aq], u\(aqsubject\(aq, \e
+                         \(aqiso\-8859\-1\(aq, (\(aqHello world\(aq, \(aqus\-ascii\(aq))
+payload=ret[0]
+print payload
+msg=pyzmail.PyzMessage.factory(payload)
+print msg.get_subject()
+
+#use more specific function from inside modules
+print pyzmail.generate.format_addresses([(\(aqJohn\(aq, \(aqjohn@foo.com\(aq) ], \e
+                                        \(aqFrom\(aq, \(aqus\-ascii\(aq)
+print pyzmail.parse.decode_mail_header(\(aq=?iso\-8859\-1?q?Hello?=\(aq)
+.ft P
+.fi
+.sp
+More in the \fI\%Quick Example\fP section.
+.SH DOCUMENTATION
+.sp
+You can find lots of sample inside the \fIdocstrings\fP but also in the \fItests\fP
+directory.
+.sp
+The documentation, samples, docstring and articles are all fitted for python 2.x.
+Some occasional hint give some tricks about Python 3.x.
+.SS Articles
+.sp
+To understand how this library works, you will find these 3 articles very useful.
+They have been written before the first release of \fBpyzmail\fP and the code has
+changed a little since:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Parsing email using Python part 1 of 2 : The Header\fP
+.IP \(bu 2
+\fI\%Parsing email using Python part 2 of 2 : The content\fP
+.IP \(bu 2
+\fI\%Generate and send mail with python: tutorial\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS API documentation
+.sp
+The \fI\%API documentation\fP in \fIepydoc\fP format contains a lot
+of \fBsamples\fP in \fIdoctest\fP string. You will find them very useful too.
+.SH SUPPORT
+.sp
+Ask your questions \fI\%here\fP
+.SH QUICK EXAMPLE
+.sp
+Lets show you how it works !
+.SS Compose an email
+.sp
+.nf
+.ft C
+import pyzmail
+
+sender=(u\(aqMe\(aq, \(aqme@foo.com\(aq)
+recipients=[(u\(aqHim\(aq, \(aqhim@bar.com\(aq), \(aqjust@me.com\(aq]
+subject=u\(aqthe subject\(aq
+text_content=u\(aqBonjour aux Fran\exe7ais\(aq
+prefered_encoding=\(aqiso\-8859\-1\(aq
+text_encoding=\(aqiso\-8859\-1\(aq
+
+payload, mail_from, rcpt_to, msg_id=pyzmail.compose_mail(\e
+        sender, \e
+        recipients, \e
+        subject, \e
+        prefered_encoding, \e
+        (text_content, text_encoding), \e
+        html=None, \e
+        attachments=[(\(aqattached content\(aq, \(aqtext\(aq, \(aqplain\(aq, \(aqtext.txt\(aq, \e
+                      \(aqus\-ascii\(aq)])
+
+print payload
+.ft P
+.fi
+.sp
+Look a the output:
+.sp
+.nf
+.ft C
+Content\-Type: multipart/mixed; boundary="===============1727493275=="
+MIME\-Version: 1.0
+From: Me <me@foo.com>
+To: Him <him@bar.com> , just@me.com
+Subject: the subject
+Date: Fri, 19 Aug 2011 16:04:42 +0200
+
+\-\-===============1727493275==
+Content\-Type: text/plain; charset="iso\-8859\-1"
+MIME\-Version: 1.0
+Content\-Transfer\-Encoding: quoted\-printable
+
+Bonjour aux Fran=E7ais
+\-\-===============1727493275==
+Content\-Type: text/plain; charset="us\-ascii"
+MIME\-Version: 1.0
+Content\-Transfer\-Encoding: 7bit
+Content\-Disposition: attachment; filename="text.txt"
+
+attached content
+\-\-===============1727493275==\-\-
+.ft P
+.fi
+.SS Send an email
+.sp
+First take a look at the other values returned by \fBpyzmail.compose_mail()\fP:
+.sp
+.nf
+.ft C
+print \(aqSender address:\(aq, mail_from
+print \(aqRecipients:\(aq, rcpt_to
+.ft P
+.fi
+.sp
+Here are the values I can reuse for my SMTP connection:
+.sp
+.nf
+.ft C
+Sender address: me@foo.com
+Recipients: [\(aqhim@bar.com\(aq, \(aqjust@me.com\(aq]
+.ft P
+.fi
+.sp
+I want to send my email via my Gmail account:
+.sp
+.nf
+.ft C
+smtp_host=\(aqsmtp.gmail.com\(aq
+smtp_port=587
+smtp_mode=\(aqtls\(aq
+smtp_login=\(aqmy.gmail.addresse@gmail.com\(aq
+smtp_password=\(aqmy.gmail.password\(aq
+
+ret=pyzmail.send_mail(payload, mail_from, rcpt_to, smtp_host, \e
+        smtp_port=smtp_port, smtp_mode=smtp_mode, \e
+        smtp_login=smtp_login, smtp_password=smtp_password)
+
+if isinstance(ret, dict):
+    if ret:
+        print \(aqfailed recipients:\(aq, \(aq, \(aq.join(ret.keys())
+    else:
+        print \(aqsuccess\(aq
+else:
+    print \(aqerror:\(aq, ret
+.ft P
+.fi
+.sp
+Here \fBpyzmail.send_mail()\fP combine \fBSSL\fP and \fBauthentication\fP.
+.SS Parse an email
+.sp
+Now lets try to read the email we have just composed:
+.sp
+.nf
+.ft C
+msg=pyzmail.PyzMessage.factory(payload)
+
+print \(aqSubject: %r\(aq % (msg.get_subject(), )
+print \(aqFrom: %r\(aq % (msg.get_address(\(aqfrom\(aq), )
+print \(aqTo: %r\(aq % (msg.get_addresses(\(aqto\(aq), )
+print \(aqCc: %r\(aq % (msg.get_addresses(\(aqcc\(aq), )
+.ft P
+.fi
+.sp
+Take a look at the outpout:
+.sp
+.nf
+.ft C
+Subject: u\(aqthe subject\(aq
+From: (u\(aqMe\(aq, \(aqme@foo.com\(aq)
+To: [(u\(aqHim\(aq, \(aqhim@bar.com\(aq), (u\(aqjust@me.com\(aq, \(aqjust@me.com\(aq)]
+Cc: []
+.ft P
+.fi
+.sp
+And a little further regarding the mail content and attachment:
+.sp
+.nf
+.ft C
+for mailpart in msg.mailparts:
+    print \(aq    %sfilename=%r alt_filename=%r type=%s charset=%s desc=%s size=%d\(aq % ( \e
+        \(aq*\(aqif mailpart.is_body else \(aq \(aq, \e
+        mailpart.filename,  \e
+        mailpart.sanitized_filename, \e
+        mailpart.type, \e
+        mailpart.charset, \e
+        mailpart.part.get(\(aqContent\-Description\(aq), \e
+        len(mailpart.get_payload()) )
+    if mailpart.type.startswith(\(aqtext/\(aq):
+        # display first line of the text
+        payload, used_charset=pyzmail.decode_text(mailpart.get_payload(), mailpart.charset, None)
+        print \(aq        >\(aq, payload.split(\(aq\e\en\(aq)[0]
+.ft P
+.fi
+.sp
+And the output:
+.sp
+.nf
+.ft C
+*filename=None alt_filename=\(aqtext.txt\(aq type=text/plain charset=iso\-8859\-1 desc=None size=20
+    > Bonjour aux Français
+ filename=u\(aqtext.txt\(aq alt_filename=\(aqtext\-01.txt\(aq type=text/plain charset=us\-ascii desc=None size=16
+    > attached content
+.ft P
+.fi
+.sp
+The first one, with a \fB*\fP is the \fItext\fP content, the second one is the attachment.
+.sp
+You also have direct access to the \fItext\fP and \fIHTML\fP content using:
+.sp
+.nf
+.ft C
+if msg.text_part!=None:
+    print \(aq\-\- text \-\-\(aq
+    print msg.text_part.get_payload()
+
+if msg.html_part!=None:
+    print \(aq\-\- html \-\-\(aq
+    print msg.html_part.get_payload()
+.ft P
+.fi
+.sp
+And the output:
+.sp
+.nf
+.ft C
+\-\- text \-\-
+Bonjour aux Français
+.ft P
+.fi
+.sp
+Their is no \fIHTML\fP part !
+.SH TRICKS
+.SS Embedding image in HTML email
+.sp
+Image embedding differs from linked images in that the image itself is
+encoded, and included inside the message. Instead of using a normal URL
+in the \fIIMG\fP tag inside the HTML body, we must use a \fIcid:target\fP reference
+and assign this \fItarget\fP name to the \fIContent\-ID\fP of the embedded file.
+.sp
+See this sample:
+.sp
+.nf
+.ft C
+import base64
+import pyzmail
+
+angry_gif=base64.b64decode(
+"""R0lGODlhDgAOALMAAAwMCYAAAACAAKaCIwAAgIAAgACAgPbTfoR/YP8AAAD/AAAA//rMUf8A/wD/
+//Tw5CH5BAAAAAAALAAAAAAOAA4AgwwMCYAAAACAAKaCIwAAgIAAgACAgPbTfoR/YP8AAAD/AAAA
+//rMUf8A/wD///Tw5AQ28B1Gqz3S6jop2sxnAYNGaghAHirQUZh6sEDGPQgy5/b9UI+eZkAkghhG
+ZPLIbMKcDMwLhIkAADs=
+""")
+
+text_content=u"I\(aqm very angry. See attached document."
+html_content=u\(aq<html><body>I\e\(aqm very angry. \(aq \e
+              \(aq<img src="cid:angry_gif" />.\en\(aq \e
+              \(aqSee attached document.</body></html>\(aq
+
+payload, mail_from, rcpt_to, msg_id=pyzmail.compose_mail(\e
+        (u\(aqMe\(aq, \(aqme@foo.com\(aq), \e
+        [(u\(aqHim\(aq, \(aqhim@bar.com\(aq), \(aqjust@me.com\(aq], \e
+        u\(aqthe subject\(aq, \e
+        \(aqiso\-8859\-1\(aq, \e
+        (text_content, \(aqiso\-8859\-1\(aq), \e
+        (html_content, \(aqiso\-8859\-1\(aq), \e
+        attachments=[(\(aqThe price of RAM modules is increasing.\(aq, \e
+                      \(aqtext\(aq, \(aqplain\(aq, \(aqtext.txt\(aq, \(aqus\-ascii\(aq), ],
+        embeddeds=[(angry_gif, \(aqimage\(aq, \(aqgif\(aq, \(aqangry_gif\(aq, None), ])
+
+print payload
+.ft P
+.fi
+.sp
+And here is the \fIpayload\fP:
+.sp
+.nf
+.ft C
+Content\-Type: multipart/mixed; boundary="===============1435507538=="
+MIME\-Version: 1.0
+From: Me <me@foo.com>
+To: Him <him@bar.com> , just@me.com
+Subject: the subject
+Date: Fri, 02 Sep 2011 01:40:52 +0200
+
+\-\-===============1435507538==
+Content\-Type: multipart/related; boundary="===============0638818366=="
+MIME\-Version: 1.0
+
+\-\-===============0638818366==
+Content\-Type: multipart/alternative; boundary="===============0288407648=="
+MIME\-Version: 1.0
+
+\-\-===============0288407648==
+Content\-Type: text/plain; charset="iso\-8859\-1"
+MIME\-Version: 1.0
+Content\-Transfer\-Encoding: quoted\-printable
+
+I\(aqm very angry. See attached document.
+\-\-===============0288407648==
+Content\-Type: text/html; charset="iso\-8859\-1"
+MIME\-Version: 1.0
+Content\-Transfer\-Encoding: quoted\-printable
+
+<html><body>I\(aqm very angry. <img src=3D"cid:angry_gif" />. See attached doc=
+ument.</body></html>
+\-\-===============0288407648==\-\-
+\-\-===============0638818366==
+Content\-Type: image/gif
+MIME\-Version: 1.0
+Content\-Transfer\-Encoding: base64
+Content\-ID: <angry_gif>
+Content\-Disposition: inline
+
+R0lGODlhDgAOALMAAAwMCYAAAACAAKaCIwAAgIAAgACAgPbTfoR/YP8AAAD/AAAA//rMUf8A/wD/
+//Tw5CH5BAAAAAAALAAAAAAOAA4AgwwMCYAAAACAAKaCIwAAgIAAgACAgPbTfoR/YP8AAAD/AAAA
+//rMUf8A/wD///Tw5AQ28B1Gqz3S6jop2sxnAYNGaghAHirQUZh6sEDGPQgy5/b9UI+eZkAkghhG
+ZPLIbMKcDMwLhIkAADs=
+\-\-===============0638818366==\-\-
+\-\-===============1435507538==
+Content\-Type: text/plain; charset="us\-ascii"
+MIME\-Version: 1.0
+Content\-Transfer\-Encoding: 7bit
+Content\-Disposition: attachment; filename="text.txt"
+
+The price of RAM module is increasing.
+\-\-===============1435507538==\-\-
+.ft P
+.fi
+.SH SCRIPTS
+.sp
+Binary executables for Windows of these script are available in
+the 
+.nf
+\(gaDownload\(ga_
+.fi
+ section below.
+.SS pyzsendmail
+.sp
+\fBpyzsendmail\fP is a command line script to compose and send simple and complex emails.
+.sp
+Features:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+\fBSSL\fP, \fBTLS\fP , \fBauthentication\fP
+.IP \(bu 2
+\fBHTML\fP content and \fIembedded images\fP
+.IP \(bu 2
+\fBattachments\fP
+.IP \(bu 2
+\fIInternationalisation\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+Read the \fBmanual\fP for more.
+.sp
+Under \fIWindows\fP \fBpyzsendmail.exe\fP can replace the now old \fI\%blat.exe\fP and
+\fI\%bmail.exe\fP.
+.SS pyzinfomail
+.sp
+\fBpyzinfomail\fP is a command line script reading an email
+from a file and printing most important information. Mostly to show how to use
+\fBpyzmail\fP library. Read the \fBmanual\fP for more.
+.SH LICENSE
+.sp
+\fBpyzmail\fP iis released under the GNU Lesser General Public License ( LGPL ).
+.SH LINKS
+.sp
+More links about parsing and writing mail in python
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+\fI\%formataddr() and unicode\fP
+.IP \(bu 2
+\fI\%Sending Unicode emails in Python\fP
+.IP \(bu 2
+\fI\%Sending Email with smtplib\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH AUTHOR
+Alain Spineux
+.SH COPYRIGHT
+2011, Alain Spineux
+.\" Generated by docutils manpage writer.
+.\" 
+.
