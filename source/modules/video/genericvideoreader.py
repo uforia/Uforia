@@ -152,7 +152,8 @@ def get_all_stream_info(file, fileInfo):
     return all_streams
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         fileInfo = AVbinFileInfo()
         fileInfo.structure_size = ctypes.sizeof(fileInfo)

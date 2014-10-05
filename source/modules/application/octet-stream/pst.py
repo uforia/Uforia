@@ -10,7 +10,8 @@ import recursive
 import libutil
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     readpst_path = libutil.get_executable("libpst", "readpst")
 
     tempdir = None

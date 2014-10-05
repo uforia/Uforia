@@ -21,7 +21,8 @@ import traceback
 import mailbox
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         with open(fullpath, "rb") as file:
             # Read the beginning of the file to check if it looks like

@@ -246,7 +246,7 @@ file - The file currently being processed
                     module.load_sources()
                     processresult = None
                     if module.is_mime_handler:
-                        processresult = module.pymodule.process(file.fullpath, config, rcontext, columns=module.columnnames)
+                        processresult = module.pymodule.process(file, config, rcontext, columns=module.columnnames)
                     if processresult != None:
                         dbqueue.put((module.md5_tablename, hashid, module.columnnames, processresult))
                 except:

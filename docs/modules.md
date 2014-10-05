@@ -6,13 +6,13 @@ The newly created module will require a `process` function and a comment definin
 ```
 # TABLE: name:LONGTEXT, value:INT
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
     return ("Answer to the Ultimate Question of Life, the Universe, and Everything", 42)
 ```
 
 The arguments to the process function are, in order:
 
-* **fullpath**: Contains the path to the to-be-examined file
+* **file**: Uforia file object, contains amongst others the path to the to-be-examined file (.fullpath) and mime-type of the file
 * **config**: The Uforia setting values
 * **rcontext**: Contains values needed to run Uforia recursively, irrelevant for most use cases
 * **columns**: A list with the names of the database columns (the same as defined in the comments)
@@ -39,7 +39,8 @@ After that step you're ready to write a recursive module. You first need to impo
 import rarfilelib.rarfile as rarfile
 import recursive
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     # Try to parse RAR data
     try:
         # Set to full path of unrar.exe if it is not in PATH

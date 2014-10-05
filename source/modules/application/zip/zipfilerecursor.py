@@ -26,7 +26,8 @@ import base64
 import recursive
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         # Open the zipfile
         zip = zipfile.ZipFile(fullpath, mode='r')

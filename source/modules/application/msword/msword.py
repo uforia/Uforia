@@ -18,7 +18,8 @@
 import tika
 import extract
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     parser = tika.AutoDetectParser()
 
     input = tika.FileInputStream(tika.File(fullpath))

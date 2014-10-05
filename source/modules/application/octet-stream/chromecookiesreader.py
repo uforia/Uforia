@@ -23,7 +23,8 @@ import os
 import sqlite3
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         # Check the name of our file, if Cookies assume Google Chrome/
         # Chromium cookies database

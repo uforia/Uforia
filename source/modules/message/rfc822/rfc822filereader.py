@@ -21,7 +21,9 @@ from email.parser import Parser
 import python_dateutil.dateutil.parser as date_parser
 import re
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
+
         # Try to parse rfc822 data
         try:
             #  Get the e-mail headers from a file

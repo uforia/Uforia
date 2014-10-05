@@ -21,7 +21,8 @@ import sys
 import pptx
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         document = zipfile.ZipFile(fullpath)
     except:

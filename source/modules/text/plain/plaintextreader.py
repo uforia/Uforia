@@ -20,7 +20,8 @@ import sys
 import traceback
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
         # Try to parse TXT data
         try:
             with open(fullpath, 'rb') as f:

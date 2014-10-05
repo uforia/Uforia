@@ -19,7 +19,8 @@ import traceback
 import mutagen.mp4
 import python_dateutil as dateutil
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
         # Try to parse mp4 data
         try:
             audio = mutagen.mp4.MP4(fullpath)

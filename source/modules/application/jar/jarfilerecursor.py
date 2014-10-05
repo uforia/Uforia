@@ -20,7 +20,8 @@ import traceback
 import imp
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
         # Try to parse jar data
         try:
             # Get instance of zip module

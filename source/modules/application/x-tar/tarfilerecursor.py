@@ -24,7 +24,8 @@ import recursive
 import tarfile
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         # Open the tar file
         tar = tarfile.open(fullpath)
