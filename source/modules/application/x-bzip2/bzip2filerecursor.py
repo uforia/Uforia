@@ -40,7 +40,8 @@ def _uncompressed_filename(fullpath):
         return lastpart + "~unbzipped"
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
          # Create a temporary directory
         tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)

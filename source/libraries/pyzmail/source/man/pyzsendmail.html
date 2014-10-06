@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyzsendmail manual page &mdash; Python easy mail library 1.0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon32.ico"/>
+    <link rel="top" title="Python easy mail library 1.0.3 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">pyzmail home</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pyzmail-logo-small.png" alt="Logo"/>
+            </a></p>
+<h3>Author's home</h3>
+<div class="tuxhome">
+  <a href="http://blog.magiksys.net">
+    <img class="mytux" src="../_static/tux-transparent-56x64b.png" alt="Tux Logo"/>
+    <span class="homesite">blog.magiksys.net</span>
+  </a>
+</div>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyzsendmail manual page</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#arguments">Arguments</a></li>
+<li><a class="reference internal" href="#samples">Samples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+<li><a class="reference internal" href="#author">Author</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/man/pyzsendmail.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyzsendmail-manual-page">
+<h1>pyzsendmail manual page<a class="headerlink" href="#pyzsendmail-manual-page" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p><strong>pyzsendmail</strong> [<em>options</em>]</p>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p><strong>pyzsendmail</strong> compose and send mails.</p>
+<p>Compose an email including <em>text</em> and/or <em>HTML</em> content, add <em>attachments</em>
+of any kind, or <em>embed</em> images in the HTML content. Depending the need,
+<strong>pyzsendmail</strong> adapts the MIME structure of the email.</p>
+<p><strong>pyzsendmail</strong> handle SSL, TLS and authentication.</p>
+<p><strong>pyzsendmail</strong> can send to one or multiple recipients, but also support <em>CC</em>
+and <em>BCC</em> recipients.</p>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-pyzsendmail-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-H">
+<tt class="descname">-H</tt><tt class="descclassname"> name_or_ip</tt><tt class="descclassname">, </tt><tt class="descname">--smtp-host</tt><tt class="descclassname">=name_or_ip</tt><a class="headerlink" href="#cmdoption-pyzsendmail-H" title="Permalink to this definition">¶</a></dt>
+<dd><p>SMTP host relay</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-p">
+<tt class="descname">-p</tt><tt class="descclassname"> port</tt><tt class="descclassname">, </tt><tt class="descname">--smtp-port</tt><tt class="descclassname">=port</tt><a class="headerlink" href="#cmdoption-pyzsendmail-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>SMTP port (default=25)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-L">
+<tt class="descname">-L</tt><tt class="descclassname"> login</tt><tt class="descclassname">, </tt><tt class="descname">--smtp-login</tt><tt class="descclassname">=login</tt><a class="headerlink" href="#cmdoption-pyzsendmail-L" title="Permalink to this definition">¶</a></dt>
+<dd><p>SMTP login (if authentication is required)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-P">
+<tt class="descname">-P</tt><tt class="descclassname"> password</tt><tt class="descclassname">, </tt><tt class="descname">--smtp-password</tt><tt class="descclassname">=password</tt><a class="headerlink" href="#cmdoption-pyzsendmail-P" title="Permalink to this definition">¶</a></dt>
+<dd><p>SMTP password (if authentication is required)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-m">
+<tt class="descname">-m</tt><tt class="descclassname"> mode</tt><tt class="descclassname">, </tt><tt class="descname">--smtp-mode</tt><tt class="descclassname">=mode</tt><a class="headerlink" href="#cmdoption-pyzsendmail-m" title="Permalink to this definition">¶</a></dt>
+<dd><p>smtp mode in &#8216;normal&#8217;, &#8216;ssl&#8217;, &#8216;tls&#8217;. (default=&#8217;normal&#8217;)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-A">
+<tt class="descname">-A</tt><tt class="descclassname"> charset</tt><tt class="descclassname">, </tt><tt class="descname">--arg-charset</tt><tt class="descclassname">=charset</tt><a class="headerlink" href="#cmdoption-pyzsendmail-A" title="Permalink to this definition">¶</a></dt>
+<dd><p>command line arguments charset (default=&lt;depend of the host locals&gt;)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-C">
+<tt class="descname">-C</tt><tt class="descclassname"> charset</tt><tt class="descclassname">, </tt><tt class="descname">--mail-charset</tt><tt class="descclassname">=charset</tt><a class="headerlink" href="#cmdoption-pyzsendmail-C" title="Permalink to this definition">¶</a></dt>
+<dd><p>mail default charset (default=&lt;depend of the host local&gt;)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-f">
+<tt class="descname">-f</tt><tt class="descclassname"> sender</tt><tt class="descclassname">, </tt><tt class="descname">--from</tt><tt class="descclassname">=sender</tt><a class="headerlink" href="#cmdoption-pyzsendmail-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>sender address</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-t">
+<tt class="descname">-t</tt><tt class="descclassname"> recipient</tt><tt class="descclassname">, </tt><tt class="descname">--to</tt><tt class="descclassname">=recipient</tt><a class="headerlink" href="#cmdoption-pyzsendmail-t" title="Permalink to this definition">¶</a></dt>
+<dd><p>add one recipient address</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-c">
+<tt class="descname">-c</tt><tt class="descclassname"> recipient</tt><tt class="descclassname">, </tt><tt class="descname">--cc</tt><tt class="descclassname">=recipient</tt><a class="headerlink" href="#cmdoption-pyzsendmail-c" title="Permalink to this definition">¶</a></dt>
+<dd><p>add one CC address</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-b">
+<tt class="descname">-b</tt><tt class="descclassname"> recipient</tt><tt class="descclassname">, </tt><tt class="descname">--bcc</tt><tt class="descclassname">=recipient</tt><a class="headerlink" href="#cmdoption-pyzsendmail-b" title="Permalink to this definition">¶</a></dt>
+<dd><p>add one BCC address</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-s">
+<tt class="descname">-s</tt><tt class="descclassname"> subject</tt><tt class="descclassname">, </tt><tt class="descname">--subject</tt><tt class="descclassname">=subject</tt><a class="headerlink" href="#cmdoption-pyzsendmail-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>message subject</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-T">
+<tt class="descname">-T</tt><tt class="descclassname"> text</tt><tt class="descclassname">, </tt><tt class="descname">--text</tt><tt class="descclassname">=text</tt><a class="headerlink" href="#cmdoption-pyzsendmail-T" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>text content in the form</dt>
+<dd>[text_charset]:&#64;filename</dd>
+<dt>or</dt>
+<dd>[text_charset]:&#8221;litteral content&#8221;</dd>
+</dl>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-M">
+<tt class="descname">-M</tt><tt class="descclassname"> html</tt><tt class="descclassname">, </tt><tt class="descname">--html</tt><tt class="descclassname">=html</tt><a class="headerlink" href="#cmdoption-pyzsendmail-M" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>html content in the form</dt>
+<dd>[text_charset]:&#64;filename</dd>
+<dt>or</dt>
+<dd>[text_charset]:&#8221;literal content&#8221;</dd>
+</dl>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-a">
+<tt class="descname">-a</tt><tt class="descclassname"> file</tt><tt class="descclassname">, </tt><tt class="descname">--attach</tt><tt class="descclassname">=file</tt><a class="headerlink" href="#cmdoption-pyzsendmail-a" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>add an attachment in the form:</dt>
+<dd>maintype/subtype:filename:target_file[:text_charset]</dd>
+<dt>for example</dt>
+<dd>image/jpg:picture.jpg:C:\thepicture.png</dd>
+<dt>or</dt>
+<dd>text/plain:file.txt:C:\report.txt:[windows-1252]</dd>
+</dl>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-e">
+<tt class="descname">-e</tt><tt class="descclassname"> file</tt><tt class="descclassname">, </tt><tt class="descname">--embed</tt><tt class="descclassname">=file</tt><a class="headerlink" href="#cmdoption-pyzsendmail-e" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>add embedded data in the form:</dt>
+<dd>maintype/subtype:content-id:target_file[:text_charset]</dd>
+<dt>for example</dt>
+<dd>image/jpg:picture:C:\thepicture.png</dd>
+</dl>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyzsendmail-E">
+<tt class="descname">-E</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--eicar</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-pyzsendmail-E" title="Permalink to this definition">¶</a></dt>
+<dd><p>include eicar virus in attachments, for testing Anti-virus</p>
+</dd></dl>
+
+</div>
+<div class="section" id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>login</strong> and <strong>password</strong> must be <em>utf-8</em> encoded if they contains non <em>us-ascii</em></dt>
+<dd>characters.</dd>
+<dt><strong>address</strong> can be of the form:</dt>
+<dd><p class="first">&#8220;Foo Bar &lt;foo.bar&#64;example.com&gt;&#8221;</p>
+<p><strong>or</strong></p>
+<p>&#8220;foo.bar&#64;example.com&#8221;</p>
+<p class="last">Name can contain non us-ascii characters. They are supposed to use the
+command line charset encoding.</p>
+</dd>
+<dt><strong>text</strong> and <strong>HTML</strong> content can be in the <em>literal</em> form:</dt>
+<dd><ul class="first simple">
+<li>:&#8221;The text content&#8221;</li>
+<li>utf8:&#8221;The text content&#8221;</li>
+</ul>
+<p>In both samples, the content is encoded using the <em>encoding</em> of the
+command line argument. In first sample, notice the <strong>:</strong> at beginning,
+the content will be encoded using the mail default charset,
+in the second sample, the text will be re-encoded into utf8.</p>
+<p><strong>or</strong> using content of a <em>file</em>:</p>
+<ul class="simple">
+<li>:&#64;&#8221;C:\file.txt&#8221;</li>
+<li>windows-1252:&#64;&#8221;C:\file.txt&#8221;</li>
+</ul>
+<p class="last">In first sample, notice the <strong>:</strong> at beginning, the file is supposed to be
+encoded using mail default charset and will be encoded this way in the
+email. In second sample, the file is supposed to be encoded using
+<em>windows-1252</em> charset and will be encoded this way in the email.</p>
+</dd>
+<dt><strong>attachment</strong> and <strong>embedded</strong> files</dt>
+<dd>In attachment and embedded content, the <em>text_charset</em> is used only if the
+<em>maintype</em> is &#8216;text&#8217;. The file is supposed to be encoded using
+<em>text_charset</em> and will be encoded using this charset in the email.</dd>
+</dl>
+</div>
+<div class="section" id="samples">
+<h2>Samples<a class="headerlink" href="#samples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>pyzsendmail -H localhost -p 25 -f "Me &lt;me\@example.com&gt;" -t "foo\@example.com" -t "Bar &lt;bar\@example.com" -s "The subject" -T :"Hello" -a image/jpg:holiday.png:C:\\Holiday.png</pre>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p><em class="manpage">pyzmailinfo(1)</em>.</p>
+</div>
+<div class="section" id="author">
+<h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
+<p>Alain Spineux &lt;<a class="reference external" href="mailto:alain&#46;spineux&#37;&#52;&#48;gmail&#46;com">alain<span>&#46;</span>spineux<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">pyzmail home</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2011, Alain Spineux.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-21029552-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

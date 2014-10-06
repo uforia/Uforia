@@ -127,7 +127,7 @@ def invoke_modules(uforiamodules, hashid, file):
                     module.load_sources()
                     processresult = None
                     if module.is_mime_handler:
-                        processresult = module.pymodule.process(file.fullpath, config, rcontext, columns=module.columnnames)
+                        processresult = module.pymodule.process(file, config, rcontext, columns=module.columnnames)
                     if processresult != None:
                         write_to_db(module.md5_tablename, hashid, module.columnnames, processresult)
                 except:

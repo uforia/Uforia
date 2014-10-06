@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$structFILETIME.html" title="FILETIME" alt="" coords="5,5,88,35"/>
+<area shape="rect" id="node4" href="$structpst__string.html" title="The string is either utf8 encoded, or it is in the code page specified by the containing..." alt="" coords="149,5,237,35"/>
+<area shape="rect" id="node6" href="$structpst__binary.html" title="a simple wrapper for binary blobs" alt="" coords="335,5,425,35"/>
+</map>

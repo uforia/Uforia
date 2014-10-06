@@ -117,7 +117,8 @@ def _parse_cookies(filename):
         return cookies if len(cookies) > 0 else None
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         # Check the name of our file, if it matches the old cookie name
         # pattern (user@domain[<nr>].txt) or the new obfuscated one

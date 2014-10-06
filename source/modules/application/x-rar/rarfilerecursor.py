@@ -21,7 +21,8 @@ import rarfilelib.rarfile as rarfile
 import recursive
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     # Try to parse RAR data
     try:
         # Set to full path of unrar.exe if it is not in PATH

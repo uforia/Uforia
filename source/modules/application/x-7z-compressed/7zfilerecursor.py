@@ -60,7 +60,8 @@ def _extractall(fullpath, tempdir):
                         seven_zip_tool)
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     # Try to parse 7z data
     try:
         seven_zip = py7zlib.Archive7z(open(fullpath, 'rb'))

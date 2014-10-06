@@ -1,0 +1,75 @@
+0.6.63  2013-12-27 Daniel Gryniewicz found buffer overrun in LIST_COPY_TIME
+0.6.62  2013-09-22 983596 - Old dependency filter breaks file coloring
+0.6.61  2013-08-06 move documentation to unversioned directory
+0.6.60  2013-06-12 add AC_USE_SYSTEM_EXTENSIONS, add readpst -a option for attachment stripping
+0.6.59  2013-05-17 add autoconf checking for libgsf
+0.6.58  2012-12-28 fix From quoting on embedded rfc/822 messages
+0.6.57  2012-12-27 remove useless dependencies
+0.6.56  2012-12-24 merge -m .msg files code into main branch
+0.6.55  2012-05-08 preserve bcc headers, space after colon is not required in header fields
+0.6.54  2011-11-04 embedded rfc822 messages might contain rtf encoded bodies
+0.6.53  2011-07-10 allow fork for parallel processing of individual email folders in separate mode
+0.6.52  2011-05-22 fix dangling freed pointer; allow broken outlook internet header field
+0.6.51  2011-04-17 fix for buffer overrun; attachment size fetched twice
+0.6.50  2010-12-24 rfc2047 and rfc2231 encoding for non-ascii headers and attachment filenames
+0.6.49  2010-09-13 fix to ignore embedded objects that are not email messages
+0.6.48  2010-09-02 fix for broken internet headers from Outlook, change to mboxrd quoting
+0.6.47  2010-05-07 patches from Kenneth Berland for solaris
+0.6.46  2010-02-13 fixes for fedora 13 change in implicit dso linking semantics
+0.6.45  2009-11-18 patch from Hugo DesRosiers to export categories and notes into vcards
+0.6.44  2009-09-20 patch from Lee Ayres to add file name extensions in separate mode
+0.6.43  2009-09-12 patches from Justin Greer, Chris White, Roberto Polli; better rfc822 embedded message decoding
+0.6.42  2009-09-03 patch from Fridrich Strba to build with DJGPP DOS cross-compiler
+0.6.41  2009-06-23 fix ax_python detection - should not use locate command
+0.6.40  2009-06-23 fedora 11 has python2.6, remove pdf version of the man pages
+0.6.39  2009-06-21 fedora > 10 moved to boost-python-devel
+0.6.39  2009-06-21 fedora > 10 moved to boost-python-devel
+0.6.38  2009-06-21 many changes including shared library soname
+0.6.37  2009-04-17 add pst_attach_to_mem() back into the shared library interface
+0.6.36  2009-04-14 build separate -doc and -devel-doc subpackages
+0.6.35  2009-04-08 properly add trailing mime boundary in all modes, build separate rpms with libpst.so shared.
+0.6.34  2009-03-19 avoid putting mixed item types into the same output folder
+0.6.33  2009-03-17 fix utf-7 conversions, don't produce empty attachment files in separate mode
+0.6.32  2009-03-14 fix ppc64 compile error
+0.6.31  2009-03-14 bump version for fedora cvs tagging mistake
+0.6.30  2009-03-14 track character set individually for each mapi element, avoid emitting bogus empty email messages into contacts and calendar files.
+0.6.29  2009-02-24 fix for 64bit on Fedora 11
+0.6.28  2009-02-24 improve decoding of multipart/report and message/rfc822 mime types
+0.6.27  2009-02-07 fix for const correctness on Fedora 11
+0.6.26  2009-02-07 patch from Fridrich Strba for building on mingw, and autoconf cleanup, better mime headers
+0.6.25  2009-01-16 improve handling of content-type charset values in mime parts
+0.6.24  2008-12-11 patch from Chris Eagle to build on cygwin
+0.6.23  2008-12-04 bump version to avoid cvs tagging mistake in fedora
+0.6.22  2008-11-28 process emails with type PST_TYPE_OTHER, fix malloc error and possible segfault
+0.6.21  2008-10-21 fix title bug with old schema in pst2ldif, also escape commas in distinguished names per rfc4514.
+0.6.20  2008-10-09 add configure option --enable-dii=no, fixes from Robert Harris for pst2ldif.
+0.6.19  2008-09-14 Initial work on a .so shared library from Bharath Acharya.
+0.6.18  2008-08-28 Fixes for iconv on Mac from Justin Greer.
+0.6.17  2008-08-05 More fixes for 32/64 bit portability on big endian ppc
+0.6.16  2008-08-05 Use inttypes.h for portable printing of 64 bit items
+0.6.15  2008-07-30 Fix file handle leak in error case, missing length on lz decompression
+0.6.14  2008-06-15 Fix my mistake in debian packaging
+0.6.13  2008-06-13 Patch from Robert Simpson for encryption type 2.
+0.6.12  2008-06-10 Patch from Joachim Metz for debian packaging, and fix for incorrect length on lz decompression.
+0.6.11  2008-06-03 Use ftello/fseeko to properly handle large files.
+0.6.10  2008-05-29 Patch from Robert Simpson for doubly-linked list and arrays of unicode strings.
+0.6.9   2008-05-16 Patch from Joachim Metz for 64 bit compile.
+0.6.8   2008-03-05 Initial version of pst2dii to convert to Summation dii load file format.
+0.6.7   2008-02-16 Ignore unknown attachments on some read messages; autoconf cleanup.
+0.6.6   2008-01-31 Code cleanup, switch from cvs to mercurial source control.
+0.6.5   2008-01-22 Code cleanup, rpm group Applications/Productivity.
+0.6.4   2008-01-19 More fixes for 64 bit format, merge changes from svn Alioth.
+0.6.3   2008-01-13 More type consistency issues found by splint.
+0.6.2   2008-01-12 More fixes for 64 bit format, consistent types size_t, off_t, etc.
+0.6.1   2008-01-06 Outlook 2003 64 bit format and fix for bogus contacts.
+0.5.12  2007-10-02 security fix for possible buffer overruns in liv-zemple decoding
+0.5.11  2007-08-24 fix for unitialized variable
+0.5.10  2007-08-20 fix yet more valgrind errors, restructure readpst recursive walk, backwards overrun test
+0.5.9   2007-08-12 fix more valgrind errors, pst2ldif wrote undefined data
+0.5.8   2007-08-10 lzfu_decompress/base64_encode encoded random data into attachment
+0.5.7   2007-08-09 fix valgrind errors, using uninitialized data
+0.5.6   2007-07-15 handle small pst files, better decoding of 7c blocks
+0.5.5   2007-07-10 merge changes from Joe Nahmias version
+0.5.4   2006-02-25 add MH mode, generated filenames with no leading zeros
+0.5.3   2006-02-20 switch to gnu autoconf/automake
+0.5.2   2006-02-18 add pst2ldif, fix btree processing in libpst.c

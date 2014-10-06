@@ -24,7 +24,8 @@ import string
 import xlrd
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     appType = ""
 
     filetype = magic.Magic(magic_file='magic.mgc')

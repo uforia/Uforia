@@ -134,12 +134,13 @@ def _get_cuesheet(audio):
     return json.dumps(cuedata)
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
     """
     Uses the mutagen library to parse all FLAC metadata.
     Parses: STREAMINFO, SEEKTABLE, VORBIS_COMMENT, CUESHEET, PICTURE
     (http://flac.sourceforge.net/format.html#format_overview)
     """
+    fullpath = file.fullpath
     try:
         audio = mutagen.flac.FLAC(fullpath)
 

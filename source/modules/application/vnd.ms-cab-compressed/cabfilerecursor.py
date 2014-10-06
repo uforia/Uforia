@@ -26,7 +26,8 @@ import recursive
 from struct import *
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     try:
         # Get instance of 7z module
         zip_module = imp.load_source('7zfilerecursor',

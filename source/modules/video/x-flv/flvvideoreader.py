@@ -28,11 +28,12 @@ META = 18
 UNDEFINED = 0
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
     """
     Pass the filename of an flv file and it will return a dictionary of meta
     data.
     """
+    fullpath = file.fullpath
 
     assorted = []
     try:

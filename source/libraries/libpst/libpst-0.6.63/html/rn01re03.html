@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>pst2ldif</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2" /><link rel="home" href="index.html" title="libpst Utilities - Version 0.6.63" /><link rel="up" href="index.html" title="libpst Utilities - Version 0.6.63" /><link rel="prev" href="rn01re02.html" title="lspst" /><link rel="next" href="rn01re04.html" title="pst2dii" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">pst2ldif</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="rn01re02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="rn01re04.html">Next</a></td></tr></table><hr /></div><div class="refentry" title="pst2ldif"><a id="pst2ldif.1"></a><div class="titlepage"></div><div class="refnamediv"><a id="pst2ldif.name.1"></a><h2>Name</h2><p>pst2ldif — extract contacts from a MS Outlook .pst file in .ldif format</p></div><div class="refsynopsisdiv" title="Synopsis"><a id="pst2ldif.synopsis.1"></a><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">pst2ldif</code>  [<code class="option">-V</code>] [<code class="option">-b <em class="replaceable"><code>ldap-base</code></em></code>] [<code class="option">-c <em class="replaceable"><code>class</code></em></code>] [<code class="option">-d <em class="replaceable"><code>debug-file</code></em></code>] [<code class="option">-l <em class="replaceable"><code>extra-line</code></em></code>] [<code class="option">-o</code>] [<code class="option">-h</code>]  pstfilename </p></div></div><div class="refsect1" title="Options"><a id="pst2ldif.options.1"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term">-V</span></dt><dd><p>
+                        Show program version. Subsequent options are then ignored.
+                    </p></dd><dt><span class="term">-b <em class="replaceable"><code>ldap-base</code></em></span></dt><dd><p>
+                        Sets the ldap base value used in the dn records. You probably want to
+                        use something like "o=organization, c=US".
+                    </p></dd><dt><span class="term">-c <em class="replaceable"><code>class</code></em></span></dt><dd><p>
+                        Sets the objectClass values for the contact items. This class needs to be
+                        defined in the schema used by your LDAP server, and at a minimum it must
+                        contain the ldap attributes given below. This option may be specified
+                        multiple times to generate entries with multiple object classes.
+                    </p></dd><dt><span class="term">-d <em class="replaceable"><code>debug-file</code></em></span></dt><dd><p>
+                        Specify name of debug log file. The log file is now an ascii file,
+                        instead of the binary file used in previous versions.
+                    </p></dd><dt><span class="term">-l <em class="replaceable"><code>extra-line</code></em></span></dt><dd><p>
+                        Specify an extra line to be added to each ldap entry. This
+                        option may be specified multiple times to add multiple lines
+                        to each ldap entry.
+                    </p></dd><dt><span class="term">-o</span></dt><dd><p>
+                        Use the old ldap schema, rather than the default new ldap schema.
+                        The old schema generates multiple postalAddress attributes for
+                        a single entry. The new schema generates a single postalAddress
+                        (and homePostalAddress when available) attribute with $ delimiters
+                        as specified in RFC4517. Using the old schema also generates two
+                        extra leading entries, one for "dn:ldap base", and one for
+                        "dn: cn=root, ldap base".
+                    </p></dd><dt><span class="term">-h</span></dt><dd><p>
+                        Show summary of options. Subsequent options are then ignored.
+                    </p></dd></dl></div></div><div class="refsect1" title="Description"><a id="pst2ldif.description.1"></a><h2>Description</h2><p><span class="command"><strong>pst2ldif</strong></span>
+                reads the contact information from a MS Outlook .pst file
+                and produces a .ldif file that may be used to import those contacts
+                into an LDAP database. The following ldap attributes are generated
+                for the old ldap schema:
+                </p><table border="0" summary="Simple list" class="simplelist"><tr><td>cn </td></tr><tr><td>givenName </td></tr><tr><td>sn </td></tr><tr><td>personalTitle </td></tr><tr><td>company </td></tr><tr><td>mail </td></tr><tr><td>postalAddress </td></tr><tr><td>l </td></tr><tr><td>st </td></tr><tr><td>postalCode </td></tr><tr><td>c </td></tr><tr><td>homePhone </td></tr><tr><td>telephoneNumber </td></tr><tr><td>facsimileTelephoneNumber </td></tr><tr><td>mobile </td></tr><tr><td>description </td></tr></table><p>
+                The following attributes are generated for the new ldap schema:
+                </p><table border="0" summary="Simple list" class="simplelist"><tr><td>cn </td></tr><tr><td>givenName </td></tr><tr><td>sn </td></tr><tr><td>title </td></tr><tr><td>o </td></tr><tr><td>mail </td></tr><tr><td>postalAddress </td></tr><tr><td>homePostalAddress </td></tr><tr><td>l </td></tr><tr><td>st </td></tr><tr><td>postalCode </td></tr><tr><td>c </td></tr><tr><td>homePhone </td></tr><tr><td>telephoneNumber </td></tr><tr><td>facsimileTelephoneNumber </td></tr><tr><td>mobile </td></tr><tr><td>description </td></tr><tr><td>labeledURI </td></tr></table><p>
+            </p></div><div class="refsect1" title="Copyright"><a id="pst2ldif.copyright.1"></a><h2>Copyright</h2><p>
+                Copyright (C) 2008 by 510 Software Group &lt;carl@five-ten-sg.com&gt;
+            </p><p>
+                This program is free software; you can redistribute it and/or modify it
+                under the terms of the GNU General Public License as published by the
+                Free Software Foundation; either version 2, or (at your option) any
+                later version.
+            </p><p>
+                You should have received a copy of the GNU General Public License along
+                with this program; see the file COPYING.  If not, please write to the
+                Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+            </p></div><div class="refsect1" title="Version"><a id="pst2ldif.version.1"></a><h2>Version</h2><p>
+                0.6.63
+            </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="rn01re02.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="rn01re04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">lspst </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> pst2dii</td></tr></table></div></body></html>

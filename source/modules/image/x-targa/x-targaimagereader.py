@@ -19,8 +19,8 @@ import traceback
 from PIL import Image
 
 
-def process(fullpath, config, rcontext, columns=None):
-
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
         # Try to parse TGA data
         try:
             image = Image.open(fullpath, "r")

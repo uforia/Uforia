@@ -1,0 +1,21 @@
+Metadata-Version: 1.1
+Name: pyzmail
+Version: 1.0.3
+Summary: Python easy mail library, to parse, compose and send emails
+Home-page: http://www.magiksys.net/pyzmail
+Author: Alain Spineux
+Author-email: alain.spineux@gmail.com
+License: LGPL
+Description: pyzmail is a high level mail library for Python 2.x & 3.x. It provides functions and classes that help to parse, compose and send emails. pyzmail exists because their is no reasons that handling mails with Python would be more difficult than with Outlook or Thunderbird. pyzmail hide the difficulties of managing the MIME structure and of the encoding/decoding for internationalized emails. pyzmail is well documented, has a lot of code samples and include 2 scripts: pyzsendmail and pyzinfomail
+Keywords: email
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Communications :: Email
+Classifier: Topic :: System :: Networking
+Classifier: Topic :: Internet
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3

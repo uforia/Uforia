@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>pst2dii</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2" /><link rel="home" href="index.html" title="libpst Utilities - Version 0.6.63" /><link rel="up" href="index.html" title="libpst Utilities - Version 0.6.63" /><link rel="prev" href="rn01re03.html" title="pst2ldif" /><link rel="next" href="rn01re05.html" title="outlook.pst" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">pst2dii</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="rn01re03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="rn01re05.html">Next</a></td></tr></table><hr /></div><div class="refentry" title="pst2dii"><a id="pst2dii.1"></a><div class="titlepage"></div><div class="refnamediv"><a id="pst2dii.name.1"></a><h2>Name</h2><p>pst2dii — extract email messages from a MS Outlook .pst file in DII load format</p></div><div class="refsynopsisdiv" title="Synopsis"><a id="pst2dii.synopsis.1"></a><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">pst2dii</code>  [<code class="option">-B <em class="replaceable"><code>bates-prefix</code></em></code>] [<code class="option">-O <em class="replaceable"><code>dii-output-file</code></em></code>] [<code class="option">-V</code>] [<code class="option">-b <em class="replaceable"><code>bates-number</code></em></code>] [<code class="option">-c <em class="replaceable"><code>bates-color</code></em></code>] [<code class="option">-d <em class="replaceable"><code>debug-file</code></em></code>]  -f <em class="replaceable"><code>ttf-font-file</code></em>  [<code class="option">-h</code>] [<code class="option">-o <em class="replaceable"><code>output-directory</code></em></code>]  pstfilename </p></div></div><div class="refsect1" title="Options"><a id="pst2dii.options.1"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term">-B <em class="replaceable"><code>bates-prefix</code></em></span></dt><dd><p>
+                        Sets the bates prefix string. The bates sequence number is appended to
+                        this string, and printed on each page.
+                    </p></dd><dt><span class="term">-O <em class="replaceable"><code>dii-output-file</code></em></span></dt><dd><p>
+                        Name of the output DII load file.
+                    </p></dd><dt><span class="term">-V</span></dt><dd><p>
+                        Show program version. Subsequent options are then ignored.
+                    </p></dd><dt><span class="term">-b <em class="replaceable"><code>bates-number</code></em></span></dt><dd><p>
+                        Starting bates sequence number. The default is zero.
+                    </p></dd><dt><span class="term">-c <em class="replaceable"><code>bates-color</code></em></span></dt><dd><p>
+                        Font color for the bates stamp on each page, specified as 6 hex digits
+                        as rrggbb values. The default is ff0000 for bright red.
+                    </p></dd><dt><span class="term">-d <em class="replaceable"><code>debug-file</code></em></span></dt><dd><p>
+                        Specify name of debug log file. The log file is now an ascii file,
+                        instead of the binary file used in previous versions.
+                    </p></dd><dt><span class="term">-f <em class="replaceable"><code>ttf-font-file</code></em></span></dt><dd><p>
+                        Specify name of a true type font file. This should be a fixed pitch font.
+                    </p></dd><dt><span class="term">-h</span></dt><dd><p>
+                        Show summary of options. Subsequent options are then ignored.
+                    </p></dd><dt><span class="term">-o <em class="replaceable"><code>output-directory</code></em></span></dt><dd><p>
+                        Specifies the output directory. The directory must already exist.
+                    </p></dd></dl></div></div><div class="refsect1" title="Description"><a id="pst2dii.description.1"></a><h2>Description</h2><p><span class="command"><strong>pst2dii</strong></span>
+                reads the email messages from a MS Outlook .pst file
+                and produces a DII load file that may be used to import message
+                summaries into a Summation DII system. The DII output file contains
+                references to the image and attachment files in the output directory.
+            </p></div><div class="refsect1" title="Copyright"><a id="pst2dii.copyright.1"></a><h2>Copyright</h2><p>
+                Copyright (C) 2008 by 510 Software Group &lt;carl@five-ten-sg.com&gt;
+            </p><p>
+                This program is free software; you can redistribute it and/or modify it
+                under the terms of the GNU General Public License as published by the
+                Free Software Foundation; either version 2, or (at your option) any
+                later version.
+            </p><p>
+                You should have received a copy of the GNU General Public License along
+                with this program; see the file COPYING.  If not, please write to the
+                Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+            </p></div><div class="refsect1" title="Version"><a id="pst2dii.version.1"></a><h2>Version</h2><p>
+                0.6.63
+            </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="rn01re03.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="rn01re05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">pst2ldif </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> outlook.pst</td></tr></table></div></body></html>

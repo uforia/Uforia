@@ -19,7 +19,8 @@ import traceback
 from hsaudiotag import auto
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
         # Try to parse .ogg data
         try:
             # Read the .ogg file

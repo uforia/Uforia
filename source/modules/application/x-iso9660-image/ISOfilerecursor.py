@@ -150,7 +150,8 @@ def _get_volume_descriptors(file):
     return result
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+    fullpath = file.fullpath
     # Try to parse 7z data
     try:
         # Get instance of 7z module

@@ -20,7 +20,8 @@ import python_dateutil as dateutil
 from PIL import Image, TiffImagePlugin
 
 
-def process(fullpath, config, rcontext, columns=None):
+def process(file, config, rcontext, columns=None):
+        fullpath = file.fullpath
 
         # Try to parse TIFF data
         try:
