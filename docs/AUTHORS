@@ -1,19 +1,34 @@
-This file contains the list of original authors and programmers.
+=================================================
+Uforia, general contact and copyright information
+=================================================
 
-Uforia v0.5 / General Information
----------------------------------
-Authors:	    A. Eijkhoudt <a.eijkhoudt@hva.nl>
-        		T. Suerink <tsuerink@nikhef.nl>
-Programmers:    A. Eijkhoudt <a.eijkhoudt@hva.nl>
-        		T. Suerink <tsuerink@nikhef.nl>
-        		J. Molenaar
-        		C. Goedhart
-        		C. Baijens
-        		B. van der Wal
-        		J. Habraken
-        		K. Bollen
-        		J. van den Berg
-        		M. Koziuk
-        		R. Vloon
-        		E. van der Vis
-        		J. Timmer <jjwtimmer@gmail.com>
+For questions, comments and suggestion, please
+contact the development team through our community
+E-mail address: <uforia [at] dhcp.net>
+
+---------------
+Original author
+---------------
+A. Eijkhoudt <a.eijkhoudt [at] hva.nl>
+Lecturer & Researcher
+Amsterdam University of Applied Sciences
+
+----------------
+Original concept
+----------------
+A. Eijkhoudt <a.eijkhoudt [at] hva.nl>
+T. Suerink <tsuerink [at] nikhef.nl>
+
+----------------------------------------
+Special thanks to the following students
+----------------------------------------
+J. Molenaar, C. Goedhart, C. Baijens,
+B. van der Wal, J. van den Berg, M. Koziuk,
+R. Vloon, E. van der Vis.
+
+----------------------
+Additional programming
+----------------------
+J. Habraken
+K. Bollen
+J. Timmer <jjwtimmer [at] gmail.com>
