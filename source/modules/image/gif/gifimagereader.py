@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (C) 2013 Hogeschool van Amsterdam
 
 # This program is free software; you can redistribute it and/or
@@ -13,10 +15,10 @@
 # This is the image module for GIF
 
 # TABLE: version:LONGTEXT, duration:BIGINT, transparancy_color:SMALLINT, background_color:SMALLINT, frames:INT, loop:SMALLINT, application_extension:LONGTEXT, XMP:LONGTEXT
+
 import sys
 import traceback
 from PIL import Image
-
 
 def process(file, config, rcontext, columns=None):
     fullpath = file.fullpath

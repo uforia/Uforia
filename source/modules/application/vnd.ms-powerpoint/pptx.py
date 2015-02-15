@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (C) 2013 Hogeschool van Amsterdam
 
 # This program is free software; you can redistribute it and/or
@@ -9,8 +11,6 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
-#!/usr/bin/env python
 
 # TABLE: title:LONGTEXT, created_by:LONGTEXT, modified_by:LONGTEXT, revision:INT, creation_date:LONGTEXT, modify_date:LONGTEXT, total_length: FLOAT, total_words:INT, application:LONGTEXT, pp_format:LONGTEXT, paragraphs:INT, slides:INT, notes:INT, hidden_slides:INT, videos:INT, company:LONGTEXT, shared:LONGTEXT, version:FLOAT, content:LONGTEXT
 
