@@ -45,7 +45,10 @@ def process(file, config, rcontext, columns=None):
                     if not mailpart.is_body:
                         attachments.append(mailpart.filename)
                         f = open(os.path.join(tempdir, mailpart.filename), 'wb')
-                        f.write(mailpart.get_payload())
+                        if mailpart.type.startswith('text/') and mailpart.charset is not None:
+                            f.write(mailpart.get_payload().decode(mailpart.charset))
+                        else:
+                            f.write(mailpart.get_payload())
                         f.close()
                 if len(attachments) > 0:
                     recursive.call_uforia_recursive(config, rcontext, tempdir, fullpath)
