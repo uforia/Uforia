@@ -15,16 +15,9 @@
 # This is the module for handling rfc822 email types
 
 # Do not change from CamelCase because these are the official header names
-# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:DATE, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, XTo:LONGTEXT, Xcc:LONGTEXT, Xbcc:LONGTEXT, Cc:LONGTEXT, Bcc:LONGTEXT, content:LONGTEXT, Attachments:LONGTEXT
+# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:TIMESTAMP, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, XTo:LONGTEXT, Xcc:LONGTEXT, Xbcc:LONGTEXT, Cc:LONGTEXT, Bcc:LONGTEXT, content:LONGTEXT, Attachments:LONGTEXT
 
-import os
-import sys
-import traceback
-import shutil
-import pyzmail
-import recursive
-import tempfile
-import python_dateutil.dateutil.parser as date_parser
+import os,sys,traceback,shutil,pyzmail,recursive,tempfile,email.utils,datetime
 
 def process(file, config, rcontext, columns=None):
         fullpath = file.fullpath
@@ -88,7 +81,7 @@ def process(file, config, rcontext, columns=None):
                         msg.get_decoded_header("Reply-To", None),
                         msg.get_decoded_header("Auto-Submitted", None),
                         msg.get_decoded_header("Message-ID", None),
-                        date_parser.parse(msg.get_decoded_header("Date", None)),
+                        datetime.datetime.fromtimestamp(int(email.utils.mktime_tz(email.utils.parsedate_tz(msg.get_decoded_header("Date", None))))).strftime('%Y-%m-%d %H:%M:%S'),
                         msg.get_decoded_header("Subject", None),
                         msg.get_decoded_header("From", None),
                         msg.get_decoded_header("To", None),
