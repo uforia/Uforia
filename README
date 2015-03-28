@@ -6,41 +6,40 @@ INSTALLATION/CONFIGURATION
 
 - Before running the Uforia program, you need to change a few settings:
 
-1) Edit those settings for the main program (like multithreading, starting directory and database) in:
-   ./Uforia/source/include/config.py
-2) You MUST use the MySQL backend if you are planning on using Uforia's frontend interface, sorry! At
-   this point we do not have support yet for other backends in the UI. Make sure you set up your MySQL
-   database beforehand and have the username/password ready to put into the configuration file.
-3) 
+1) Edit those settings for the main program (like multithreading, starting
+   directory and database) in: ./Uforia/source/include/config.py
+2) You MUST use the MySQL backend if you are planning on using Uforia's frontend
+   interface, sorry! At this point we do not have support yet for other backends
+   in the UI. Make sure you set up your MySQL database beforehand and have the
+   username and password ready to put into the configuration file.
 
-OPTIONAL: If you intend to develop for/on Uforia, please read the documents and tutorials in ./Uforia/docs/
+OPTIONAL: If you intend to develop for/on Uforia, please read the documents and
+          tutorials in ./Uforia/docs/
         
 =======
 RUNNING
 =======
 
-After successful configuration, you may start uforia by going into the directory:
+After successful configuration, you may start uforia by going into the
+directory: ./Uforia/source/ and running Uforia: ./uforia.py
 
-1) cd ./Uforia/source/
+Except for some minimal output, you should not see anything unless you've
+enabled the DEBUG setting.
 
-and running Uforia:
+Explore the database contents for the desired information.
 
-2) ./uforia.py
-
-Except for some minimal output, you should not see anything unless you've enabled the DEBUG setting.
-
-3) Explore the database contents for the desired information.
-
-OPTIONAL: After Uforia has completed its run, go to the frontend interface and proceed to make your
-          first mappings, visualizations and commence the Elasticsearch indexing.
+OPTIONAL: After Uforia has completed its run, go to the frontend interface and
+proceed to make your first mappings, visualizations and commence the Elasticsearch
+indexing.
 
 =====
 NOTES
 =====
 
-The master branch is always in flux, as we are continuously developing and pushing updates. That said,
-we generally test everything in our live demo environment, so you shouldn't encounter any critical
-failures. If you do, please contact us or submit a bug report!
+The master branch is always in flux, as we are continuously developing and pushing
+updates. That said, we generally test everything in our live demo environment, so
+you shouldn't encounter any critical failures. If you do, please contact us or
+submit a bug report!
 
 ---
 Kind regards,
