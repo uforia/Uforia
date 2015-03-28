@@ -55,7 +55,11 @@ db - Optionally use another database object
     while True:
         table, hashid, columns, values = dbqueue.get()
         if table != "No more tasks":
-            db.store(table, hashid, columns, values)
+            if type(values[0]) == list:
+                for item in values:
+                    db.store(table, hashid, columns, item)
+            else:
+                db.store(table, hashid, columns, values)
             dbqueue.task_done()
         else:
             break

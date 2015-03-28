@@ -97,7 +97,7 @@ class Database(object):
             self.execute_query(query)
 
         query = """CREATE TABLE IF NOT EXISTS `files`
-            (`hashid` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+            (`hashid` BIGINT UNSIGNED NOT NULL,
             INDEX USING HASH (`hashid`),
             `fullpath` LONGTEXT,
             `name` LONGTEXT,
@@ -167,7 +167,7 @@ class Database(object):
             name = name.strip()
             type = type.strip()
             query += """,`""" + name + """` """ + type
-        query += """, PRIMARY KEY(`hashid`));"""
+        query += """);"""
         self.execute_query(query)
 
         # Truncate table if not already dropped before

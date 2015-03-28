@@ -21,7 +21,8 @@ import os,sys,traceback,shutil,pyzmail,recursive,tempfile,email.utils,datetime
 
 def process(file, config, rcontext, columns=None):
         fullpath = file.fullpath
-
+        if "Message-ID: " not in open(fullpath,'r').read():
+            return None
         # Try to parse rfc822 data
         try:
             #  Get the e-mail headers from a file
