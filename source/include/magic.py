@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Hogeschool van Amsterdam
+# Copyright (C) 2013-2015 A. Eijkhoudt and others
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
