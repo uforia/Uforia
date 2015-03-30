@@ -17,7 +17,7 @@
 # Do not change from CamelCase because these are the official header names
 # TABLE: Date:DATETIME, From:LONGTEXT, To:LONGTEXT, Direction:LONGTEXT, Duration:LONGTEXT, ServiceCode:LONGTEXT, IMEI:LONGTEXT, CellID:LONGTEXT, SiteName:LONGTEXT, Suburb:LONGTEXT
 
-import os,sys,traceback,shutil,csv,recursive,datetime,time
+import os,sys,traceback,shutil,recursive,datetime,time
 
 def process(file, config, rcontext, columns=None):
         fullpath = file.fullpath
