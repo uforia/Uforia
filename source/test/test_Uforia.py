@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (C) 2013-2015 A. Eijkhoudt and others
 
 # This program is free software; you can redistribute it and/or
