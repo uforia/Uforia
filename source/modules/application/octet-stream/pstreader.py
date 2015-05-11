@@ -50,7 +50,7 @@ def process(file, config, rcontext, columns=None):
                 raise Exception("readpst failed to extract " + fullpath)
 
             recursive.call_uforia_recursive(config, rcontext, tempdir, fullpath)
-            return fullpath
+            return [fullpath]
         except:
             traceback.print_exc(file=sys.stderr)
             return None

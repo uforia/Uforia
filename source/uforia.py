@@ -259,8 +259,6 @@ file - The file currently being processed
         except:
             traceback.print_exc(file=sys.stderr)
             raise
-            raise
-
 
 def file_processor(item, dbqueue, monitorqueue, uforiamodules, config,
                     rcontext):

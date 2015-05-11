@@ -15,7 +15,7 @@
 # This is the module for handling rfc822 email types
 
 # Do not change from CamelCase because these are the official header names
-# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:TIMESTAMP, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, XTo:LONGTEXT, Xcc:LONGTEXT, Xbcc:LONGTEXT, Cc:LONGTEXT, Bcc:LONGTEXT, content:LONGTEXT, Attachments:LONGTEXT
+# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:TIMESTAMP, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, Content:LONGTEXT, Attachments:LONGTEXT
 
 import os,sys,traceback,shutil,pyzmail,recursive,tempfile,email.utils,datetime
 
@@ -54,6 +54,18 @@ def process(file, config, rcontext, columns=None):
                         shutil.rmtree(tempdir)  # delete directory
                 except OSError as exc:
                     traceback.print_exc(file=sys.stderr)
+                    
+            # Merge the receivers
+            To = msg.get_decoded_header('To',None)
+            XTo = msg.get_decoded_header('X-To',None)
+            Cc = msg.get_decoded_header('Cc',None)
+            XCc = msg.get_decoded_header('X-Cc',None)
+            Bcc = msg.get_decoded_header('Bcc',None)
+            XBcc = msg.get_decoded_header('X-Bcc',None)
+            Receivers = u''
+            for i in [To,XTo,Cc,XCc,Bcc,XBcc]:
+                if i:
+                    Receivers += unicode(i)+', '
 
             # Get most common headers
             assorted = [msg.get_decoded_header("Delivered-To", None),
@@ -85,13 +97,8 @@ def process(file, config, rcontext, columns=None):
                         datetime.datetime.fromtimestamp(int(email.utils.mktime_tz(email.utils.parsedate_tz(msg.get_decoded_header("Date", None))))).strftime('%Y-%m-%d %H:%M:%S'),
                         msg.get_decoded_header("Subject", None),
                         msg.get_decoded_header("From", None),
-                        msg.get_decoded_header("To", None),
-                        msg.get_decoded_header("Content-Type", None),
-                        msg.get_decoded_header("X-To", None),
-                        msg.get_decoded_header("X-Cc", None),
-                        msg.get_decoded_header("X-Bcc", None),
-                        msg.get_decoded_header("Cc", None),
-                        msg.get_decoded_header("Bcc", None)]
+                        Receivers,
+                        msg.get_decoded_header("Content-Type", None)]
 
             # Start at the beginning of the file
             email_file.seek(0)

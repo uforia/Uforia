@@ -14,7 +14,7 @@
 
 # This is the image module for GIF
 
-# TABLE: version:LONGTEXT, duration:BIGINT, transparancy_color:SMALLINT, background_color:SMALLINT, frames:INT, loop:SMALLINT, application_extension:LONGTEXT, XMP:LONGTEXT
+# TABLE: version:LONGTEXT, duration:BIGINT, transparency:SMALLINT, background:SMALLINT, frames:INT, loop:SMALLINT, application_extension:LONGTEXT, XMP:LONGTEXT
 
 import sys
 import traceback
@@ -24,14 +24,24 @@ def process(file, config, rcontext, columns=None):
     fullpath = file.fullpath
     # Try to parse the GIF data
     try:
+        assorted = []
         image = Image.open(fullpath, "r")
-
-        assorted = [
-            image.info['version'],
-            image.info['duration'],
-            image.info['transparency'],
-            image.info['background'],
-        ]
+        if 'version' in image.info:
+            assorted.append(image.info['version'])
+        else:
+            assorted.append(0)
+        if 'duration' in image.info:
+            assorted.append(image.info['duration'])
+        else:
+            assorted.append(0)
+        if 'transparency' in image.info:
+            assorted.append(image.info['transparency'])
+        else:
+            assorted.append(0)
+        if 'background' in image.info:
+            assorted.append(image.info['background'])
+        else:
+            assorted.append(0)
 
         # Seek until EOF to find the number of animation frames
         noframes = 0
@@ -60,8 +70,10 @@ def process(file, config, rcontext, columns=None):
         if config.ENABLEXMP:
             import libxmp
             xmpfile = libxmp.XMPFiles(file_path=fullpath)
-            assorted.append(str(xmpfile.get_xmp()))
-            xmpfile.close_file()
+            if xmpfile.get_xmp():
+                assorted.append(str(xmpfile.get_xmp()))
+            else:
+                assorted.append(None)
         else:
             assorted.append(None)
 
