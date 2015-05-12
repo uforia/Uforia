@@ -16,14 +16,7 @@
 
 # TABLE: fullpath:LONGTEXT
 
-import shutil
-import subprocess
-import sys
-import tempfile
-import traceback
-
-import libutil
-import recursive
+import shutil, subprocess, sys, tempfile, traceback, libutil, recursive, os
 
 def process(file, config, rcontext, columns=None):
     fullpath = file.fullpath

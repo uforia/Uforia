@@ -56,12 +56,17 @@ def process(file, config, rcontext, columns=None):
                     traceback.print_exc(file=sys.stderr)
                     
             # Merge the receivers
-            To = msg.get_decoded_header('To',None)
-            XTo = msg.get_decoded_header('X-To',None)
-            Cc = msg.get_decoded_header('Cc',None)
-            XCc = msg.get_decoded_header('X-Cc',None)
-            Bcc = msg.get_decoded_header('Bcc',None)
-            XBcc = msg.get_decoded_header('X-Bcc',None)
+            To = msg.get_decoded_header('To', None)
+            XTo = msg.get_decoded_header('X-To', None)
+            Cc = msg.get_decoded_header('Cc', None)
+            XCc = msg.get_decoded_header('X-Cc', None)
+            Bcc = msg.get_decoded_header('Bcc', None)
+            XBcc = msg.get_decoded_header('X-Bcc', None)
+            Date = datetime.datetime.fromtimestamp(int(email.utils.mktime_tz(email.utils.parsedate_tz(msg.get_decoded_header("Date", None))))).strftime('%Y-%m-%d %H:%M:%S')
+            Subject = msg.get_decoded_header("Subject", None)
+            From = msg.get_decoded_header("From", None)
+            Received = msg.get_decoded_header("Received", None)
+            MessageID = msg.get_decoded_header("Message-ID", None)
             Receivers = u''
             for i in [To,XTo,Cc,XCc,Bcc,XBcc]:
                 if i:
@@ -70,7 +75,7 @@ def process(file, config, rcontext, columns=None):
             # Get most common headers
             assorted = [msg.get_decoded_header("Delivered-To", None),
                         msg.get_decoded_header("Original-Recipient", None),
-                        msg.get_decoded_header("Received", None),
+                        Received,
                         msg.get_decoded_header("Return-Path", None),
                         msg.get_decoded_header("Received-SPF", None),
                         msg.get_decoded_header("Authentication-Results", None),
@@ -93,18 +98,31 @@ def process(file, config, rcontext, columns=None):
                         msg.get_decoded_header("Precedence", None),
                         msg.get_decoded_header("Reply-To", None),
                         msg.get_decoded_header("Auto-Submitted", None),
-                        msg.get_decoded_header("Message-ID", None),
-                        datetime.datetime.fromtimestamp(int(email.utils.mktime_tz(email.utils.parsedate_tz(msg.get_decoded_header("Date", None))))).strftime('%Y-%m-%d %H:%M:%S'),
-                        msg.get_decoded_header("Subject", None),
-                        msg.get_decoded_header("From", None),
+                        MessageID,
+                        Date,
+                        Subject,
+                        From,
                         Receivers,
                         msg.get_decoded_header("Content-Type", None)]
 
-            # Start at the beginning of the file
-            email_file.seek(0)
-
-            # Put whole email file in database
-            assorted.append(email_file.read())
+            # Grab the common headers and all E-mail bodies
+            Body = ''
+            Headers = {'From':From,'Subject':Subject,'To':To,'XTo:':XTo,'Cc':Cc,'XCc':XCc,'Bcc':Bcc,'XBcc':XBcc,'Date':Date,'MessageID':MessageID,'Received':Received}
+            for key in Headers:
+                if Headers[key]:
+                    Body += key+': '+Headers[key]+'\n'
+            Body += '\n'
+            for mailpart in msg.mailparts:
+                if mailpart.is_body:
+                    payload = mailpart.get_payload()
+                    try:
+                        Body += payload.decode('utf-8')
+                    except UnicodeError:
+                        try:
+                            Body += payload.decode('ISO-8859-1')
+                        except UnicodeError:
+                            Body += payload
+            assorted.append(Body)
 
             assorted.append(','.join(attachments))
 
