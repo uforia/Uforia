@@ -23,7 +23,7 @@ SPAMD_HOST = '127.0.0.1'
 SPAMD_PORT = 783
 SPAMD_USER = 'spamd'
 SPAMD_SPAMSCORELIMIT = 5.0
-SPAMD_DOSPAMCHECK = True
+SPAMD_DOSPAMCHECK = False
 
 import os,sys,traceback,shutil,pyzmail,recursive,tempfile,email.utils,datetime,socket
 
