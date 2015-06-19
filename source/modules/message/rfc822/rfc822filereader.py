@@ -15,9 +15,17 @@
 # This is the module for handling rfc822 email types
 
 # Do not change from CamelCase because these are the official header names
-# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:TIMESTAMP, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, Content:LONGTEXT, Attachments:LONGTEXT
+# TABLE: Delivered_To:LONGTEXT, Original_Recipient:LONGTEXT, Received:LONGTEXT, Return_Path:LONGTEXT, Received_SPF:LONGTEXT, Authentication_Results:LONGTEXT, DKIM_Signature:LONGTEXT, DomainKey_Signature:LONGTEXT, Organization:LONGTEXT, MIME_Version:DOUBLE, List_Unsubscribe:LONGTEXT, X_Received:LONGTEXT, X_Priority:LONGTEXT, X_MSMail_Priority:LONGTEXT, X_Mailer:LONGTEXT, X_MimeOLE:LONGTEXT, X_Notifications:LONGTEXT, X_Notification_ID:LONGTEXT, X_Sender_ID:LONGTEXT, X_Notification_Category:LONGTEXT, X_Notification_Type:LONGTEXT, X_UB:INT, Precedence:LONGTEXT, Reply_To:LONGTEXT, Auto_Submitted:LONGTEXT, Message_ID:LONGTEXT, Date:TIMESTAMP, Subject:LONGTEXT, From:LONGTEXT, To:LONGTEXT, Content_Type:LONGTEXT, Content:LONGTEXT, Attachments:LONGTEXT, SpamScore:DOUBLE, SpamReport:LONGTEXT, isSpam:TEXT
 
-import os,sys,traceback,shutil,pyzmail,recursive,tempfile,email.utils,datetime
+# Configuration for the SpamAssassin
+
+SPAMD_HOST = '127.0.0.1'
+SPAMD_PORT = 783
+SPAMD_USER = 'spamd'
+SPAMD_SPAMSCORELIMIT = 5.0
+SPAMD_DOSPAMCHECK = True
+
+import os,sys,traceback,shutil,pyzmail,recursive,tempfile,email.utils,datetime,socket
 
 def process(file, config, rcontext, columns=None):
         fullpath = file.fullpath
@@ -117,14 +125,72 @@ def process(file, config, rcontext, columns=None):
                     payload = mailpart.get_payload()
                     try:
                         Body += payload.decode('utf-8')
+                        Encoding = 'utf-8'
                     except UnicodeError:
                         try:
                             Body += payload.decode('ISO-8859-1')
+                            Encoding = 'ISO-8859-1'
                         except UnicodeError:
                             Body += payload
             assorted.append(Body)
 
             assorted.append(','.join(attachments))
+
+            # Spam checking code - R. Broerze & A. Hamed
+            
+            if SPAMD_DOSPAMCHECK:
+                try:
+                    raw_email = open(fullpath, 'r').read()
+                    try:
+                        full_email = raw_email.decode('utf-8')
+                        Encoding = 'utf-8'
+                    except UnicodeError:
+                        try:
+                            full_email = raw_email.decode('ISO-8859-1')
+                            Encoding = 'ISO-8859-1'
+                        except UnicodeError:
+                            full_email = raw_email
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.connect((SPAMD_HOST, SPAMD_PORT))
+                    data =  'REPORT SPAMC/1.2\r\n'
+                    data += 'Content-length: %d\r\n' % len(full_email.encode(Encoding))
+                    data += 'User: %s\r\n\r\n' % SPAMD_USER
+                    data += full_email
+                    sock.sendall(data.encode(Encoding));
+                    fd = sock.makefile('rb', 0)
+                    spamd_header = fd.readline()
+                    if spamd_header.find('EX_OK') == -1:
+                        if config.DEBUG:
+                            print('SpamCheck error')
+                        traceback.print_exc(file=sys.stderr)
+                        raise Exception
+                    spamd_score = fd.readline()
+                    spamd_score_splitted = spamd_score.split(";")[1].split("/")[0].strip()
+                    saveReport = False
+                    report = ''
+                    for line in fd.readlines():
+                        if saveReport:
+                            report += line
+                        if line.startswith('----'):
+                            saveReport = True
+                    assorted.append(spamd_score_splitted)
+                    assorted.append(report)
+                    if float(spamd_score_splitted) > SPAMD_SPAMSCORELIMIT:
+                        assorted.append('yes')
+                    else:
+                        assorted.append('no')
+                    sock.close()
+                except Exception:
+                    if config.DEBUG:
+                        print('SpamCheck error')
+                    traceback.print_exc(file=sys.stderr)
+                    assorted.append(None);
+                    assorted.append(None);
+                    assorted.append('unknown');
+            else:
+                assorted.append(None);
+                assorted.append(None);
+                assorted.append('unknown');
 
             # Make sure we stored exactly the same amount of columns as
             # specified!!
