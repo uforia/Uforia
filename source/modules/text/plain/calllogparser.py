@@ -17,52 +17,79 @@
 # Do not change from CamelCase because these are the official header names
 # TABLE: Date:DATETIME, From:LONGTEXT, To:LONGTEXT, Direction:LONGTEXT, Duration:LONGTEXT, ServiceCode:LONGTEXT, IMEI:LONGTEXT, CellID:LONGTEXT, SiteName:LONGTEXT, Suburb:LONGTEXT
 
-import os,sys,traceback,shutil,recursive,datetime,time
+import os,sys,traceback,shutil,recursive,datetime,time,tempfile
 
 def process(file, config, rcontext, columns=None):
         fullpath = file.fullpath
-        if "Date;Time;Called;Calling;Direction;Duration;ServiceCode;IMEI;CellID;SiteName;Suburb" not in open(fullpath,'r').read():
+        f = open(fullpath,'r')
+        if "Date;Time;Called;Calling;Direction;Duration;ServiceCode;IMEI;CellID;SiteName;Suburb" not in f.read():
             return None
+        else:
+            f.seek(0)
+            numlines = sum(1 for _ in f)
+            if numlines < 1:
+                # Empty file
+                return None
 
-        # Try to parse the cell phone log
-        try:
-            #  Get first line from the file and check if it's in the cell log format
-            assorted = []
-            cell_file = open(fullpath, 'r')
-            firstline = cell_file.readline().strip()
-            # We have a match, start building the call log list, line by line, because we need to reconstruct timestamps
-            for line in cell_file:
-                itemlist = line.split(';')
-                Date	                = itemlist[0]
-                RawTime    	         	= str(itemlist[1])
-                Time                    = RawTime.zfill(6)
-                DateTime    	        = datetime.datetime.fromtimestamp(time.mktime(time.strptime(Date+' '+Time,'%d/%m/%y %H%M%S'))).strftime('%Y-%m-%d %H:%M:%S')
-                From 	         	    = itemlist[2].strip() if itemlist[2] else None
-                To   		        	= itemlist[3].strip() if itemlist[3] else None
-                Direction             	= itemlist[4].strip() if itemlist[4] else None
-                Duration            	= itemlist[5].strip() if itemlist[5] else '0'
-                ServiceCode             = itemlist[6].strip() if itemlist[6] else 'No Code'
-                IMEI     		        = itemlist[7].strip() if itemlist[7] else 'No IMEI'
-                CellID          		= itemlist[8].strip() if itemlist[8] else 'Unknown'
-                SiteName            	= itemlist[9].strip() if itemlist[9] else 'Unknown'
-                Suburb   	        	= itemlist[10].strip() if itemlist[10] else 'Unknown'
+            if numlines == 2:
+                # Header and single line, should go into the database
+                try:
+                    f.seek(0)
+                    firstline = f.readline().strip()
+                    itemlist = f.readline().split(';')
 
-                Row=[DateTime,From,To,Direction,Duration,ServiceCode,IMEI,CellID,SiteName,Suburb]
-                assorted.append(Row)
+                    Date	                = itemlist[0]
+                    RawTime    	         	= str(itemlist[1])
+                    Time                    = RawTime.zfill(6)
+                    DateTime    	        = datetime.datetime.fromtimestamp(time.mktime(time.strptime(Date+' '+Time,'%d/%m/%Y %H%M%S'))).strftime('%Y-%m-%d %H:%M:%S')
+                    From 	         	    = itemlist[2].strip() if itemlist[2] else None
+                    To   		        	= itemlist[3].strip() if itemlist[3] else None
+                    Direction             	= itemlist[4].strip() if itemlist[4] else None
+                    Duration            	= itemlist[5].strip() if itemlist[5] else '0'
+                    ServiceCode             = itemlist[6].strip() if itemlist[6] else 'No Code'
+                    IMEI     		        = itemlist[7].strip() if itemlist[7] else 'No IMEI'
+                    CellID          		= itemlist[8].strip() if itemlist[8] else 'Unknown'
+                    SiteName            	= itemlist[9].strip() if itemlist[9] else 'Unknown'
+                    Suburb   	        	= itemlist[10].strip() if itemlist[10] else 'Unknown'
 
-            # Print some data that is stored in the database if debug is true
-            if config.DEBUG:
-                print "\ncell phone data:"
-                for i in range(0, len(assorted)):
-                    print "%-18s %s" % (columns[i] + ':', assorted[i])
+                    Row=[DateTime,From,To,Direction,Duration,ServiceCode,IMEI,CellID,SiteName,Suburb]
+                
+                    if config.DEBUG:
+                        print "\ncell phone data:"
+                        for i in range(0, len(assorted)):
+                            print "%-18s %s" % (columns[i] + ':', assorted[i])
 
-            #assert len(assorted) == len(columns)
-            return assorted
-        except TypeError:
-            print('TypeError')
-            pass
-        except:
-            traceback.print_exc(file=sys.stderr)
+                    return Row
+                except TypeError:
+                    print('TypeError')
+                    pass
+                except:
+                    traceback.print_exc(file=sys.stderr)
+                    return None              
 
-            # Store values in database so not the whole application crashes
-            return None
+            if numlines > 2:
+                # Header and multiple lines, split up into files
+                f.seek(0)
+                firstline = f.readline().strip()
+                secondline = f.readline()
+                lineno = 1
+                tmpdir = tempfile.mkdtemp("_uforiatmp", dir=config.EXTRACTDIR)
+                targetdir = tmpdir + os.path.sep + os.path.dirname(fullpath)
+                if not os.path.exists(targetdir):
+                    try:
+                        os.makedirs(targetdir)
+                    except OSError as exc:
+                        if exc.errno != errno.EXIST:
+                            raise
+                for line in f:
+                    targetfile = fullpath + "_line_" + str(lineno).zfill(len(str(numlines)))
+                    lineno += 1
+                    with open(tmpdir+targetfile,'wb') as g:
+                        g.write(firstline+'\n')
+                        g.write(line)
+                recursive.call_uforia_recursive(config,rcontext,tmpdir,os.path.dirname(fullpath))
+                try:
+                    shutil.rmtree(tmpdir)
+                except:
+                    traceback.print_exc(file=sys.stderr)
+                return None

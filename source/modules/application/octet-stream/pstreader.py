@@ -50,6 +50,7 @@ def process(file, config, rcontext, columns=None):
         finally:
             try:
                 if tempdir:
-                    shutil.rmtree(tempdir)  # delete directory
+                    pass
+                    #shutil.rmtree(tempdir)  # delete directory
             except OSError as exc:
                 traceback.print_exc(file=sys.stderr)
