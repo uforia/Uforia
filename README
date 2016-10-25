@@ -36,13 +36,12 @@ indexing.
 NOTES
 =====
 
-The master branch is always in flux, as we are continuously developing and pushing
+The master branch can be in flux. We might be continuously developing and pushing    
 updates. That said, we generally test everything in our live demo environment, so
-you shouldn't encounter any critical failures. If you do, please contact us or
-submit a bug report!
+you shouldn't encounter any 'overly' critical failures. If you do, please contact
+us or submit a bug report, or even better: a git pull request! 
 
 ---
 Kind regards,
 
-A. Eijkhoudt <a.eijkhoudt@dhcp.net>
-Owner, Original Author and Chief Architect of Uforia
+A. Eijkhoudt <uforia@dhcp.net> 
