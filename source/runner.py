@@ -17,6 +17,21 @@ import subprocess
 import platform
 import ctypes
 
+def _find_executable(execname, path=None):
+    if path is None:
+        path = os.environ['PATH']
+    paths = path.split(os.pathsep)
+
+    if os.path.isfile(execname):
+        return execname
+    else:
+        for p in paths:
+            f = os.path.join(p, execname)
+            if os.path.isfile(f):
+                return f
+    return None
+
+
 def _get_arch_linux():
     if ctypes.sizeof(ctypes.c_voidp) == 8:
         return 'amd64'
@@ -25,23 +40,25 @@ def _get_arch_linux():
 
 
 def _do_linux_setup():
-    javapathcmd = "readlink -f $(which java)"
-    proc = subprocess.Popen(javapathcmd, shell=True, stdout=subprocess.PIPE)
-    out = proc.communicate()
-
-    if proc.returncode:
+    # Replacing failed use of readlink via a shell process to a pythonic solution
+    javaexec = _find_executable('java')
+    if not javaexec:
         print "WARNING: Java not found. Modules using JVM will not function."
     else:
+        javaexecrealpath = os.path.realpath(javaexec)
+        javapath = os.path.dirname(javaexecrealpath) + '/../../'
+        javapath = os.path.realpath(javapath)
+
         linuxarch = _get_arch_linux()
 
-        javapath = os.path.abspath(out[0] + "/../../../")
         javalibpath = os.path.join(javapath, "jre/lib/" + linuxarch)
         javaserverpath = os.path.join(javalibpath, "server")
 
         if not 'LD_LIBRARY_PATH' in os.environ:
-            os.environ['LD_LIBRARY_PATH'] = ""
+            os.environ['LD_LIBRARY_PATH'] = javalibpath + ":" + javaserverpath
+        else:
+            os.environ['LD_LIBRARY_PATH'] += ":" + javalibpath + ":" + javaserverpath
 
-        os.environ['LD_LIBRARY_PATH'] += ":" + javalibpath + ":" + javaserverpath
         os.environ['LD_LIBRARY_PATH'] += ":./libraries/PIL/bin-x86_64-Linux:./libraries/PIL/bin-x86-Linux"
 
 def _do_win32_setup():
@@ -83,7 +100,7 @@ def _linux_run(runfunction):
     else:
         os.environ['_UFORIA_WRAPPER'] = 'YES'
         _do_linux_setup()
-        subprocess.call([sys.executable] + sys.argv) 
+        subprocess.call([sys.executable] + sys.argv)
 
 def _windows_run(runfunction):
     _do_win32_setup()
