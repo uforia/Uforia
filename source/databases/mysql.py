@@ -86,6 +86,13 @@ class Database(object):
         except:
             traceback.print_exc(file=sys.stderr)
 
+
+    def commit(self):
+        self.connection.commit()
+
+    def close(self):
+        self.connection.close()
+
     def setup_main_table(self):
         """
         Sets up the main data table, which contains general information
@@ -197,11 +204,11 @@ class Database(object):
         query += """);"""
         params = []
         for i in values:
-            # To prevent unicode strings being converted to ascii 
+            # To prevent unicode strings being converted to ascii
             if isinstance(i, unicode):
                 string = i
             else:
-                string = str(i) 
+                string = str(i)
             params.append(string)
         query = query.replace(""" (, """, """ (""")
         query = query.replace("""'NULL'""", """NULL""")

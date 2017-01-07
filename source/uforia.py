@@ -63,10 +63,9 @@ db - Optionally use another database object
             dbqueue.task_done()
         else:
             break
-
-    db.connection.commit()
+    db.commit()
     dbqueue.task_done()
-    db.connection.close()
+    db.close()
 
 
 def monitorworker(monitorqueue):
@@ -150,9 +149,8 @@ db - Optionally use another database object
         db = database.Database(config)
 
     db.store_mimetype_values(table, columns, values)
-
-    db.connection.commit()
-    db.connection.close()
+    db.commit()
+    db.close()
 
 
 def file_scanner(dir, dbqueue, monitorqueue, uforiamodules, config,
