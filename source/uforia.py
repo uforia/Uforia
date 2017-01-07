@@ -440,16 +440,20 @@ try:
 except:
     print("< WARNING! > Config file not found or not configured correctly, loading default config.")
 
-if not test_error_on_non_existance('include/File.py'): sys.exit(1)
+if not test_error_on_non_existance('include/File.py'):
+    sys.exit(1)
 File = imp.load_source('File', 'include/File.py')
 
-if not test_error_on_non_existance('include/magic.py'): sys.exit(1)
+if not test_error_on_non_existance('include/magic.py'):
+    sys.exit(1)
 magic = imp.load_source('magic', 'include/magic.py')
 
-if not test_error_on_non_existance('include/modulescanner.py'): sys.exit(1)
+if not test_error_on_non_existance('include/modulescanner.py'):
+    sys.exit(1)
 modules = imp.load_source('modulescanner', 'include/modulescanner.py')
 
-if not test_error_on_non_existance(config.DATABASEDIR + config.DBTYPE + ".py"): sys.exit(1)
+if not test_error_on_non_existance(config.DATABASEDIR + config.DBTYPE + ".py"):
+    sys.exit(1)
 database = imp.load_source(config.DBTYPE, config.DATABASEDIR + config.DBTYPE + ".py")
 
 config = config_as_pickleable(config)
