@@ -322,7 +322,7 @@ Sets up the database, modules, all background processes and then
 invokes the file_scanner.
 """
     recursive = rcontext.is_recursive
-    if not recursive: 
+    if not recursive:
         print("Uforia starting...")
 
     if config.DEBUG:
@@ -370,7 +370,7 @@ invokes the file_scanner.
         monitorqueue.put(None)
         monitorqueue.join()
 
-    if not recursive: 
+    if not recursive:
         print("\nUforia completed...\n")
     sys.stdout.flush()
 
@@ -408,20 +408,54 @@ shared object files loaded with ctypes.
         # sys.path.append is not reliable for this thing
         os.environ['PATH'] += ";./libraries/windows-deps"
 
+def test_error_on_non_existance(filepath):
+    # Returns False on error, True on success
+    if not filepath:
+        print "Internal Error: no file test"
+        return False
+    elif filepath == "":
+        print "Internal error: filename to test is empty string."
+        return False
+    elif not os.path.exists(filepath):
+        print "Internal error: \"%s\" does not exist." % filepath
+        return False
+    elif not os.path.isfile(filepath):
+        print "Internal error: \"%s\" is not a regular file." % filepath
+        return False
+    elif os.stat(filepath).st_size == 0:
+        print "Internal error: \"%s\" is an empty file." % filepath
+        return False
+    return True
+
+
 setup_library_paths()
 
 
 # Fixes crash-on-exit bugs on Windows by loading it before libmagic
 import libxmp
 
+if not test_error_on_non_existance('include/default_config.py'):
+    sys.exit(1)
 config = imp.load_source('config', 'include/default_config.py')
 try:
     config = imp.load_source('config', 'include/config.py')
 except:
     print("< WARNING! > Config file not found or not configured correctly, loading default config.")
+
+if not test_error_on_non_existance('include/File.py'):
+    sys.exit(1)
 File = imp.load_source('File', 'include/File.py')
+
+if not test_error_on_non_existance('include/magic.py'):
+    sys.exit(1)
 magic = imp.load_source('magic', 'include/magic.py')
+
+if not test_error_on_non_existance('include/modulescanner.py'):
+    sys.exit(1)
 modules = imp.load_source('modulescanner', 'include/modulescanner.py')
+
+if not test_error_on_non_existance(config.DATABASEDIR + config.DBTYPE + ".py"):
+    sys.exit(1)
 database = imp.load_source(config.DBTYPE, config.DATABASEDIR + config.DBTYPE + ".py")
 
 config = config_as_pickleable(config)
