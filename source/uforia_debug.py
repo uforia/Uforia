@@ -46,8 +46,8 @@ def write_to_db(table, hashid, columns, values, db=None):
         db = database.Database(config)
     db.store(table, hashid, columns, values)
 
-    db.connection.commit()
-    db.connection.close()
+    db.commit()
+    db.close()
 
 
 def write_to_mimetypes_table(table, columns, values, db=None):
@@ -64,8 +64,8 @@ def write_to_mimetypes_table(table, columns, values, db=None):
 
     db.store_mimetype_values(table, columns, values)
 
-    db.connection.commit()
-    db.connection.close()
+    db.commit()
+    db.close()
 
 
 def file_scanner(dir, uforiamodules, rcontext):
